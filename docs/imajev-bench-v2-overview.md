@@ -123,7 +123,8 @@ the low-cost version of that plan.
   - OpenAI
   - Gemini
   - Vertex
-  - any OpenAI-compatible endpoint
+  - any OpenAI-compatible endpoint (`OPENAI_BASE_URL`), which is how local models are run through
+    vLLM; the manifest records the base URL and served model
 
 **Required disclosure:** every result must state its interface and its reasoning setting. GPT-5.4
 scored 76% with no reasoning and 93% with medium reasoning on the hard trial.
@@ -149,6 +150,22 @@ test items unless `--allow-test-exposure` is passed.
 
 ## 7. Results (test split, 279 items)
 
+Interfaces are ranked separately (pre-registration). Local rows: one H100, 23 Sept 2026.
+
+Direct option scoring (single pass, full option rotations):
+
+| Model | Accuracy (95% CI) | Notes |
+| --- | --- | --- |
+| imajev-9b (v1.1) | 81.0% (75–86) | beats its base, paired cluster test p = 0.03 (H1) |
+| Qwen3.5-9B base | 76.7% (70–82) | |
+| Qwen3.5-4B base | 70.6% (64–78) | |
+| imajev-2b (v2.1) | 63.1% (56–70) | 63.4% on a Mac with MLX; 98.2% answer agreement between backends; +2.9 over its base, p = 0.57 (H2, n.s.) |
+| Qwen3.5-2B base | 60.2% (53–67) | |
+| imajev-2b, no image | abstains on 258/279 | image-necessity control, not ranked |
+| imajev-2b, no state | 51.6% (45–58) | state-necessity control, not ranked; joint track 46/122 vs 76/122 with the state |
+
+Structured generation (JSON matching the schema, prompt `api-v2`):
+
 | Model | Accuracy (95% CI) | Notes |
 | --- | --- | --- |
 | Gemini 3.1 Pro* | 99.6% (99–100) | *checked images during construction |
@@ -156,24 +173,33 @@ test items unless `--allow-test-exposure` is passed.
 | GPT-5.4 (reasoning medium) | 98.9% (98–100) | |
 | Gemini 3.8 Flash | 98.2% (96–100) | |
 | Grok 4.3 | 91.4% (87–95) | no response schema; 24 format errors; abstained on business-day items |
-| imajev-2b (v2.1) | 63.4% (56–70) | local, direct option scoring, MLX |
-| imajev-2b, no image | abstains on 258/279 | image-necessity control, not ranked |
+| Qwen3.5-9B base | 74.6% (69–80) | vLLM, JSON schema, default reasoning |
+| Qwen3.5-4B base | 67.4% (61–73) | vLLM |
+| Gemma 4 E4B | 60.2% (53–68) | vLLM |
+| Qwen3.5-2B base | 59.9% (54–66) | vLLM |
+| Gemma 4 E2B | 58.8% (52–66) | vLLM |
 
 - **Frontier models are saturated.** v2.0-lite is a sanity check for them, not a separator.
-- **Small models are far from the ceiling,** which is the intended use.
-- **The no-image control shows the images are needed.**
+- **Small models are far from the ceiling and separate by size and by training,** which is the
+  intended use.
+- **Direct option scoring beats structured generation for the same base model at every size**
+  (2B 60.2 vs 59.9, 4B 70.6 vs 67.4, 9B 76.7 vs 74.6); this is exploratory.
+- **The controls show both inputs are needed:** without the image imajev-2b abstains; without the
+  state its joint-track score drops from 76 to 46 of 122.
 - **No home advantage:** generator-family effects were not visible in the per-generator
   breakdowns. With 73 Nano Banana 2 items, this is weak evidence.
-- **Still running:** imajev-9b and the base Qwen models, on an A100.
+- **Deferred:** direct-scoring rows for Gemma 4 E2B/E4B and SmolVLM2 (their harness backends are
+  MLX-only; the Mac runs were stopped).
 
 Full tables: `reports/imajev-bench-v2-lite-v1/RESULTS.md` and
 `imajev-release/bench/LEADERBOARD.md`.
 
 ## 8. Hidden test for submitted models
 
-- **What it is:** the imajevBench team keeps a **private test set** that is never published:
-  `data/imajev-bench/private-1/`. It has 36 new scenes plus 30 text items (24 of them hard),
-  built with a different seed and split salt.
+- **Status: planned, not yet built.** The hidden set does not exist on disk yet
+  (`data/imajev-bench/private-1/` is not present); until it is built and its hash published, no
+  hidden-test result can be claimed. The plan: 36 new scenes plus 30 text items (24 of them hard),
+  built with a different seed and split salt, never published.
 - **Tier A (weights):** the team runs the model offline, so hidden items never leave team machines.
 - **Tier B (API endpoint):** the items are sent to the endpoint, and exposure rules apply.
 - **Reports:** `scripts/imajev_bench/evaluate_submission.py` publishes **aggregate metrics only**:
@@ -200,7 +226,9 @@ Full policy: `docs/imajev-bench-hidden-test.md`.
   - a few self-cancelling rules;
   - small people at image edges in 3 scenes;
   - weekday timetables that don't state the day.
-- The first hidden set is Flare-only.
+- The hidden set is not built yet (§8); when it is, the first version will be Flare-only.
+- Gemma 4 and SmolVLM2 have generation rows only (Gemma) or no row yet (SmolVLM2): their
+  direct-scoring backends are MLX-only.
 
 ## 10. Cost
 

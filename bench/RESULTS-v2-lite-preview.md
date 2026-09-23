@@ -71,6 +71,14 @@ are kept in `eval-aborted/`.
 
 The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
 
+## Results: test split, local and open models (279 items; H100, 23 Sept)
+
+Direct option scoring (full rotations, uncalibrated, PyTorch bf16): imajev-9b 226/279 (81.0%, CI 0.75–0.86); Qwen3.5-9B base 214 (76.7%);
+Qwen3.5-4B base 197 (70.6%); imajev-2b 176 (63.1%; Mac MLX run 177); Qwen3.5-2B base 168 (60.2%). Structured generation through vLLM with a
+JSON schema, default reasoning: Qwen3.5-9B 208 (74.6%); Qwen3.5-4B 188 (67.4%); Gemma 4 E4B 168 (60.2%); Qwen3.5-2B 167 (59.9%);
+Gemma 4 E2B 164 (58.8%). Interfaces are ranked separately. Per-track, per-family, controls, baselines and the paired tests are in
+`LEADERBOARD.md`; raw runs in `h100-run/out/`.
+
 ## Robustness
 
 | Model | Excluding the 23 flagged items | Flare images | Nano Banana 2 images | Text only |
@@ -93,9 +101,14 @@ The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
    - Covered sign hours are often treated as if the restriction applies.
 
    v2.0-lite does not separate frontier models, and it is disclosed as a sanity check for them.
-2. **The intended use is small and local models.** These are the models doing typed decisions on
-   device, where differences are expected. Those runs (Qwen 3.5 2B/9B, imajev 1.1 2B/9B, Gemma 4
-   E4B), and the no-image baseline, are pending the owner's choice of hardware (Mac or A100).
+2. **The intended use is small and local models, and they separate.** On the test split (H100, direct
+   option scoring): imajev-9b 81.0%, Qwen3.5-9B base 76.7%, Qwen3.5-4B base 70.6%, imajev-2b 63.1%
+   (63.4% on the Mac with MLX; 98.2% answer agreement between backends), Qwen3.5-2B base 60.2%. The
+   imajev adapter beats its base at 9B (H1, paired cluster test p = 0.03) and by 2.9 points at 2B
+   (H2, p = 0.57, not significant). By structured generation through vLLM the base models score
+   lower than by direct scoring at every size (9B 74.6, 4B 67.4, 2B 59.9; Gemma 4 E4B 60.2, E2B 58.8).
+   The no-image control abstains on 258/279 and the no-state control drops the 2B's joint track from
+   76 to 46 of 122. Full tables: `LEADERBOARD.md`.
 3. **The reasoning setting matters a lot.** In the hard trial, GPT-5.4 scored 76% with Azure's
    default of no reasoning and 93% with medium reasoning. Every entry must state its setting.
 4. **The labels look clean, but the audit is still needed.** Five strong models agree with the
@@ -126,8 +139,9 @@ The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
 
 ## Still to do before a public preview
 
-1. **Local and open-model runs, plus the no-image baseline:** in progress in a parallel session
-   on an A100 (see `imajev-release/bench/`).
+1. **Local and open-model runs:** done on one H100 (23 Sept); see `LEADERBOARD.md`. Still missing:
+   direct-scoring rows for Gemma 4 E2B/E4B and SmolVLM2 (MLX-only backends; deferred) and the
+   no-image controls for models other than imajev-2b.
 2. **Optional: a human spot-check of the model audit,** using the same packet. It would upgrade
    the label from "model-audited" to "human-audited".
 3. **Publishing details:** licences (proposed: CC0 for the AI images, CC BY 4.0 for the labels), a

@@ -98,7 +98,10 @@ def wardrobe():
     used = sorted(set(re.findall(r"'assets/([\w-]+\.(?:png|jpg))'", (folder / "scenarios.js").read_text())))
     catalog = {Path(item["image"]).name: item for item in json.loads((folder / "catalog.json").read_text())["items"]}
     digests = {name: sha256(folder / "assets" / name) for name in used}
-    hits = trained_on_many(list(digests.values()))
+    # Training used resized copies, so a hash can miss the same photo; ABO pieces are also matched by product ID.
+    products = {name: catalog[name]["provenance"]["source_id"] for name in used
+                if catalog[name]["provenance"].get("source_name") == "abo"}
+    hits = trained_on_many(list(digests.values()) + list(products.values()))
     rows = []
     for name in used:
         item, prov = catalog[name], catalog[name]["provenance"]
@@ -109,7 +112,7 @@ def wardrobe():
         else:
             meta = {"dataset": prov.get("source_name"), "license": prov.get("license"), "source_page": prov.get("source_page"),
                     "credit": f"{prov.get('attribution', prov.get('source_name'))}, {prov.get('license')}"}
-        found = hits[digests[name]]
+        found = sorted(set(hits[digests[name]] + hits.get(products.get(name), [])))
         rows.append({"file": name, "title": item["title"], **meta, "synthetic": synthetic, "edit": None,
                      "source_sha256": digests[name], "in_training_rows": found, "held_out": not found})
         print(f"{name:8s} {str(meta['license']):22s} synthetic={synthetic} held_out={not found}")
