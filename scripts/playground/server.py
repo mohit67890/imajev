@@ -339,11 +339,14 @@ def main(argv=None):
     parser.add_argument("--model-bundle", default=str(BUNDLE))
     parser.add_argument("--rotations", type=int, default=1, help="candidate orders averaged per question (MLX)")
     parser.add_argument("--calibration", help="held-out temperature calibration artifact")
+    parser.add_argument("--model-name", help="public model name reported by the API and the UI (e.g. imajev-2b)")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
     backend = build_backend(args.backend, args.adapter, args.no_adapter, Path(args.model_bundle), args.rotations)
+    if args.model_name:
+        backend.model = args.model_name
     log.info("backend=%s model=%s adapter=%s load_seconds=%.1f",
              backend.name, backend.model, backend.adapter, backend.load_seconds)
     calibration = None

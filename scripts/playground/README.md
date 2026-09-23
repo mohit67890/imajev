@@ -44,3 +44,22 @@ off it is on a public text benchmark, against the base model and an external ope
   photo is meant and answers from the single-image prior at ~1.00 confidence. Ask that one with a single image.
 - `unknown_probability` is the mass the model put on "unknown"; `abstained` is true when unknown was the top outcome. It does not say why
   (insufficient evidence, false premise, or the right answer not being listed); add an "other / none of the above" option when that matters.
+
+## Scenarios page (`/scenarios/`)
+Seven real-world decisions, each a Jev request over 0–2 photos with one-click changes to the record ("flips") or
+to a photo ("variants"), and the app rule that turns the answers into an action (publish / hold / send to a person).
+Serve the release 2B and open http://127.0.0.1:8765/scenarios/ :
+```sh
+HF_HUB_OFFLINE=1 PYTHONPATH=src:scripts .venv/bin/python scripts/playground/server.py --backend mlx \
+  --adapter reports/decision-v2.1/runs/h100x4/last-step1361-mlx \
+  --calibration reports/decision-v2.1/calibration-v2.1-final.json --model-name imajev-2b
+```
+- Scenarios, flips, variants, app rules and expected outcomes: `static/scenarios/scenarios.js` (`buildCase` is shared
+  by the page and the checker, so a checked combination is exactly what the page sends).
+- Check every default, flip and variant against the running server before a demo or a recording:
+  `node scripts/playground/verify_scenarios.mjs` → `reports/scenarios/verification.json` (also copied to the page,
+  "See the check run"). Only combinations that pass belong in a GIF.
+- Photos: `python scripts/playground/build_scenario_assets.py` copies them into `static/scenarios/assets/` and writes
+  `attribution.json` with licence, source and whether the photo appears in any training row of the v1 → v2.1 manifests
+  (the page shows "unseen in training", "seen in training" or "composite"). Takes ~5 minutes (greps the manifests).
+- Deep links keep the state: `#listing?listing.color=red`, `#qc?photo=good part`. `j` / `k` switch scenarios.

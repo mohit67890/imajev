@@ -1,5 +1,5 @@
 {
-  "calibration_version": "v2.1",
+  "calibration_version": "v2.1-conservative",
   "counts": {
     "boolean:2": 14887,
     "choice:2": 1020,
@@ -10,12 +10,12 @@
   },
   "schema_version": "1.1",
   "temperatures": {
-    "boolean:2": 0.6050425613069234,
-    "choice:2": 0.40229102626569446,
-    "choice:26-254": 0.5673429562058006,
-    "choice:3-5": 0.38109983357171656,
-    "choice:6-10": 0.386259240966179,
-    "ordinal:3-5": 0.8100553148503845
+    "boolean:2": 0.7778448182683506,
+    "choice:2": 0.6342641612653945,
+    "choice:26-254": 0.7532217178266971,
+    "choice:3-5": 0.6173328385658069,
+    "choice:6-10": 0.6214975792118413,
+    "ordinal:3-5": 0.9000307299478082
   },
   "unknown_offsets": {
     "boolean:2": 0.0,
