@@ -70,9 +70,11 @@ def release_check(records: list[dict], root: Path, targets: dict | None = None,
     def gate(name, ok, detail, **extra):
         gates.append({"gate": name, "passed": bool(ok), "detail": detail, **extra})
 
+    quarantined = [r for r in records if r["provenance"].get("quarantined")]
     try:
-        validate_records(records, Path(root), require_reviewed=True)
-        gate("human_review", True, "Every record has a validated label route (see limitations for the audit method).")
+        validate_records([r for r in records if not r["provenance"].get("quarantined")], Path(root), require_reviewed=True)
+        gate("human_review", True, "Every scored record has a validated label route (see limitations for the audit method); "
+             f"{len(quarantined)} quarantined record(s) are excluded from scoring.")
     except ValueError as exc:
         gate("human_review", False, str(exc))
 

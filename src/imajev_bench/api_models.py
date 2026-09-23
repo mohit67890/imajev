@@ -270,7 +270,11 @@ def make_provider(name: str, model: str, env_file: Path | None = None, reasoning
                                    load_setting("AZURE_OPENAI_API_VERSION", env_file, required=False),
                                    reasoning_effort=reasoning_effort)
     if name == "openai":
-        return OpenAIProvider(model, load_key(name, env_file), reasoning_effort=reasoning_effort)
+        # OPENAI_BASE_URL lets any OpenAI-compatible server (vLLM, llama.cpp, Ollama) run the structured-generation
+        # interface locally; the served model id and base URL are recorded with the run.
+        base_url = load_setting("OPENAI_BASE_URL", env_file, required=False) or "https://api.openai.com/v1"
+        key = load_setting("OPENAI_API_KEY", env_file, required=False) or "local"
+        return OpenAIProvider(model, key, base_url=base_url, reasoning_effort=reasoning_effort)
     if name == "vertex-gemini":
         project = load_setting("GOOGLE_CLOUD_PROJECT", env_file, required=False) or gcloud_project()
         location = load_setting("GOOGLE_CLOUD_LOCATION", env_file, required=False) or "global"
@@ -308,6 +312,7 @@ def run_api(records: list[dict], root: Path, output: Path, provider, *, constrai
     output.mkdir(parents=True, exist_ok=False)
     manifest = {"format_version": "0.1.0", "adapter": "api-structured-generation", "purpose": purpose,
                 "provider": provider.name, "model_requested": provider.model, "constrained_json": constrained,
+                "base_url": getattr(provider, "base_url", None),
                 "prompt_version": PROMPT_VERSION, "option_order_seed": order_seed, "records_sha256": digest(records), "scoring_sha256": scoring_digest(records),
                 "reasoning_effort": getattr(provider, "reasoning_effort", None) or "provider default",
                 "record_count": len(records), "reviewed": all(r["annotation_status"] == "reviewed" for r in records),

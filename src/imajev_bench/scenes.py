@@ -537,17 +537,18 @@ BUILDERS = {"menu": build_menu, "shelf": build_shelf, "timetable": build_timetab
 
 
 def plan_scenes(count: int, seed: int, generators=("flare", "nano-banana-2"), kinds=None, first_share=0.5) -> list[Scene]:
-    """Round-robin over scene kinds; within each kind, the first generator gets `first_share` of scenes.
+    """Round-robin over scene kinds; the first generator gets `first_share` of all scenes.
 
-    The split is spread evenly (not front-loaded) so every kind has scenes from both generators.
+    The second generator's scenes are spread evenly over the whole plan (by global index), so small plans get
+    their share too; an earlier per-kind formula gave the second generator nothing when a plan had fewer than
+    four scenes per kind (private-1 was built that way and is Flare-only).
     """
     rng = random.Random(f"imajev-bench-v2-scenes\0{seed}")
     kinds = list(kinds or BUILDERS)
     scenes = []
     for i in range(count):
         kind = kinds[i % len(kinds)]
-        k = i // len(kinds)                       # k-th scene of this kind
-        other = int((k + 1) * (1 - first_share)) > int(k * (1 - first_share))
+        other = int((i + 1) * (1 - first_share)) > int(i * (1 - first_share))
         generator = generators[1] if len(generators) > 1 and other else generators[0]
         scenes.append(BUILDERS[kind](rng, f"scene-{seed:02d}-{i:04d}", generator))
     return scenes

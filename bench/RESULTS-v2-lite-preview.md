@@ -1,7 +1,11 @@
 # imajev-bench v2.0-lite (preview): first results
 
-Status on 2026-09-23: a **preview**. The labels are not yet human-audited, and five release gates
-are unmet (listed in `release/DATASHEET.md`). Numbers can change after the audit.
+Status on 2026-09-23: a **preview**. The labels are **model-audited, not human-audited** (see
+"Audit" below). Three release gates are unmet (construction lint, image necessity in this
+report's runs, statistical power) and are listed in `release/DATASHEET.md`.
+
+Use `data/imajev-bench/v2-lite-v1/records-audited.jsonl` as the canonical records file. It has
+the audit applied, with 1 label error quarantined.
 
 ## Dataset
 
@@ -19,6 +23,32 @@ are unmet (listed in `release/DATASHEET.md`). Numbers can change after the audit
     every stated fact.
   - 400 labels are promoted. 138 items wait for a blind human audit (a 15% cluster sample, every
     occlusion-based Unknown, and every flagged item).
+
+## Audit (AI, blind, two independent families)
+
+- **Scope:** 138 items. That is a 15% cluster sample, plus every occlusion-based Unknown, plus every
+  item flagged in triage.
+- **Auditors:** Claude Opus 5.5 (four sub-agents, each viewing every image) and Kimi K2.5 (through
+  Azure). Neither family generated images, checked images or appears on the leaderboard. Both
+  answered blind, without seeing the reference answers.
+- **Adjudication:** every disagreement was adjudicated by looking at the image. The adjudicator is
+  the model family of the pipeline's author, which is a disclosed limitation.
+- **Result: 1 label error in 138 (0.7%), with an upper 95% bound of 4.0%.** The error is
+  `scene-03-0089-cover-q0`, where translucent tape leaves the "Unknown" value readable. It is
+  quarantined.
+- **Claude** agreed with the constructed answers on 137 of 138 items.
+- **Kimi** failed to answer 8 items (timeouts or format errors). It answered 9 covered-value items
+  instead of abstaining, taking prices from neighbouring rows or assuming hidden sign hours; these
+  are model errors, confirmed on the images.
+- **Other issues the auditors raised, disclosed rather than fixed:**
+  - Some nutrition panels are physically implausible (for example 19 g fat at 110 kcal).
+  - A few text rules cancel themselves ("express, unless express").
+  - Small people appear at image edges in 3 scenes.
+  - One price is painted just past the board edge.
+  - Weekday timetables don't state the current day.
+  - One dark mug is borderline between colours.
+- **Records:** audit details are stored per item in `provenance.model_audit`. Blind answers and
+  adjudications are in `reports/imajev-bench-v2-lite-v1/audit/`.
 
 ## Results: full set (533 items)
 
@@ -96,9 +126,10 @@ The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
 
 ## Still to do before a public preview
 
-1. **Blind human audit of 138 items:**
-   `data/imajev-bench/v2-lite-v1/packets/audit-auditor-1-v2.html`.
-2. **Local and open-model runs, plus the no-image baseline:** hardware decision pending.
+1. **Local and open-model runs, plus the no-image baseline:** in progress in a parallel session
+   on an A100 (see `imajev-release/bench/`).
+2. **Optional: a human spot-check of the model audit,** using the same packet. It would upgrade
+   the label from "model-audited" to "human-audited".
 3. **Publishing details:** licences (proposed: CC0 for the AI images, CC BY 4.0 for the labels), a
    contact address, a README, and the test-split policy.
 

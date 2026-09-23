@@ -27,6 +27,8 @@ MODELS = {
     "imajev2b": ("artifacts/model.json", "reports/decision-v1.1/runs/h100x4/best-mlx", "backend"),
     "imajev2b-v21": ("artifacts/model.json", "reports/decision-v2.1/runs/h100x4/last-step1361-mlx", "backend"),
     "qwen9b": ("artifacts/model-qwen9b.json", None, "backend"),
+    "qwen4b": ("artifacts/model-qwen4b.json", None, "backend"),
+    "gemma-e2b": ("artifacts/model-gemma-e2b.json", None, "gemma_backend"),
     "imajev9b": ("artifacts/model-qwen9b.json", "reports/decision-v1.1-9b/runs/h200x4/best-mlx", "backend"),
     "gemma": ("artifacts/model-gemma.json", None, "gemma_backend"),
     "smolvlm": ("artifacts/model-smolvlm2.json", None, "smolvlm_backend"),
