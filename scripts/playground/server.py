@@ -101,15 +101,17 @@ class TorchBackend:
 
     name = "torch"
 
-    def __init__(self, bundle=BUNDLE, adapter=None, device="mps"):
+    def __init__(self, bundle=BUNDLE, adapter=None, device=None):
         import torch
         from torch_decision import TorchDecision
         self.torch = torch
+        if device is None:  # CUDA on a pod or Space, Metal on a Mac, CPU otherwise
+            device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
         self.bundle = json.loads(Path(bundle).read_text())
         if not Path(self.bundle["path"]).is_dir():
             raise ValueError("Local model snapshot is missing; run scripts/download_model.py")
         start = perf_counter()
-        self.engine = TorchDecision(self.bundle["path"], device)
+        self.engine = TorchDecision(self.bundle["path"], device, dtype=torch.bfloat16 if device == "cuda" else torch.float32)
         if adapter is not None:
             from peft import PeftModel
             self.engine.model = PeftModel.from_pretrained(self.engine.model, str(adapter)).eval()
