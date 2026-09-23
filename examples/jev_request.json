@@ -1,0 +1,10 @@
+{
+  "state": {"listing": {"title": "Striped cotton shirt", "color": "blue"}, "channel": "marketplace"},
+  "questions": {
+    "matches_color": {"type": "noul", "instructions": "The garment in the photo matches `listing.color`."},
+    "product_type": {"type": "choice", "instructions": "What kind of product is shown?",
+                     "criteria": {"shirt": "A shirt or T-shirt", "shoe": "Footwear", "bag": "A handbag or backpack", "other": null}},
+    "photo_quality": {"type": "score", "instructions": "How usable is this photo for a product listing?",
+                      "criteria": ["Unusable: blurry, dark or badly cropped", "Usable with flaws", "Clear and well framed"]}
+  }
+}

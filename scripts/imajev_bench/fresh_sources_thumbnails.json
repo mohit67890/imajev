@@ -1,0 +1,68 @@
+[
+  {
+    "asset_id": "photo-003",
+    "source_id": "commons-receipt-deavmi",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Receipt.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/Receipt.jpg/960px-Receipt.jpg",
+    "thumbnail_width": 960,
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "creator": "Deavmi",
+    "selection_evidence": "The file page exposes a 960 x 1,707 thumbnail in its standard resolution list."
+  },
+  {
+    "asset_id": "photo-006",
+    "source_id": "commons-san-jose-media-parking-sign",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Media_street_parking_sign,_South_6th_Street,_San_Jose,_California.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Media_street_parking_sign%2C_South_6th_Street%2C_San_Jose%2C_California.jpg/960px-Media_street_parking_sign%2C_South_6th_Street%2C_San_Jose%2C_California.jpg",
+    "thumbnail_width": 960,
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "creator": "Mxn",
+    "selection_evidence": "The file page exposes a 960 x 1,280 thumbnail in its standard resolution list."
+  },
+  {
+    "asset_id": "photo-008",
+    "source_id": "commons-tortilla-chip-ingredients",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Ingredients_label_for_tortilla_chips_.png",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/9/95/Ingredients_label_for_tortilla_chips_.png",
+    "thumbnail_width": 471,
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "creator": "Cindyy28",
+    "selection_evidence": "The raster is only 471 x 97; the file page uses the native 471 x 97 binary as its preview and offers no larger thumbnail derivative."
+  },
+  {
+    "asset_id": "photo-010",
+    "source_id": "commons-little-hug-nutrition-label",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Nutrition_facts_2014-03-17_08-47.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Nutrition_facts_2014-03-17_08-47.jpg/960px-Nutrition_facts_2014-03-17_08-47.jpg",
+    "thumbnail_width": 960,
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "creator": "Tcoe33",
+    "selection_evidence": "The file page exposes a 960 x 1,280 thumbnail in its standard resolution list."
+  },
+  {
+    "asset_id": "photo-011",
+    "source_id": "commons-four-vermouth-bottles",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Four_bottles_of_vermouth.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Four_bottles_of_vermouth.jpg/1280px-Four_bottles_of_vermouth.jpg",
+    "thumbnail_width": 1280,
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "creator": "Kenneth C. Zirkel",
+    "selection_evidence": "The file page exposes a 1,280 x 1,079 thumbnail in its standard resolution list."
+  },
+  {
+    "asset_id": "photo-012",
+    "source_id": "commons-recycling-bins-mannheim-2025",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Recycling-bins-Mannheim-September-2025.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Recycling-bins-Mannheim-September-2025.jpg/1280px-Recycling-bins-Mannheim-September-2025.jpg",
+    "thumbnail_width": 1280,
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "creator": "Acediscovery",
+    "selection_evidence": "The file page exposes a 1,280 x 652 thumbnail in its standard resolution list."
+  }
+]

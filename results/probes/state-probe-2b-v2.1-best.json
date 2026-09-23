@@ -1,0 +1,199 @@
+{
+  "manifest": "data/manifests/decision-v2-state-probe.jsonl",
+  "label": "2b-v2.1-best",
+  "items": 200,
+  "overall_accuracy": 0.685,
+  "abstention_rate": 0.13,
+  "families": {
+    "claim_supported": {
+      "n": 33,
+      "correct": 21,
+      "accuracy": 0.6364,
+      "abstained": 9,
+      "abstained_correctly": 9,
+      "gold_unknown": 11
+    },
+    "condition_report": {
+      "n": 33,
+      "correct": 31,
+      "accuracy": 0.9394,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "count_matches": {
+      "n": 33,
+      "correct": 20,
+      "accuracy": 0.6061,
+      "abstained": 2,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "instruction_changes_answer": {
+      "n": 34,
+      "correct": 14,
+      "accuracy": 0.4118,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "label_text_matches": {
+      "n": 33,
+      "correct": 18,
+      "accuracy": 0.5455,
+      "abstained": 15,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "which_field_conflicts": {
+      "n": 34,
+      "correct": 33,
+      "accuracy": 0.9706,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    }
+  },
+  "pairs": {
+    "complete_pairs": 17,
+    "pairs_whose_gold_differs": 17,
+    "answer_changed_when_state_changed": 12,
+    "answer_changed_rate": 0.7059,
+    "both_halves_correct": 2,
+    "both_halves_correct_rate": 0.1176
+  },
+  "confusion_by_gold": {
+    "0": {
+      "0": 4,
+      "1": 3
+    },
+    "2": {
+      "1": 4,
+      "2": 1,
+      "0": 2
+    },
+    "False": {
+      "True": 12,
+      "False": 26,
+      "unknown": 17
+    },
+    "True": {
+      "True": 19
+    },
+    "a barrel": {
+      "a drum": 1
+    },
+    "a bed": {
+      "a bed": 1
+    },
+    "a belt": {
+      "a belt": 1
+    },
+    "a bicycle": {
+      "a bicycle": 1
+    },
+    "a bird": {
+      "a bird": 1
+    },
+    "a boy": {
+      "a boy": 1
+    },
+    "a building": {
+      "a castle": 1
+    },
+    "a different condition is visible": {
+      "no visible damage": 2
+    },
+    "a football": {
+      "a football": 1
+    },
+    "a kitchen knife": {
+      "a kitchen knife": 1
+    },
+    "a lantern": {
+      "a lantern": 1
+    },
+    "a man": {
+      "a man": 1,
+      "a fashion accessory": 1
+    },
+    "a panda": {
+      "a panda": 1
+    },
+    "a stapler": {
+      "a stapler": 1
+    },
+    "a sun hat": {
+      "a hat": 1
+    },
+    "a tree": {
+      "a horse": 1
+    },
+    "binoculars": {
+      "binoculars": 1
+    },
+    "case.listing.condition": {
+      "case.listing.condition": 1
+    },
+    "case.listing.product_type": {
+      "case.listing.product_type": 3
+    },
+    "condition": {
+      "condition": 2
+    },
+    "listing.attributes.material": {
+      "none of these": 1,
+      "listing.attributes.material": 2
+    },
+    "listing.attributes.product_type": {
+      "listing.attributes.product_type": 3
+    },
+    "listing.condition": {
+      "listing.condition": 3
+    },
+    "listing.material": {
+      "listing.material": 1
+    },
+    "listing.product_type": {
+      "listing.product_type": 4
+    },
+    "no visible damage": {
+      "no visible damage": 28
+    },
+    "none of them": {
+      "a cutting board": 1,
+      "clothing": 1,
+      "none of them": 2,
+      "a castle": 1,
+      "a hat": 1,
+      "a fashion accessory": 1,
+      "a building": 1,
+      "a tool": 1,
+      "a horse": 1,
+      "a drum": 1,
+      "a bicycle wheel": 1,
+      "a mammal": 1,
+      "jeans": 1,
+      "a vehicle": 1,
+      "fruit": 1,
+      "an animal": 1
+    },
+    "none of these": {
+      "none of these": 12
+    },
+    "product_type": {
+      "product_type": 1
+    },
+    "record.values.product_type": {
+      "record.values.product_type": 1
+    },
+    "the reported condition is visible": {
+      "the reported condition is visible": 3
+    },
+    "unknown": {
+      "False": 2,
+      "unknown": 9
+    }
+  },
+  "seconds": 103.3
+}

@@ -1,0 +1,204 @@
+{
+  "manifest": "data/manifests/decision-v2-state-probe.jsonl",
+  "label": "2b-v1.1",
+  "items": 200,
+  "overall_accuracy": 0.605,
+  "abstention_rate": 0.075,
+  "families": {
+    "claim_supported": {
+      "n": 33,
+      "correct": 20,
+      "accuracy": 0.6061,
+      "abstained": 8,
+      "abstained_correctly": 8,
+      "gold_unknown": 11
+    },
+    "condition_report": {
+      "n": 33,
+      "correct": 23,
+      "accuracy": 0.697,
+      "abstained": 1,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "count_matches": {
+      "n": 33,
+      "correct": 14,
+      "accuracy": 0.4242,
+      "abstained": 1,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "instruction_changes_answer": {
+      "n": 34,
+      "correct": 13,
+      "accuracy": 0.3824,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "label_text_matches": {
+      "n": 33,
+      "correct": 22,
+      "accuracy": 0.6667,
+      "abstained": 5,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "which_field_conflicts": {
+      "n": 34,
+      "correct": 29,
+      "accuracy": 0.8529,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    }
+  },
+  "pairs": {
+    "complete_pairs": 17,
+    "pairs_whose_gold_differs": 17,
+    "answer_changed_when_state_changed": 10,
+    "answer_changed_rate": 0.5882,
+    "both_halves_correct": 4,
+    "both_halves_correct_rate": 0.2353
+  },
+  "confusion_by_gold": {
+    "0": {
+      "0": 3,
+      "1": 4
+    },
+    "2": {
+      "1": 5,
+      "0": 2
+    },
+    "False": {
+      "True": 21,
+      "False": 28,
+      "unknown": 6
+    },
+    "True": {
+      "True": 17,
+      "False": 2
+    },
+    "a barrel": {
+      "a drum": 1
+    },
+    "a bed": {
+      "a bed": 1
+    },
+    "a belt": {
+      "a belt": 1
+    },
+    "a bicycle": {
+      "none of them": 1
+    },
+    "a bird": {
+      "a bird": 1
+    },
+    "a boy": {
+      "a mammal": 1
+    },
+    "a building": {
+      "a castle": 1
+    },
+    "a different condition is visible": {
+      "the reported condition is visible": 1,
+      "no visible damage": 1
+    },
+    "a football": {
+      "a football": 1
+    },
+    "a kitchen knife": {
+      "a kitchen knife": 1
+    },
+    "a lantern": {
+      "a lantern": 1
+    },
+    "a man": {
+      "clothing": 1,
+      "a fashion accessory": 1
+    },
+    "a panda": {
+      "a panda": 1
+    },
+    "a stapler": {
+      "a stapler": 1
+    },
+    "a sun hat": {
+      "a hat": 1
+    },
+    "a tree": {
+      "a horse": 1
+    },
+    "binoculars": {
+      "binoculars": 1
+    },
+    "case.listing.condition": {
+      "case.listing.condition": 1
+    },
+    "case.listing.product_type": {
+      "case.listing.product_type": 3
+    },
+    "condition": {
+      "condition": 2
+    },
+    "listing.attributes.material": {
+      "none of these": 1,
+      "listing.attributes.material": 2
+    },
+    "listing.attributes.product_type": {
+      "listing.attributes.product_type": 3
+    },
+    "listing.condition": {
+      "listing.condition": 3
+    },
+    "listing.material": {
+      "listing.product_type": 1
+    },
+    "listing.product_type": {
+      "listing.product_type": 4
+    },
+    "no visible damage": {
+      "the reported condition is visible": 7,
+      "no visible damage": 20,
+      "unknown": 1
+    },
+    "none of them": {
+      "a cutting board": 1,
+      "clothing": 1,
+      "none of them": 4,
+      "a castle": 1,
+      "a hat": 1,
+      "a fashion accessory": 1,
+      "a tool": 1,
+      "a horse": 1,
+      "a drum": 1,
+      "a bicycle wheel": 1,
+      "a mammal": 1,
+      "jeans": 1,
+      "fruit": 1,
+      "an animal": 1
+    },
+    "none of these": {
+      "none of these": 9,
+      "condition": 1,
+      "record.values.colour": 1,
+      "listing.attributes.condition": 1
+    },
+    "product_type": {
+      "product_type": 1
+    },
+    "record.values.product_type": {
+      "record.values.product_type": 1
+    },
+    "the reported condition is visible": {
+      "the reported condition is visible": 3
+    },
+    "unknown": {
+      "False": 2,
+      "True": 1,
+      "unknown": 8
+    }
+  },
+  "seconds": 107.4
+}

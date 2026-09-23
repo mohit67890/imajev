@@ -1,0 +1,317 @@
+{
+  "commons-receipt-deavmi": {
+    "field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "Which heading is printed at the top of the paper?",
+      "options": [
+        {
+          "value": "Pre-paid Voucher",
+          "description": "Pre-paid Voucher"
+        },
+        {
+          "value": "Tax Invoice",
+          "description": "Tax Invoice"
+        },
+        {
+          "value": "Delivery Note",
+          "description": "Delivery Note"
+        },
+        {
+          "value": "Bank Statement",
+          "description": "Bank Statement"
+        }
+      ]
+    },
+    "gold": "Pre-paid Voucher",
+    "evidence": "The top line of the photographed paper reads 'Pre-paid Voucher'. Do not transcribe voucher, PIN, phone, or cashier identifiers.",
+    "joint": [
+      [
+        {
+          "required_heading": "Pre-paid Voucher",
+          "rule": "Accept this document for a fictional routing queue only if required_heading exactly matches the visible heading at the top. Otherwise reject. Ignore all account-like numbers."
+        },
+        "accept"
+      ],
+      [
+        {
+          "required_heading": "Tax Invoice",
+          "rule": "Accept this document for a fictional routing queue only if required_heading exactly matches the visible heading at the top. Otherwise reject. Ignore all account-like numbers."
+        },
+        "reject"
+      ]
+    ],
+    "unknown_field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "What percentage tax rate is explicitly printed on this paper? Return unknown if no tax rate is readable.",
+      "options": [
+        {
+          "value": "5%",
+          "description": "5%"
+        },
+        {
+          "value": "10%",
+          "description": "10%"
+        },
+        {
+          "value": "15%",
+          "description": "15%"
+        }
+      ]
+    },
+    "unknown_evidence": "No percentage tax rate is readable. The product denomination R110 is visible and must not be confused with a tax rate."
+  },
+  "commons-san-jose-media-parking-sign": {
+    "field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "For whom does the central sign say the space is reserved?",
+      "options": [
+        {
+          "value": "media",
+          "description": "media"
+        },
+        {
+          "value": "buses",
+          "description": "buses"
+        },
+        {
+          "value": "deliveries",
+          "description": "deliveries"
+        },
+        {
+          "value": "residents",
+          "description": "residents"
+        }
+      ]
+    },
+    "gold": "media",
+    "evidence": "The central sign visibly reads 'RESERVED FOR MEDIA' and 'PERMIT ONLY'.",
+    "joint": [
+      [
+        {
+          "candidate_class": "media",
+          "rule": "This is a sign-text matching task, not legal advice. Accept only when candidate_class is the class explicitly named after RESERVED FOR on the central sign; otherwise reject."
+        },
+        "accept"
+      ],
+      [
+        {
+          "candidate_class": "deliveries",
+          "rule": "This is a sign-text matching task, not legal advice. Accept only when candidate_class is the class explicitly named after RESERVED FOR on the central sign; otherwise reject."
+        },
+        "reject"
+      ]
+    ],
+    "unknown_field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "During which posted clock hours does this restriction apply? Return unknown if no hours are visible.",
+      "options": [
+        {
+          "value": "08:00-17:00",
+          "description": "08:00-17:00"
+        },
+        {
+          "value": "09:00-18:00",
+          "description": "09:00-18:00"
+        },
+        {
+          "value": "18:00-24:00",
+          "description": "18:00-24:00"
+        }
+      ]
+    },
+    "unknown_evidence": "The photographed signs state tow-away zone, reserved for media, permit only, and to here; no clock hours are visible."
+  },
+  "commons-little-hug-nutrition-label": {
+    "field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "How many calories per serving are printed in the Nutrition Facts panel?",
+      "options": [
+        {
+          "value": "0",
+          "description": "0"
+        },
+        {
+          "value": "10",
+          "description": "10"
+        },
+        {
+          "value": "40",
+          "description": "40"
+        },
+        {
+          "value": "80",
+          "description": "80"
+        }
+      ]
+    },
+    "gold": "10",
+    "evidence": "The Nutrition Facts panel visibly states 'Calories/Calorias 10' per serving.",
+    "joint": [
+      [
+        {
+          "maximum_calories_per_serving": 10,
+          "rule": "Accept when the printed calories per serving are no greater than maximum_calories_per_serving; otherwise reject. Use the visible panel only and make no health claim."
+        },
+        "accept"
+      ],
+      [
+        {
+          "maximum_calories_per_serving": 9,
+          "rule": "Accept when the printed calories per serving are no greater than maximum_calories_per_serving; otherwise reject. Use the visible panel only and make no health claim."
+        },
+        "reject"
+      ]
+    ],
+    "unknown_field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "What retail selling price is explicitly printed on this package? Return unknown if no selling price is visible.",
+      "options": [
+        {
+          "value": "$1.00",
+          "description": "$1.00"
+        },
+        {
+          "value": "$2.00",
+          "description": "$2.00"
+        },
+        {
+          "value": "$3.00",
+          "description": "$3.00"
+        }
+      ]
+    },
+    "unknown_evidence": "The visible nutrition, ingredient and package markings do not give a retail selling price. A partially visible best-by date is present, so expiration year is not used as a missing-evidence task."
+  },
+  "commons-four-vermouth-bottles": {
+    "field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "How many separate bottles are visible?",
+      "options": [
+        {
+          "value": "3",
+          "description": "3"
+        },
+        {
+          "value": "4",
+          "description": "4"
+        },
+        {
+          "value": "5",
+          "description": "5"
+        },
+        {
+          "value": "6",
+          "description": "6"
+        }
+      ]
+    },
+    "gold": "4",
+    "evidence": "Four distinct upright bottles are fully visible from left to right.",
+    "joint": [
+      [
+        {
+          "minimum_visible_bottles": 4,
+          "rule": "Accept when the number of separate visible bottles is at least minimum_visible_bottles; otherwise reject. Count physical bottles, not label illustrations or reflections."
+        },
+        "accept"
+      ],
+      [
+        {
+          "minimum_visible_bottles": 5,
+          "rule": "Accept when the number of separate visible bottles is at least minimum_visible_bottles; otherwise reject. Count physical bottles, not label illustrations or reflections."
+        },
+        "reject"
+      ]
+    ],
+    "unknown_field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "In which year was the leftmost bottle manufactured? Return unknown if a manufacturing year is not readable.",
+      "options": [
+        {
+          "value": "2018",
+          "description": "2018"
+        },
+        {
+          "value": "2019",
+          "description": "2019"
+        },
+        {
+          "value": "2020",
+          "description": "2020"
+        }
+      ]
+    },
+    "unknown_evidence": "No manufacturing year is readable on the visible part of the leftmost bottle."
+  },
+  "commons-recycling-bins-mannheim-2025": {
+    "field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "How many separate cylindrical waste receptacles are visible?",
+      "options": [
+        {
+          "value": "4",
+          "description": "4"
+        },
+        {
+          "value": "5",
+          "description": "5"
+        },
+        {
+          "value": "6",
+          "description": "6"
+        },
+        {
+          "value": "7",
+          "description": "7"
+        }
+      ]
+    },
+    "gold": "6",
+    "evidence": "Six separate cylindrical metal receptacles are visible: two black-lidded on the left, two yellow-lidded in the middle (rear body partly occluded), and two blue-lidded on the right.",
+    "joint": [
+      [
+        {
+          "minimum_blue_lidded_receptacles": 2,
+          "rule": "Accept when at least minimum_blue_lidded_receptacles separate receptacles have predominantly blue lid faces; otherwise reject. Count receptacles, not the small raised label tabs."
+        },
+        "accept"
+      ],
+      [
+        {
+          "minimum_blue_lidded_receptacles": 3,
+          "rule": "Accept when at least minimum_blue_lidded_receptacles separate receptacles have predominantly blue lid faces; otherwise reject. Count receptacles, not the small raised label tabs."
+        },
+        "reject"
+      ]
+    ],
+    "unknown_field": {
+      "id": "decision",
+      "type": "choice",
+      "question": "On which weekday are these receptacles collected? Return unknown if no collection weekday is visible.",
+      "options": [
+        {
+          "value": "Monday",
+          "description": "Monday"
+        },
+        {
+          "value": "Wednesday",
+          "description": "Wednesday"
+        },
+        {
+          "value": "Friday",
+          "description": "Friday"
+        }
+      ]
+    },
+    "unknown_evidence": "No collection weekday is visible on the receptacles or surrounding scene."
+  }
+}

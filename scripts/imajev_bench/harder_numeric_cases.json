@@ -1,0 +1,283 @@
+[
+  {
+    "source_ids": [
+      "commons-hibernian-menu-board"
+    ],
+    "family": "fictional_catalog_budget_reconciliation",
+    "state": {
+      "record": "Create a fictional catalog bundle containing one soup, one catch-of-the-day dish, and one cheesecake.",
+      "adjustment": "Add a fixed 2.00 catalog handling amount after summing the displayed prices.",
+      "rule": "Approve the bundle when the adjusted total is no more than 35.00; the boundary is inclusive."
+    },
+    "field": {
+      "id": "bundle_approved",
+      "type": "boolean",
+      "question": "Does the fictional bundle satisfy the stated approval rule?",
+      "yes_description": "The adjusted total is at or below the inclusive limit.",
+      "no_description": "The adjusted total is above the inclusive limit."
+    },
+    "gold": true,
+    "evidence": "The board shows soup at 6.50, catch of the day at 19.00, and cheesecake at 7.50. Their sum is 33.00; adding 2.00 gives exactly 35.00, which meets the inclusive limit. This is a fictional catalog calculation, not purchasing guidance."
+  },
+  {
+    "source_ids": [
+      "commons-hibernian-menu-board"
+    ],
+    "family": "fictional_catalog_ordinal_band",
+    "state": {
+      "record": "Combine one soup, one evening-roast entry and one cheesecake, then subtract a fixed 5.00 record credit.",
+      "bands": [
+        "Level 1: adjusted total at or below 22.00.",
+        "Level 2: above 22.00 and at most 25.00.",
+        "Level 3: above 25.00."
+      ]
+    },
+    "field": {
+      "id": "adjusted_total_level",
+      "type": "ordinal",
+      "question": "Which level contains the adjusted fictional record total?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "At or below 22.00."
+        },
+        {
+          "value": 2,
+          "description": "Above 22.00 and at most 25.00."
+        },
+        {
+          "value": 3,
+          "description": "Above 25.00."
+        }
+      ]
+    },
+    "gold": 2,
+    "evidence": "Visible prices are soup 6.50, roast 14.50 and cheesecake 7.50. Sum 28.50 minus 5.00 is 23.50, so level 2. The steak-price reading is not needed."
+  },
+  {
+    "source_ids": [
+      "commons-little-hug-nutrition-label"
+    ],
+    "family": "fictional_record_exact_boundary",
+    "state": {
+      "record_rule": "For a fictional inventory record, compute package units as servings per container multiplied by calories per serving.",
+      "acceptance_rule": "Accept the record when the computed units are at most 400, including exactly 400."
+    },
+    "field": {
+      "id": "record_accepted",
+      "type": "boolean",
+      "question": "Is the fictional inventory record accepted under the stated rule?",
+      "yes_description": "The computed units are no more than the inclusive cap.",
+      "no_description": "The computed units exceed the inclusive cap."
+    },
+    "gold": true,
+    "evidence": "The panel visibly gives 40 servings per container and 10 calories per serving. Multiplication yields exactly 400 units, so the inclusive 400 cap is met. This is a fictional record check and makes no health claim."
+  },
+  {
+    "source_ids": [
+      "commons-little-hug-nutrition-label"
+    ],
+    "family": "fictional_numeric_composite_ordinal",
+    "state": {
+      "formula": "For a fictional label index, add sodium milligrams, ten times total-carbohydrate grams, and sugar grams, all per serving.",
+      "levels": [
+        "Level 1: index at or below 100.",
+        "Level 2: index from 101 through 110 inclusive.",
+        "Level 3: index above 110."
+      ]
+    },
+    "field": {
+      "id": "label_index_level",
+      "type": "ordinal",
+      "question": "Which level contains the fictional label index?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "Index at or below 100."
+        },
+        {
+          "value": 2,
+          "description": "Index from 101 through 110 inclusive."
+        },
+        {
+          "value": 3,
+          "description": "Index above 110."
+        }
+      ]
+    },
+    "gold": 2,
+    "evidence": "The panel visibly lists sodium 80 mg, total carbohydrate 2 g, and sugars 2 g per serving. The fictional index is 80 + (10 x 2) + 2 = 102, which is Level 2. This is not a nutritional assessment."
+  },
+  {
+    "source_ids": [
+      "commons-little-hug-nutrition-label",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "fictional_cross_image_capacity",
+    "state": {
+      "record": "A fictional display assigns 11 label servings to every separate bottle position visible in the second image.",
+      "rule": "Mark capacity sufficient only if the servings per container in the first image cover every assignment."
+    },
+    "field": {
+      "id": "capacity_sufficient",
+      "type": "boolean",
+      "question": "Is the recorded capacity sufficient for the fictional display?",
+      "yes_description": "The container capacity covers all bottle-position assignments.",
+      "no_description": "The bottle-position assignments exceed the container capacity."
+    },
+    "gold": false,
+    "evidence": "The first image visibly states 40 servings per container, while the second image visibly contains four separate bottles. The assignment requires 4 x 11 = 44 servings, which exceeds 40, so capacity is insufficient. This is a fictional display-record calculation."
+  },
+  {
+    "source_ids": [
+      "commons-hibernian-menu-board",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "fictional_cross_image_average_band",
+    "state": {
+      "record": "In a fictional catalog audit, sum every displayed menu entry priced below 20.00, then divide by the number of separate bottle positions in the second image.",
+      "bands": [
+        "low: quotient below 11.50.",
+        "middle: quotient from 11.50 through 12.00 inclusive.",
+        "high: quotient above 12.00."
+      ]
+    },
+    "field": {
+      "id": "audit_band",
+      "type": "choice",
+      "question": "Which band contains the fictional audit quotient?",
+      "options": [
+        {
+          "value": "low",
+          "description": "Below 11.50."
+        },
+        {
+          "value": "middle",
+          "description": "From 11.50 through 12.00 inclusive."
+        },
+        {
+          "value": "high",
+          "description": "Above 12.00."
+        }
+      ]
+    },
+    "gold": "middle",
+    "evidence": "The menu entries below 20.00 are 6.50, 19.00, 14.50, 7.50, totaling 47.50; the higher-priced steak is excluded. Four separate bottles are visible; 47.50/4=11.875, within the middle band."
+  },
+  {
+    "source_ids": [
+      "commons-hibernian-menu-board",
+      "commons-little-hug-nutrition-label"
+    ],
+    "family": "fictional_cross_image_exact_boundary",
+    "state": {
+      "record": "A fictional catalog bundle contains one soup and one evening roast from Image 1 and one serving of the drink labeled in Image 2.",
+      "rule": "Route to queue A only if both conditions hold: the two menu-item prices total at most 21.00, and printed sugar grams per drink serving are at most 2 g. Both bounds include equality. Otherwise route to queue B. These are record checks, not a health assessment."
+    },
+    "field": {
+      "id": "record_queue",
+      "type": "choice",
+      "question": "Which queue receives the fictional record?",
+      "options": [
+        {
+          "value": "queue_a",
+          "description": "Both specified constraints hold."
+        },
+        {
+          "value": "queue_b",
+          "description": "At least one specified constraint fails."
+        }
+      ]
+    },
+    "gold": "queue_a",
+    "evidence": "Soup 6.50+roast 14.50=21.00; the drink label gives 2 g sugars per serving. Both inclusive boundaries hold, so queue_a."
+  },
+  {
+    "source_ids": [
+      "commons-little-hug-nutrition-label",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "fictional_cross_image_numeric_reconciliation",
+    "state": {
+      "record": "For a fictional shelf record, allocate one label serving to each separate bottle position and total the sugar grams represented.",
+      "rule": "Use the printed sugar grams per serving and count only fully visible separate bottles."
+    },
+    "field": {
+      "id": "recorded_sugar_total",
+      "type": "choice",
+      "question": "What total should the fictional shelf record contain?",
+      "options": [
+        {
+          "value": "6 g",
+          "description": "Six grams."
+        },
+        {
+          "value": "8 g",
+          "description": "Eight grams."
+        },
+        {
+          "value": "10 g",
+          "description": "Ten grams."
+        },
+        {
+          "value": "12 g",
+          "description": "Twelve grams."
+        }
+      ]
+    },
+    "gold": "8 g",
+    "evidence": "The label visibly states 2 g sugars per serving, and four fully visible separate bottles appear in the second image. One serving per position gives 2 x 4 = 8 g. This is a fictional shelf record, not dietary guidance."
+  },
+  {
+    "source_ids": [
+      "commons-hibernian-menu-board",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "fictional_missing_numeric_evidence",
+    "state": {
+      "record": "For a fictional catalog, add the displayed price of the evening roast to the mean displayed selling price of all separate bottled products in the second image.",
+      "bands": [
+        "tier_1: combined amount at or below 30.00.",
+        "tier_2: combined amount above 30.00."
+      ],
+      "missing_data_rule": "If any required displayed selling price is absent, no tier is determined."
+    },
+    "field": {
+      "id": "catalog_tier",
+      "type": "choice",
+      "question": "Which tier is determined for the fictional catalog record?",
+      "options": [
+        {
+          "value": "tier_1",
+          "description": "Combined amount at or below 30.00."
+        },
+        {
+          "value": "tier_2",
+          "description": "Combined amount above 30.00."
+        }
+      ]
+    },
+    "gold": null,
+    "evidence": "The menu visibly supplies the evening-roast price of 14.50, and four bottles are visible, but no selling price is displayed for any bottle. The required bottle-price mean cannot be computed, so neither tier is established. This is a fictional catalog check."
+  },
+  {
+    "source_ids": [
+      "commons-little-hug-nutrition-label",
+      "commons-hibernian-menu-board"
+    ],
+    "family": "fictional_missing_cross_image_evidence",
+    "state": {
+      "record": "A fictional price audit compares the package's displayed retail selling price with the lowest displayed menu price in the second image.",
+      "rule": "Return yes only if the package price is strictly lower; return no only if it is equal or higher. If either required price is absent, the result is undetermined."
+    },
+    "field": {
+      "id": "package_price_strictly_lower",
+      "type": "boolean",
+      "question": "Is the package's displayed retail selling price strictly lower than the lowest displayed menu price?",
+      "yes_description": "The visible package price is strictly lower than the lowest visible menu price.",
+      "no_description": "The visible package price is equal to or higher than the lowest visible menu price."
+    },
+    "gold": null,
+    "evidence": "The menu visibly has prices, with 6.50 the lowest, but the package image displays nutrition, ingredients, and product markings without a retail selling price. The strict comparison therefore cannot be evaluated. This is a fictional catalog audit."
+  }
+]

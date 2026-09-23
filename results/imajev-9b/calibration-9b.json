@@ -1,0 +1,20 @@
+{
+  "calibration_version": "v1.1-9b",
+  "counts": {
+    "boolean:2": 14887,
+    "choice:2": 1020,
+    "choice:26-254": 4514,
+    "choice:3-5": 2474,
+    "choice:6-10": 662,
+    "ordinal:3-5": 1660
+  },
+  "schema_version": "1.0",
+  "temperatures": {
+    "boolean:2": 1.0920613511817499,
+    "choice:2": 1.085552643200241,
+    "choice:26-254": 1.0355399918685126,
+    "choice:3-5": 1.0193759406924379,
+    "choice:6-10": 1.144806384861894,
+    "ordinal:3-5": 1.0954094757198645
+  }
+}

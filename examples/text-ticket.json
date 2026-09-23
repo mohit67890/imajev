@@ -1,0 +1,8 @@
+{
+  "state": "Customer ticket: I was charged twice for my Team subscription today. Please refund the duplicate charge. I cannot afford to wait another week.",
+  "questions": {
+    "department": {"type": "choice", "instructions": "Which department should handle this ticket?", "criteria": {"billing": "Payments, invoices and refunds", "technical": "Software errors", "sales": "New purchases"}},
+    "refund": {"type": "noul", "instructions": "The customer is requesting a refund."},
+    "urgency": {"type": "score", "instructions": "Rate the urgency expressed in the ticket.", "criteria": ["No urgency", "Some urgency", "Strong urgency"]}
+  }
+}

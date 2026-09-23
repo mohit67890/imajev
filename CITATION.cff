@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "imajev: an open Jev-style decision model for images and text"
+message: "If you use imajev, please cite it as below."
+type: software
+authors:
+  - family-names: Garg
+    given-names: Mohit
+version: 1.0.0
+date-released: 2026-09-24
+license: Apache-2.0
+repository-code: https://github.com/mohit67890/imajev
+keywords:
+  - typed decisions
+  - vision-language
+  - calibration
+  - Jev

@@ -1,0 +1,109 @@
+{
+  "manifest": "data/manifests/decision-v2-pairs-probe.jsonl",
+  "label": "2b-v1.1",
+  "items": 60,
+  "overall_accuracy": 0.6833,
+  "abstention_rate": 0.0,
+  "families": {
+    "target_still_matches_reference": {
+      "n": 20,
+      "correct": 15,
+      "accuracy": 0.75,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "what_changed": {
+      "n": 20,
+      "correct": 16,
+      "accuracy": 0.8,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    },
+    "which_state_field_now_wrong": {
+      "n": 20,
+      "correct": 10,
+      "accuracy": 0.5,
+      "abstained": 0,
+      "abstained_correctly": 0,
+      "gold_unknown": 0
+    }
+  },
+  "pairs": {
+    "complete_pairs": 0,
+    "pairs_whose_gold_differs": 0,
+    "answer_changed_when_state_changed": 0,
+    "answer_changed_rate": 0.0,
+    "both_halves_correct": 0,
+    "both_halves_correct_rate": 0.0
+  },
+  "confusion_by_gold": {
+    "False": {
+      "False": 6,
+      "True": 4
+    },
+    "True": {
+      "True": 9,
+      "False": 1
+    },
+    "an object changed colour": {
+      "an object changed colour": 1,
+      "an object was added": 1
+    },
+    "an object was added": {
+      "an object was added": 4
+    },
+    "an object was removed": {
+      "nothing relevant changed": 2,
+      "an object was removed": 2
+    },
+    "audit.all_items_still_there": {
+      "audit.no_new_items": 1,
+      "none of these": 1
+    },
+    "audit.colours_as_before": {
+      "audit.colours_as_before": 1
+    },
+    "audit.nothing_covered_or_blurred": {
+      "audit.nothing_covered_or_blurred": 1
+    },
+    "condition_record.all_items_still_there": {
+      "condition_record.no_new_items": 1
+    },
+    "condition_record.no_new_items": {
+      "none of these": 1
+    },
+    "inspection.no_new_items": {
+      "none of these": 1
+    },
+    "inspection.nothing_covered_or_blurred": {
+      "inspection.nothing_covered_or_blurred": 1
+    },
+    "none of these": {
+      "audit.nothing_covered_or_blurred": 1,
+      "site_check.no_new_items": 1,
+      "site_check.nothing_covered_or_blurred": 1,
+      "none of these": 4,
+      "condition_record.all_items_still_there": 1,
+      "audit.all_items_still_there": 1
+    },
+    "nothing relevant changed": {
+      "nothing relevant changed": 6
+    },
+    "site_check.all_items_still_there": {
+      "site_check.all_items_still_there": 1
+    },
+    "site_check.no_new_items": {
+      "site_check.no_new_items": 1
+    },
+    "site_check.nothing_covered_or_blurred": {
+      "site_check.nothing_covered_or_blurred": 1
+    },
+    "something was covered or blurred out": {
+      "something was covered or blurred out": 3,
+      "an object was added": 1
+    }
+  },
+  "seconds": 86.3
+}

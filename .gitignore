@@ -1,0 +1,13 @@
+.venv*/
+.cache/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+adapters/
+artifacts/huggingface-cache/
+artifacts/models/
+data/
+out/
+.env*
+.DS_Store
+*.log

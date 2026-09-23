@@ -1,0 +1,267 @@
+[
+  {
+    "source_ids": [
+      "commons-recycling-bins-mannheim-2025",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "relational_count_boundary",
+    "state": {
+      "record_kind": "fictional_display_audit",
+      "rule": "Approve exactly when the number of separate receptacles in attachment 1 minus the number of separate bottles in attachment 2 is at least 2. Count a partly occluded receptacle when its own lid and body establish a separate container; ignore label art and reflections."
+    },
+    "field": {
+      "id": "decision",
+      "type": "boolean",
+      "question": "Does this fictional display audit approve?"
+    },
+    "gold": true,
+    "evidence": "Attachment 1 has six separate receptacles, including the rear yellow-lidded receptacle whose body is partly occluded; attachment 2 has four physical bottles. The difference is 6 - 4 = 2, exactly meeting the inclusive boundary. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-recycling-bins-mannheim-2025",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "relational_count_boundary",
+    "state": {
+      "record_kind": "fictional_display_audit",
+      "rule": "Approve exactly when the number of separate receptacles in attachment 1 minus the number of separate bottles in attachment 2 is greater than 2. Count a partly occluded receptacle when its own lid and body establish a separate container; ignore label art and reflections."
+    },
+    "field": {
+      "id": "decision",
+      "type": "boolean",
+      "question": "Does this fictional display audit approve?"
+    },
+    "gold": false,
+    "evidence": "The verified counts are six receptacles and four bottles, so the difference is exactly 2. It does not satisfy the strict greater-than-2 rule. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-cta-speed-limit",
+      "commons-caringbah-speed-limit-50"
+    ],
+    "family": "numeric_relation_boundary",
+    "state": {
+      "record_kind": "fictional_number-card_catalog",
+      "rule": "Treat only the large central speed-limit numeral on each attachment as a dimensionless catalog number; ignore units and real-world sign meaning. Assign band amber when attachment 2's number is exactly five times attachment 1's number, blue when it is more than five times, and gray otherwise."
+    },
+    "field": {
+      "id": "band",
+      "type": "choice",
+      "question": "Which fictional catalog band applies?",
+      "options": [
+        {
+          "value": "amber",
+          "description": "exactly five times"
+        },
+        {
+          "value": "blue",
+          "description": "more than five times"
+        },
+        {
+          "value": "gray",
+          "description": "neither condition"
+        }
+      ]
+    },
+    "gold": "amber",
+    "evidence": "The largest printed integers are 10 in attachment 1 and 50 in attachment 2. Numerically, 50 = 5 x 10, so the exact-ratio band applies. This is a fictional numeric-only rule, not a unit or safety comparison. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-cta-speed-limit",
+      "commons-caringbah-speed-limit-50"
+    ],
+    "family": "numeric_relation_boundary",
+    "state": {
+      "record_kind": "fictional_number-card_catalog",
+      "rule": "Treat only the large central speed-limit numeral on each attachment as a dimensionless catalog number; ignore units and real-world sign meaning. Assign tier high only when attachment 2's number is at least 41 greater than attachment 1's number; assign tier medium when the difference is 40; otherwise assign tier low. Encode low as 1, medium as 2, high as 3."
+    },
+    "field": {
+      "id": "tier",
+      "type": "ordinal",
+      "question": "What fictional catalog tier applies?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "Low tier."
+        },
+        {
+          "value": 2,
+          "description": "Medium tier."
+        },
+        {
+          "value": 3,
+          "description": "High tier."
+        }
+      ]
+    },
+    "gold": 2,
+    "evidence": "The visible integers are 10 and 50, giving 50 - 10 = 40. That reaches the exact medium branch but is one short of the inclusive high threshold. The rule explicitly makes the figures dimensionless. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-recycling-bins-mannheim-2025",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "color_count_composition",
+    "state": {
+      "record_kind": "fictional_color_inventory",
+      "rule": "Approve only if both clauses hold: attachment 1 contains the same positive number of predominantly blue lid faces as predominantly yellow lid faces, and attachment 2 contains exactly one bottle with a predominantly red cap. Count physical containers, including separately identifiable partly occluded ones."
+    },
+    "field": {
+      "id": "decision",
+      "type": "boolean",
+      "question": "Does this fictional color inventory approve?"
+    },
+    "gold": true,
+    "evidence": "Attachment 1 contains two blue-lidded and two yellow-lidded receptacles, so the positive counts match. Attachment 2 has one red-capped bottle, the third from the left. Both nonredundant clauses hold. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-recycling-bins-mannheim-2025",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "color_count_composition",
+    "state": {
+      "record_kind": "fictional_color_inventory",
+      "rule": "Approve only if both clauses hold: attachment 1 contains more predominantly blue lid faces than predominantly yellow lid faces, and attachment 2 contains exactly one bottle with a predominantly red cap. Count physical containers, including separately identifiable partly occluded ones."
+    },
+    "field": {
+      "id": "decision",
+      "type": "boolean",
+      "question": "Does this fictional color inventory approve?"
+    },
+    "gold": false,
+    "evidence": "The bottle clause holds because exactly one cap is red, but attachment 1 has two blue lid faces and two yellow lid faces. Blue is not more numerous, so the conjunction fails. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-san-jose-media-parking-sign",
+      "commons-hirschegg-no-parking-sign"
+    ],
+    "family": "spatial_panel_relation",
+    "state": {
+      "record_kind": "fictional_panel-layout_catalog",
+      "rule": "Count only distinct sign panels on the central pole in Image 1 and on the wooden gate in Image 2. Ignore background building signage, words and supports. Assign rank 3 when attachment 1 has exactly one more panel than attachment 2 and attachment 1's panels form a vertical stack; assign rank 2 when only one clause holds; otherwise assign rank 1. This is a layout-only catalog rule with no parking or legal interpretation."
+    },
+    "field": {
+      "id": "rank",
+      "type": "ordinal",
+      "question": "What fictional layout rank applies?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "rank 1"
+        },
+        {
+          "value": 2,
+          "description": "rank 2"
+        },
+        {
+          "value": 3,
+          "description": "rank 3"
+        }
+      ]
+    },
+    "gold": 3,
+    "evidence": "Attachment 1 has three distinct panels mounted one above another. Attachment 2 has two distinct panels on the gate: a small rectangle and a larger triangle. The count difference is exactly one and the first arrangement is vertical, so both clauses hold. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-san-jose-media-parking-sign",
+      "commons-hirschegg-no-parking-sign"
+    ],
+    "family": "spatial_panel_relation",
+    "state": {
+      "record_kind": "fictional_panel-layout_catalog",
+      "rule": "Count only distinct sign panels on the central pole in Image 1 and on the wooden gate in Image 2. Ignore background building signage, words and supports. Assign rank 3 when attachment 1 has exactly two more panels than attachment 2 and attachment 1's panels form a vertical stack; assign rank 2 when exactly one clause holds; otherwise assign rank 1. This is a layout-only catalog rule with no parking or legal interpretation."
+    },
+    "field": {
+      "id": "rank",
+      "type": "ordinal",
+      "question": "What fictional layout rank applies?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "rank 1"
+        },
+        {
+          "value": 2,
+          "description": "rank 2"
+        },
+        {
+          "value": 3,
+          "description": "rank 3"
+        }
+      ]
+    },
+    "gold": 2,
+    "evidence": "Attachment 1's three panels do form a vertical stack, but attachment 2 has two panels, making the difference one rather than two. Exactly one clause holds, which maps to rank 2. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "missing_catalog_attribute",
+    "state": {
+      "record_kind": "fictional_bottle_catalog",
+      "rule": "Return early when the manufacturing year printed on the leftmost bottle is before 2020, current when it is 2020 or later, and unknown when no manufacturing year is readable. Do not substitute a volume, alcohol percentage, slogan, or inferred product age."
+    },
+    "field": {
+      "id": "cohort",
+      "type": "choice",
+      "question": "Which fictional catalog cohort applies?",
+      "options": [
+        {
+          "value": "early",
+          "description": "before 2020"
+        },
+        {
+          "value": "current",
+          "description": "2020 or later"
+        }
+      ]
+    },
+    "gold": null,
+    "evidence": "No manufacturing year is readable on the visible portion of the leftmost bottle. Other visible numbers concern different attributes and cannot supply the required fact. Provisional authored label."
+  },
+  {
+    "source_ids": [
+      "commons-recycling-bins-mannheim-2025",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "missing_evidence_short_circuit",
+    "state": {
+      "rule": "Count separate receptacles in Image 1, including independently identifiable partly occluded ones, and physical bottles in Image 2. Requirement 1: the receptacle count is equal to the bottle count. Requirement 2: the displayed total receptacle capacity is at least 100 litres. Accept only if both are established true. Reject if any requirement is established false even if another is unknown. Return Unknown if no requirement is false but at least one cannot be determined. Do not infer capacity from container size."
+    },
+    "field": {
+      "id": "decision",
+      "type": "boolean",
+      "question": "Does this inventory record meet both requirements?",
+      "yes_description": "Both requirements are established true.",
+      "no_description": "At least one requirement is established false."
+    },
+    "gold": false,
+    "evidence": "Six receptacles versus four bottles makes requirement 1 false. No total capacity is displayed, but the explicit short-circuit rule gives false despite that missing fact."
+  },
+  {
+    "source_ids": [
+      "commons-recycling-bins-mannheim-2025",
+      "commons-four-vermouth-bottles"
+    ],
+    "family": "missing_evidence_short_circuit",
+    "state": {
+      "rule": "Count separate receptacles in Image 1, including independently identifiable partly occluded ones, and physical bottles in Image 2. Requirement 1: the receptacle count is at least the bottle count. Requirement 2: the displayed total receptacle capacity is at least 100 litres. Accept only if both are established true. Reject if any requirement is established false even if another is unknown. Return Unknown if no requirement is false but at least one cannot be determined. Do not infer capacity from container size."
+    },
+    "field": {
+      "id": "decision",
+      "type": "boolean",
+      "question": "Does this inventory record meet both requirements?",
+      "yes_description": "Both requirements are established true.",
+      "no_description": "At least one requirement is established false."
+    },
+    "gold": null,
+    "evidence": "Six receptacles is at least four bottles, so requirement 1 holds. No total capacity is displayed, leaving requirement 2 unknown; with no known failure the result is null."
+  }
+]

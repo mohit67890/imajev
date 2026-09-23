@@ -1,0 +1,110 @@
+[
+  {
+    "source_id": "commons-menu-board-joshcool776",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Menu_Board.JPG",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Menu_Board.JPG",
+    "license": "CC0 1.0",
+    "creator": "JoshCool776",
+    "description": "Photograph of a menu board; candidate for visible item/price transcription and rule-conditioned price-cap decisions.",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  {
+    "source_id": "commons-hibernian-menu-board",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Menu_Board_at_the_Hibernian_Hotel,_Mallow.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Menu_Board_at_the_Hibernian_Hotel%2C_Mallow.jpg",
+    "license": "CC BY 2.0",
+    "creator": "Tim Sheerman-Chase",
+    "description": "Outdoor hotel menu board photographed in Mallow; candidate for OCR, price comparison, and insufficient-evidence cases after legibility review.",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/"
+  },
+  {
+    "source_id": "commons-receipt-deavmi",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Receipt.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Receipt.jpg",
+    "license": "CC BY-SA 3.0",
+    "creator": "Deavmi",
+    "description": "Mobile photograph of a receipt; candidate for visible total/line-item transcription and an explicit reimbursement-cap decision.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  {
+    "source_id": "commons-cta-speed-limit",
+    "file_page": "https://commons.wikimedia.org/wiki/File:CTA_speed_limit_sign.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/CTA_speed_limit_sign.jpg",
+    "license": "CC BY-SA 4.0",
+    "creator": "Daniel Schwen",
+    "description": "Chicago elevated speed-limit sign showing 10; candidate for numeric sign reading and threshold-rule decisions.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "source_id": "commons-caringbah-speed-limit-50",
+    "file_page": "https://commons.wikimedia.org/wiki/File:50_km_speed_limit_road_sign_2.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/50_km_speed_limit_road_sign_2.jpg",
+    "license": "CC BY-SA 4.0",
+    "creator": "HutheMeow",
+    "description": "Roadside 50 km/h sign in Caringbah; candidate for sign reading, threshold decisions, and sign-versus-background evidence checks.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "source_id": "commons-san-jose-media-parking-sign",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Media_street_parking_sign,_South_6th_Street,_San_Jose,_California.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Media_street_parking_sign%2C_South_6th_Street%2C_San_Jose%2C_California.jpg",
+    "license": "CC BY-SA 4.0",
+    "creator": "Mxn",
+    "description": "Street parking sign with multiple text conditions; candidate for bounded action selection under a supplied time/vehicle state.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "source_id": "commons-hirschegg-no-parking-sign",
+    "file_page": "https://commons.wikimedia.org/wiki/File:No_parking_sign,_Hirschegg_01.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/No_parking_sign%2C_Hirschegg_01.jpg",
+    "license": "CC BY-SA 4.0",
+    "creator": "Herzi Pinki",
+    "description": "No-parking sign photographed in Hirschegg; candidate for sign-type classification and rule-conditioned parking decisions.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "source_id": "commons-tortilla-chip-ingredients",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Ingredients_label_for_tortilla_chips_.png",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ingredients_label_for_tortilla_chips_.png",
+    "license": "CC BY-SA 4.0",
+    "creator": "Cindyy28",
+    "description": "Close crop of a tortilla-chip ingredient list; candidate for ingredient-presence decisions under an explicit prohibited-ingredient rule.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "source_id": "commons-deodorant-back-label",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Deodorant_stick_with_ingredients_label_(back_label).jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Deodorant_stick_with_ingredients_label_%28back_label%29.jpg",
+    "license": "CC BY-SA 4.0",
+    "creator": "Notional Target",
+    "description": "Deodorant container with its back ingredient label; candidate for visible label evidence, attribute checks, and unreadable-region abstention.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "source_id": "commons-little-hug-nutrition-label",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Nutrition_facts_2014-03-17_08-47.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Nutrition_facts_2014-03-17_08-47.jpg",
+    "license": "CC BY-SA 3.0",
+    "creator": "Tcoe33",
+    "description": "Little Hug package with English and Spanish Nutrition Facts and ingredients; candidate for numeric nutrient thresholds and bilingual label evidence.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  {
+    "source_id": "commons-four-vermouth-bottles",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Four_bottles_of_vermouth.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Four_bottles_of_vermouth.jpg",
+    "license": "CC BY-SA 4.0",
+    "creator": "Kenneth C. Zirkel",
+    "description": "Four distinct vermouth bottles arranged left to right; candidate for exact counting, ordinal position, and label/relationship questions.",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  {
+    "source_id": "commons-recycling-bins-mannheim-2025",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Recycling-bins-Mannheim-September-2025.jpg",
+    "download_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Recycling-bins-Mannheim-September-2025.jpg",
+    "license": "CC BY 4.0",
+    "creator": "Acediscovery",
+    "description": "Street recycling-bin scene; candidate for object counting, color/category relations, and explicit disposal-rule decisions after visual review.",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  }
+]

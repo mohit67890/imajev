@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "request_id": "product-smoke-001",
+  "state": {"inspection_scope": "product_only"},
+  "fields": [
+    {"id": "product_type", "type": "choice", "question": "What is the main product shown?", "options": [
+      {"value": "shoe", "description": "Footwear, excluding its packaging."},
+      {"value": "shirt", "description": "A shirt or T-shirt."},
+      {"value": "bag", "description": "A handbag, backpack, or similar bag."},
+      {"value": "other", "description": "A visible product outside the listed categories."}
+    ]},
+    {"id": "product_damaged", "type": "boolean", "question": "Is the product itself visibly damaged? Ignore damage limited to packaging. If the image is too unclear to inspect, choose unknown."}
+  ],
+  "execution": {"mode": "inspect", "allow_external_fallback": false}
+}

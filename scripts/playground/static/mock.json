@@ -1,0 +1,167 @@
+{
+  "_comment": "Offline fixture for index.html?mock=1 — covers every card state the spec describes.",
+  "state": {
+    "listing": {
+      "title": "Striped cotton shirt, relaxed fit",
+      "color": "blue",
+      "product_type": "shirt",
+      "price_usd": 39
+    },
+    "channel": "marketplace",
+    "seller_tier": "new"
+  },
+  "questions": {
+    "photo_quality": {
+      "type": "score",
+      "instructions": "How usable is this photo for a product listing?",
+      "criteria": [
+        "Unusable: out of focus, very dark, or the product is cropped out",
+        "Poor: the product is visible but the photo is noisy or badly lit",
+        "Acceptable: clear enough to identify the product",
+        "Good: sharp, well lit, product fills a reasonable part of the frame",
+        "Excellent: studio-grade, clean background, product clearly the subject"
+      ]
+    },
+    "matches_color": {
+      "type": "noul",
+      "instructions": "The garment in the photo matches `listing.color`.",
+      "criteria": {
+        "true": "The dominant garment colour is the listed colour or a close shade of it",
+        "false": "The garment is clearly a different colour family"
+      }
+    },
+    "is_worn_by_model": {
+      "type": "noul",
+      "instructions": "A person is wearing the garment in the photo."
+    },
+    "product_type": {
+      "type": "choice",
+      "instructions": "What kind of product is shown?",
+      "criteria": {
+        "shirt": "A shirt, T-shirt or blouse",
+        "shoe": "Any footwear",
+        "bag": "A handbag, backpack or luggage",
+        "other": null
+      }
+    },
+    "sign_text": {
+      "type": "choice",
+      "instructions": "Which word appears on the sign in the background?",
+      "criteria": {
+        "OPEN": null, "CLOSED": null, "SALE": null, "EXIT": null, "ENTER": null,
+        "STOP": null, "PARKING": null, "PUSH": null, "PULL": null, "NO_ENTRY": null
+      }
+    },
+    "fabric_country": {
+      "type": "choice",
+      "instructions": "Which country is printed on the care label?",
+      "criteria": {
+        "portugal": "The label reads Portugal",
+        "vietnam": "The label reads Vietnam",
+        "india": "The label reads India",
+        "turkey": "The label reads Türkiye or Turkey"
+      }
+    }
+  },
+  "response": {
+    "model": "imajev-v1",
+    "answers": {
+      "photo_quality": {
+        "type": "score",
+        "score": 3.39,
+        "legend": {
+          "0": "Unusable: out of focus, very dark, or the product is cropped out",
+          "1": "Poor: the product is visible but the photo is noisy or badly lit",
+          "2": "Acceptable: clear enough to identify the product",
+          "3": "Good: sharp, well lit, product fills a reasonable part of the frame",
+          "4": "Excellent: studio-grade, clean background, product clearly the subject"
+        },
+        "probabilities": { "0": 0.01, "1": 0.03, "2": 0.10, "3": 0.28, "4": 0.58 },
+        "confidence": 0.456,
+        "unknown_probability": 0.04,
+        "abstained": false
+      },
+      "matches_color": {
+        "type": "noul",
+        "noul": 0.99,
+        "unknown_probability": 0.01,
+        "abstained": false
+      },
+      "is_worn_by_model": {
+        "type": "noul",
+        "noul": 0.05,
+        "unknown_probability": 0.03,
+        "abstained": false
+      },
+      "product_type": {
+        "type": "choice",
+        "choice": "shirt",
+        "probabilities": { "shirt": 0.86, "shoe": 0.06, "bag": 0.03, "other": 0.05 },
+        "confidence": 0.797,
+        "unknown_probability": 0.02,
+        "abstained": false
+      },
+      "sign_text": {
+        "type": "choice",
+        "choice": "OPEN",
+        "probabilities": {
+          "OPEN": 0.41, "CLOSED": 0.19, "SALE": 0.12, "EXIT": 0.08, "ENTER": 0.06,
+          "STOP": 0.05, "PARKING": 0.04, "PUSH": 0.03, "PULL": 0.01, "NO_ENTRY": 0.01
+        },
+        "confidence": 0.307,
+        "unknown_probability": 0.11,
+        "abstained": false
+      },
+      "fabric_country": {
+        "type": "choice",
+        "choice": "portugal",
+        "probabilities": { "portugal": 0.34, "vietnam": 0.31, "india": 0.20, "turkey": 0.15 },
+        "confidence": 0.026,
+        "unknown_probability": 0.78,
+        "abstained": true
+      }
+    },
+    "usage": {
+      "prefill_ms": 82,
+      "questions_ms": 274,
+      "total_ms": 361,
+      "input_tokens": 1187,
+      "images": [
+        { "sha256": "9f2a1c77c0b4d3e5a6188f0c4b9d2e7a35c16f80b2d4e9c3a7158d0f6e2b4c91", "width": 1024, "height": 1024 },
+        { "sha256": "3b71ee40d9c25a8f16b0473ce8d5920fa4c7381be6d05f29a83c14d7e0b6925c", "width": 800, "height": 1200 }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "name": "Product listing check (mock)",
+      "images": 1,
+      "state": { "listing": { "title": "Striped cotton shirt", "color": "blue", "product_type": "shirt" } },
+      "questions": {
+        "matches_color": { "type": "noul", "instructions": "The garment matches `listing.color`." },
+        "product_type": {
+          "type": "choice",
+          "instructions": "What kind of product is shown?",
+          "criteria": { "shirt": "A shirt or T-shirt", "shoe": "Footwear", "bag": "A handbag or backpack", "other": null }
+        },
+        "photo_quality": {
+          "type": "score",
+          "instructions": "How usable is this photo for a product listing?",
+          "criteria": ["Unusable", "Usable with flaws", "Clear and well framed"]
+        }
+      }
+    },
+    {
+      "name": "Counting as score (mock)",
+      "images": 1,
+      "state": { "scene": "street" },
+      "questions": {
+        "people_visible": {
+          "type": "score",
+          "instructions": "How many people are visible?",
+          "criteria": ["none", "one", "two", "three", "four", "five", "six or more"]
+        }
+      }
+    }
+  ]
+}

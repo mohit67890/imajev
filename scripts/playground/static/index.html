@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>imajev playground</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='%236e8bff'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <span class="brand">imajev <span class="crumb">/</span> <span class="crumb-2">playground</span></span>
+  <span class="chip" id="model-chip">not connected</span>
+  <span class="chip warn" id="mock-chip" hidden>mock mode</span>
+  <span class="spacer"></span>
+  <a href="wardrobe/" style="color:inherit;font-size:12px;text-decoration:none">Wardrobe ↗</a>
+  <label class="sr-only" for="load-example">Load an example request</label>
+  <select id="load-example"><option value="">Load example…</option></select>
+  <button id="theme-toggle" aria-label="Toggle colour theme">Light</button>
+</header>
+
+<main class="split">
+
+  <!-- ───────────────────────────── request ───────────────────────────── -->
+  <section class="pane pane-left">
+
+    <section class="images" id="images-strip" aria-labelledby="t-images">
+      <div class="images-head">
+        <button class="fold" data-fold="images-strip" aria-expanded="true" aria-label="Collapse images"></button>
+        <h2 class="pane-title" id="t-images">Images <span class="opt-note">optional</span></h2>
+        <span class="spacer"></span>
+        <span class="count" id="image-count">0 / 2</span>
+      </div>
+      <div class="shots" id="thumbs"></div>
+      <button class="dropzone" id="dropzone" type="button"
+              aria-label="Add up to two images, or none for a text-only request: drop files here or press Enter to browse">
+        <span class="plus">+</span>
+        <span class="dz-text">Drop or click<span class="hint">1st = reference · 2nd = target · none = text-only</span></span>
+      </button>
+      <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" multiple hidden>
+    </section>
+
+    <div class="pane-head">
+      <button class="fold" data-fold="ed-state" aria-expanded="true" aria-label="Collapse state"></button>
+      <h2 class="pane-title" id="t-state">State</h2>
+      <span class="spacer"></span>
+      <span class="validation ok" id="state-msg" role="status" aria-live="polite"></span>
+      <button id="format-state" title="Re-indent the JSON">Format</button>
+    </div>
+    <div class="ed" id="ed-state" data-min="90">
+      <div class="ed-gutter" aria-hidden="true"></div>
+      <pre class="ed-hl" aria-hidden="true"></pre>
+      <textarea class="ed-input" id="state" spellcheck="false" aria-labelledby="t-state"
+                aria-describedby="state-msg"></textarea>
+    </div>
+
+    <div class="hsplit" id="hsplit" role="separator" aria-orientation="horizontal" tabindex="0"
+         aria-label="Resize the state editor (arrow keys, double-click to reset)"></div>
+
+    <div class="pane-head">
+      <button class="fold" data-fold="ed-questions" aria-expanded="true" aria-label="Collapse questions"></button>
+      <h2 class="pane-title" id="t-questions">Questions</h2>
+      <span class="spacer"></span>
+      <span class="validation ok" id="questions-msg" role="status" aria-live="polite"></span>
+      <label class="sr-only" for="insert-question">Insert a question template</label>
+      <select id="insert-question">
+        <option value="">Insert…</option>
+        <option value="noul">noul</option>
+        <option value="choice">choice</option>
+        <option value="score">score</option>
+      </select>
+      <button id="format-questions" title="Re-indent the JSON">Format</button>
+    </div>
+    <div class="ed grow" id="ed-questions" data-min="160">
+      <div class="ed-gutter" aria-hidden="true"></div>
+      <pre class="ed-hl" aria-hidden="true"></pre>
+      <textarea class="ed-input" id="questions" spellcheck="false" aria-labelledby="t-questions"
+                aria-describedby="questions-msg"></textarea>
+    </div>
+
+    <div id="error" class="errorbox" hidden role="alert"></div>
+
+    <footer class="runbar">
+      <span class="chip ghost" id="endpoint-chip"></span>
+      <span class="spacer"></span>
+      <span class="elapsed" id="elapsed"></span>
+      <span class="spinner" id="spinner" hidden></span>
+      <button class="primary" id="run"><span id="run-label">Run request</span><span class="kbd" aria-hidden="true">⌘↵</span></button>
+    </footer>
+
+  </section>
+
+  <div class="vsplit" id="vsplit" role="separator" aria-orientation="vertical" tabindex="0"
+       aria-label="Resize the panes (arrow keys, double-click to reset)"></div>
+
+  <!-- ───────────────────────────── response ──────────────────────────── -->
+  <section class="pane pane-right">
+
+    <div class="pane-head">
+      <h2 class="pane-title">Response</h2>
+      <span class="ran" id="ran-at"></span>
+      <span class="spacer"></span>
+      <button id="toggle-raw" aria-pressed="false" title="Show the raw JSON payload">Raw JSON</button>
+      <span class="seg" role="group" aria-label="Copy the request">
+        <button id="copy-curl" title="Copy this request as a curl command">curl</button>
+        <button id="copy-vd" title="Copy this request as a vd decide command">vd decide</button>
+      </span>
+    </div>
+
+    <div class="thead">
+      <span class="c-twist"></span>
+      <span class="c-key">Key &amp; instructions</span>
+      <span class="c-val" id="latency"></span>
+      <span class="c-type">Primitive type</span>
+    </div>
+
+    <div class="rows" id="cards">
+      <p class="empty">No response yet. Write questions, add an image if the question needs one, then run the request.</p>
+    </div>
+    <pre class="raw" id="raw" hidden></pre>
+
+    <div class="pane-head sub">
+      <button class="fold" data-fold="history" aria-expanded="true" aria-label="Collapse history"></button>
+      <h2 class="pane-title">History <span id="history-count"></span></h2>
+      <span class="spacer"></span>
+      <button id="clear-history">Clear</button>
+    </div>
+    <div class="history" id="history"></div>
+
+  </section>
+</main>
+
+<div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lb-close" type="button" aria-label="Close preview (Esc)">×</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Previous image (←)">‹</button>
+  <figure class="lb-figure">
+    <img id="lb-img" alt="">
+    <figcaption id="lb-caption"></figcaption>
+  </figure>
+  <button class="lb-nav lb-next" type="button" aria-label="Next image (→)">›</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+[
+  {
+    "family": "rule_precedence",
+    "state": {
+      "rules": [
+        "General rule: route every blue-tagged parcel to Bay 2.",
+        "Exception: if a parcel is blue-tagged and marked FRAGILE, route it to Bay 5. An applicable exception overrides the general rule."
+      ],
+      "parcel": {
+        "tag": "blue",
+        "marking": "FRAGILE"
+      }
+    },
+    "field": {
+      "id": "use_bay_5",
+      "type": "boolean",
+      "question": "Under the stated routing rules, should this parcel go to Bay 5?",
+      "yes_description": "The applicable final route is Bay 5.",
+      "no_description": "The applicable final route is not Bay 5."
+    },
+    "gold": true,
+    "evidence": "Both rules match, and the text explicitly gives the FRAGILE exception precedence; the final route is Bay 5."
+  },
+  {
+    "family": "rule_precedence",
+    "state": {
+      "policy": "Apply the highest-priority matching instruction. Priority 1 outranks priority 2. If matching instructions have the same priority, the one with the later issued_at timestamp wins.",
+      "instructions": [
+        {
+          "priority": 2,
+          "issued_at": "2028-04-03T09:00:00Z",
+          "condition": "folder is amber",
+          "action": "archive"
+        },
+        {
+          "priority": 1,
+          "issued_at": "2028-04-01T16:30:00Z",
+          "condition": "folder owner is Team Cedar",
+          "action": "hold"
+        },
+        {
+          "priority": 1,
+          "issued_at": "2028-04-02T08:15:00Z",
+          "condition": "folder owner is Team Cedar",
+          "action": "release"
+        }
+      ],
+      "folder": {
+        "colour": "amber",
+        "owner": "Team Cedar"
+      }
+    },
+    "field": {
+      "id": "final_action",
+      "type": "choice",
+      "question": "Which action applies to the folder?",
+      "options": [
+        {
+          "value": "archive",
+          "description": "Archive the folder."
+        },
+        {
+          "value": "hold",
+          "description": "Keep the folder on hold."
+        },
+        {
+          "value": "release",
+          "description": "Release the folder."
+        }
+      ]
+    },
+    "gold": "release",
+    "evidence": "The two Team Cedar rules have the highest priority (1); their tie is resolved by issued_at, and the 2028-04-02 release instruction is later."
+  },
+  {
+    "family": "rule_precedence",
+    "state": {
+      "policy": "Apply the matching rule with the smallest priority number. The policy gives no tie-breaking rule for matching rules with the same priority.",
+      "rules": [
+        {
+          "priority": 1,
+          "condition": "label contains STAR",
+          "action": "shelf_a"
+        },
+        {
+          "priority": 1,
+          "condition": "weight is below 2 kg",
+          "action": "shelf_b"
+        }
+      ],
+      "item": {
+        "label": "STAR",
+        "weight_kg": 1.4
+      }
+    },
+    "field": {
+      "id": "destination",
+      "type": "choice",
+      "question": "Which destination is determined by the policy?",
+      "options": [
+        {
+          "value": "shelf_a",
+          "description": "Place the item on shelf A."
+        },
+        {
+          "value": "shelf_b",
+          "description": "Place the item on shelf B."
+        }
+      ]
+    },
+    "gold": null,
+    "evidence": "Both priority-1 rules match and prescribe different destinations, while the policy explicitly supplies no tie breaker."
+  },
+  {
+    "family": "missing_conflicting_evidence",
+    "state": {
+      "rule": "Choose 'restock' only when the counted quantity is below 6; otherwise choose 'leave'. A missing count cannot establish either action.",
+      "inventory_note": {
+        "item": "notebooks",
+        "count": null,
+        "comment": "count pending"
+      }
+    },
+    "field": {
+      "id": "stock_action",
+      "type": "choice",
+      "question": "What stock action is established by the note?",
+      "options": [
+        {
+          "value": "restock",
+          "description": "Restock the notebooks."
+        },
+        {
+          "value": "leave",
+          "description": "Leave the stock unchanged."
+        }
+      ]
+    },
+    "gold": null,
+    "evidence": "The only count is explicitly missing, so the below-6 condition and its complement cannot be evaluated under the supplied rule."
+  },
+  {
+    "family": "missing_conflicting_evidence",
+    "state": {
+      "rule": "A crate passes only if every required check is recorded as pass. Any recorded fail means it does not pass.",
+      "required_checks": {
+        "seal": "pass",
+        "label": "fail",
+        "dimensions": "pass"
+      }
+    },
+    "field": {
+      "id": "crate_passes",
+      "type": "boolean",
+      "question": "Does the crate pass all required checks?",
+      "yes_description": "Every required check is recorded as pass.",
+      "no_description": "At least one required check is recorded as fail."
+    },
+    "gold": false,
+    "evidence": "The label check is recorded as fail, which is sufficient for a negative result under the rule."
+  },
+  {
+    "family": "missing_conflicting_evidence",
+    "state": {
+      "rubric": "Assign level 1 for 0-2 marks, level 2 for 3-5 marks, and level 3 for 6 or more marks. If the supplied reports disagree on the mark count and no report is designated authoritative, the level is not determined.",
+      "reports": [
+        {
+          "source": "morning sheet",
+          "marks": 2
+        },
+        {
+          "source": "evening sheet",
+          "marks": 6
+        }
+      ],
+      "authoritative_source": null
+    },
+    "field": {
+      "id": "mark_level",
+      "type": "ordinal",
+      "question": "Which mark level is determined by the supplied reports?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "0 to 2 marks."
+        },
+        {
+          "value": 2,
+          "description": "3 to 5 marks."
+        },
+        {
+          "value": 3,
+          "description": "6 or more marks."
+        }
+      ]
+    },
+    "gold": null,
+    "evidence": "The reports conflict across levels 1 and 3, and neither report is authoritative, so the rubric requires an undetermined result."
+  },
+  {
+    "family": "scheduling_date_boundaries",
+    "state": {
+      "window": "The display window begins at 2029-06-10 09:00 UTC and ends at 2029-06-10 17:00 UTC. Both endpoints are included.",
+      "event_time": "2029-06-10 17:00 UTC"
+    },
+    "field": {
+      "id": "inside_window",
+      "type": "boolean",
+      "question": "Is the event time inside the display window?",
+      "yes_description": "The event is at or after the inclusive start and at or before the inclusive end.",
+      "no_description": "The event lies outside the inclusive window."
+    },
+    "gold": true,
+    "evidence": "The event is exactly at the 17:00 UTC endpoint, and the rule states that both endpoints are included."
+  },
+  {
+    "family": "scheduling_date_boundaries",
+    "state": {
+      "rule": "Collection slots occur only Monday through Friday. A request made before 15:00 local time uses the next calendar day if it is a weekday; a request at or after 15:00 skips one additional calendar day. After that calculation, move forward to Monday if the result is Saturday or Sunday.",
+      "request_time": "2030-11-15 15:00 local",
+      "request_day": "Friday"
+    },
+    "field": {
+      "id": "collection_day",
+      "type": "choice",
+      "question": "On which weekday is the collection slot?",
+      "options": [
+        {
+          "value": "monday",
+          "description": "Monday."
+        },
+        {
+          "value": "tuesday",
+          "description": "Tuesday."
+        },
+        {
+          "value": "wednesday",
+          "description": "Wednesday."
+        },
+        {
+          "value": "friday",
+          "description": "Friday."
+        }
+      ]
+    },
+    "gold": "monday",
+    "evidence": "At exactly 15:00 the at-or-after branch applies: Friday plus two calendar days is Sunday, which rolls forward to Monday."
+  },
+  {
+    "family": "scheduling_date_boundaries",
+    "state": {
+      "rule": "Count whole calendar days from the fixed check date to the due date, excluding the check date and including the due date. Assign urgency 3 for 0-1 days, urgency 2 for 2-4 days, and urgency 1 for 5 or more days.",
+      "check_date": "2031-02-27",
+      "due_date": "2031-03-03"
+    },
+    "field": {
+      "id": "urgency",
+      "type": "ordinal",
+      "question": "What urgency level applies?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "Due in 5 or more whole calendar days."
+        },
+        {
+          "value": 2,
+          "description": "Due in 2 to 4 whole calendar days."
+        },
+        {
+          "value": 3,
+          "description": "Due in 0 to 1 whole calendar days."
+        }
+      ]
+    },
+    "gold": 2,
+    "evidence": "Excluding February 27 and including March 3 gives four days: February 28 and March 1, 2, and 3. Four days maps to urgency 2."
+  },
+  {
+    "family": "numerical_reconciliation",
+    "state": {
+      "rule": "Expected closing count equals opening count plus received units minus dispatched units. Choose 'balanced' if recorded closing equals expected closing; otherwise choose the direction of the discrepancy relative to expected.",
+      "opening": 128,
+      "received": 37,
+      "dispatched": 49,
+      "recorded_closing": 116
+    },
+    "field": {
+      "id": "reconciliation",
+      "type": "choice",
+      "question": "How does the recorded closing count reconcile?",
+      "options": [
+        {
+          "value": "balanced",
+          "description": "Recorded closing equals expected closing."
+        },
+        {
+          "value": "recorded_high",
+          "description": "Recorded closing is above expected."
+        },
+        {
+          "value": "recorded_low",
+          "description": "Recorded closing is below expected."
+        }
+      ]
+    },
+    "gold": "balanced",
+    "evidence": "128 + 37 - 49 = 116, which equals the recorded closing count."
+  },
+  {
+    "family": "numerical_reconciliation",
+    "state": {
+      "rule": "The batch is within tolerance when the absolute difference between the measured total and the ledger total is no more than 0.25 kg. Equality at 0.25 kg is within tolerance.",
+      "measured_total_kg": 42.6,
+      "ledger_total_kg": 42.31
+    },
+    "field": {
+      "id": "within_tolerance",
+      "type": "boolean",
+      "question": "Is the batch within the stated tolerance?",
+      "yes_description": "The absolute difference is at most 0.25 kg.",
+      "no_description": "The absolute difference is greater than 0.25 kg."
+    },
+    "gold": false,
+    "evidence": "The absolute difference is 42.60 - 42.31 = 0.29 kg, which exceeds 0.25 kg."
+  },
+  {
+    "family": "numerical_reconciliation",
+    "state": {
+      "rule": "Compute absolute discrepancy as |expected - observed|. Assign level 1 for 0-4 units, level 2 for 5-9 units, and level 3 for 10 or more units. Boundary values belong to the range that starts with that value.",
+      "expected": 245,
+      "observed": 236
+    },
+    "field": {
+      "id": "discrepancy_level",
+      "type": "ordinal",
+      "question": "What discrepancy level applies?",
+      "levels": [
+        {
+          "value": 1,
+          "description": "Absolute discrepancy of 0 to 4 units."
+        },
+        {
+          "value": 2,
+          "description": "Absolute discrepancy of 5 to 9 units."
+        },
+        {
+          "value": 3,
+          "description": "Absolute discrepancy of 10 or more units."
+        }
+      ]
+    },
+    "gold": 2,
+    "evidence": "The absolute discrepancy is |245 - 236| = 9 units, which is level 2."
+  }
+]
