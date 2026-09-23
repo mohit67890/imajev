@@ -63,7 +63,7 @@ r = requests.post("http://127.0.0.1:8765/v1/systemone", json={
 print(r.json()["answers"]["queue"])   # {"type": "choice", "choice": "billing", "probabilities": {...}, "confidence": ..., "unknown_probability": ..., "abstained": false}
 ```
 
-On PyTorch, pass `--backend torch --adapter adapters/imajev-2b/peft`. For the 9B: `python scripts/download_model.py --model 9b`,
+On PyTorch, pass `--backend torch --adapter adapters/imajev-2b`. For the 9B: `python scripts/download_model.py --model 9b`,
 download `mohit67890/imajev-9b`, and start the server with `--model-bundle artifacts/model-qwen9b.json`.
 
 ## Results

@@ -8,7 +8,7 @@ teacher, 84% kept, 15% unknown), `pairs_natural` (8,469; same-item / attribute-d
 `pairs_grounded` (17,162; reference photo + edited target, labels by construction). New-source dev/test rows whose photos v2 had trained on
 were moved to train (899) or dropped (7,743 rows) so that no image hash spans partitions. Recipe as v2: lr 5e-5, one epoch (1,361 steps,
 zero crashes), best checkpoint by `mean_accuracy` over the v1.1 dev set and the reasoning dev set. 4× H100 SXM, ~1.3 h including
-labelling and evaluation; pod8 cost $80.92 in total for v2 and v2.1.
+labelling and evaluation; pod8 cost $95.43 in total for v2 and v2.1.
 
 Two checkpoints are kept: **step 50**, which the selector chose (v1.1 dev 87.0%, reasoning dev 48.0%, mean 0.675) and which saw ~8k of
 the 232k training decisions, and **step 1,361**, the end of the epoch (87.0% / 43.75%). The pod panels ran on step 50; step 1,361 was

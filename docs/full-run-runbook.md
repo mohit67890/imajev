@@ -111,7 +111,7 @@ Held-out sources 39.5% -> 46.8%; held-out unanswerable yes/no (TUBench): 1/225 c
   different partitions → both to train). Outcome: +2,732 twins, 899 rows moved, 7,743 dropped, 232,092 train decisions, audit ok.
   Lesson: build new sources on photos that are not in any existing manifest, or partition them by the photo's existing partition.
 
-## v2.1 outcome (23 Sept 2026, the pod, terminated; pod8 total $80.92 for v2 + v2.1)
+## v2.1 outcome (23 Sept 2026, the pod, terminated; pod8 total $95.43 for v2 + v2.1)
 - Label (9B teacher, 4×35k decisions, ~15 min: 84% of state_grounded and 91% of pairs_natural kept) → assemble (audit repairs above)
   → train 1 epoch from v2 best (1,361 steps, 0 crashes, ~40 min) → eval incl. state/pairs probes (~25 min).
 - The mean_accuracy selector picked step 50 (reasoning dev 48.0% vs 43.75% at step 1,361): the released "best" saw ~8k of the
