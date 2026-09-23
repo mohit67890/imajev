@@ -72,7 +72,7 @@ def release_check(records: list[dict], root: Path, targets: dict | None = None,
 
     try:
         validate_records(records, Path(root), require_reviewed=True)
-        gate("human_review", True, "Every record carries two agreeing (or adjudicated) human reviews.")
+        gate("human_review", True, "Every record has a validated label route (see limitations for the audit method).")
     except ValueError as exc:
         gate("human_review", False, str(exc))
 
@@ -113,8 +113,9 @@ def release_check(records: list[dict], root: Path, targets: dict | None = None,
         audit = audit_report(records)
         gate("consensus_audit", audit["audited"] >= targets["min_audited"]
              and audit["error_rate"] is not None and audit["error_rate"] <= targets["max_consensus_error"],
-             f"{consensus_labels} labels use the model-consensus or construction route; audited {audit['audited']} with "
-             f"{audit['consensus_errors']} errors (upper 95% bound {audit['wilson_upper_95']}).", **audit)
+             f"{consensus_labels} labels use the model-consensus or construction route; audited {audit['audited']} "
+             f"({audit['audit_method']} audit) with {audit['consensus_errors']} errors "
+             f"(upper 95% bound {audit['wilson_upper_95']}).", **audit)
     else:
         gate("consensus_audit", True, "No labels used the model-consensus or construction route.")
 
@@ -164,6 +165,13 @@ def limitations(records: list[dict], gates: list[dict]) -> list[str]:
     notes.append("Label routes: " + ", ".join(f"{k}: {v}" for k, v in routes.most_common()) + ". Construction labels are "
                  "computed from the scene or text specification; a seeded sample and every occlusion-based Unknown are "
                  "human-audited, and the audited error rate is reported with its upper bound.")
+    model_audited = [r for r in records if r["provenance"].get("model_audit")]
+    if model_audited:
+        auditors = sorted({a for r in model_audited for a in r["provenance"]["model_audit"].get("auditors", [])})
+        notes.append(f"The audit of {len(model_audited)} items was done by AI models ({', '.join(auditors)}), not by "
+                     "humans: blind answers from auditors outside the generator, checker and leaderboard roles, with every "
+                     "disagreement adjudicated by the pipeline author's model. Treat the audited error rate as a model "
+                     "audit.")
     unknown = sum(r["gold"] is None for r in records)
     notes.append(f"{unknown}/{len(records)} references are Unknown (insufficient evidence).")
     notes.append("Scores depend on each model's interface and reasoning setting (direct option scoring vs structured "

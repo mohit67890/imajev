@@ -32,13 +32,12 @@ favours it on perception.
 | GPT-5.4 (reasoning medium) | 527/533 (99%) | 75/75 | 223/223 | 229/235 | 41/45 | 1/488 | 1 | 90/96 |
 | GPT-5.6 Luna* (default) | 526/533 (99%) | 75/75 | 223/223 | 228/235 | 39/45 | 0/488 | 1 | 91/96 |
 | Grok 4.3 (default, no response schema) | 483/533 (91%) | 46/75 | 211/223 | 226/235 | 40/45 | 21/488 | 24 | 82/96 |
-| Gemini 3.1 Pro* (default thinking) | pending | | | | | | | |
+| Gemini 3.1 Pro* (default thinking) | 525/533 (98%) | 73/75 | 222/223 | 230/235 | 41/45 | 1/488 | 3 | 91/96 |
 
-**Gemini 3.1 Pro is pending.** Vertex capacity for this preview model ran out partway through
-(HTTP 429 even on single requests). Its first dev and calibration runs contain 51 capacity errors:
-it answered 198 of the 203 items it could reach correctly. A retry job reruns all its splits once
-capacity returns (`reports/imajev-bench-v2-lite-v1-gemini-retry.log`). The error-containing runs are
-kept in `eval-aborted/`.
+**Gemini 3.1 Pro was rerun.** Vertex capacity for this preview model ran out partway through the
+first run (HTTP 429 even on single requests), leaving 51 capacity errors. A retry job waited for
+capacity and reran all its splits; the table shows that clean rerun. The error-containing first runs
+are kept in `eval-aborted/`.
 
 The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
 
@@ -50,6 +49,7 @@ The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
 | GPT-5.4 medium | 507/510 (99.4%) | 382/385 | 70/73 | 75/75 |
 | GPT-5.6 Luna | 504/510 (98.8%) | 379/385 | 72/73 | 75/75 |
 | Grok 4.3 | 469/510 (92.0%) | 369/385 | 68/73 | 46/75 |
+| Gemini 3.1 Pro | 504/510 (98.8%) | 381/385 | 71/73 | 73/75 |
 
 - **No visible home advantage.** OpenAI models do not score higher on OpenAI-generated images, and
   Gemini does not score higher on Google-generated images. With only 73 Nano Banana 2 image items,
@@ -68,7 +68,7 @@ The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
    E4B), and the no-image baseline, are pending the owner's choice of hardware (Mac or A100).
 3. **The reasoning setting matters a lot.** In the hard trial, GPT-5.4 scored 76% with Azure's
    default of no reasoning and 93% with medium reasoning. Every entry must state its setting.
-4. **The labels look clean, but the audit is still needed.** Four strong models agree with the
+4. **The labels look clean, but the audit is still needed.** Five strong models agree with the
    constructed answers on about 99% of items. Error triage still found two image defects the
    checkers missed:
    - a sticky note spilling onto a second price;
@@ -99,8 +99,7 @@ The 95% intervals, from a cluster bootstrap, are in `eval-summary/summary.md`.
 1. **Blind human audit of 138 items:**
    `data/imajev-bench/v2-lite-v1/packets/audit-auditor-1-v2.html`.
 2. **Local and open-model runs, plus the no-image baseline:** hardware decision pending.
-3. **Gemini 3.1 Pro rerun:** automatic when capacity returns.
-4. **Publishing details:** licences (proposed: CC0 for the AI images, CC BY 4.0 for the labels), a
+3. **Publishing details:** licences (proposed: CC0 for the AI images, CC BY 4.0 for the labels), a
    contact address, a README, and the test-split policy.
 
 ## Cost so far (estimates from list prices; bills are authoritative)

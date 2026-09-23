@@ -197,12 +197,22 @@ def _construction_error(record: BenchmarkRecord, reviews: object) -> str | None:
         return "constructed truth must equal gold"
     if record.images and construction.get("image_checks") != "passed":
         return "image records on the construction route require passed image checks"
-    if record.provenance.get("judgement_dependent"):
-        return "judgement-dependent records cannot use the construction route"
+    if record.provenance.get("judgement_dependent") and not record.provenance.get("audit_sample"):
+        return "judgement-dependent records need an audit before they can use the construction route"
     if record.provenance.get("audit_sample"):
         expected = _model_input_sha256(record)
+        audit = record.provenance.get("model_audit")
+        if isinstance(audit, dict) and not reviews:
+            # Model audit (disclosed as such): blind answers from independent auditors plus an adjudication.
+            if audit.get("verdict") != "confirmed" or "adjudicated_value" not in audit or not audit.get("auditors"):
+                return "a model audit must be confirmed, name its auditors and record the adjudicated value"
+            if type(audit["adjudicated_value"]) is not type(record.gold) or audit["adjudicated_value"] != record.gold:
+                return "model-audit adjudicated value must equal gold"
+            if audit.get("input_sha256") != expected:
+                return "model audit must bind to the model input"
+            return _target_error(record, record.gold)
         if not isinstance(reviews, list) or not reviews:
-            return "audit-sample construction records require a human review"
+            return "audit-sample construction records require a human review or a confirmed model audit"
         for review in reviews:
             if not isinstance(review, dict) or review.get("input_sha256") != expected or "value" not in review:
                 return "construction audit reviews must bind to the model input and carry a value"

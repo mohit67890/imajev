@@ -77,13 +77,13 @@ def main(argv=None):
                                                            sum(r["family"] == f for r in records)]
                                                        for f in sorted({r["family"] for r in records})}}
     # Robustness views: without flagged items, and per image generator (home-advantage check).
-    flagged = {r["id"] for r in records if r["provenance"].get("judgement_dependent")}
+    flagged = {r["id"] for r in records if r["provenance"].get("judgement_dependent") or r["provenance"].get("quarantined")}
     def generator(r):
         sources = r["provenance"].get("image_sources") or []
         return sources[0].get("generator", "real/unknown") if sources else "text-only"
     strata = sorted({generator(r) for r in records})
-    lines += ["", f"Robustness: accuracy excluding the {len(flagged)} flagged items (judgement calls, image defects, premise "
-              "mismatches), and by image generator.", "",
+    lines += ["", f"Robustness: accuracy excluding the {len(flagged)} flagged or quarantined items (judgement calls, image "
+              "defects, premise mismatches, audit-found label errors), and by image generator.", "",
               "| Model | Excl. flagged | " + " | ".join(strata) + " |", "| --- | ---: | " + " | ".join("---:" for _ in strata) + " |"]
     for model in summary:
         predictions = runs[model]

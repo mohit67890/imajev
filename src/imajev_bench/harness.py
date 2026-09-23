@@ -102,6 +102,63 @@ class MLXBackend:
                 "trained_readout": self.direct.readout is not None, "load_seconds": self.direct.load_seconds}
 
 
+class TorchBackend:
+    """PyTorch path (CUDA/MPS/CPU): scripts/torch_decision.TorchDecision + PEFT adapter + trained readout.
+
+    Same prompt compilation and verified label boundaries as the server's torch backend; one full forward per
+    question, no shared prefill, no batching.
+    """
+
+    def __init__(self, engine, identity: dict, adapter: str | None = None):
+        import torch
+        self.torch, self.engine, self.identity, self.adapter = torch, engine, identity, adapter
+        self._peak = 0
+
+    @classmethod
+    def load(cls, base_path: str, adapter: str | None, identity: dict, device: str | None = None):
+        import torch
+        from torch_decision import TorchDecision
+        device = device or ("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+        dtype = torch.bfloat16 if device == "cuda" else torch.float32
+        engine = TorchDecision(base_path, device, dtype=dtype)
+        if adapter:
+            from peft import PeftModel
+            engine.model = PeftModel.from_pretrained(engine.model, str(adapter)).eval()
+            engine.enable_readout(adapter, trainable=False)
+        engine.model.eval()
+        return cls(engine, {**identity, "device": device, "dtype": str(dtype)}, adapter)
+
+    def labels(self, header, count, n_images):
+        return self.engine.labels(count, n_images)
+
+    def score(self, images, prompt, labels, choices):
+        from vision_decision.scoring import result_from_logits
+        start = time.perf_counter()
+        with self.torch.no_grad():
+            rendered, inputs, token_ids = self.engine.prepare(images, prompt, labels)
+            preprocess = time.perf_counter() - start
+            logits = [float(x) for x in self.engine.candidate_logits(inputs, token_ids).cpu().tolist()]
+        forward = time.perf_counter() - start - preprocess
+        result = result_from_logits(choices, logits, token_ids=token_ids)
+        return list(result.raw_logits.values()), {"preprocess_seconds": preprocess, "forward_seconds": forward,
+                                                  "input_tokens": int(inputs["input_ids"].shape[-1]),
+                                                  "choice_token_ids": list(token_ids),
+                                                  "tie_break_policy": "lowest_vocabulary_token_id"}
+
+    def reset_peak_memory(self):
+        if self.torch.cuda.is_available():
+            self.torch.cuda.reset_peak_memory_stats()
+
+    def peak_memory_bytes(self):
+        if self.torch.cuda.is_available():
+            return int(self.torch.cuda.max_memory_allocated())
+        return None
+
+    def describe(self):
+        return {**self.identity, "backend": "torch", "adapter": self.adapter,
+                "trained_readout": getattr(self.engine, "readout", None) is not None}
+
+
 # Desktop compositor and editor/browser UI processes are routinely above the threshold without
 # competing for model compute; they are recorded under "ignored" rather than flagging the case.
 IGNORED_PROCESSES = ("WindowServer", "kernel_task", "Code Helper (Renderer)", "Google Chrome Helper (Renderer)")

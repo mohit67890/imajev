@@ -35,8 +35,8 @@ with p.open('a') as stream:
    target=name(choices[target][0]),prediction=name(result.value),confidence=max(result.scores.values()),scores={name(k):v for k,v in result.scores.items()},seconds=seconds,
    prefill_seconds=meta['prefill_seconds'],input_tokens=meta['questions'][0]['rotations'][0]['input_tokens'],
    partition=r.get('partition'),decision_type=r['request']['fields'][0]['type'],option_count=len(choices)-1,target_index=target,
-   labels=[name(c[0]) for c in choices],logits=[float({name(k):v for k,v in result.raw_logits.items()}[name(c[0])]) for c in choices] if result.raw_logits else None,
-   raw_logits={name(k):float(v) for k,v in result.raw_logits.items()} if result.raw_logits else None,has_image=bool(r['images']))
+   labels=[name(c[0]) for c in choices],logits=[float({str(name(k)):v for k,v in result.raw_logits.items()}[str(name(c[0]))]) for c in choices] if result.raw_logits else None,
+   raw_logits={str(name(k)):float(v) for k,v in result.raw_logits.items()} if result.raw_logits else None,has_image=bool(r['images']))
   row['correct']=row['prediction']==row['target']
   if r['request']['fields'][0]['type']=='choice':
    h,c,t,_=render(reversed_record(r));row['reversed_prediction']=name(backend.score_questions(image,[(h,c,t)],rotations=1)[0][0].value)
