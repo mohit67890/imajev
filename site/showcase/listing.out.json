@@ -12,28 +12,28 @@
       "confidence": 0.9191285346929658,
       "unknown_probability": 0.007095746940280429,
       "abstained": false,
-      "calibration_version": "p2c-4b-soup50-authored-dev"
+      "calibration_version": "imajev-4b-1.0"
     },
     "color_matches": {
       "type": "noul",
       "noul": 0.08234277746385382,
       "unknown_probability": 0.021674834309841812,
       "abstained": false,
-      "calibration_version": "p2c-4b-soup50-authored-dev"
+      "calibration_version": "imajev-4b-1.0"
     },
     "type_matches": {
       "type": "noul",
       "noul": 0.9891722134699041,
       "unknown_probability": 0.004022438706837568,
       "abstained": false,
-      "calibration_version": "p2c-4b-soup50-authored-dev"
+      "calibration_version": "imajev-4b-1.0"
     }
   },
   "usage": {
-    "prefill_ms": 174.3,
-    "questions_ms": 893.5,
+    "prefill_ms": 181.5,
+    "questions_ms": 913.7,
     "input_tokens": 224,
-    "total_ms": 1152.9,
+    "total_ms": 1200.0,
     "images": [
       {
         "sha256": "2c4a50ed988d9f740196605c76f9551dace9f98bf2ba78c26f9878e6f3dcf95a",

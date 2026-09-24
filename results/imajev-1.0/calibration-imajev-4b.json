@@ -1,6 +1,6 @@
 {
  "schema_version": "1.1",
- "calibration_version": "p2c-4b-soup50-authored-dev",
+ "calibration_version": "imajev-4b-1.0",
  "temperatures": {
   "boolean:2": 1.717,
   "boolean:3-5": 1.717,
@@ -27,7 +27,8 @@
   "nll_raw": 0.8513307799810266,
   "nll_calibrated": 0.7624903855562389,
   "note": "the pod's phase-2c calibration fold gives T~1 (soft-target model is calibrated in-distribution) and does nothing on JevBench hard; served JevBench hard with this file: 70.3 / ECE 0.116 (rot4+cal); offsets 0 (unknown handling gated separately)",
-  "date": "2026-09-24"
+  "date": "2026-09-24",
+  "internal_version": "p2c-4b-soup50-authored-dev"
  },
  "counts": {
   "boolean:2": 150,

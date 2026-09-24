@@ -299,10 +299,10 @@ yet**; a measurement will be requested at launch, and nothing below is one.
 | JevBench hard (111) | 60.4% | 70.3% | 69.4% | JevK5 v0.2.0 73.9%, Eikos-4B 73.9%, Hopper 67.6%, Qwen3.5-4B base (structured generation) 48.6%, mojev 0.85B 33.3% |
 | JevBench original (72) / easy (48) | 93.1 / 100 | 98.6 / 100 | 100 / 100 | JevK5 97.2 / 100, Eikos-4B 93.1 / 100, Hopper 95.8 / 100 |
 | JevBench hard ECE, raw → as shipped (rotations + `calibration.json`) | 0.176 → 0.123 | 0.164 → 0.116 | 0.187 → 0.092 | JevK5 0.073, Eikos-4B 0.054, Hopper 0.050 |
-| MMLU-1000, text-only / with an unrelated photo | 59.8 / 54.9 | 74.5 / 72.9 | 79.2 / 78.8 | previous (phase-2b) adapters; not re-run on the shipped versions |
+| MMLU-1000, text-only / with an unrelated photo | 59.8 / 54.9 | 74.5 / 72.9 | 79.2 / 78.8 | previous adapters; not re-run on the shipped versions |
 | Irrelevance panel (2,823) | 68.9% | 80.2% | 84.0% | |
-| typed-decisions test (2,000) | 59.2% | 67.0% | 67.0% | previous (phase-2b) adapters; not re-run on the shipped versions |
-| Reasoning dev (6,240; also used for checkpoint selection) | 58.9% | 66.6% | 67.4% | previous (phase-2b) adapters; the soft-target checkpoints inside the shipped averages score 62.7 / 67.2 / 68.9% and the averages were not measured; before the last part of the hard-question stage: 64.5 / 67.8 / 69.2% |
+| typed-decisions test (2,000) | 59.2% | 67.0% | 67.0% | previous adapters; not re-run on the shipped versions |
+| Reasoning dev (6,240; also used for checkpoint selection) | 58.9% | 66.6% | 67.4% | previous adapters; the soft-target checkpoints inside the shipped averages score 62.7 / 67.2 / 68.9% and the averages were not measured; before the last part of the hard-question stage: 64.5 / 67.8 / 69.2% |
 
 Reading:
 
@@ -312,12 +312,12 @@ Reading:
 - **The image gain is on ImajevBench.** The paired tests were re-run on the shipped adapters (paired cluster sign-flip over 89 evidence
   clusters). The 4B beats its untuned base by +11.8 points [+5.8, +18.0], p = 0.0006 (exploratory). The 2B beats its base by +11.5 [+3.5, +18.9],
   p = 0.005 (our pre-registered test against the untuned base model). The 9B's gain over its base, +5.4 [−1.2, +12.4], p = 0.131, is **not significant** at
-  0.05 (same pre-registered test; the previous, phase-2b 9B gave +6.1, p = 0.074, and the earlier version of imajev-9b the test was registered with gave +4.3, p = 0.031). Frontier APIs score 91.4–99.6% by structured generation, a different interface ranked
+  0.05 (same pre-registered test; the previous 9B gave +6.1, p = 0.074, and the earlier version of imajev-9b the test was registered with gave +4.3, p = 0.031). Frontier APIs score 91.4–99.6% by structured generation, a different interface ranked
   separately. 51 contrast sets pair a scene with an edited copy whose right answer must change, become unknown, or stay; the 4B gets all of a set
   right in 36 of 51 (9B 35, 2B 25).
 - **Other open image-capable Jev-class models.** Jev-Omni (akhilaaa3/Jev-Omni, Gemma 4 12B) scores 78.5% on the same test through its
-  own `predict()` API. The 4B/9B lead of about 4 points is not significant (p ≈ 0.25; phase-2b adapters vs Jev-Omni) and comes from abstaining on Unknown items,
-  which Jev-Omni has no output for; on answerable items Jev-Omni is slightly ahead (219 vs 215 / 216 for the phase-2b adapters) and better calibrated
+  own `predict()` API. The 4B/9B lead of about 4 points is not significant (p ≈ 0.25; previous adapters vs Jev-Omni) and comes from abstaining on Unknown items,
+  which Jev-Omni has no output for; on answerable items Jev-Omni is slightly ahead (219 vs 215 / 216 for the previous adapters) and better calibrated
   (ECE 0.069). Details in `bench/LEADERBOARD.md`.
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/charts/calibration-dark.svg"><img alt="Reliability of imajev-4b on JevBench hard: raw confidence is well above accuracy; with the shipped calibration it tracks the diagonal. Hard ECE 0.187→0.138 (2B), 0.215→0.112 (4B), 0.236→0.106 (9B)" src="docs/assets/charts/calibration-light.svg"></picture>
@@ -453,7 +453,7 @@ harness in `src/imajev_bench`, leaderboard in `bench/LEADERBOARD.md`. Run your m
 - `scripts/v2/` data collection, templates and the 9B pseudo-labelling pipeline.
 - `scripts/p2/` hard typed-question generation, answering, assembly and temperature fitting.
 - `src/imajev_bench/`, `bench/` the benchmark.
-- `results/` every evaluation we report: `results/imajev-1.0/` (the released models, their calibration files and release gates; `phase-2b/` holds the previous adapters and their earlier paired tests), `results/benchmarks/`
+- `results/` every evaluation we report: `results/imajev-1.0/` (the released models, their calibration files and release gates; `previous-version/` holds the previous adapters and their earlier paired tests), `results/benchmarks/`
   (JevBench and ImajevBench runs), plus reports on earlier checkpoints (`results/earlier-checkpoints/`).
 - `docs/` specs and the run book.
 

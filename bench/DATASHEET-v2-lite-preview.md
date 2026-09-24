@@ -114,7 +114,7 @@ were not run in this preview (see Local-model runs: status).
   Qwen3.5-2B base, and the imajev-2b `no_state` control. Structured generation through vLLM 0.30.0 (JSON schema, default reasoning):
   Qwen3.5-2B/4B/9B base, Gemma 4 E2B-it, Gemma 4 E4B-it.
 - Completed on the training pods (one H100 per run, 24 Sept 2026), same settings and scoring hash: the released adapters
-  imajev-4b (82.4%), imajev-9b (82.1%) and imajev-2b (71.7%), their previous versions (phase-2b: 82.4%, 82.8% and 70.3%), and the
+  imajev-4b (82.4%), imajev-9b (82.1%) and imajev-2b (71.7%), their previous versions (82.4%, 82.8% and 70.3%), and the
   pre-release checkpoints from before the last part of the hard-question stage (imajev-2b 68.5%, and the 4B and 9B). The pre-registered
   tests H1 (imajev-9b vs its untuned base) and H2 (imajev-2b vs its untuned base) were re-run for each replaced adapter and are reported
   beside the registered results.

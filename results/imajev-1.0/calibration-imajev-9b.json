@@ -1,6 +1,6 @@
 {
  "schema_version": "1.1",
- "calibration_version": "p2c-9b-soup50-authored-dev",
+ "calibration_version": "imajev-9b-1.0",
  "temperatures": {
   "boolean:2": 1.748,
   "boolean:3-5": 1.748,
@@ -27,7 +27,8 @@
   "nll_raw": 0.7615848725618098,
   "nll_calibrated": 0.6568009539784012,
   "note": "served JevBench hard with this file: 69.4 / ECE 0.092 (rot4 + cal), 69.4 / 0.090 without rotations; the pod's phase-2c fold gives T~1 and does nothing on hard; offsets 0 (unknown handling gated separately)",
-  "date": "2026-09-24"
+  "date": "2026-09-24",
+  "internal_version": "p2c-9b-soup50-authored-dev"
  },
  "counts": {
   "boolean:2": 150,
