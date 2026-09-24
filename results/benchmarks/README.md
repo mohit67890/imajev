@@ -49,6 +49,12 @@ Pending rows: Gemma 4 E2B/E4B and SmolVLM2-2.2B **direct option scoring** (MLX-o
 | imajev-4b 1.0 (phase 2c soup50) | MLX playground server, rot4, raw; one generic prompt (`Which {task} label fits this text?`, choice over full label list); multi-label heads = one noul per label, set = noul > 0.5 (top label if empty); exact set match | 59.3 | 58.8 ±1.8 (1704/2900) | 2026-09-25 | `results/benchmarks/fast-decisions/imajev-4b/` (public repo) |
 Not comparable to their board (test split: GLiNER2.5-Decide 60.2, JevK5 57.6, SemIf 4B 56.4). Weak spots: multi-label heads (product_area 12, genres 26, aspects 42), ticket urgency 29, support_topic 38, paper_field 41.
 
+## DecisionBench 1.0 (Hanno-Labs/decision-bench, 23,900 rows, official harness `run-system-one-http`)
+| System | Setup | Primary acc | Scored-row acc | Coverage | ECE | Date | Files |
+|---|---|---|---|---|---|---|---|
+| imajev-4b 1.0 (HF rev 712891d1) | torch server @ public 4e623a8, rot4 + shipped calibration, `--max-input-tokens 32768`, `--max-candidates 254`; 1×H100 | **77.5** | 79.3 | 97.75% (537 × 255-candidate rows unsupported, 0 errors) | **0.024** | 2026-09-25 | `decisionbench/` (+ raw run in `decisionbench-run/`, not exported) |
+Rank on 2026-09-25: 3rd of 55 (after Bosun v3.1 1.7B 84.9 / 0.6B 81.2; above Winnow-12B 76.7, Jev 1.13 72.0); lowest ECE of all records. Upstream-dataset overlap disclosed in `decisionbench/contamination-check.md` (banking77 → RouteFinancial scored 87.1%, below RouteGeneralAssistant 96.7%).
+
 ## Reading notes for the launch report
 - Frozen 35B-A3B with reasoning at 97.3 hard shows the hard split is largely a reasoning problem; single-pass small models (ours) are a different interface with milliseconds of latency — state both.
 - mojev and cua-s1 are the two open "same-interface" small models found so far; neither has abstention or image grounding.

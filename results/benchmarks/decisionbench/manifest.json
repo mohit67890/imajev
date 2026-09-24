@@ -1,0 +1,10 @@
+{
+  "error_rows": 537,
+  "files": {
+    "raw.jsonl": "0a853fa963d782ccb9f465c0c7d1c4a8da0c4b517a4cfb8efa53eeba1c372264",
+    "summary.json": "f4850ca2663461fbaa044dae30e631e53a60c48cbc703d3d0d53f536a2fc197f"
+  },
+  "requested_rows": 23900,
+  "schema_version": "decision-bench-run-v1",
+  "successful_rows": 23363
+}
