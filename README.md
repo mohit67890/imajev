@@ -10,13 +10,23 @@ with a probability on each and an explicit <i>can't tell</i>. Your system acts w
 <p align="center">
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/licence-Apache--2.0-111111?style=flat-square"></a>
   <a href="https://huggingface.co/mohit67890/imajev-4b"><img alt="weights" src="https://img.shields.io/badge/weights-2B%20·%204B%20·%209B-555555?style=flat-square"></a>
-  <a href="https://huggingface.co/spaces/mohit67890/imajev"><img alt="demo" src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-555555?style=flat-square"></a>
   <a href="https://huggingface.co/datasets/mohit67890/imajev-bench"><img alt="ImajevBench" src="https://img.shields.io/badge/benchmark-ImajevBench-555555?style=flat-square"></a>
 </p>
 
-<p align="center"><a href="https://mohit67890.github.io/imajev/"><b>Website</b></a> · <a href="https://huggingface.co/spaces/mohit67890/imajev">Live demo</a> · <a href="#quickstart">Quickstart</a> · <a href="#checked-not-cherry-picked">Checked examples</a> · <a href="#results">Results</a> · <a href="https://mohit67890.github.io/imajev/report/">Technical report</a></p>
+<p align="center"><a href="https://huggingface.co/spaces/mohit67890/imajev"><img alt="Try the live demo on Hugging Face Spaces" src="https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-lg.svg"></a></p>
+
+<p align="center"><a href="https://huggingface.co/spaces/mohit67890/imajev"><b>Live demo</b></a> · <a href="https://mohit67890.github.io/imajev/"><b>Website</b></a> · <a href="#quickstart">Quickstart</a> · <a href="#checked-not-cherry-picked">Checked examples</a> · <a href="#results">Results</a> · <a href="https://mohit67890.github.io/imajev/report/">Technical report</a></p>
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/request-listing-dark.png"><img alt="imajev-4b checks a listing against its photo: listing.color says red, the photo shows beige shoes; the model names listing.color as contradicted at 0.999 and the app holds the listing" src="docs/assets/readme/request-listing-light.png"></picture></p>
+
+## Try it live
+
+The [live demo](https://huggingface.co/spaces/mohit67890/imajev) runs imajev-4b on a GPU. Pick one of the checked examples
+(a listing against its photo, a return, a part on the line, an email against a CRM record, a refund against the policy, a ticket,
+a stylist request it declines to guess on), change the record or swap a photo, and watch the answer and the app's action change.
+Or upload your own photo and write your own questions.
+
+<p align="center"><a href="https://huggingface.co/spaces/mohit67890/imajev"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/space-dark.png"><img alt="The imajev live demo on Hugging Face Spaces: the listing check holds a listing whose colour contradicts the photo" src="docs/assets/readme/space-light.png"></picture></a></p>
 
 ## One request, every answer typed
 
