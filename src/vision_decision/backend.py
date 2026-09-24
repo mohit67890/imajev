@@ -6,8 +6,9 @@ from time import perf_counter
 from .scoring import compile_question, readout_codes, verified_label_ids, result_from_logits, cyclic_offsets, rotate, combine_rotations
 
 class MLXDirect:
-    def __init__(self, bundle="artifacts/model.json", adapter=None):
+    def __init__(self, bundle="artifacts/model.json", adapter=None, max_input_tokens=4096):
         import mlx.core as mx
+        self.max_input_tokens = int(max_input_tokens)
         from mlx_vlm import load
         self.mx = mx
         self.bundle = json.loads(Path(bundle).read_text())
@@ -161,8 +162,8 @@ class MLXDirect:
         suffix = tokenizer.encode("</think>\n\n", add_special_tokens=False)
         if ids[0, -len(suffix):].tolist() != suffix:
             raise ValueError("Processed decision-position suffix mismatch")
-        if ids.shape[-1] > 4096:
-            raise ValueError("Processed request exceeds the 4096-token research limit")
+        if ids.shape[-1] > self.max_input_tokens:
+            raise ValueError(f"Processed request exceeds the {self.max_input_tokens}-token limit")
         if images:
             if pixels is None or "image_grid_thw" not in inputs:
                 raise ValueError("Processor returned no image grid")

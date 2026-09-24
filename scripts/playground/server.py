@@ -76,9 +76,10 @@ class MLXBackend:
 
     name = "mlx"
 
-    def __init__(self, bundle=BUNDLE, adapter=None, rotations=1):
+    def __init__(self, bundle=BUNDLE, adapter=None, rotations=1, max_input_tokens=4096):
         from vision_decision.backend import MLXDirect
-        self.engine = MLXDirect(str(bundle), adapter=None if adapter is None else str(adapter))
+        self.engine = MLXDirect(str(bundle), adapter=None if adapter is None else str(adapter),
+                                max_input_tokens=max_input_tokens)
         self.adapter = None if adapter is None else str(adapter)
         self.model = MODEL_NAME if adapter else BASE_MODEL_NAME
         self.load_seconds = self.engine.load_seconds
@@ -101,7 +102,7 @@ class TorchBackend:
 
     name = "torch"
 
-    def __init__(self, bundle=BUNDLE, adapter=None, device=None, rotations=1):
+    def __init__(self, bundle=BUNDLE, adapter=None, device=None, rotations=1, max_input_tokens=4096):
         import torch
         from torch_decision import TorchDecision
         self.torch = torch
@@ -112,7 +113,8 @@ class TorchBackend:
         if not Path(self.bundle["path"]).is_dir():
             raise ValueError("Local model snapshot is missing; run scripts/download_model.py")
         start = perf_counter()
-        self.engine = TorchDecision(self.bundle["path"], device, dtype=torch.bfloat16 if device == "cuda" else torch.float32)
+        self.engine = TorchDecision(self.bundle["path"], device, dtype=torch.bfloat16 if device == "cuda" else torch.float32,
+                                   max_length=int(max_input_tokens))
         if adapter is not None:
             from peft import PeftModel
             self.engine.model = PeftModel.from_pretrained(self.engine.model, str(adapter)).eval()
@@ -148,7 +150,7 @@ class TorchBackend:
                          "rotations": self.rotations}
 
 
-def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations=1):
+def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations=1, max_input_tokens=4096):
     """`auto` prefers MLX with the converted adapter and falls back to torch + the PEFT adapter."""
     if kind == "auto":
         kind = "mlx" if MLX_ADAPTER.is_dir() else "torch"
@@ -164,9 +166,9 @@ def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations
     if chosen is not None and not Path(chosen).is_dir():
         raise ValueError(f"Adapter directory {chosen} does not exist")
     if kind == "mlx":
-        return MLXBackend(bundle, chosen, rotations=rotations)
+        return MLXBackend(bundle, chosen, rotations=rotations, max_input_tokens=max_input_tokens)
     if kind == "torch":
-        return TorchBackend(bundle, chosen, rotations=rotations)
+        return TorchBackend(bundle, chosen, rotations=rotations, max_input_tokens=max_input_tokens)
     raise ValueError(f"Unknown backend {kind!r}")
 
 
@@ -350,12 +352,15 @@ def main(argv=None):
     parser.add_argument("--model-bundle", default=str(BUNDLE))
     parser.add_argument("--rotations", type=int, default=1, help="candidate orders averaged per question (MLX and torch)")
     parser.add_argument("--calibration", help="held-out temperature calibration artifact")
+    parser.add_argument("--max-input-tokens", type=int, default=4096,
+                        help="refuse requests longer than this many processed tokens (training used <= 4096)")
     parser.add_argument("--model-name", help="public model name reported by the API and the UI (e.g. imajev-2b)")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
-    backend = build_backend(args.backend, args.adapter, args.no_adapter, Path(args.model_bundle), args.rotations)
+    backend = build_backend(args.backend, args.adapter, args.no_adapter, Path(args.model_bundle), args.rotations,
+                            args.max_input_tokens)
     if args.model_name:
         backend.model = args.model_name
     log.info("backend=%s model=%s adapter=%s load_seconds=%.1f",

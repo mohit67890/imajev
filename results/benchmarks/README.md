@@ -43,6 +43,12 @@ Controls: imajev-2b no-image (abstains 258/279), no-state 51.6, family-majority 
 Run files: `imajev-release/bench/records/`, per-run predictions and manifests under `imajev-release/bench/` and `reports/imajev-bench/` (H100 bench pod pull); phase-2 rows under `reports/decision-p2/pod/train-out/<size>/imajevbench-best/`.
 Pending rows: Gemma 4 E2B/E4B and SmolVLM2-2.2B **direct option scoring** (MLX-only backends; Mac runs were stopped to avoid crashes) — marked pending on the leaderboard; mojev and cua-s1 on ImajevBench need a TypeSafe-protocol provider in the harness (follow-up).
 
+## fastino/fast-decisions (DEV split only: 17 domains × 100 rows, 2,900 heads; the 300/domain test split behind their board is held out)
+| System | Setup | Domain avg | Pooled heads | Date | Files |
+|---|---|---|---|---|---|
+| imajev-4b 1.0 (phase 2c soup50) | MLX playground server, rot4, raw; one generic prompt (`Which {task} label fits this text?`, choice over full label list); multi-label heads = one noul per label, set = noul > 0.5 (top label if empty); exact set match | 59.3 | 58.8 ±1.8 (1704/2900) | 2026-09-25 | `results/benchmarks/fast-decisions/imajev-4b/` (public repo) |
+Not comparable to their board (test split: GLiNER2.5-Decide 60.2, JevK5 57.6, SemIf 4B 56.4). Weak spots: multi-label heads (product_area 12, genres 26, aspects 42), ticket urgency 29, support_topic 38, paper_field 41.
+
 ## Reading notes for the launch report
 - Frozen 35B-A3B with reasoning at 97.3 hard shows the hard split is largely a reasoning problem; single-pass small models (ours) are a different interface with milliseconds of latency — state both.
 - mojev and cua-s1 are the two open "same-interface" small models found so far; neither has abstention or image grounding.
