@@ -157,12 +157,12 @@ Direct option scoring (single pass, full option rotations):
 
 | Model | Accuracy (95% CI) | Notes |
 | --- | --- | --- |
-| imajev-9b (phase-2b, released) | 82.8% (77–88) | |
-| imajev-4b (phase-2b, released) | 82.4% (77–88) | indistinguishable from the 9B (paired test p = 1.0) |
+| imajev-9b (phase-2c soup50, released) | 82.1% (76–88) | phase-2b adapter 82.8% (77–88) |
+| imajev-4b (phase-2c soup50, released) | 82.4% (77–89) | phase-2b adapter 82.4% (77–88), indistinguishable from the released 9B (paired test p = 1.0) |
 | imajev-9b (earlier v1.1 adapter) | 81.0% (75–86) | pre-registered H1 vs its base: p = 0.03, confirmed |
 | Qwen3.5-9B base | 76.7% (70–82) | |
 | Qwen3.5-4B base | 70.6% (64–78) | |
-| imajev-2b (phase-2b) | 70.3% (64–77) | phase-2 adapter 68.5%; the 2B release choice is still open |
+| imajev-2b (phase-2c soup50, released) | 71.7% (65–78) | phase-2b adapter 70.3% (64–77); phase-2 adapter 68.5% |
 | imajev-2b (earlier v2.1 adapter) | 63.1% (56–70) | 63.4% on a Mac with MLX (98.2% answer agreement); pre-registered H2 vs its base: p = 0.57, not significant |
 | Qwen3.5-2B base | 60.2% (53–67) | |
 | imajev-2b, no image | abstains on 258/279 | image-necessity control, not ranked |

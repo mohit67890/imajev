@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-09-24T07:44:22.278944</dc:date>
+    <dc:date>2026-09-24T19:24:46.726952</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -42,7 +42,7 @@ z
      <g id="line2d_1">
       <path d="M 190.08 313.2 
 L 190.08 61.2 
-" clip-path="url(#pd695adade7)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#pf71efe4c13)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="line2d_2"/>
      <g id="text_1">
@@ -109,7 +109,7 @@ z
      <g id="line2d_3">
       <path d="M 289.872 313.2 
 L 289.872 61.2 
-" clip-path="url(#pd695adade7)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#pf71efe4c13)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="line2d_4"/>
      <g id="text_2">
@@ -191,7 +191,7 @@ z
      <g id="line2d_5">
       <path d="M 389.664 313.2 
 L 389.664 61.2 
-" clip-path="url(#pd695adade7)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#pf71efe4c13)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="line2d_6"/>
      <g id="text_3">
@@ -206,7 +206,7 @@ L 389.664 61.2
      <g id="line2d_7">
       <path d="M 489.456 313.2 
 L 489.456 61.2 
-" clip-path="url(#pd695adade7)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#pf71efe4c13)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="line2d_8"/>
      <g id="text_4">
@@ -235,7 +235,7 @@ z
      <g id="line2d_9">
       <path d="M 589.248 313.2 
 L 589.248 61.2 
-" clip-path="url(#pd695adade7)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#pf71efe4c13)" style="fill: none; stroke: #e3e3df; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="line2d_10"/>
      <g id="text_5">
@@ -330,31 +330,31 @@ L 485.065152 69.143478
 L 485.065152 86.126087 
 L 190.08 86.126087 
 z
-" clip-path="url(#pd695adade7)" style="fill: #8f8f8a"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #8f8f8a"/>
    </g>
    <g id="patch_4">
     <path d="M 190.08 96.534783 
-L 467.102592 96.534783 
-L 467.102592 113.517391 
+L 485.065152 96.534783 
+L 485.065152 113.517391 
 L 190.08 113.517391 
 z
-" clip-path="url(#pd695adade7)" style="fill: #111111"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #8f8f8a"/>
    </g>
    <g id="patch_5">
     <path d="M 190.08 123.926087 
-L 463.51008 123.926087 
-L 463.51008 140.908696 
+L 470.695104 123.926087 
+L 470.695104 140.908696 
 L 190.08 140.908696 
 z
-" clip-path="url(#pd695adade7)" style="fill: #111111"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #111111"/>
    </g>
    <g id="patch_6">
     <path d="M 190.08 151.317391 
-L 459.917568 151.317391 
-L 459.917568 168.3 
+L 467.102592 151.317391 
+L 467.102592 168.3 
 L 190.08 168.3 
 z
-" clip-path="url(#pd695adade7)" style="fill: #111111"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #111111"/>
    </g>
    <g id="patch_7">
     <path d="M 190.08 178.708696 
@@ -362,15 +362,15 @@ L 459.917568 178.708696
 L 459.917568 195.691304 
 L 190.08 195.691304 
 z
-" clip-path="url(#pd695adade7)" style="fill: #8f8f8a"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #8f8f8a"/>
    </g>
    <g id="patch_8">
     <path d="M 190.08 206.1 
-L 416.807424 206.1 
-L 416.807424 223.082609 
+L 431.177472 206.1 
+L 431.177472 223.082609 
 L 190.08 223.082609 
 z
-" clip-path="url(#pd695adade7)" style="fill: #111111"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #111111"/>
    </g>
    <g id="patch_9">
     <path d="M 190.08 233.491304 
@@ -378,7 +378,7 @@ L 398.844864 233.491304
 L 398.844864 250.473913 
 L 190.08 250.473913 
 z
-" clip-path="url(#pd695adade7)" style="fill: #8f8f8a"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #8f8f8a"/>
    </g>
    <g id="patch_10">
     <path d="M 190.08 260.882609 
@@ -386,7 +386,7 @@ L 384.075648 260.882609
 L 384.075648 277.865217 
 L 190.08 277.865217 
 z
-" clip-path="url(#pd695adade7)" style="fill: #8f8f8a"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #8f8f8a"/>
    </g>
    <g id="patch_11">
     <path d="M 190.08 288.273913 
@@ -394,7 +394,7 @@ L 323.002944 288.273913
 L 323.002944 305.256522 
 L 190.08 305.256522 
 z
-" clip-path="url(#pd695adade7)" style="fill: #8f8f8a"/>
+" clip-path="url(#pf71efe4c13)" style="fill: #8f8f8a"/>
    </g>
    <g id="patch_12">
     <path d="M 190.08 313.2 
@@ -718,89 +718,273 @@ z
     </g>
    </g>
    <g id="text_8">
-    <!-- 69.4 -->
-    <g style="fill: #111111" transform="translate(471.094272 108.401087) scale(0.09 -0.09)">
+    <!-- 73.9 -->
+    <g style="fill: #3d3d3d" transform="translate(489.056832 108.401087) scale(0.09 -0.09)">
+     <use xlink:href="#IBMPlexMono-Regular-41"/>
+     <use xlink:href="#IBMPlexMono-Regular-3d" transform="translate(60 0)"/>
+     <use xlink:href="#IBMPlexMono-Regular-4b" transform="translate(120 0)"/>
+     <use xlink:href="#IBMPlexMono-Regular-43" transform="translate(180 0)"/>
+    </g>
+   </g>
+   <g id="text_9">
+    <!-- Eikos-4B -->
+    <g style="fill: #3d3d3d" transform="translate(143.772168 108.776087) scale(0.1 -0.1)">
      <defs>
-      <path id="IBMPlexMono-Medium-40" d="M 1933 -77 
-Q 1555 -77 1260 44 
-Q 966 166 761 393 
-Q 557 621 448 941 
-Q 339 1261 339 1664 
-Q 339 2150 486 2579 
-Q 634 3008 870 3366 
-Q 1107 3725 1395 4003 
-Q 1683 4282 1965 4467 
-L 2925 4467 
-Q 2541 4192 2233 3936 
-Q 1926 3680 1699 3411 
-Q 1472 3142 1318 2844 
-Q 1165 2547 1082 2182 
-L 1126 2170 
-Q 1197 2304 1293 2422 
-Q 1389 2541 1517 2630 
-Q 1645 2720 1811 2771 
-Q 1978 2822 2189 2822 
-Q 2477 2822 2720 2726 
-Q 2963 2630 3142 2448 
-Q 3322 2266 3421 2010 
-Q 3520 1754 3520 1434 
-Q 3520 1101 3408 822 
-Q 3296 544 3088 345 
-Q 2880 147 2585 35 
-Q 2291 -77 1933 -77 
-z
-M 1926 499 
-Q 2336 499 2560 720 
-Q 2784 941 2784 1344 
-L 2784 1408 
-Q 2784 1811 2560 2032 
-Q 2336 2253 1926 2253 
-Q 1523 2253 1299 2032 
-Q 1075 1811 1075 1408 
-L 1075 1344 
-Q 1075 941 1299 720 
-Q 1523 499 1926 499 
+      <path id="PlexSansRegular-Regular-22" d="M 3322 0 
+L 595 0 
+L 595 4467 
+L 3322 4467 
+L 3322 3994 
+L 1133 3994 
+L 1133 2496 
+L 3194 2496 
+L 3194 2022 
+L 1133 2022 
+L 1133 474 
+L 3322 474 
+L 3322 0 
 z
 " transform="scale(0.015625)"/>
-      <path id="IBMPlexMono-Medium-43" d="M 3501 2803 
-Q 3501 2317 3353 1888 
-Q 3206 1459 2969 1100 
-Q 2733 742 2445 460 
-Q 2157 179 1875 0 
-L 915 0 
-Q 1299 275 1606 531 
-Q 1914 787 2141 1056 
-Q 2368 1325 2521 1622 
-Q 2675 1920 2758 2285 
-L 2714 2298 
-Q 2643 2163 2547 2044 
-Q 2451 1926 2323 1836 
-Q 2195 1747 2028 1696 
-Q 1862 1645 1651 1645 
-Q 1363 1645 1120 1741 
-Q 877 1837 697 2019 
-Q 518 2202 419 2458 
-Q 320 2714 320 3034 
-Q 320 3366 432 3644 
-Q 544 3923 752 4121 
-Q 960 4320 1254 4432 
-Q 1549 4544 1907 4544 
-Q 2278 4544 2576 4422 
-Q 2874 4301 3078 4073 
-Q 3283 3846 3392 3526 
-Q 3501 3206 3501 2803 
+      <path id="PlexSansRegular-Regular-c" d="M 800 4077 
+Q 640 4077 563 4157 
+Q 486 4237 486 4365 
+L 486 4448 
+Q 486 4576 563 4656 
+Q 640 4736 800 4736 
+Q 966 4736 1040 4656 
+Q 1114 4576 1114 4448 
+L 1114 4365 
+Q 1114 4237 1040 4157 
+Q 966 4077 800 4077 
 z
-M 1914 2214 
-Q 2317 2214 2541 2435 
-Q 2765 2656 2765 3059 
-L 2765 3123 
-Q 2765 3526 2541 3747 
-Q 2317 3968 1914 3968 
-Q 1504 3968 1280 3747 
-Q 1056 3526 1056 3123 
-L 1056 3059 
-Q 1056 2656 1280 2435 
-Q 1504 2214 1914 2214 
+M 544 0 
+L 544 3302 
+L 1056 3302 
+L 1056 0 
+L 544 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="PlexSansRegular-Regular-e" d="M 544 0 
+L 544 4736 
+L 1056 4736 
+L 1056 2323 
+L 1056 1734 
+L 1082 1734 
+L 1587 2298 
+L 2522 3302 
+L 3142 3302 
+L 1920 1997 
+L 3264 0 
+L 2643 0 
+L 1549 1683 
+L 1056 1178 
+L 1056 0 
+L 544 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="PlexSansRegular-Regular-12" d="M 1792 -77 
+Q 1350 -77 1014 137 
+Q 678 352 489 739 
+Q 301 1126 301 1651 
+Q 301 2176 489 2563 
+Q 678 2950 1014 3164 
+Q 1350 3379 1792 3379 
+Q 2234 3379 2570 3164 
+Q 2906 2950 3094 2563 
+Q 3283 2176 3283 1651 
+Q 3283 1126 3094 739 
+Q 2906 352 2570 137 
+Q 2234 -77 1792 -77 
+z
+M 1792 378 
+Q 2208 378 2470 634 
+Q 2733 890 2733 1414 
+L 2733 1888 
+Q 2733 2413 2470 2669 
+Q 2208 2925 1792 2925 
+Q 1382 2925 1116 2669 
+Q 851 2413 851 1888 
+L 851 1414 
+Q 851 890 1116 634 
+Q 1382 378 1792 378 
+z
+" transform="scale(0.015625)"/>
+      <path id="PlexSansRegular-Regular-16" d="M 1536 -77 
+Q 1082 -77 768 99 
+Q 454 275 230 570 
+L 595 864 
+Q 787 627 1024 492 
+Q 1261 358 1574 358 
+Q 1901 358 2083 499 
+Q 2266 640 2266 896 
+Q 2266 1088 2141 1229 
+Q 2016 1370 1690 1414 
+L 1427 1453 
+Q 1126 1498 883 1603 
+Q 640 1709 502 1904 
+Q 365 2099 365 2406 
+Q 365 2899 701 3139 
+Q 1037 3379 1542 3379 
+Q 1811 3379 2019 3315 
+Q 2227 3251 2393 3132 
+Q 2560 3014 2694 2848 
+L 2355 2541 
+Q 2246 2694 2035 2819 
+Q 1824 2944 1504 2944 
+Q 1190 2944 1024 2806 
+Q 858 2669 858 2432 
+Q 858 2195 1021 2083 
+Q 1184 1971 1491 1920 
+L 1747 1882 
+Q 2298 1798 2528 1564 
+Q 2758 1331 2758 954 
+Q 2758 634 2611 403 
+Q 2464 173 2189 48 
+Q 1914 -77 1536 -77 
+z
+" transform="scale(0.015625)"/>
+      <path id="PlexSansRegular-Regular-52" d="M 2112 1670 
+L 442 1670 
+L 442 2221 
+L 2112 2221 
+L 2112 1670 
+z
+" transform="scale(0.015625)"/>
+      <path id="PlexSansRegular-Regular-3e" d="M 2912 0 
+L 2400 0 
+L 2400 877 
+L 243 877 
+L 243 1350 
+L 2112 4467 
+L 2912 4467 
+L 2912 1325 
+L 3558 1325 
+L 3558 877 
+L 2912 877 
+L 2912 0 
+z
+M 2368 4051 
+L 749 1325 
+L 2400 1325 
+L 2400 4051 
+L 2368 4051 
+z
+" transform="scale(0.015625)"/>
+      <path id="PlexSansRegular-Regular-1f" d="M 595 0 
+L 595 4467 
+L 2432 4467 
+Q 2982 4467 3302 4153 
+Q 3622 3840 3622 3315 
+Q 3622 2982 3504 2784 
+Q 3386 2586 3216 2490 
+Q 3046 2394 2899 2368 
+L 2899 2330 
+Q 3021 2323 3171 2262 
+Q 3322 2202 3459 2080 
+Q 3597 1958 3686 1766 
+Q 3776 1574 3776 1293 
+Q 3776 928 3625 633 
+Q 3475 339 3216 169 
+Q 2957 0 2624 0 
+L 595 0 
+z
+M 1133 2074 
+L 1133 474 
+L 2458 474 
+Q 2688 474 2854 554 
+Q 3021 634 3110 787 
+Q 3200 941 3200 1165 
+L 3200 1382 
+Q 3200 1606 3110 1760 
+Q 3021 1914 2854 1994 
+Q 2688 2074 2458 2074 
+L 1133 2074 
+z
+M 1133 3994 
+L 1133 2534 
+L 2368 2534 
+Q 2579 2534 2729 2608 
+Q 2880 2682 2963 2819 
+Q 3046 2957 3046 3155 
+L 3046 3373 
+Q 3046 3571 2963 3708 
+Q 2880 3846 2729 3920 
+Q 2579 3994 2368 3994 
+L 1133 3994 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#PlexSansRegular-Regular-22"/>
+     <use xlink:href="#PlexSansRegular-Regular-c" transform="translate(58.296875 0)"/>
+     <use xlink:href="#PlexSansRegular-Regular-e" transform="translate(83.296875 0)"/>
+     <use xlink:href="#PlexSansRegular-Regular-12" transform="translate(134.296875 0)"/>
+     <use xlink:href="#PlexSansRegular-Regular-16" transform="translate(190.296875 0)"/>
+     <use xlink:href="#PlexSansRegular-Regular-52" transform="translate(238 0)"/>
+     <use xlink:href="#PlexSansRegular-Regular-3e" transform="translate(277.90625 0)"/>
+     <use xlink:href="#PlexSansRegular-Regular-1f" transform="translate(337.90625 0)"/>
+    </g>
+   </g>
+   <g id="text_10">
+    <!-- 70.3 -->
+    <g style="fill: #111111" transform="translate(474.686784 135.792391) scale(0.09 -0.09)">
+     <defs>
+      <path id="IBMPlexMono-Medium-41" d="M 1082 0 
+L 2739 3872 
+L 998 3872 
+L 998 3046 
+L 378 3046 
+L 378 4467 
+L 3456 4467 
+L 3456 3840 
+L 1843 0 
+L 1082 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="IBMPlexMono-Medium-38" d="M 1920 -77 
+Q 1498 -77 1187 80 
+Q 877 237 675 531 
+Q 474 826 378 1254 
+Q 282 1683 282 2234 
+Q 282 2778 378 3210 
+Q 474 3642 675 3936 
+Q 877 4230 1187 4387 
+Q 1498 4544 1920 4544 
+Q 2342 4544 2652 4387 
+Q 2963 4230 3164 3936 
+Q 3366 3642 3462 3210 
+Q 3558 2778 3558 2234 
+Q 3558 1683 3462 1254 
+Q 3366 826 3164 531 
+Q 2963 237 2652 80 
+Q 2342 -77 1920 -77 
+z
+M 1920 512 
+Q 2406 512 2614 873 
+Q 2822 1235 2822 1850 
+L 2822 2618 
+Q 2822 3232 2614 3593 
+Q 2406 3955 1920 3955 
+Q 1677 3955 1504 3862 
+Q 1331 3770 1222 3594 
+Q 1114 3418 1066 3171 
+Q 1018 2925 1018 2618 
+L 1018 1850 
+Q 1018 1542 1066 1296 
+Q 1114 1050 1222 874 
+Q 1331 698 1504 605 
+Q 1677 512 1920 512 
+z
+M 1920 1856 
+Q 1696 1856 1609 1945 
+Q 1523 2035 1523 2163 
+L 1523 2304 
+Q 1523 2432 1609 2521 
+Q 1696 2611 1920 2611 
+Q 2144 2611 2230 2521 
+Q 2317 2432 2317 2304 
+L 2317 2163 
+Q 2317 2035 2230 1945 
+Q 2144 1856 1920 1856 
 z
 " transform="scale(0.015625)"/>
       <path id="IBMPlexMono-Medium-4b" d="M 1920 -64 
@@ -816,36 +1000,63 @@ Q 2477 192 2352 64
 Q 2227 -64 1920 -64 
 z
 " transform="scale(0.015625)"/>
-      <path id="IBMPlexMono-Medium-3e" d="M 2317 0 
-L 2317 870 
-L 192 870 
-L 192 1485 
-L 2061 4467 
-L 3002 4467 
-L 3002 1434 
-L 3629 1434 
-L 3629 870 
-L 3002 870 
-L 3002 0 
-L 2317 0 
-z
-M 800 1434 
-L 2317 1434 
-L 2317 3808 
-L 2278 3808 
-L 800 1434 
+      <path id="IBMPlexMono-Medium-3d" d="M 1734 2624 
+Q 2163 2624 2371 2806 
+Q 2579 2989 2579 3264 
+L 2579 3309 
+Q 2579 3616 2377 3779 
+Q 2176 3942 1837 3942 
+Q 1510 3942 1283 3795 
+Q 1056 3648 902 3392 
+L 416 3808 
+Q 518 3955 652 4089 
+Q 787 4224 960 4323 
+Q 1133 4422 1357 4483 
+Q 1581 4544 1862 4544 
+Q 2176 4544 2445 4467 
+Q 2714 4390 2912 4240 
+Q 3110 4090 3219 3875 
+Q 3328 3661 3328 3392 
+Q 3328 3181 3261 3008 
+Q 3194 2835 3075 2704 
+Q 2957 2573 2797 2489 
+Q 2637 2406 2458 2368 
+L 2458 2336 
+Q 2650 2298 2822 2211 
+Q 2995 2125 3129 1987 
+Q 3264 1850 3341 1661 
+Q 3418 1472 3418 1229 
+Q 3418 934 3302 694 
+Q 3187 454 2972 281 
+Q 2758 109 2457 16 
+Q 2157 -77 1786 -77 
+Q 1472 -77 1232 -9 
+Q 992 58 806 170 
+Q 621 282 483 426 
+Q 346 570 243 723 
+L 774 1133 
+Q 941 864 1168 694 
+Q 1395 525 1792 525 
+Q 2214 525 2438 720 
+Q 2662 915 2662 1261 
+L 2662 1312 
+Q 2662 1658 2428 1840 
+Q 2195 2022 1754 2022 
+L 1274 2022 
+L 1274 2624 
+L 1734 2624 
 z
 " transform="scale(0.015625)"/>
      </defs>
-     <use xlink:href="#IBMPlexMono-Medium-40"/>
-     <use xlink:href="#IBMPlexMono-Medium-43" transform="translate(60 0)"/>
+     <use xlink:href="#IBMPlexMono-Medium-41"/>
+     <use xlink:href="#IBMPlexMono-Medium-38" transform="translate(60 0)"/>
      <use xlink:href="#IBMPlexMono-Medium-4b" transform="translate(120 0)"/>
-     <use xlink:href="#IBMPlexMono-Medium-3e" transform="translate(180 0)"/>
+     <use xlink:href="#IBMPlexMono-Medium-3d" transform="translate(180 0)"/>
     </g>
    </g>
-   <g id="text_9">
-    <!-- imajev-9b, 4 rotations -->
-    <g style="fill: #111111" transform="translate(82.131543 108.776087) scale(0.1 -0.1)">
+   <g id="text_11">
+    <!-- imajev-4b -->
+    <g style="fill: #111111" transform="translate(137.431543 136.167391) scale(0.1 -0.1)">
      <defs>
       <path id="PlexSansSemiBold-Regular-c" d="M 883 3827 
 Q 634 3827 518 3945 
@@ -1019,6 +1230,189 @@ L 2202 2355
 L 2202 1542 
 z
 " transform="scale(0.015625)"/>
+      <path id="PlexSansSemiBold-Regular-3e" d="M 3027 0 
+L 2227 0 
+L 2227 864 
+L 205 864 
+L 205 1581 
+L 1984 4467 
+L 3027 4467 
+L 3027 1517 
+L 3610 1517 
+L 3610 864 
+L 3027 864 
+L 3027 0 
+z
+M 2176 3648 
+L 896 1517 
+L 2227 1517 
+L 2227 3648 
+L 2176 3648 
+z
+" transform="scale(0.015625)"/>
+      <path id="PlexSansSemiBold-Regular-3" d="M 474 0 
+L 474 4736 
+L 1293 4736 
+L 1293 2790 
+L 1318 2790 
+Q 1408 3078 1661 3248 
+Q 1914 3418 2240 3418 
+Q 2669 3418 2957 3213 
+Q 3245 3008 3398 2621 
+Q 3552 2234 3552 1677 
+Q 3552 1120 3398 726 
+Q 3245 333 2957 128 
+Q 2669 -77 2240 -77 
+Q 1914 -77 1664 96 
+Q 1414 269 1318 557 
+L 1293 557 
+L 1293 0 
+L 474 0 
+z
+M 1978 602 
+Q 2298 602 2496 816 
+Q 2694 1030 2694 1382 
+L 2694 1958 
+Q 2694 2317 2496 2531 
+Q 2298 2746 1978 2746 
+Q 1786 2746 1629 2678 
+Q 1472 2611 1382 2489 
+Q 1293 2368 1293 2208 
+L 1293 1146 
+Q 1293 973 1382 851 
+Q 1472 730 1629 666 
+Q 1786 602 1978 602 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#PlexSansSemiBold-Regular-c"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-10" transform="translate(27.5 0)"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-1" transform="translate(116.296875 0)"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-d" transform="translate(172.203125 0)"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-6" transform="translate(199.703125 0)"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-19" transform="translate(254.59375 0)"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-52" transform="translate(306.40625 0)"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-3e" transform="translate(346.609375 0)"/>
+     <use xlink:href="#PlexSansSemiBold-Regular-3" transform="translate(406.609375 0)"/>
+    </g>
+   </g>
+   <g id="text_12">
+    <!-- 69.4 -->
+    <g style="fill: #111111" transform="translate(471.094272 163.183696) scale(0.09 -0.09)">
+     <defs>
+      <path id="IBMPlexMono-Medium-40" d="M 1933 -77 
+Q 1555 -77 1260 44 
+Q 966 166 761 393 
+Q 557 621 448 941 
+Q 339 1261 339 1664 
+Q 339 2150 486 2579 
+Q 634 3008 870 3366 
+Q 1107 3725 1395 4003 
+Q 1683 4282 1965 4467 
+L 2925 4467 
+Q 2541 4192 2233 3936 
+Q 1926 3680 1699 3411 
+Q 1472 3142 1318 2844 
+Q 1165 2547 1082 2182 
+L 1126 2170 
+Q 1197 2304 1293 2422 
+Q 1389 2541 1517 2630 
+Q 1645 2720 1811 2771 
+Q 1978 2822 2189 2822 
+Q 2477 2822 2720 2726 
+Q 2963 2630 3142 2448 
+Q 3322 2266 3421 2010 
+Q 3520 1754 3520 1434 
+Q 3520 1101 3408 822 
+Q 3296 544 3088 345 
+Q 2880 147 2585 35 
+Q 2291 -77 1933 -77 
+z
+M 1926 499 
+Q 2336 499 2560 720 
+Q 2784 941 2784 1344 
+L 2784 1408 
+Q 2784 1811 2560 2032 
+Q 2336 2253 1926 2253 
+Q 1523 2253 1299 2032 
+Q 1075 1811 1075 1408 
+L 1075 1344 
+Q 1075 941 1299 720 
+Q 1523 499 1926 499 
+z
+" transform="scale(0.015625)"/>
+      <path id="IBMPlexMono-Medium-43" d="M 3501 2803 
+Q 3501 2317 3353 1888 
+Q 3206 1459 2969 1100 
+Q 2733 742 2445 460 
+Q 2157 179 1875 0 
+L 915 0 
+Q 1299 275 1606 531 
+Q 1914 787 2141 1056 
+Q 2368 1325 2521 1622 
+Q 2675 1920 2758 2285 
+L 2714 2298 
+Q 2643 2163 2547 2044 
+Q 2451 1926 2323 1836 
+Q 2195 1747 2028 1696 
+Q 1862 1645 1651 1645 
+Q 1363 1645 1120 1741 
+Q 877 1837 697 2019 
+Q 518 2202 419 2458 
+Q 320 2714 320 3034 
+Q 320 3366 432 3644 
+Q 544 3923 752 4121 
+Q 960 4320 1254 4432 
+Q 1549 4544 1907 4544 
+Q 2278 4544 2576 4422 
+Q 2874 4301 3078 4073 
+Q 3283 3846 3392 3526 
+Q 3501 3206 3501 2803 
+z
+M 1914 2214 
+Q 2317 2214 2541 2435 
+Q 2765 2656 2765 3059 
+L 2765 3123 
+Q 2765 3526 2541 3747 
+Q 2317 3968 1914 3968 
+Q 1504 3968 1280 3747 
+Q 1056 3526 1056 3123 
+L 1056 3059 
+Q 1056 2656 1280 2435 
+Q 1504 2214 1914 2214 
+z
+" transform="scale(0.015625)"/>
+      <path id="IBMPlexMono-Medium-3e" d="M 2317 0 
+L 2317 870 
+L 192 870 
+L 192 1485 
+L 2061 4467 
+L 3002 4467 
+L 3002 1434 
+L 3629 1434 
+L 3629 870 
+L 3002 870 
+L 3002 0 
+L 2317 0 
+z
+M 800 1434 
+L 2317 1434 
+L 2317 3808 
+L 2278 3808 
+L 800 1434 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#IBMPlexMono-Medium-40"/>
+     <use xlink:href="#IBMPlexMono-Medium-43" transform="translate(60 0)"/>
+     <use xlink:href="#IBMPlexMono-Medium-4b" transform="translate(120 0)"/>
+     <use xlink:href="#IBMPlexMono-Medium-3e" transform="translate(180 0)"/>
+    </g>
+   </g>
+   <g id="text_13">
+    <!-- imajev-9b -->
+    <g style="fill: #111111" transform="translate(137.431543 163.558696) scale(0.1 -0.1)">
+     <defs>
       <path id="PlexSansSemiBold-Regular-43" d="M 3526 2790 
 Q 3526 2310 3382 1888 
 Q 3238 1466 3004 1107 
@@ -1059,198 +1453,6 @@ Q 1331 2445 1497 2358
 Q 1664 2272 1901 2272 
 z
 " transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-3" d="M 474 0 
-L 474 4736 
-L 1293 4736 
-L 1293 2790 
-L 1318 2790 
-Q 1408 3078 1661 3248 
-Q 1914 3418 2240 3418 
-Q 2669 3418 2957 3213 
-Q 3245 3008 3398 2621 
-Q 3552 2234 3552 1677 
-Q 3552 1120 3398 726 
-Q 3245 333 2957 128 
-Q 2669 -77 2240 -77 
-Q 1914 -77 1664 96 
-Q 1414 269 1318 557 
-L 1293 557 
-L 1293 0 
-L 474 0 
-z
-M 1978 602 
-Q 2298 602 2496 816 
-Q 2694 1030 2694 1382 
-L 2694 1958 
-Q 2694 2317 2496 2531 
-Q 2298 2746 1978 2746 
-Q 1786 2746 1629 2678 
-Q 1472 2611 1382 2489 
-Q 1293 2368 1293 2208 
-L 1293 1146 
-Q 1293 973 1382 851 
-Q 1472 730 1629 666 
-Q 1786 602 1978 602 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-5d" d="M 954 986 
-Q 1222 986 1344 851 
-Q 1466 717 1466 512 
-L 1466 397 
-Q 1466 45 1290 -316 
-Q 1114 -678 813 -915 
-L 237 -915 
-Q 448 -704 598 -505 
-Q 749 -307 819 -58 
-Q 627 -19 534 102 
-Q 442 224 442 397 
-L 442 512 
-Q 442 717 570 851 
-Q 698 986 954 986 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-3e9" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-3e" d="M 3027 0 
-L 2227 0 
-L 2227 864 
-L 205 864 
-L 205 1581 
-L 1984 4467 
-L 3027 4467 
-L 3027 1517 
-L 3610 1517 
-L 3610 864 
-L 3027 864 
-L 3027 0 
-z
-M 2176 3648 
-L 896 1517 
-L 2227 1517 
-L 2227 3648 
-L 2176 3648 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-15" d="M 1293 0 
-L 474 0 
-L 474 3341 
-L 1293 3341 
-L 1293 2650 
-L 1325 2650 
-Q 1370 2829 1475 2985 
-Q 1581 3142 1763 3241 
-Q 1946 3341 2208 3341 
-L 2387 3341 
-L 2387 2566 
-L 2131 2566 
-Q 1856 2566 1667 2512 
-Q 1478 2458 1385 2346 
-Q 1293 2234 1293 2048 
-L 1293 0 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-12" d="M 1798 -77 
-Q 1325 -77 976 137 
-Q 627 352 438 745 
-Q 250 1139 250 1677 
-Q 250 2214 438 2601 
-Q 627 2989 976 3203 
-Q 1325 3418 1798 3418 
-Q 2278 3418 2627 3203 
-Q 2976 2989 3165 2601 
-Q 3354 2214 3354 1677 
-Q 3354 1139 3165 745 
-Q 2976 352 2627 137 
-Q 2278 -77 1798 -77 
-z
-M 1798 582 
-Q 2125 582 2310 784 
-Q 2496 986 2496 1363 
-L 2496 1984 
-Q 2496 2362 2310 2560 
-Q 2125 2758 1798 2758 
-Q 1485 2758 1296 2560 
-Q 1107 2362 1107 1984 
-L 1107 1363 
-Q 1107 986 1296 784 
-Q 1485 582 1798 582 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-17" d="M 2106 0 
-L 1517 0 
-Q 1094 0 873 221 
-Q 653 442 653 851 
-L 653 2694 
-L 160 2694 
-L 160 3341 
-L 416 3341 
-Q 602 3341 669 3427 
-Q 736 3514 736 3686 
-L 736 4256 
-L 1472 4256 
-L 1472 3341 
-L 2157 3341 
-L 2157 2694 
-L 1472 2694 
-L 1472 653 
-L 2106 653 
-L 2106 0 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-11" d="M 1293 0 
-L 474 0 
-L 474 3341 
-L 1293 3341 
-L 1293 2784 
-L 1325 2784 
-Q 1427 3053 1648 3235 
-Q 1869 3418 2259 3418 
-Q 2771 3418 3049 3075 
-Q 3328 2733 3328 2112 
-L 3328 0 
-L 2509 0 
-L 2509 2029 
-Q 2509 2381 2381 2563 
-Q 2253 2746 1958 2746 
-Q 1792 2746 1638 2685 
-Q 1485 2624 1389 2505 
-Q 1293 2387 1293 2208 
-L 1293 0 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansSemiBold-Regular-16" d="M 1568 -77 
-Q 1088 -77 761 86 
-Q 435 250 186 538 
-L 685 1024 
-Q 870 813 1091 691 
-Q 1312 570 1600 570 
-Q 1894 570 2025 672 
-Q 2157 774 2157 954 
-Q 2157 1101 2064 1187 
-Q 1971 1274 1747 1306 
-L 1414 1350 
-Q 1056 1395 806 1516 
-Q 557 1638 429 1849 
-Q 301 2061 301 2362 
-Q 301 2848 649 3133 
-Q 998 3418 1568 3418 
-Q 1894 3418 2128 3357 
-Q 2362 3296 2541 3177 
-Q 2720 3059 2874 2893 
-L 2394 2413 
-Q 2246 2566 2041 2668 
-Q 1837 2771 1594 2771 
-Q 1338 2771 1213 2678 
-Q 1088 2586 1088 2426 
-Q 1088 2259 1187 2172 
-Q 1286 2086 1523 2048 
-L 1862 2003 
-Q 2413 1926 2678 1680 
-Q 2944 1434 2944 1018 
-Q 2944 698 2774 448 
-Q 2605 198 2294 60 
-Q 1984 -77 1568 -77 
-z
-" transform="scale(0.015625)"/>
      </defs>
      <use xlink:href="#PlexSansSemiBold-Regular-c"/>
      <use xlink:href="#PlexSansSemiBold-Regular-10" transform="translate(27.5 0)"/>
@@ -1260,166 +1462,6 @@ z
      <use xlink:href="#PlexSansSemiBold-Regular-19" transform="translate(254.59375 0)"/>
      <use xlink:href="#PlexSansSemiBold-Regular-52" transform="translate(306.40625 0)"/>
      <use xlink:href="#PlexSansSemiBold-Regular-43" transform="translate(346.609375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-3" transform="translate(406.609375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-5d" transform="translate(465.015625 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-3e9" transform="translate(494.921875 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-3e" transform="translate(518.515625 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-3e9" transform="translate(578.515625 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-15" transform="translate(602.109375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-12" transform="translate(640.90625 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-17" transform="translate(696.796875 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-1" transform="translate(734.203125 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-17" transform="translate(789.703125 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-c" transform="translate(827.109375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-12" transform="translate(854.609375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-11" transform="translate(910.90625 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-16" transform="translate(969.703125 0)"/>
-    </g>
-   </g>
-   <g id="text_10">
-    <!-- 68.5 -->
-    <g style="fill: #111111" transform="translate(467.50176 135.792391) scale(0.09 -0.09)">
-     <defs>
-      <path id="IBMPlexMono-Medium-42" d="M 1920 -77 
-Q 1523 -77 1222 22 
-Q 922 122 717 294 
-Q 512 467 406 704 
-Q 301 941 301 1222 
-Q 301 1670 550 1939 
-Q 800 2208 1203 2317 
-L 1203 2368 
-Q 858 2490 646 2752 
-Q 435 3014 435 3398 
-Q 435 3917 822 4230 
-Q 1210 4544 1920 4544 
-Q 2630 4544 3017 4230 
-Q 3405 3917 3405 3398 
-Q 3405 3014 3193 2752 
-Q 2982 2490 2637 2368 
-L 2637 2317 
-Q 3040 2208 3289 1939 
-Q 3539 1670 3539 1222 
-Q 3539 941 3433 704 
-Q 3328 467 3123 294 
-Q 2918 122 2617 22 
-Q 2317 -77 1920 -77 
-z
-M 1920 493 
-Q 2342 493 2569 678 
-Q 2797 864 2797 1203 
-L 2797 1338 
-Q 2797 1677 2569 1862 
-Q 2342 2048 1920 2048 
-Q 1498 2048 1270 1862 
-Q 1043 1677 1043 1338 
-L 1043 1203 
-Q 1043 864 1270 678 
-Q 1498 493 1920 493 
-z
-M 1920 2598 
-Q 2304 2598 2505 2768 
-Q 2707 2938 2707 3245 
-L 2707 3328 
-Q 2707 3635 2505 3804 
-Q 2304 3974 1920 3974 
-Q 1536 3974 1334 3804 
-Q 1133 3635 1133 3328 
-L 1133 3245 
-Q 1133 2938 1334 2768 
-Q 1536 2598 1920 2598 
-z
-" transform="scale(0.015625)"/>
-      <path id="IBMPlexMono-Medium-3f" d="M 3270 3846 
-L 1242 3846 
-L 1126 2259 
-L 1178 2259 
-Q 1331 2522 1548 2678 
-Q 1766 2835 2144 2835 
-Q 2432 2835 2678 2739 
-Q 2925 2643 3107 2464 
-Q 3290 2285 3395 2025 
-Q 3501 1766 3501 1440 
-Q 3501 1107 3392 828 
-Q 3283 550 3078 348 
-Q 2874 147 2573 35 
-Q 2272 -77 1888 -77 
-Q 1587 -77 1353 -9 
-Q 1120 58 937 170 
-Q 755 282 620 426 
-Q 486 570 384 723 
-L 909 1133 
-Q 992 1005 1085 893 
-Q 1178 781 1293 697 
-Q 1408 614 1558 569 
-Q 1709 525 1901 525 
-Q 2317 525 2534 752 
-Q 2752 979 2752 1370 
-L 2752 1421 
-Q 2752 1811 2531 2028 
-Q 2310 2246 1901 2246 
-Q 1600 2246 1427 2137 
-Q 1254 2029 1126 1894 
-L 531 1978 
-L 698 4467 
-L 3270 4467 
-L 3270 3846 
-z
-" transform="scale(0.015625)"/>
-     </defs>
-     <use xlink:href="#IBMPlexMono-Medium-40"/>
-     <use xlink:href="#IBMPlexMono-Medium-42" transform="translate(60 0)"/>
-     <use xlink:href="#IBMPlexMono-Medium-4b" transform="translate(120 0)"/>
-     <use xlink:href="#IBMPlexMono-Medium-3f" transform="translate(180 0)"/>
-    </g>
-   </g>
-   <g id="text_11">
-    <!-- imajev-9b -->
-    <g style="fill: #111111" transform="translate(137.431543 136.167391) scale(0.1 -0.1)">
-     <use xlink:href="#PlexSansSemiBold-Regular-c"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-10" transform="translate(27.5 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-1" transform="translate(116.296875 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-d" transform="translate(172.203125 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-6" transform="translate(199.703125 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-19" transform="translate(254.59375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-52" transform="translate(306.40625 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-43" transform="translate(346.609375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-3" transform="translate(406.609375 0)"/>
-    </g>
-   </g>
-   <g id="text_12">
-    <!-- 67.6 -->
-    <g style="fill: #111111" transform="translate(463.909248 163.183696) scale(0.09 -0.09)">
-     <defs>
-      <path id="IBMPlexMono-Medium-41" d="M 1082 0 
-L 2739 3872 
-L 998 3872 
-L 998 3046 
-L 378 3046 
-L 378 4467 
-L 3456 4467 
-L 3456 3840 
-L 1843 0 
-L 1082 0 
-z
-" transform="scale(0.015625)"/>
-     </defs>
-     <use xlink:href="#IBMPlexMono-Medium-40"/>
-     <use xlink:href="#IBMPlexMono-Medium-41" transform="translate(60 0)"/>
-     <use xlink:href="#IBMPlexMono-Medium-4b" transform="translate(120 0)"/>
-     <use xlink:href="#IBMPlexMono-Medium-40" transform="translate(180 0)"/>
-    </g>
-   </g>
-   <g id="text_13">
-    <!-- imajev-4b -->
-    <g style="fill: #111111" transform="translate(137.431543 163.558696) scale(0.1 -0.1)">
-     <use xlink:href="#PlexSansSemiBold-Regular-c"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-10" transform="translate(27.5 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-1" transform="translate(116.296875 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-d" transform="translate(172.203125 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-6" transform="translate(199.703125 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-19" transform="translate(254.59375 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-52" transform="translate(306.40625 0)"/>
-     <use xlink:href="#PlexSansSemiBold-Regular-3e" transform="translate(346.609375 0)"/>
      <use xlink:href="#PlexSansSemiBold-Regular-3" transform="translate(406.609375 0)"/>
     </g>
    </g>
@@ -1492,33 +1534,6 @@ L 3930 0
 L 3392 0 
 z
 " transform="scale(0.015625)"/>
-      <path id="PlexSansRegular-Regular-12" d="M 1792 -77 
-Q 1350 -77 1014 137 
-Q 678 352 489 739 
-Q 301 1126 301 1651 
-Q 301 2176 489 2563 
-Q 678 2950 1014 3164 
-Q 1350 3379 1792 3379 
-Q 2234 3379 2570 3164 
-Q 2906 2950 3094 2563 
-Q 3283 2176 3283 1651 
-Q 3283 1126 3094 739 
-Q 2906 352 2570 137 
-Q 2234 -77 1792 -77 
-z
-M 1792 378 
-Q 2208 378 2470 634 
-Q 2733 890 2733 1414 
-L 2733 1888 
-Q 2733 2413 2470 2669 
-Q 2208 2925 1792 2925 
-Q 1382 2925 1116 2669 
-Q 851 2413 851 1888 
-L 851 1414 
-Q 851 890 1116 634 
-Q 1382 378 1792 378 
-z
-" transform="scale(0.015625)"/>
       <path id="PlexSansRegular-Regular-13" d="M 544 -1280 
 L 544 3302 
 L 1056 3302 
@@ -1581,12 +1596,12 @@ z
     </g>
    </g>
    <g id="text_16">
-    <!-- 56.8 -->
-    <g style="fill: #111111" transform="translate(420.799104 217.966304) scale(0.09 -0.09)">
-     <use xlink:href="#IBMPlexMono-Medium-3f"/>
-     <use xlink:href="#IBMPlexMono-Medium-40" transform="translate(60 0)"/>
+    <!-- 60.4 -->
+    <g style="fill: #111111" transform="translate(435.169152 217.966304) scale(0.09 -0.09)">
+     <use xlink:href="#IBMPlexMono-Medium-40"/>
+     <use xlink:href="#IBMPlexMono-Medium-38" transform="translate(60 0)"/>
      <use xlink:href="#IBMPlexMono-Medium-4b" transform="translate(120 0)"/>
-     <use xlink:href="#IBMPlexMono-Medium-42" transform="translate(180 0)"/>
+     <use xlink:href="#IBMPlexMono-Medium-3e" transform="translate(180 0)"/>
     </g>
    </g>
    <g id="text_17">
@@ -1730,47 +1745,6 @@ Q 2342 794 2342 960
 L 2342 1504 
 z
 " transform="scale(0.015625)"/>
-      <path id="PlexSansRegular-Regular-52" d="M 2112 1670 
-L 442 1670 
-L 442 2221 
-L 2112 2221 
-L 2112 1670 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansRegular-Regular-16" d="M 1536 -77 
-Q 1082 -77 768 99 
-Q 454 275 230 570 
-L 595 864 
-Q 787 627 1024 492 
-Q 1261 358 1574 358 
-Q 1901 358 2083 499 
-Q 2266 640 2266 896 
-Q 2266 1088 2141 1229 
-Q 2016 1370 1690 1414 
-L 1427 1453 
-Q 1126 1498 883 1603 
-Q 640 1709 502 1904 
-Q 365 2099 365 2406 
-Q 365 2899 701 3139 
-Q 1037 3379 1542 3379 
-Q 1811 3379 2019 3315 
-Q 2227 3251 2393 3132 
-Q 2560 3014 2694 2848 
-L 2355 2541 
-Q 2246 2694 2035 2819 
-Q 1824 2944 1504 2944 
-Q 1190 2944 1024 2806 
-Q 858 2669 858 2432 
-Q 858 2195 1021 2083 
-Q 1184 1971 1491 1920 
-L 1747 1882 
-Q 2298 1798 2528 1564 
-Q 2758 1331 2758 954 
-Q 2758 634 2611 403 
-Q 2464 173 2189 48 
-Q 1914 -77 1536 -77 
-z
-" transform="scale(0.015625)"/>
       <path id="PlexSansRegular-Regular-3b" d="M 3501 0 
 L 563 0 
 L 563 474 
@@ -1784,26 +1758,6 @@ L 2349 4467
 L 2349 474 
 L 3501 474 
 L 3501 0 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansRegular-Regular-3e" d="M 2912 0 
-L 2400 0 
-L 2400 877 
-L 243 877 
-L 243 1350 
-L 2112 4467 
-L 2912 4467 
-L 2912 1325 
-L 3558 1325 
-L 3558 877 
-L 2912 877 
-L 2912 0 
-z
-M 2368 4051 
-L 749 1325 
-L 2400 1325 
-L 2400 4051 
-L 2368 4051 
 z
 " transform="scale(0.015625)"/>
       <path id="PlexSansRegular-Regular-3" d="M 544 0 
@@ -1947,25 +1901,6 @@ L 1242 2854
 L 1242 448 
 L 1914 448 
 L 1914 0 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansRegular-Regular-c" d="M 800 4077 
-Q 640 4077 563 4157 
-Q 486 4237 486 4365 
-L 486 4448 
-Q 486 4576 563 4656 
-Q 640 4736 800 4736 
-Q 966 4736 1040 4656 
-Q 1114 4576 1114 4448 
-L 1114 4365 
-Q 1114 4237 1040 4157 
-Q 966 4077 800 4077 
-z
-M 544 0 
-L 544 3302 
-L 1056 3302 
-L 1056 0 
-L 544 0 
 z
 " transform="scale(0.015625)"/>
       <path id="PlexSansRegular-Regular-11" d="M 1056 0 
@@ -2278,49 +2213,6 @@ Q 2669 1677 2425 1891
 Q 2182 2106 1709 2106 
 L 1184 2106 
 L 1184 2573 
-z
-" transform="scale(0.015625)"/>
-      <path id="PlexSansRegular-Regular-1f" d="M 595 0 
-L 595 4467 
-L 2432 4467 
-Q 2982 4467 3302 4153 
-Q 3622 3840 3622 3315 
-Q 3622 2982 3504 2784 
-Q 3386 2586 3216 2490 
-Q 3046 2394 2899 2368 
-L 2899 2330 
-Q 3021 2323 3171 2262 
-Q 3322 2202 3459 2080 
-Q 3597 1958 3686 1766 
-Q 3776 1574 3776 1293 
-Q 3776 928 3625 633 
-Q 3475 339 3216 169 
-Q 2957 0 2624 0 
-L 595 0 
-z
-M 1133 2074 
-L 1133 474 
-L 2458 474 
-Q 2688 474 2854 554 
-Q 3021 634 3110 787 
-Q 3200 941 3200 1165 
-L 3200 1382 
-Q 3200 1606 3110 1760 
-Q 3021 1914 2854 1994 
-Q 2688 2074 2458 2074 
-L 1133 2074 
-z
-M 1133 3994 
-L 1133 2534 
-L 2368 2534 
-Q 2579 2534 2729 2608 
-Q 2880 2682 2963 2819 
-Q 3046 2957 3046 3155 
-L 3046 3373 
-Q 3046 3571 2963 3708 
-Q 2880 3846 2729 3920 
-Q 2579 3994 2368 3994 
-L 1133 3994 
 z
 " transform="scale(0.015625)"/>
       <path id="PlexSansRegular-Regular-5d" d="M 870 749 
@@ -3690,7 +3582,7 @@ z
    </g>
   </g>
   <g id="text_25">
-   <!-- Same protocol for every system: jevbench harness, typesafe adapter, one H100, serial. Competitive, not first. -->
+   <!-- Same protocol for every system: jevbench harness, typesafe adapter, one H100, serial. Competitive, not #1. -->
    <g style="fill: #3d3d3d" transform="translate(22.176 55.4025) scale(0.105 -0.105)">
     <defs>
      <path id="PlexSansRegular-Regular-30" d="M 1850 -77 
@@ -3883,37 +3775,41 @@ Q 3526 474 3126 198
 Q 2726 -77 2170 -77 
 z
 " transform="scale(0.015625)"/>
-     <path id="PlexSansRegular-Regular-c5" d="M 723 0 
-L 723 2854 
-L 186 2854 
-L 186 3302 
-L 723 3302 
-L 723 3968 
-Q 723 4307 902 4521 
-Q 1082 4736 1446 4736 
-L 1946 4736 
-L 1946 4288 
-L 1235 4288 
-L 1235 3302 
-L 3085 3302 
-L 3085 0 
-L 2573 0 
-L 2573 2854 
-L 1235 2854 
-L 1235 0 
-L 723 0 
+     <path id="PlexSansRegular-Regular-8c" d="M 2368 0 
+L 2598 1312 
+L 1613 1312 
+L 1382 0 
+L 973 0 
+L 1203 1312 
+L 384 1312 
+L 384 1696 
+L 1267 1696 
+L 1446 2771 
+L 634 2771 
+L 634 3155 
+L 1517 3155 
+L 1741 4467 
+L 2150 4467 
+L 1926 3155 
+L 2912 3155 
+L 3136 4467 
+L 3546 4467 
+L 3322 3155 
+L 4141 3155 
+L 4141 2771 
+L 3251 2771 
+L 3072 1696 
+L 3891 1696 
+L 3891 1312 
+L 3008 1312 
+L 2778 0 
+L 2368 0 
 z
-M 2829 4077 
-Q 2669 4077 2592 4157 
-Q 2515 4237 2515 4365 
-L 2515 4448 
-Q 2515 4576 2592 4656 
-Q 2669 4736 2829 4736 
-Q 2995 4736 3068 4656 
-Q 3142 4576 3142 4448 
-L 3142 4365 
-Q 3142 4237 3068 4157 
-Q 2995 4077 2829 4077 
+M 1677 1696 
+L 2662 1696 
+L 2842 2771 
+L 1856 2771 
+L 1677 1696 
 z
 " transform="scale(0.015625)"/>
     </defs>
@@ -4020,15 +3916,13 @@ z
     <use xlink:href="#PlexSansRegular-Regular-12" transform="translate(4539.859375 0)"/>
     <use xlink:href="#PlexSansRegular-Regular-17" transform="translate(4595.859375 0)"/>
     <use xlink:href="#PlexSansRegular-Regular-3e9" transform="translate(4630.953125 0)"/>
-    <use xlink:href="#PlexSansRegular-Regular-c5" transform="translate(4654.546875 0)"/>
-    <use xlink:href="#PlexSansRegular-Regular-15" transform="translate(4711.25 0)"/>
-    <use xlink:href="#PlexSansRegular-Regular-16" transform="translate(4747.953125 0)"/>
-    <use xlink:href="#PlexSansRegular-Regular-17" transform="translate(4795.953125 0)"/>
-    <use xlink:href="#PlexSansRegular-Regular-5a" transform="translate(4831.046875 0)"/>
+    <use xlink:href="#PlexSansRegular-Regular-8c" transform="translate(4654.546875 0)"/>
+    <use xlink:href="#PlexSansRegular-Regular-3b" transform="translate(4725.84375 0)"/>
+    <use xlink:href="#PlexSansRegular-Regular-5a" transform="translate(4785.84375 0)"/>
    </g>
   </g>
   <g id="text_26">
-   <!-- Our runs, 24 Sept 2026; not the official board (sealed items, 4-axis score). Source: results/benchmarks/ -->
+   <!-- Our runs, 24 Sept 2026; imajev as served (4 rotations, calibration file); not the official board (sealed items, 4-axis score). Source: results/benchmarks/ -->
    <g style="fill: #6e6e6b" transform="translate(22.176 346.225) scale(0.082 -0.082)">
     <defs>
      <path id="IBMPlexMono-Regular-2c" d="M 1920 -77 
@@ -4338,84 +4232,6 @@ Q 2394 2694 2288 2585
 Q 2182 2476 1920 2476 
 z
 " transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-12" d="M 1920 -77 
-Q 1574 -77 1296 44 
-Q 1018 166 822 393 
-Q 627 621 524 937 
-Q 422 1254 422 1651 
-Q 422 2042 524 2362 
-Q 627 2682 822 2909 
-Q 1018 3136 1296 3257 
-Q 1574 3379 1920 3379 
-Q 2266 3379 2544 3257 
-Q 2822 3136 3017 2909 
-Q 3213 2682 3315 2362 
-Q 3418 2042 3418 1651 
-Q 3418 1254 3315 937 
-Q 3213 621 3017 393 
-Q 2822 166 2544 44 
-Q 2266 -77 1920 -77 
-z
-M 1920 365 
-Q 2349 365 2611 621 
-Q 2874 877 2874 1414 
-L 2874 1888 
-Q 2874 2426 2611 2682 
-Q 2349 2938 1920 2938 
-Q 1491 2938 1228 2682 
-Q 966 2426 966 1888 
-L 966 1414 
-Q 966 877 1228 621 
-Q 1491 365 1920 365 
-z
-" transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-b" d="M 627 4736 
-L 1139 4736 
-L 1139 2765 
-L 1165 2765 
-Q 1216 2886 1293 2998 
-Q 1370 3110 1482 3193 
-Q 1594 3277 1747 3328 
-Q 1901 3379 2106 3379 
-Q 2624 3379 2937 3049 
-Q 3251 2720 3251 2118 
-L 3251 0 
-L 2739 0 
-L 2739 2029 
-Q 2739 2483 2540 2704 
-Q 2342 2925 1958 2925 
-Q 1805 2925 1657 2886 
-Q 1510 2848 1395 2771 
-Q 1280 2694 1209 2572 
-Q 1139 2451 1139 2291 
-L 1139 0 
-L 627 0 
-L 627 4736 
-z
-" transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-7" d="M 531 435 
-L 1645 435 
-L 1645 2867 
-L 467 2867 
-L 467 3302 
-L 1645 3302 
-L 1645 3981 
-Q 1645 4314 1821 4525 
-Q 1997 4736 2374 4736 
-L 3482 4736 
-L 3482 4301 
-L 2157 4301 
-L 2157 3302 
-L 3482 3302 
-L 3482 2867 
-L 2157 2867 
-L 2157 435 
-L 3334 435 
-L 3334 0 
-L 531 0 
-L 531 435 
-z
-" transform="scale(0.015625)"/>
      <path id="IBMPlexMono-Regular-c" d="M 2125 4032 
 Q 1901 4032 1811 4125 
 Q 1722 4218 1722 4358 
@@ -4441,34 +4257,36 @@ L 678 0
 L 678 435 
 z
 " transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-4" d="M 2035 -77 
-Q 1677 -77 1398 48 
-Q 1120 173 928 397 
-Q 736 621 637 941 
-Q 538 1261 538 1651 
-Q 538 2042 640 2362 
-Q 742 2682 934 2909 
-Q 1126 3136 1401 3257 
-Q 1677 3379 2029 3379 
-Q 2509 3379 2809 3168 
-Q 3110 2957 3251 2618 
-L 2842 2400 
-Q 2752 2656 2544 2797 
-Q 2336 2938 2029 2938 
-Q 1805 2938 1629 2864 
-Q 1453 2790 1331 2656 
-Q 1210 2522 1149 2336 
-Q 1088 2150 1088 1933 
-L 1088 1370 
-Q 1088 1152 1149 966 
-Q 1210 781 1331 646 
-Q 1453 512 1632 438 
-Q 1811 365 2042 365 
-Q 2374 365 2592 518 
-Q 2810 672 2938 941 
-L 3302 691 
-Q 3155 358 2844 140 
-Q 2534 -77 2035 -77 
+     <path id="IBMPlexMono-Regular-10" d="M 346 0 
+L 346 3302 
+L 819 3302 
+L 819 2918 
+L 845 2918 
+Q 922 3110 1062 3244 
+Q 1203 3379 1478 3379 
+Q 1766 3379 1907 3235 
+Q 2048 3091 2080 2861 
+L 2099 2861 
+Q 2189 3085 2355 3232 
+Q 2522 3379 2816 3379 
+Q 3219 3379 3356 3097 
+Q 3494 2816 3494 2291 
+L 3494 0 
+L 3021 0 
+L 3021 2208 
+Q 3021 2630 2934 2793 
+Q 2848 2957 2618 2957 
+Q 2413 2957 2285 2825 
+Q 2157 2694 2157 2426 
+L 2157 0 
+L 1683 0 
+L 1683 2208 
+Q 1683 2630 1596 2793 
+Q 1510 2957 1286 2957 
+Q 1082 2957 950 2825 
+Q 819 2694 819 2426 
+L 819 0 
+L 346 0 
 z
 " transform="scale(0.015625)"/>
      <path id="IBMPlexMono-Regular-1" d="M 3168 0 
@@ -4513,49 +4331,42 @@ Q 960 614 1142 483
 Q 1325 352 1645 352 
 z
 " transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-f" d="M 512 435 
-L 1664 435 
-L 1664 4301 
-L 512 4301 
-L 512 4736 
-L 2176 4736 
-L 2176 435 
-L 3328 435 
-L 3328 0 
-L 512 0 
-L 512 435 
+     <path id="IBMPlexMono-Regular-d" d="M 653 -845 
+L 2253 -845 
+L 2253 2867 
+L 595 2867 
+L 595 3302 
+L 2765 3302 
+L 2765 -525 
+Q 2765 -858 2589 -1069 
+Q 2413 -1280 2035 -1280 
+L 653 -1280 
+L 653 -845 
+z
+M 2509 4032 
+Q 2285 4032 2195 4125 
+Q 2106 4218 2106 4358 
+L 2106 4461 
+Q 2106 4602 2195 4694 
+Q 2285 4787 2509 4787 
+Q 2733 4787 2822 4694 
+Q 2912 4602 2912 4461 
+L 2912 4358 
+Q 2912 4218 2822 4125 
+Q 2733 4032 2509 4032 
 z
 " transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-3" d="M 608 4736 
-L 1120 4736 
-L 1120 2765 
-L 1146 2765 
-Q 1466 3379 2163 3379 
-Q 2771 3379 3113 2924 
-Q 3456 2470 3456 1651 
-Q 3456 832 3113 377 
-Q 2771 -77 2163 -77 
-Q 1466 -77 1146 538 
-L 1120 538 
-L 1120 0 
-L 608 0 
-L 608 4736 
-z
-M 1965 378 
-Q 2413 378 2659 650 
-Q 2906 922 2906 1370 
-L 2906 1933 
-Q 2906 2381 2659 2653 
-Q 2413 2925 1965 2925 
-Q 1792 2925 1638 2880 
-Q 1485 2835 1369 2748 
-Q 1254 2662 1187 2537 
-Q 1120 2413 1120 2246 
-L 1120 1056 
-Q 1120 890 1187 765 
-Q 1254 640 1369 553 
-Q 1485 467 1638 422 
-Q 1792 378 1965 378 
+     <path id="IBMPlexMono-Regular-19" d="M 1594 0 
+L 410 3302 
+L 928 3302 
+L 1402 1920 
+L 1914 429 
+L 1939 429 
+L 2451 1920 
+L 2925 3302 
+L 3430 3302 
+L 2246 0 
+L 1594 0 
 z
 " transform="scale(0.015625)"/>
      <path id="IBMPlexMono-Regular-5" d="M 2720 538 
@@ -4612,36 +4423,179 @@ Q 1523 659 1417 1091
 Q 1312 1523 1312 1990 
 z
 " transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-10" d="M 346 0 
-L 346 3302 
-L 819 3302 
-L 819 2918 
-L 845 2918 
-Q 922 3110 1062 3244 
-Q 1203 3379 1478 3379 
-Q 1766 3379 1907 3235 
-Q 2048 3091 2080 2861 
-L 2099 2861 
-Q 2189 3085 2355 3232 
-Q 2522 3379 2816 3379 
-Q 3219 3379 3356 3097 
-Q 3494 2816 3494 2291 
-L 3494 0 
-L 3021 0 
-L 3021 2208 
-Q 3021 2630 2934 2793 
-Q 2848 2957 2618 2957 
-Q 2413 2957 2285 2825 
-Q 2157 2694 2157 2426 
-L 2157 0 
-L 1683 0 
-L 1683 2208 
-Q 1683 2630 1596 2793 
-Q 1510 2957 1286 2957 
-Q 1082 2957 950 2825 
-Q 819 2694 819 2426 
-L 819 0 
-L 346 0 
+     <path id="IBMPlexMono-Regular-12" d="M 1920 -77 
+Q 1574 -77 1296 44 
+Q 1018 166 822 393 
+Q 627 621 524 937 
+Q 422 1254 422 1651 
+Q 422 2042 524 2362 
+Q 627 2682 822 2909 
+Q 1018 3136 1296 3257 
+Q 1574 3379 1920 3379 
+Q 2266 3379 2544 3257 
+Q 2822 3136 3017 2909 
+Q 3213 2682 3315 2362 
+Q 3418 2042 3418 1651 
+Q 3418 1254 3315 937 
+Q 3213 621 3017 393 
+Q 2822 166 2544 44 
+Q 2266 -77 1920 -77 
+z
+M 1920 365 
+Q 2349 365 2611 621 
+Q 2874 877 2874 1414 
+L 2874 1888 
+Q 2874 2426 2611 2682 
+Q 2349 2938 1920 2938 
+Q 1491 2938 1228 2682 
+Q 966 2426 966 1888 
+L 966 1414 
+Q 966 877 1228 621 
+Q 1491 365 1920 365 
+z
+" transform="scale(0.015625)"/>
+     <path id="IBMPlexMono-Regular-4" d="M 2035 -77 
+Q 1677 -77 1398 48 
+Q 1120 173 928 397 
+Q 736 621 637 941 
+Q 538 1261 538 1651 
+Q 538 2042 640 2362 
+Q 742 2682 934 2909 
+Q 1126 3136 1401 3257 
+Q 1677 3379 2029 3379 
+Q 2509 3379 2809 3168 
+Q 3110 2957 3251 2618 
+L 2842 2400 
+Q 2752 2656 2544 2797 
+Q 2336 2938 2029 2938 
+Q 1805 2938 1629 2864 
+Q 1453 2790 1331 2656 
+Q 1210 2522 1149 2336 
+Q 1088 2150 1088 1933 
+L 1088 1370 
+Q 1088 1152 1149 966 
+Q 1210 781 1331 646 
+Q 1453 512 1632 438 
+Q 1811 365 2042 365 
+Q 2374 365 2592 518 
+Q 2810 672 2938 941 
+L 3302 691 
+Q 3155 358 2844 140 
+Q 2534 -77 2035 -77 
+z
+" transform="scale(0.015625)"/>
+     <path id="IBMPlexMono-Regular-f" d="M 512 435 
+L 1664 435 
+L 1664 4301 
+L 512 4301 
+L 512 4736 
+L 2176 4736 
+L 2176 435 
+L 3328 435 
+L 3328 0 
+L 512 0 
+L 512 435 
+z
+" transform="scale(0.015625)"/>
+     <path id="IBMPlexMono-Regular-3" d="M 608 4736 
+L 1120 4736 
+L 1120 2765 
+L 1146 2765 
+Q 1466 3379 2163 3379 
+Q 2771 3379 3113 2924 
+Q 3456 2470 3456 1651 
+Q 3456 832 3113 377 
+Q 2771 -77 2163 -77 
+Q 1466 -77 1146 538 
+L 1120 538 
+L 1120 0 
+L 608 0 
+L 608 4736 
+z
+M 1965 378 
+Q 2413 378 2659 650 
+Q 2906 922 2906 1370 
+L 2906 1933 
+Q 2906 2381 2659 2653 
+Q 2413 2925 1965 2925 
+Q 1792 2925 1638 2880 
+Q 1485 2835 1369 2748 
+Q 1254 2662 1187 2537 
+Q 1120 2413 1120 2246 
+L 1120 1056 
+Q 1120 890 1187 765 
+Q 1254 640 1369 553 
+Q 1485 467 1638 422 
+Q 1792 378 1965 378 
+z
+" transform="scale(0.015625)"/>
+     <path id="IBMPlexMono-Regular-7" d="M 531 435 
+L 1645 435 
+L 1645 2867 
+L 467 2867 
+L 467 3302 
+L 1645 3302 
+L 1645 3981 
+Q 1645 4314 1821 4525 
+Q 1997 4736 2374 4736 
+L 3482 4736 
+L 3482 4301 
+L 2157 4301 
+L 2157 3302 
+L 3482 3302 
+L 3482 2867 
+L 2157 2867 
+L 2157 435 
+L 3334 435 
+L 3334 0 
+L 531 0 
+L 531 435 
+z
+" transform="scale(0.015625)"/>
+     <path id="IBMPlexMono-Regular-61" d="M 2528 1990 
+Q 2528 1523 2422 1091 
+Q 2317 659 2134 288 
+Q 1952 -83 1709 -384 
+Q 1466 -685 1197 -883 
+L 678 -883 
+Q 954 -672 1203 -393 
+Q 1453 -115 1641 214 
+Q 1830 544 1939 925 
+Q 2048 1306 2048 1715 
+L 2048 2266 
+Q 2048 2675 1939 3056 
+Q 1830 3437 1641 3766 
+Q 1453 4096 1203 4374 
+Q 954 4653 678 4864 
+L 1197 4864 
+Q 1466 4659 1709 4361 
+Q 1952 4064 2134 3693 
+Q 2317 3322 2422 2890 
+Q 2528 2458 2528 1990 
+z
+" transform="scale(0.015625)"/>
+     <path id="IBMPlexMono-Regular-b" d="M 627 4736 
+L 1139 4736 
+L 1139 2765 
+L 1165 2765 
+Q 1216 2886 1293 2998 
+Q 1370 3110 1482 3193 
+Q 1594 3277 1747 3328 
+Q 1901 3379 2106 3379 
+Q 2624 3379 2937 3049 
+Q 3251 2720 3251 2118 
+L 3251 0 
+L 2739 0 
+L 2739 2029 
+Q 2739 2483 2540 2704 
+Q 2342 2925 1958 2925 
+Q 1805 2925 1657 2886 
+Q 1510 2848 1395 2771 
+Q 1280 2694 1209 2572 
+Q 1139 2451 1139 2291 
+L 1139 0 
+L 627 0 
+L 627 4736 
 z
 " transform="scale(0.015625)"/>
      <path id="IBMPlexMono-Regular-46" d="M 992 1677 
@@ -4670,28 +4624,6 @@ L 1882 1299
 L 1517 774 
 L 979 0 
 L 390 0 
-z
-" transform="scale(0.015625)"/>
-     <path id="IBMPlexMono-Regular-61" d="M 2528 1990 
-Q 2528 1523 2422 1091 
-Q 2317 659 2134 288 
-Q 1952 -83 1709 -384 
-Q 1466 -685 1197 -883 
-L 678 -883 
-Q 954 -672 1203 -393 
-Q 1453 -115 1641 214 
-Q 1830 544 1939 925 
-Q 2048 1306 2048 1715 
-L 2048 2266 
-Q 2048 2675 1939 3056 
-Q 1830 3437 1641 3766 
-Q 1453 4096 1203 4374 
-Q 954 4653 678 4864 
-L 1197 4864 
-Q 1466 4659 1709 4361 
-Q 1952 4064 2134 3693 
-Q 2317 3322 2422 2890 
-Q 2528 2458 2528 1990 
 z
 " transform="scale(0.015625)"/>
      <path id="IBMPlexMono-Regular-4d" d="M 1920 -58 
@@ -4768,91 +4700,141 @@ z
     <use xlink:href="#IBMPlexMono-Regular-40" transform="translate(1260 0)"/>
     <use xlink:href="#IBMPlexMono-Regular-4f" transform="translate(1320 0)"/>
     <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(1380 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-11" transform="translate(1440 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(1500 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(1560 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(1620 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(1680 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-b" transform="translate(1740 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(1800 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(1860 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(1920 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-7" transform="translate(1980 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-7" transform="translate(2040 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(2100 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(2160 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(2220 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(2280 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-f" transform="translate(2340 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(1440 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-10" transform="translate(1500 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(1560 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-d" transform="translate(1620 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(1680 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-19" transform="translate(1740 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(1800 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(1860 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(1920 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(1980 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(2040 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(2100 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(2160 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-19" transform="translate(2220 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(2280 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-5" transform="translate(2340 0)"/>
     <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(2400 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-3" transform="translate(2460 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(2520 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(2580 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-60" transform="translate(2460 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-3e" transform="translate(2520 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(2580 0)"/>
     <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(2640 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-5" transform="translate(2700 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(2760 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-60" transform="translate(2820 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(2880 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(2940 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(3000 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-f" transform="translate(3060 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(3120 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-5" transform="translate(3180 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(2700 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(2760 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(2820 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(2880 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(2940 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(3000 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-11" transform="translate(3060 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(3120 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4e" transform="translate(3180 0)"/>
     <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(3240 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(3300 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(3360 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(3420 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-10" transform="translate(3480 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(3540 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-4e" transform="translate(3600 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(3660 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-3e" transform="translate(3720 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-46" transform="translate(3780 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(3840 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-1b" transform="translate(3900 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(3960 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(4020 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(4080 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(4140 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(4200 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(4260 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(4320 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(4380 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-61" transform="translate(4440 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-4b" transform="translate(4500 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(4560 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-30" transform="translate(4620 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(4680 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-18" transform="translate(4740 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(4800 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(4860 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(4920 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-4d" transform="translate(4980 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(5040 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(5100 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(5160 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(5220 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-18" transform="translate(5280 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(3300 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(3360 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-f" transform="translate(3420 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(3480 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-3" transform="translate(3540 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(3600 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(3660 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(3720 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(3780 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(3840 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-11" transform="translate(3900 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(3960 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-7" transform="translate(4020 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(4080 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-f" transform="translate(4140 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(4200 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-61" transform="translate(4260 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4f" transform="translate(4320 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(4380 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-11" transform="translate(4440 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(4500 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(4560 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(4620 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(4680 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-b" transform="translate(4740 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(4800 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(4860 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(4920 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-7" transform="translate(4980 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-7" transform="translate(5040 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(5100 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(5160 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(5220 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(5280 0)"/>
     <use xlink:href="#IBMPlexMono-Regular-f" transform="translate(5340 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(5400 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(5460 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-66" transform="translate(5520 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-3" transform="translate(5580 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(5640 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-11" transform="translate(5700 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(5760 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-b" transform="translate(5820 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-10" transform="translate(5880 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(5940 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(6000 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-e" transform="translate(6060 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(6120 0)"/>
-    <use xlink:href="#IBMPlexMono-Regular-66" transform="translate(6180 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(5400 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-3" transform="translate(5460 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(5520 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(5580 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(5640 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-5" transform="translate(5700 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(5760 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-60" transform="translate(5820 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(5880 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(5940 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(6000 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-f" transform="translate(6060 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(6120 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-5" transform="translate(6180 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(6240 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(6300 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(6360 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(6420 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-10" transform="translate(6480 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(6540 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4e" transform="translate(6600 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(6660 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-3e" transform="translate(6720 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-46" transform="translate(6780 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(6840 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1b" transform="translate(6900 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-c" transform="translate(6960 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(7020 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(7080 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(7140 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(7200 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(7260 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(7320 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(7380 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-61" transform="translate(7440 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4b" transform="translate(7500 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(7560 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-30" transform="translate(7620 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-12" transform="translate(7680 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-18" transform="translate(7740 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(7800 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(7860 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(7920 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4d" transform="translate(7980 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-405" transform="translate(8040 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(8100 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(8160 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(8220 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-18" transform="translate(8280 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-f" transform="translate(8340 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-17" transform="translate(8400 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(8460 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-66" transform="translate(8520 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-3" transform="translate(8580 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-6" transform="translate(8640 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-11" transform="translate(8700 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-4" transform="translate(8760 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-b" transform="translate(8820 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-10" transform="translate(8880 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-1" transform="translate(8940 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-15" transform="translate(9000 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-e" transform="translate(9060 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-16" transform="translate(9120 0)"/>
+    <use xlink:href="#IBMPlexMono-Regular-66" transform="translate(9180 0)"/>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="pd695adade7">
+  <clipPath id="pf71efe4c13">
    <rect x="190.08" y="61.2" width="399.168" height="252"/>
   </clipPath>
  </defs>

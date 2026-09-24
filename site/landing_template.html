@@ -321,7 +321,7 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
 
 <header class="top"><div class="wrap">
   <a class="word" href="#top"><img class="l" src="assets/brand/mark-light.svg" alt=""><img class="d" src="assets/brand/mark-dark.svg" alt="">imajev</a>
-  <nav aria-label="Sections"><a href="#apart">Why imajev</a><a href="#uses">Use cases</a><a href="#examples">Examples</a><a href="#checks">Checks</a><a href="#benchmarks">Benchmarks</a><a href="#made">Training</a><a href="#developers">Developers</a><a href="report/">Report</a><a href="https://github.com/mohit67890/imajev">GitHub</a></nav>
+  <nav aria-label="Sections"><a href="#apart">Why imajev</a><a href="#uses">Use cases</a><a href="#examples">Examples</a><a href="#checks">Checks</a><a href="#benchmarks">Benchmarks</a><a href="#made">Training</a><a href="#specs">Specs</a><a href="#developers">Developers</a><a href="report/">Report</a><a href="https://github.com/mohit67890/imajev">GitHub</a></nav>
 </div></header>
 
 <main id="top">
@@ -360,10 +360,10 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
       <h3>Two photos, one decision</h3><p>A reference and a target in the same request: what was shipped against what came back, a known-good part against the one on the line.</p>
       <button type="button" class="see" data-sid="qc" data-label="chipped part">See the QC check</button></div>
     <div class="item"><div class="pics"><span class="bars"><span class="top" style="width:30%"></span><span style="width:18%"></span><span class="unk" style="width:88%"></span></span></div>
-      <h3>A trained <i>can't tell</i></h3><p>Every answer carries a probability for <i>unknown</i>. Asked for a white or beige bag from a closet with only a red and a black backpack, the 4B puts 0.89 on unknown instead of guessing.</p>
+      <h3>A trained <i>can't tell</i></h3><p>Every answer carries a probability for <i>unknown</i>. Asked for a white or beige bag from a closet with only a red and a black backpack, the 4B puts 0.89 on unknown instead of guessing, and it abstains on only 3 of the 258 answerable items (2B 4, 9B 2).</p>
       <button type="button" class="see" data-sid="style-m01" data-label="me.likes=white, cream or beige">See it decline to guess</button></div>
     <div class="item"><div class="pics"><span class="chip">2B · 4B · 9B</span><span class="chip">MLX · CUDA</span></div>
-      <h3>Open, small and local</h3><p>Apache-2.0 weights from 2B. Runs on a Mac or one GPU, about 0.1 s per question, so photos and customer data never leave your network.</p>
+      <h3>Open, small and local</h3><p>Apache-2.0 weights from 2B. Runs on a Mac or one GPU, about 0.1 s per question raw (0.3 s with 4 rotations), so photos and customer data never leave your network. The Mac (MLX) weights agree with the GPU run on 97 to 99% of ImajevBench answers (2B 97.1%, 4B 98.2%, 9B 99.3%).</p>
       <button type="button" class="see" onclick="document.getElementById('developers').scrollIntoView()">See how to run it</button></div>
     <div class="item"><div class="pics"><span class="chip">POST /v1/systemone</span></div>
       <h3>Jev's contract, now with images</h3><p>The same request and response as Jev, plus <code>images</code>, <code>unknown_probability</code> and <code>abstained</code>. Text-only Jev requests work unchanged.</p>
@@ -374,10 +374,10 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
     <tbody>
       <tr><td>photos in a request</td><td class="us">up to 2 (reference + target)</td><td>none, text only</td><td>yes; two-photo requests not documented</td><td>yes</td></tr>
       <tr><td>answer format</td><td class="us">probability per option you set</td><td>probability per option you set</td><td>probability per option you set</td><td>generated text or JSON</td></tr>
-      <tr><td>says it can't tell</td><td class="us">trained <i>unknown</i>, 15 / 21 on ImajevBench</td><td>not documented</td><td>no abstain output, so 0 / 21</td><td>only if prompted</td></tr>
+      <tr><td>says it can't tell</td><td class="us">trained <i>unknown</i>, 14 / 21 on ImajevBench</td><td>not documented</td><td>no abstain output, so 0 / 21</td><td>only if prompted</td></tr>
       <tr><td>record per request</td><td class="us">32 KB (about 8k tokens)</td><td>32k tokens</td><td>not documented</td><td>large</td></tr>
       <tr><td>where it runs</td><td class="us">your hardware, open weights</td><td>hosted API</td><td>your hardware, open weights (12B)</td><td>hosted API</td></tr>
-      <tr><td>time per decision</td><td class="us">about 0.1 s (one H100)</td><td>not documented</td><td>about 0.1 s (one H100)</td><td>5 to 8 s</td></tr>
+      <tr><td>time per decision</td><td class="us">about 0.1 s raw, 0.3 s with 4 rotations (one H100, under load)</td><td>not documented</td><td>about 0.1 s (one H100)</td><td>5 to 8 s</td></tr>
       <tr><td>ImajevBench accuracy</td><td class="us">82.4% (4B)</td><td>cannot take photos</td><td>78.5%</td><td>91.4% to 99.6%</td></tr>
     </tbody></table>
     <p class="foot" style="margin-top:10px">Jev from docs.typesafe.ai (models page, Jev 1.13.0). Jev-Omni from its model card and our run of its own predict() API. Frontier rows and all ImajevBench numbers from our runs, 24 Sept 2026; frontier models answer by structured generation, a different interface. Jev's record limit is larger than imajev's.</p>
@@ -398,7 +398,7 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
 
 <section class="s" id="uses"><div class="wrap">
   <div class="s-head"><h2>Where it fits</h2>
-    <p>The decisions it handles well are the high-volume, well-defined ones with a clear set of answers. Each item below opens a checked example.</p></div>
+    <p>The decisions it handles well are the high-volume, well-defined ones with a clear set of answers. Each item below opens a checked example. Also on the same endpoint: a kids' letter-tracing pad and a closet stylist; every clickable combination in the apps is checked against the right answer before it is shown.</p></div>
   <div class="uses" id="uses-grid"></div>
 </div></section>
 
@@ -447,45 +447,70 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
     <div><h3>It says when it can't tell</h3><p>A trained <i>unknown</i> for missing or contradictory evidence, plus a probability you threshold. People review what is unclear.</p></div>
     <div><h3>Every decision is on the record</h3><p>Each answer is a set of probabilities over your options. Log them, audit them, and see exactly why a case was automated or escalated.</p></div>
     <div><h3>Photos, records and text together</h3><p>Compare a photo with a record, a returned item with what was shipped, or an email with the account, in one request.</p></div>
-    <div><h3>Cheap at volume</h3><p>About 0.1 s per question on one GPU, around 40,000 decisions an hour, with no per-call fees. Sizes from 2B for tight budgets to 9B.</p></div>
+    <div><h3>Cheap at volume</h3><p>About 0.1 s per question raw on one GPU, tens of thousands of decisions an hour raw, about 10,000 an hour as served with four option orders, or 0.3 s with the 4 option rotations it is served with, with no per-call fees. Sizes from 2B for tight budgets to 9B.</p></div>
   </div>
 </div></section>
 
 <section class="s" id="benchmarks"><div class="wrap">
   <div class="s-head"><h2>Where it stands</h2>
-    <p>Same protocol for every system on each chart. imajev is not the most accurate option. It is the small one that runs on your own hardware, answers a question in about 0.1 s on one GPU, and can abstain.</p></div>
+    <p>Same protocol for every system on each chart. imajev is not the most accurate option. It is the small one that runs on your own hardware, answers a question in about 0.1 s raw (0.3 s with 4 rotations) on one GPU, and can abstain.</p></div>
   <div class="bench">
-    <figure><div id="c-ib"></div><figcaption><b>ImajevBench v2.0-lite</b>, 279 test items: photos, records and text, including 21 items whose right answer is unknown. Dot is accuracy, line the 95% cluster interval. Frontier APIs answer by structured generation, a different interface taking 5 to 8 s per item; starred ones also screened the benchmark's images.</figcaption></figure>
-    <figure><div id="c-jb"></div><figcaption><b>JevBench public hard split</b>, 111 text-only items, our runs with the jevbench harness on one H100. Not the official leaderboard, which adds sealed items; an entry will be requested.</figcaption></figure>
+    <figure><div id="c-ib"></div><figcaption><b>ImajevBench v2.0-lite</b>, 279 test items: photos, records and text, including 21 items whose right answer is unknown. Dot is accuracy, line the 95% cluster interval. Frontier APIs answer by structured generation, a different interface taking 5 to 8 s per item; starred ones also screened the benchmark's images. 51 contrast sets pair a scene with an edited copy whose right answer must change, become unknown, or stay; the 4B gets all of a set right in 36 of 51 (9B 35, 2B 25).</figcaption></figure>
+    <figure><div id="c-jb"></div><figcaption><b>JevBench public hard split</b>, 111 text-only items, our runs with the jevbench harness on one H100; imajev as served, with 4 option rotations and its calibration file. Not the official leaderboard, which adds sealed items; an entry will be requested.</figcaption></figure>
   </div>
   <div class="readings">
-    <div><span class="label">Uplift</span><p>The imajev adapter lifts Qwen3.5-4B from 70.6% to 82.4% on ImajevBench (+11.8 points, p = 0.0008). The 4B matches the 9B there.</p></div>
-    <div><span class="label">Abstention</span><p>imajev-4b answers <i>unknown</i> correctly on 15 of 21 items. Jev-Omni, another open Jev-class model, has no abstain output: 78.5% overall, 0 of 21 unknown, and it is slightly ahead on answerable items.</p></div>
-    <div><span class="label">Not first</span><p>JevK5 (73.9%) leads every imajev size on JevBench hard; the 4B ties Hopper at 67.6%. A reasoning model scores 97.3%, at seconds and thousands of tokens per decision.</p></div>
+    <div><span class="label">Uplift</span><p>The imajev adapter lifts Qwen3.5-4B from 70.6% to 82.4% on ImajevBench (+11.8 points; the paired test gives p = 0.0006). The 4B is level with the 9B there. On a 202-item hidden split that is never published item by item, the sizes score 74.3%, 84.2% and 84.7%.</p></div>
+    <div><span class="label">Abstention</span><p>imajev-4b answers <i>unknown</i> correctly on 14 of 21 items. Jev-Omni, another open Jev-class model, has no abstain output: 78.5% overall, 0 of 21 unknown, and it is slightly ahead on answerable items.</p></div>
+    <div><span class="label">Not #1</span><p>JevK5 and Eikos-4B (73.9%) lead every imajev size on JevBench hard, by 3 to 4 items of 111; the 4B (70.3%) is above Hopper (67.6%). A reasoning model scores 97.3%, at seconds and thousands of tokens per decision.</p></div>
   </div>
 </div></section>
 
 <section class="s" id="made"><div class="wrap">
   <div class="s-head"><h2>How it was made</h2>
-    <p>About a million training decisions in three stages, on open base models, for about $570 of rented GPU time for the whole project.</p></div>
+    <p>About a million training decisions in three stages, on open base models, for $676 of rented GPU time for the whole project.</p></div>
   <div class="made">
     <div class="ledger" role="img" aria-label="Training data: 504 thousand human-labelled decisions, 488 thousand labelled by our 9B, 23 thousand hard questions kept on teacher agreement">
       <span class="label">Training decisions, to scale</span>
       <div class="strip"><span class="seg h" style="flex:504"></span><span class="seg m" style="flex:488"></span><span class="seg t" style="flex:23"></span></div>
       <div class="keys">
-        <div class="key"><span class="sw seg h"></span><span><b>1 · Human-labelled, public datasets</b><span class="d">300k on images from 21 sources, 200k text-only from 15 sources, 4k photo-vs-listing contradictions. Every source licence-checked for commercial use.</span></span><span class="n">504k</span></div>
-        <div class="key"><span class="sw seg m"></span><span><b>2 · New sources, labelled by our 9B</b><span class="d">416k on six photo and text sources the models had never seen, kept only when two option orders agreed; 72k photo-vs-record and two-photo decisions. The 9B made these labels, so it skipped this stage.</span></span><span class="n">488k</span></div>
-        <div class="key"><span class="sw seg t"></span><span><b>3 · Hard questions</b><span class="d">Written and answered by open-weight teachers, kept only when they agreed, plus licensed human reasoning sets. This took the 9B's JevBench hard score from 42.3% to 68.5%.</span></span><span class="n">23k</span></div>
+        <div class="key"><span class="sw seg h"></span><span><b>1 · Human-labelled, public datasets</b><span class="d">300k on images from 21 sources, 200k text-only from 15 sources, 4k photo-vs-listing contradictions. Every source licence-checked; for 16 image sources the licence covers the annotations only.</span></span><span class="n">504k</span></div>
+        <div class="key"><span class="sw seg m"></span><span><b>2 · New sources, labelled by our 9B</b><span class="d">416k kept of 547k labelled, on six photo and text sources the models had never seen, kept only when two option orders agreed; 72k photo-vs-record and two-photo decisions (54k labelled by the 9B, 17k by construction). The 9B made these labels, so it skipped this stage.</span></span><span class="n">488k</span></div>
+        <div class="key"><span class="sw seg t"></span><span><b>3 · Hard questions</b><span class="d">Written and answered by open-weight teachers, kept only when they agreed, plus licensed human reasoning sets. This took the 9B's JevBench hard score from 42.3% to 68.5%. The shipped adapters are a weight-space average of two adapters: that one and a soft-target continuation on 39,515 further rows; served, the 9B scores 69.4%.</span></span><span class="n">23k</span></div>
       </div>
     </div>
     <dl class="spec-list">
       <div><dt>Model</dt><dd>A rank-16 LoRA on the language layers of Qwen3.5 (2B, 4B, 9B), plus a small readout over your option codes. The vision encoder is frozen.</dd></div>
       <div><dt>Never trained on</dt><dd>Jev outputs, paid-API outputs or JevBench items. Every teacher is an open-weight model.</dd></div>
-      <div><dt>Compute</dt><dd><span class="big">≈ $570</span>Rented GPU time for the whole project, every experiment included.</dd></div>
+      <div><dt>Compute</dt><dd><span class="big">$676</span>Rented GPU time for the whole project, every experiment included.</dd></div>
       <div><dt>Licence</dt><dd>Adapters, readouts and code Apache-2.0, on Apache-2.0 base models.</dd></div>
     </dl>
   </div>
   <p class="note" style="margin-top:22px">Per-stage results, the costs of the last stage and how to rebuild every dataset are in the <a href="report/#s6">report</a>.</p>
+</div></section>
+
+<section class="s" id="specs"><div class="wrap">
+  <div class="s-head"><h2>Technical specification</h2>
+    <p>Three adapters on pinned Qwen3.5 base models, trained with the same recipe. Every number below comes from the run manifests, logs and billing records in the repository.</p></div>
+  <div class="tw"><table>
+    <thead><tr><th></th><th class="n">imajev-2b</th><th class="n">imajev-4b</th><th class="n">imajev-9b</th></tr></thead>
+    <tbody>
+      <tr><td>Base model, pinned revision</td><td class="n">Qwen3.5-2B @15852e8c</td><td class="n">Qwen3.5-4B @851bf6e8</td><td class="n">Qwen3.5-9B @c2022362</td></tr>
+      <tr><td>Trainable parameters<span class="sub">LoRA r=16, α=32, plus readout</span></td><td class="n">16,152,576</td><td class="n">31,127,040</td><td class="n">41,152,512</td></tr>
+      <tr><td>Adapter file, float32</td><td class="n">62.6 MB</td><td class="n">122.0 MB</td><td class="n">160.5 MB</td></tr>
+      <tr><td>Decision readout<span class="sub">one bias-free linear layer over 255 option codes</span></td><td class="n">255 × 2048</td><td class="n">255 × 2560</td><td class="n">255 × 4096</td></tr>
+      <tr><td>Calibration temperature</td><td class="n">1.65</td><td class="n">1.72</td><td class="n">1.75</td></tr>
+      <tr><td>Base download</td><td class="n">4.6 GB</td><td class="n">9.3 GB</td><td class="n">19.3 GB</td></tr>
+    </tbody></table></div>
+  <div class="readings">
+    <div><span class="label">Stage 1 · 504,000 decisions</span><p>36 licence-admitted public sources: 200,000 text decisions from 15 sources, 300,000 image decisions from 21 sources, 4,000 photo-vs-listing contradictions. Trained into the 2B and 9B.</p></div>
+    <div><span class="label">Stage 2 · 475,305 of 616,964 kept</span><p>The 9B labelled candidates on new photo and text sources and on photo-vs-record and two-photo questions; 77.0% were kept because the answer held under two option orders. With 17,162 edited-photo pairs labelled by construction, the stage holds 71,630 photo-vs-record and two-photo decisions. The 4B took stages 1 and 2 as one 866,854-decision run.</p></div>
+    <div><span class="label">Stage 3 · two rounds, then a soft-target continuation</span><p>Hard typed questions written by open-weight teachers and kept only when independent answerers agreed (9,368 then 4,852 kept), plus 8,532 items from licensed human reasoning sets. All three models. Then 2 epochs on 39,515 rows with probability targets (the hard questions relabelled by Qwen3.6-35B-A3B, 9,880 new hard rows, 10,570 Eikos decisions, 5,000 image replay); each shipped adapter is the weight-space average of the round-2 adapter and that continuation's best checkpoint.</p></div>
+  </div>
+  <div class="limits" style="margin-top:22px">
+    <div><h3>Recipe</h3><p>Cross-entropy on the readout logits over the listed options (soft targets where a record carries a distribution). AdamW, weight decay 0, linear warm-up then cosine decay to 10% of the peak rate, gradient clipping 1.0, seed 0, on 4 GPUs. Peak rate 2e-4 for first runs down to 2e-5 in the last round.</p></div>
+    <div><h3>Compute</h3><p>About $676 of rented GPU time for the whole project ($499.07 for the first three stages, about $177 for the soft-target continuation), every run included: labelling, generation, all training, all evaluations and aborted pods, on H100 and H200 pods.</p></div>
+  </div>
+  <p class="note" style="margin-top:22px">Per-source counts and licences, training runs by model, costs by use, evaluation sets and contamination checks are in the <a href="https://github.com/mohit67890/imajev/blob/main/docs/technical-specification.md">full technical specification</a> and in <a href="report/#s6">section 6 of the report</a>.</p>
 </div></section>
 
 <section class="s" id="developers"><div class="wrap">
@@ -502,9 +527,9 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
   <div class="tw" style="margin-top:36px"><table>
     <thead><tr><th>Model</th><th>Use it when</th><th class="n">ImajevBench</th><th class="n">JevBench hard</th><th class="n">Unknown right</th><th class="n">Base download</th></tr></thead>
     <tbody>
-      <tr><td><a href="https://huggingface.co/mohit67890/imajev-2b">imajev-2b</a></td><td>memory or latency is the constraint</td><td class="n">70.3%</td><td class="n">56.8%</td><td class="n">5 / 21</td><td class="n">4.6 GB</td></tr>
-      <tr class="ours"><td><a href="https://huggingface.co/mohit67890/imajev-4b">imajev-4b</a></td><td>the default for almost everything</td><td class="n">82.4%</td><td class="n">67.6%</td><td class="n">15 / 21</td><td class="n">9.3 GB</td></tr>
-      <tr><td><a href="https://huggingface.co/mohit67890/imajev-9b">imajev-9b</a></td><td>knowledge-heavy text, when memory is not tight</td><td class="n">82.8%</td><td class="n">68.5%</td><td class="n">15 / 21</td><td class="n">19.3 GB</td></tr>
+      <tr><td><a href="https://huggingface.co/mohit67890/imajev-2b">imajev-2b</a></td><td>memory or latency is the constraint</td><td class="n">71.7%</td><td class="n">60.4%</td><td class="n">5 / 21</td><td class="n">4.6 GB</td></tr>
+      <tr class="ours"><td><a href="https://huggingface.co/mohit67890/imajev-4b">imajev-4b</a></td><td>the default for almost everything</td><td class="n">82.4%</td><td class="n">70.3%</td><td class="n">14 / 21</td><td class="n">9.3 GB</td></tr>
+      <tr><td><a href="https://huggingface.co/mohit67890/imajev-9b">imajev-9b</a></td><td>knowledge-heavy text, when memory is not tight</td><td class="n">82.1%</td><td class="n">69.4%</td><td class="n">15 / 21</td><td class="n">19.3 GB</td></tr>
     </tbody></table></div>
   <p class="note" style="margin-top:14px">The full contract, the act-or-escalate pattern, fitting your own calibration and how to reproduce every number are in the <a href="report/#s5">report's developer section</a>.</p>
 </div></section>
@@ -515,8 +540,8 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
     <div><h3>No reasoning at inference</h3><p>One forward pass by design. Multi-step arithmetic and judging answer quality trail reasoning models.</p></div>
     <div><h3>An empty field can read as "no"</h3><p>With a blank payment note, the 4B answered "not paid" instead of unknown. Unknown is trained for missing evidence, not guaranteed.</p></div>
     <div><h3>Scribbles read as letters</h3><p>On the tracing pad it reads 20 of 20 traced letters and numbers correctly but calls 8 of 10 scribbles a letter. In 6 of those the confidence is low and the app asks for another try; in 2 it tells the child they drew an A.</p></div>
-    <div><h3>Over-confident without calibration</h3><p>Raw ECE on hard text items is 0.19 to 0.24. Use the calibration file there, or fit one on your own data.</p></div>
-    <div><h3>The 2B rarely abstains</h3><p>5 of 21 unknown items on ImajevBench, against 15 for the 4B and 9B.</p></div>
+    <div><h3>Over-confident without calibration</h3><p>Raw ECE on hard text items is 0.16 to 0.19. Use the calibration file there, or fit one on your own data.</p></div>
+    <div><h3>The 2B rarely abstains</h3><p>5 of 21 unknown items on ImajevBench, against 14 for the 4B and 15 for the 9B.</p></div>
     <div><h3>Real photo pairs are the hardest task</h3><p>Two photos with a known edit are near-perfect (98% on our pairs probe), but natural pairs of real photos scored 41.8% on an earlier 4B checkpoint; not yet re-run on the release.</p></div>
     <div><h3>English, two photos, a preview benchmark</h3><p>ImajevBench images are AI-generated and model-audited, with no human audit yet.</p></div>
   </div>
@@ -750,12 +775,12 @@ function el(tag, a, p, text){ const e = document.createElementNS(NS, tag); for (
 const T = (s, x, y, t, o = {}) => el('text', Object.assign({x, y, fill:css('--ink2'), 'font-family':'IBM Plex Sans, sans-serif', 'font-size':13}, o), s, t);
 const M = (s, x, y, t, o = {}) => el('text', Object.assign({x, y, fill:css('--muted'), 'font-family':'IBM Plex Mono, monospace', 'font-size':11}, o), s, t);
 function hover(n, h){ n.addEventListener('mousemove', e => showTip(e, h)); n.addEventListener('mouseleave', () => tip.hidden = true); }
-const IB = [['imajev-9b', 82.8, 77, 88, 1, 'A'], ['imajev-4b', 82.4, 77, 88, 1, 'A'], ['Qwen3.5-9B base', 76.7, 70, 82, 0, 'A'],
-  ['Qwen3.5-4B base', 70.6, 64, 78, 0, 'A'], ['imajev-2b', 70.3, 64, 77, 1, 'A'], ['Gemma 4 E4B-it', 63.1, 55, 72, 0, 'A'], ['Qwen3.5-2B base', 60.2, 53, 67, 0, 'A'],
+const IB = [['imajev-4b', 82.4, 77, 89, 1, 'A'], ['imajev-9b', 82.1, 76, 88, 1, 'A'], ['Qwen3.5-9B base', 76.7, 70, 82, 0, 'A'],
+  ['imajev-2b', 71.7, 65, 78, 1, 'A'], ['Qwen3.5-4B base', 70.6, 64, 78, 0, 'A'], ['Gemma 4 E4B-it', 63.1, 55, 72, 0, 'A'], ['Qwen3.5-2B base', 60.2, 53, 67, 0, 'A'],
   ['Jev-Omni (12B)', 78.5, 73, 84, 0, 'B'],
   ['Gemini 3.1 Pro*', 99.6, 99, 100, 0, 'C'], ['GPT-5.6 Luna*', 99.3, 98, 100, 0, 'C'], ['GPT-5.4', 98.9, 98, 100, 0, 'C'], ['Gemini 3.8 Flash', 98.2, 96, 100, 0, 'C'], ['Grok 4.3', 91.4, 87, 95, 0, 'C']];
 const GROUPLAB = {B:'other Jev-class model, own interface', C:'frontier APIs, structured generation'};
-const JB = [['JevK5 v0.2.0', 73.9, 0], ['imajev-9b', 68.5, 1], ['imajev-4b', 67.6, 1], ['Hopper', 67.6, 0], ['imajev-2b', 56.8, 1], ['cua-s1-4b', 52.3, 0], ['Qwen3.5-4B, generation', 48.6, 0], ['mojev 0.85B', 33.3, 0]];
+const JB = [['JevK5 v0.2.0', 73.9, 0], ['Eikos-4B', 73.9, 0], ['imajev-4b', 70.3, 1], ['imajev-9b', 69.4, 1], ['Hopper', 67.6, 0], ['imajev-2b', 60.4, 1], ['cua-s1-4b', 52.3, 0], ['Qwen3.5-4B, generation', 48.6, 0], ['mojev 0.85B', 33.3, 0]];
 function axis(s, x, ticks, y0, y1){ ticks.forEach(v => { el('line', {x1:x(v), x2:x(v), y1:y0, y2:y1, stroke:css('--rule')}, s); M(s, x(v), y1 + 15, v + '%', {'text-anchor':'middle'}); }); }
 function drawIB(){
   const box = $('#c-ib'); box.innerHTML = ''; const W = 560, rh = 24, left = 150, right = 48;

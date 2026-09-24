@@ -26,7 +26,7 @@ from typing import Any, Callable, Protocol
 from vision_decision.contracts import UNKNOWN, Request
 from vision_decision.scoring import candidates, combine_rotations, compile_question, cyclic_offsets, option_text, rotate
 
-from .runner import canonical_bytes, digest, file_digest, scoring_digest
+from .runner import canonical_bytes, digest, file_digest, run_hashes
 from .schema import model_payload
 
 PROFILES = ("imajev-native", "benchmark-neutral")
@@ -248,8 +248,7 @@ def run_local(records: list[dict], root: Path, output: Path, backend: Backend, *
         raise ValueError("No records selected")
     root, output = Path(root), Path(output)
     output.mkdir(parents=True, exist_ok=False)
-    manifest = {"format_version": "0.1.0", "adapter": "local-direct-option", "records_sha256": digest(records),
-                "scoring_sha256": scoring_digest(records),
+    manifest = {"format_version": "0.1.0", "adapter": "local-direct-option", **run_hashes(records),
                 "record_count": len(records), "reviewed": all(r["annotation_status"] == "reviewed" for r in records),
                 "started_at": datetime.now(timezone.utc).isoformat(), "profile": profile, "condition": condition,
                 "rotations": rotations, "warmup_records": warmup, "timing_repeats": repeats, "concurrency": 1,

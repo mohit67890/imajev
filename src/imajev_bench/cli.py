@@ -5,7 +5,7 @@ from pathlib import Path
 
 from .review import build_review
 from .runner import run, verify_run
-from .schema import validate_records
+from .schema import gold_withheld, validate_records
 from .scoring import score
 from .annotations import import_prelabels, merge_reviews
 from .api_models import PROVIDERS, make_provider, prelabel_export, run_api
@@ -162,6 +162,9 @@ def main(argv=None):
         parser.error("Selected split has no records")
     if any(r["provenance"].get("quarantined") or r["provenance"].get("review_flags") for r in records):
         parser.error("Flagged groups are quarantined; resolve them through a dataset revision before evaluation")
+    if args.command in ("score", "compare") and gold_withheld(records):
+        parser.error(f"{len(gold_withheld(records))} selected records have gold withheld (public test split); they cannot be "
+                     "scored locally. Submit the run folder to the maintainers, or score the dev/calibration split.")
     if args.command == "run":
         print(run(records, root, args.output, args.adapter, args.endpoint, args.timeout, args.seed))
         return

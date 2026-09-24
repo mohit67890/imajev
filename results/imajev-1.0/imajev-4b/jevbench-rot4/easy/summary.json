@@ -1,6 +1,6 @@
 {
   "accuracy": 1.0,
-  "brier_mean": 4.907942944821533e-08,
+  "brier_mean": 1.8572288563501393e-06,
   "calibration_n": 48,
   "complete": true,
   "cost_basis": [
@@ -77,17 +77,17 @@
         "accuracy": 1.0,
         "hi": 1.0,
         "lo": 0.9,
-        "mean_confidence": 0.9999367431469749,
+        "mean_confidence": 0.9995820803667471,
         "n": 48
       }
     ],
-    "ece": 6.325685302510653e-05,
+    "ece": 0.0004179196332528834,
     "n": 48
   },
   "latency": {
     "n": 48,
-    "p50_s": 0.25120776149924495,
-    "p95_s": 0.26410440930158074
+    "p50_s": 0.28940190654248,
+    "p95_s": 0.3018543563783169
   },
   "latency_failures": {
     "n": 0,
@@ -117,7 +117,7 @@
   "per_family": {
     "extraction": {
       "accuracy": 1.0,
-      "brier_mean": 6.3567637137663345e-09,
+      "brier_mean": 4.5773979356927714e-07,
       "calibration_n": 12,
       "cost_basis": [
         "zero_route_fee_compute_excluded"
@@ -192,17 +192,17 @@
             "accuracy": 1.0,
             "hi": 1.0,
             "lo": 0.9,
-            "mean_confidence": 0.9999715879578238,
+            "mean_confidence": 0.9997654130713186,
             "n": 12
           }
         ],
-        "ece": 2.841204217618465e-05,
+        "ece": 0.00023458692868139064,
         "n": 12
       },
       "latency": {
         "n": 12,
-        "p50_s": 0.2532105889986269,
-        "p95_s": 0.2632524689015554
+        "p50_s": 0.29147441033273935,
+        "p95_s": 0.30380725748836995
       },
       "latency_failures": {
         "n": 0,
@@ -223,7 +223,7 @@
     },
     "fact": {
       "accuracy": 1.0,
-      "brier_mean": 1.8973467362692405e-07,
+      "brier_mean": 6.965001122378226e-06,
       "calibration_n": 12,
       "cost_basis": [
         "zero_route_fee_compute_excluded"
@@ -298,17 +298,17 @@
             "accuracy": 1.0,
             "hi": 1.0,
             "lo": 0.9,
-            "mean_confidence": 0.9997845408238016,
+            "mean_confidence": 0.9986171512480482,
             "n": 12
           }
         ],
-        "ece": 0.00021545917619836263,
+        "ece": 0.0013828487519518262,
         "n": 12
       },
       "latency": {
         "n": 12,
-        "p50_s": 0.18536453650085605,
-        "p95_s": 0.19609189239927216
+        "p50_s": 0.2173626385629177,
+        "p95_s": 0.2571420218795537
       },
       "latency_failures": {
         "n": 0,
@@ -329,7 +329,7 @@
     },
     "intent": {
       "accuracy": 1.0,
-      "brier_mean": 2.1942444890382617e-10,
+      "brier_mean": 5.858677078087696e-09,
       "calibration_n": 12,
       "cost_basis": [
         "zero_route_fee_compute_excluded"
@@ -404,17 +404,17 @@
             "accuracy": 1.0,
             "hi": 1.0,
             "lo": 0.9,
-            "mean_confidence": 0.9999930266747468,
+            "mean_confidence": 0.9999601395737866,
             "n": 12
           }
         ],
-        "ece": 6.973325253234464e-06,
+        "ece": 3.986042621340058e-05,
         "n": 12
       },
       "latency": {
         "n": 12,
-        "p50_s": 0.2531745405012771,
-        "p95_s": 0.27069723200002044
+        "p50_s": 0.2901115585118532,
+        "p95_s": 0.31155997542664404
       },
       "latency_failures": {
         "n": 0,
@@ -435,7 +435,7 @@
     },
     "tool_selection": {
       "accuracy": 1.0,
-      "brier_mean": 6.856003267156298e-12,
+      "brier_mean": 3.158323749670603e-10,
       "calibration_n": 12,
       "cost_basis": [
         "zero_route_fee_compute_excluded"
@@ -510,17 +510,17 @@
             "accuracy": 1.0,
             "hi": 1.0,
             "lo": 0.9,
-            "mean_confidence": 0.9999978171315266,
+            "mean_confidence": 0.9999856175738345,
             "n": 12
           }
         ],
-        "ece": 2.1828684734215287e-06,
+        "ece": 1.4382426165471252e-05,
         "n": 12
       },
       "latency": {
         "n": 12,
-        "p50_s": 0.2530355939998117,
-        "p95_s": 0.26305733569952283
+        "p50_s": 0.2900965930894017,
+        "p95_s": 0.2987683301791549
       },
       "latency_failures": {
         "n": 0,
@@ -549,7 +549,7 @@
   "splits": {
     "public": {
       "accuracy": 1.0,
-      "brier_mean": 4.907942944821533e-08,
+      "brier_mean": 1.8572288563501393e-06,
       "calibration_n": 48,
       "cost_basis": [
         "zero_route_fee_compute_excluded"
@@ -624,17 +624,17 @@
             "accuracy": 1.0,
             "hi": 1.0,
             "lo": 0.9,
-            "mean_confidence": 0.9999367431469749,
+            "mean_confidence": 0.9995820803667471,
             "n": 48
           }
         ],
-        "ece": 6.325685302510653e-05,
+        "ece": 0.0004179196332528834,
         "n": 48
       },
       "latency": {
         "n": 48,
-        "p50_s": 0.25120776149924495,
-        "p95_s": 0.26410440930158074
+        "p50_s": 0.28940190654248,
+        "p95_s": 0.3018543563783169
       },
       "latency_failures": {
         "n": 0,

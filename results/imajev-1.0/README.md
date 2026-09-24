@@ -1,88 +1,120 @@
-# decision-p2b: last hard top-up before launch (7×H100 pod `ei3vnzgkax4r3m`, 2026-09-24)
+# Phase 2c (Eikos-style soft-target delta fine-tunes) — results log
 
-## Frozen Qwen3.6-35B-A3B on public JevBench (`check35b/`)
+Pod the phase-2c pod (8×H100, $27.92/h), 2026-09-24. Recipe: `docs/phase-2c-plan.md` (+amendments), runbook
+`docs/phase-2c-runbook.md`, audit `docs/phase-2c-audit.md`. Training mixture `data/manifests/decision-p2c.jsonl`
+(39,515 rows: phase-2b teacher rows relabelled with Qwen3.6-35B-A3B distributions, 9,880 new hard/judge/programmatic
+rows, Eikos strict slice 10,570, image replay 5k; train unknown share 4.9%). Delta lanes start from the phase-2b
+adapters; 2 epochs; `--soft-targets --soft-weight 1.0 --rationale-weight 0.3 --rationale-max-tokens 192 --permute-options`.
 
-Interface: structured generation through vLLM 0.30 (bf16, one H100) with the jevbench `openai_compat` adapter
-(JSON-schema output, temperature 0). Thinking off = `enable_thinking: false` in the chat template, 4,096-token budget.
-Thinking on = reasoning parser `qwen3`, 16,000-token completion budget, 900 s timeout (the adapter's default 4,096 budget
-was exhausted by reasoning on ~20% of hard items; the patched adapter reads `OPENAI_COMPAT_MAX_TOKENS`).
+Ship gates (`cloud/p2c_gates_reference.json`): ImajevBench public ≥ phase-2b − 1 (4B 81.4), visual/joint item counts,
+probes within tolerance, correct-unknown rate, false abstention, irrelevance. Bars: Eikos-4B same-protocol
+JevBench hard 73.9 / ECE 0.054; JevK5 73.9. Eikos's own published table (their harness, 2026-09): 4B final 72.1 hard / 91.7 original / ECE 0.049; 27B final 82.9 / 100 / 0.051; Jev reference 73.0 / 98.6 (official board). Our run of their 4B is 2 items above their own number, so harnesses agree within noise; the material gap to Eikos-4B is ECE, not accuracy.
 
-| Mode | hard (111) | original (72) | easy (48) |
-|---|---|---|---|
-| thinking off | 61.3 / ECE 0.329 | 88.9 / 0.098 | 100 / 0.002 |
-| thinking on | **97.3** / ECE 0.045 | 100 / 0.004 | 100 / 0.001 |
+## 4B (trained 09:26–10:52 UTC, 747 steps, OOM at step 625 → fresh-process resume at the same budget)
 
-Thinking-on hard by family: adversarial 6/6, ambiguous 7/7, judge_hard 17/17, long_policy 18/19, multi_hop 17/18,
-probability 10/10, routing_hard 5/5, temporal_numeric 14/15, tradeoff 6/6, trap 8/8 (108/111; 1 request failed).
+Dev curve: phase-2c dev 0.908 → 0.928 (best, step 260) → 0.922 (last); judge-dev 29/29 from step ~100 on.
+Best checkpoint selected on the text dev sets, i.e. before most of the image replay had been seen.
 
-Reading: single-pass (the imajev serving mode) the frozen 35B-A3B is at our trained 4B's level (62), so it is not a
-fourth tier without training. With reasoning it is above every published JevBench hard number (Eikos-27B 82.9,
-xor 77.5, reflex 76.6, jevk5 73.9) — a different interface (seconds of latency, thousands of tokens per decision), and a
-very strong grader of exactly this kind of question. Consequence: it was added as a THIRD answerer for phase-2b
-(unanimous agreement across Qwen3.6-27B thinking, gpt-oss-20b and Qwen3.6-35B-A3B thinking). Adding a unanimous
-answerer can only remove rows, never mislabel them; the two-answerer records are recoverable by re-running the
-assembler on the first two answer files.
+| candidate | JevBench hard raw (ECE) | original | easy | ImajevBench public (joint/text/visual) | private-1 hidden | gates |
+|---|---|---|---|---|---|---|
+| phase-2b 4B (reference) | 67.6 (cal 0.088) | | | 82.4 (99/26/105) | 84.7 (68/23/80), ECE 0.076 | — |
+| 2c best (step 260) | **71.2** (0.165) | 98.6 | 100 | 79.6 (92/24/106) | 83.2 (66/21/81), ECE 0.053 | FAIL a.imajevbench_acc, a.joint_items; all others PASS |
+| 2c last (step 747) | 70.3 (0.162) | 100 | 100 | 79.9 (94/25/104) | | (not gated) |
+| soup50 = ½ p2b + ½ 2c-best (LoRA + readout averaged) | 69.4 (0.164) | 98.6 | 100 | **82.4 (97/26/107)** | 84.2 (67/23/80), ECE 0.056 | image gates PASS → **4B ship candidate** |
+| soup75 = ¼ p2b + ¾ 2c-best | 69.4 (0.142) | 98.6 | 100 | 80.6 (94/25/106) | | FAIL a.imajevbench_acc |
 
-## Generation (writers)
-Two Qwen3.6-27B replicas (TP=4 and TP=2), thinking on for the hard families, off for the unknown families.
-Accepted documents: hard 2,166 (1,445 + 721; 234 rejected), unknown 533 (of 900 attempted) → 2,699 documents.
+Where 2c-best lost on ImajevBench vs phase-2b: joint threshold_rule 48→46, rule_exception 20→18, multi_step_rule
+6→4, text numerical_reconciliation 6→4; visual counting +1, spatial_counting +1, comparison −1 (14 joint items lost,
+8 gained). Unknown gold 14/14 correct; false abstention 0.24%; irrelevance 80.7 (v2.1 73.8); state probe 71.0 (ref 72.0);
+pairs 98.3; reasoning dev 67.2 (phase-2b 66.6, v2.1 67.8).
 
-## mojev (MoLeMo-Lab/mojev, 0.85B, MIT) on public JevBench — same `typesafe` interface as imajev (`mojev/` on the pod)
-Served with `mojev serve` (its TypeSafe-compatible `/v1/systemone`), one H100, 2026-09-24. hard **33.3** / ECE 0.268, original 63.9 / 0.171,
-easy 91.7 / 0.066. Its reported 93.23% accuracy is on its own synthetic mojev-mix test split. No unknown/abstain, image support untested.
+Calibration: the pod fits T on the phase-2c calibration fold (teacher rows, hard ×3): 2c-best T=1.045 → hard ECE
+0.159 — the soft-target model is calibrated on its own distribution but over-confident on JevBench hard. Authored-dev
+(150 items, phase-2b policy) fits: 2c-best T=1.29, last 1.50, soup50 1.72. Offline re-temperature of the raw hard
+responses: 2c-best ECE 0.165 → 0.148 (T 1.3) → 0.071 (1.6) → 0.069 (2.0); soup50 0.164 → 0.104 (1.6) → 0.091 (2.0)
+→ 0.078 (2.6). Policy: ship the authored-dev T (no fitting on JevBench), report the resulting ECE.
+Served check (server `--calibration` with the authored-dev file, T=1.72): soup50 hard 69.4 / ECE 0.109, original 98.6 / 0.093.
+Rotation averaging (`--rotations 4`, the phase-2b 9B serving setting): soup50 rot4 hard 70.3 / ECE 0.171 raw; rot4+cal **70.3 / 0.116** (original 98.6 / 0.024 raw) → 4B serving configuration = soup50 + rot4 + authored-dev T.
 
-## Phase-2b assembly (three answerers, unanimous)
-8,097 questions from 2,699 documents → 4,852 kept (train 4,114 / test 486 / dev 252); 1,883 dropped by disagreement, 1,362 by the
-near-duplicate lint (454 documents), 148 unknown rows kept (3.1%, below the 15% target — caveat carried into training).
-Manifest `decision-p2b.jsonl`: 9,066 rows (train 7,812 incl. 30% phase-2 replay, calibration 622 on held-out domains
-telecom/hospitality/nonprofit_grants, test 435, dev 197; unknown 196) + `decision-p2b-jevstyle-dev.jsonl` (150 authored items).
+Raw responses: pod `p2/train-out-p2c/4b-delta/jevbench-*` (pulled to `reports/decision-p2c/pod/` after the run).
 
-## cua-ai/cua-s1-4b-0.2 on public JevBench (off-domain row, `cua-s1-v2/` on the pod)
-A computer-use specialist: text LoRA (r16/α32 on q/k/v/o/gate/up/down) on Qwen3.5-4B that scores (element, action) options
-for a screen state; its authors state it is not for use outside that task. Its adapter keys use the text-only layout
-(`model.layers.N`); the multimodal Qwen3.5-4B class names them `model.language_model.layers.N`, so PEFT and vLLM both attach
-zero adapters silently (first run: identical to base on 111/111 hard items). With the keys remapped (PEFT check: max |Δlogit|
-7.3), served with vLLM LoRA, generic JevBench prompt, thinking off, JSON-schema output, one H100, 2026-09-24:
-hard **52.3** / ECE 0.456, original 88.9 / 0.111, easy 100 / 0.001. Control, untouched Qwen3.5-4B base under identical settings:
-hard 48.6 / 0.448, original 80.6 / 0.181, easy 100 / 0.005. Read as "a GUI-action LoRA transfers a little, stays far below the
-trained single-pass tiers and is badly over-confident", not as a ranking of the model at its own task.
+4B decision (11:20 UTC): interpolation sweep w∈{0, 0.5, 0.75, 1} on the 2c-best adapter gives hard 67.6 / 69.4 / 69.4 / 71.2 and ImajevBench 82.4 / 82.4 / 80.6 / 79.6; the differences on hard are 2 items apiece (111 items). soup50 is the only candidate above phase-2b on hard that passes every gate.
 
-## Calibration fit, 4B phase 2b (`calibration-p2b-4b.json`, schema 1.1, fitted on the 622-row held-out-domain fold)
-Temperatures: boolean:2 1.80, choice:3-5 1.39, choice:6-10 2.12 (n=8), ordinal:3-5 1.42, ordinal:6-10 1.44 (n=9) — the model is
-over-confident on hard typed questions, in line with the raw JevBench hard ECE 0.215 → 0.163 with the pod's single temperature (1.52).
-Unknown offsets from this fold are NOT shippable as fitted (choice:3-5 −2.4, boolean:2 −0.9, ordinal:3-5 +0.7, two buckets at the −4 floor):
-the fold has 3.1% unknown targets, so NLL pushes offsets to extremes exactly as on the v2.1 fold. Policy (as decided for v2.1):
-ship temperatures from this fold; keep offsets bounded and only in buckets with unknown targets, decided after the MMLU /
-irrelevance off-distribution check in the morning. Small buckets (n<20) inherit the neighbouring bucket's temperature.
+## Calibration objective (12:00 UTC, owner: "no further runs — if we can make calibration better then do it now")
+Post-hoc only, on the authored dev predictions already on disk. The NLL-optimal single T on the 150 authored items under-corrects
+the hard regime for every candidate; fitting the same items for ECE (mean of 5/10/15/20-bin ECE, no JevBench data) gives a larger T.
 
-## Phase-2b training results (7×H100, 2026-09-24; `pod/train-out-p2b/`; 2 epochs, lr 2e-5 from the phase-2 best adapters)
+| candidate | NLL-fit T → hard ECE (offline) | Brier-fit T → hard ECE | ECE-fit T → hard ECE | authored-dev acc / hard acc |
+|---|---|---|---|---|
+| 4B soup50 raw | 1.70 → 0.110 | 1.95 → 0.100 | 2.05 → 0.074 | 64.7 / 69.4 |
+| 4B soup50 rot4 (offline approx.) | 1.70 → 0.111 | 1.95 → 0.121 | 2.05 → 0.094 | 64.7 / 70.3 |
+| 2B soup50 rot4 (offline approx.) | 1.65 → 0.124 | 1.95 → 0.126 | 1.90 → 0.096 (smoothed fit: 2.20) | 58.0 / 60.4 |
+| 4B 2c-best raw | 1.30 → 0.148 | 1.30 → 0.148 | 1.65 → 0.082 | 64.0 / 71.2 |
 
-| Panel | 2B (p2 → p2b) | 4B (p2 → p2b) | 9B (p2 → p2b) |
-|---|---|---|---|
-| JevBench hard, raw | 55.0 → 56.8 (ECE 0.234 → 0.187) | 62.2 → **67.6** (0.224 → 0.215) | 67.6 → 68.5 (0.207 → 0.236) |
-| JevBench hard, best serving variant | 56.8 cal (ECE 0.184) | 67.6 cal (ECE **0.163**) | **69.4** rot4+cal (ECE **0.170**) |
-| JevBench original / easy | 91.7 / 100 | 98.6 / 100 | **100** / 100 |
-| ImajevBench (279) | 68.5 → **70.3** | 80.6 → **82.4** | 81.4 → **82.8** |
-| phase-2b test (435) | 77.7 | 85.1 | 86.0 |
-| phase-2 test (regression, 2,983) | 66.4 → 65.5 | 77.4 → 77.7 | 79.7 → 80.1 |
-| reasoning dev (6,240) | 64.5 → **58.9** | 67.8 → 66.6 | 69.2 → 67.4 |
-| state probe / pairs probe | 69.5 / 100 | 68.5 / 98.3 | 69.5 / 80.0 |
-| selected checkpoint | best = step 80 of 220 | best = last (266) | best ≈ step 350 of 365 |
+Hard ECE on 111 items moves by ±0.02 between neighbouring T values, so single points are noisy; the direction (T ≈ 2 rather than
+1.7) is consistent across candidates. New policy: **ECE-fit T on the authored dev** — 4B soup50 T 2.05, 2B soup50 T 2.20
+(`reports/decision-p2c/calibration-p2c-{4b,2b}-soup50-final.json`, schema 1.1, the fit note records both temperatures). Served
+verification (variants `cal2` / `rot4cal2`, pod GPUs 4-7 while the 9B trained, 12:05 UTC) — per-tier and pooled 10-bin ECE over the 231 public items:
 
-2B: best/last differ (last hard 55.0 raw, 59.5 rot4 — noise on 111 items). Dev curves in `pod/train-out-p2b/<size>/dev-curve.jsonl`.
+| soup50, served | hard | original | easy | pooled (231) |
+|---|---|---|---|---|
+| 4B NLL-fit T 1.72, rot4 | 0.116 | 0.096 | 0.009 | **0.026** |
+| 4B ECE-fit T 2.05, rot4 | 0.091 | 0.132 | 0.021 | 0.048 |
+| 4B NLL-fit T 1.72, no rotations | 0.109 | 0.093 | 0.009 | 0.038 |
+| 4B ECE-fit T 2.05, no rotations | 0.073 | 0.131 | 0.020 | 0.052 |
+| 2B NLL-fit T 1.65, rot4 | 0.123 | 0.091 | 0.040 | **0.025** |
+| 2B ECE-fit T 2.20, rot4 | 0.090 | 0.170 | 0.088 | 0.075 |
 
-Reading: the hard-tier data moved the 4B most (+5.4 hard, +1.8 ImajevBench, calibration better), the 9B less (+1.8 hard with
-rotations+calibration, +1.4 ImajevBench, text track 21→29/37, original 100), the 2B least (+1.8 hard) at the cost of a 5.6-point drop on
-the broad reasoning dev set. All three miss largely the same hard items (4B∩9B = 25 of ~35 misses; 18 of those are JevK5 misses too);
-the family we are consistently behind JevK5 on is judge_hard (10/17 vs 13/17), which no writer family covers. Next round: soft-target
-distillation from Qwen3.6-35B-A3B (thinking) + a judge-style family + calibration term.
+**Decision: keep the NLL-fit temperatures.** The official board's Calibration axis is `100·(1 − ECE/0.5)` on one pooled ECE
+(`composite_v13/v14.py`), and the larger T trades hard-tier ECE for under-confidence on the original/easy tiers, which the pooled
+metric punishes. The ECE-fit files are kept as `calibration-p2c-{4b,2b}-soup50-ecefit-alternative.json`. Fixing hard without
+touching the easy tiers needs a non-linear confidence map (the server schema is temperature-only) → post-launch item.
 
-Same-protocol competitor rows (our runs on this pod, `reports/benchmarks/`): JevK5 hard 73.9 / ECE 0.073, original 97.2, easy 100.
+## 2B (trained on the side lane 10:03–10:52 UTC, 620 steps; evaluation started 11:20 UTC on GPUs 4-6 via `eval2b_side.sh`, the main script's own eval functions)
 
-## Calibration decision (2026-09-24 ~05:25 IST): temperatures fitted on the authored JevBench-style dev set
-Why: the model is over-confident on hard items (4B raw: 72/111 items above 0.9 confidence, 56 correct; JevK5 36/34, Hopper 19/18).
-The pod's single T (1.52, fitted on the 85%-accuracy held-out-domain fold) under-corrects for the ~68%-accuracy hard regime.
-Re-temperaturing the raw JevBench-hard predictions offline: 4B ECE 0.215 → 0.164 (T 1.52) → 0.088 (T 2.30, NLL-optimal on the
-150-item authored dev set); 9B 0.236 → 0.181 → 0.104 raw (rotations lower it further). Shipped files `calibration-p2b-<size>-final.json`
-(schema 1.1, one T for every bucket: 2B/4B/9B fitted per size, offsets 0 until the MMLU/irrelevance check). Long-term fix: soft-target
-distillation + Brier term so the model hedges on its own (competitors' mean top-probability ~0.7 vs ours 0.88).
+| candidate | JevBench hard raw (cal) | original | easy | ImajevBench public (joint/text/visual) | gates |
+|---|---|---|---|---|---|
+| phase-2b 2B (reference) | 56.8 | | | 70.3 (83/—/95) | — |
+| 2c best | 55.9, ECE 0.209 (cal 0.161) | 90.3 | 100 | 71.0 (80/19/99) | FAIL a.joint_items (80 < 81); all others PASS |
+| 2c best, private-1 hidden | | | | **74.8 (59/24/68)** vs phase-2b 70.8 (55/22/66), ECE 0.094 vs 0.101 | hidden split: +8 items, joint +4 |
+| 2c last | 56.8, ECE 0.233 (cal 0.168) | 88.9 | 100 | | |
+| soup50 = ½ p2b + ½ 2c-best | **58.6** (0.176) | 91.7 | 100 | **71.7 (82/19/99)** | **SHIPPABLE, all gates pass** (state 68.5, pairs 100, unknown 12/14 = 85.7 as phase-2b, false abstention 1.19%, irrelevance 68.9) |
+| soup50, private-1 hidden | | | | **74.3 (58/25/67)** vs phase-2b 70.8, ECE 0.089 | |
+
+2B panels: reasoning dev 62.7 (phase-2b 58.9, v2.1 64.5 → most of the phase-2b dip recovered), state probe 69.0 (69.5), pairs 100 (100), irrelevance 69.8, phase-2b test 76.8, phase-2 test 67.1, judge-dev 79.3.
+
+2B decision (revised 11:35 UTC): hard −1 item; public images +2 items (joint −3 / visual +4, the joint gate misses by one item); hidden split +8 items (joint +4, text +2, visual +2). The public joint miss looks like noise against the hidden split. 2B soup50 passes every gate and beats phase-2b on every tier → **2B ship candidate = soup50**.
+Authored-dev T: 2c-best 1.76, soup50 1.65. Served variants for soup50: cal 58.6 / ECE 0.075; rot4 60.4 / 0.207; rot4+cal **60.4 / 0.123** (original 93.1 / 0.091, easy 100) → 2B serving configuration = soup50 + rot4 + authored-dev T (phase-2b 2B: 56.8 / 0.163).
+
+## 9B (trained 10:52–12:31 UTC on GPUs 0-3, 1,018 steps; evaluated 12:31– on all 8 GPUs: main script on 4-7, side orchestrator on 0-3)
+
+Best selection score 0.947 (mean of phase-2c dev + judge-dev). Authored-dev: 2c-best 72.7% (NLL T 1.43), last 72.0% (T 1.64), soup50 73.3% (T 1.75).
+
+| candidate | JevBench hard raw (cal) | original | easy | ImajevBench public (joint/text/visual) | private-1 hidden | gates |
+|---|---|---|---|---|---|---|
+| phase-2b 9B (reference) | 68.5 raw / 69.4 rot4+cal (ECE 0.104) | 100 | | 82.8 | 84.2 (67/23/80), ECE 0.108 | — |
+| 2c best | 66.7 (0.161); cal T 1.43 → 66.7 / 0.123 | 100 | 100 | 82.4 (96/29/105) | **85.1 (69/23/80)**, ECE 0.046 | SHIPPABLE, all gates pass (state 75.5, pairs 90, unknown 14/14, false abst. 0.48%, irrelevance 84.0) |
+| 2c last | 68.5 (0.168); cal 68.5 / 0.114 | 100 | 100 | | | |
+| soup50 = ½ p2b + ½ 2c-best | 69.4 (0.187); cal 69.4 / 0.090; rot4 69.4 / 0.174; rot4+cal 69.4 / 0.092 | 100 | 100 | 82.1 (96/29/104) | 84.7 (67/24/80), ECE 0.079 | SHIPPABLE, all gates pass |
+
+Panels (2c-best): phase-2c test 85.5, judge-dev 28/29, phase-2b test 87.4, phase-2 test 80.3, reasoning dev 68.9 (phase-2b 67.4, v2.1 69.2 → recovered), state probe 75.5, pairs 90.0 (phase-2b 80.0), irrelevance 84.0.
+9B decision (12:47 UTC): the pure 2c checkpoint does not gain on hard (66.7 < phase-2b 68.5) although it passes every gate and is best on the hidden split; **soup50 ships**: hard 69.4 / ECE 0.092 (rot4+cal; phase-2b 69.4 / 0.104), all gates, hidden 84.7 (phase-2b 84.2), public images 82.1 (82.8, −2 items, within gate). All three sizes therefore ship the phase-2c soup50 recipe.
+soup50 gates (12:41 UTC): **SHIPPABLE, all pass** — ImajevBench 82.1 ≥ 81.8, visual 104 ≥ 104, joint 96 ≥ 94, state 73.5, pairs 90.0, unknown 14/14, false abstention 0.24%, irrelevance 84.0.
+
+MLX parity (Mac, staged `imajev-release/hf/imajev-4b/mlx`): MLX 4b-soup50 ImajevBench: 229/279 = 82.1% tracks {'joint': (96, 122), 'text': (26, 37), 'visual': (107, 120)} (torch pod run 230/279 = 82.4%); argmax agreement 274/279 = 98.2%, mean |Δp| 0.006, max 0.22 → PASS.
+MLX parity (Mac, staged `imajev-release/hf/imajev-2b/mlx`): MLX 2b-soup50 ImajevBench: 195/279 = 69.9% tracks {'joint': (81, 122), 'text': (18, 37), 'visual': (96, 120)} (torch pod run 200/279 = 71.7%); argmax agreement 271/279 = 97.1%, mean |Δp| 0.0074, max 0.20 → PASS.
+
+## Pod closed (12:55 UTC)
+the phase-2c pod terminated after ALL_DONE (12:46 UTC); uptime 6 h 20 min at $27.92/h ≈ $177. Everything is under `reports/decision-p2c/`:
+`pod/<size>-delta/` (JevBench runs incl. raw responses, ImajevBench runs, calibration fits, gates, dev curves, best adapters in `train-best/`),
+`pod/<size>-soup50/gates.json`, `pod/adapters/<size>-soup50/`, `pod/private1/<run>/score`, `pod/p2c-train-results.tgz` (the script's own
+pack, 698 MB, incl. every eval panel's predictions), `pod/run.log`, `mlx-parity/<size>-soup50/`, `calibration-p2c-<size>-soup50-final.json`
+(+ `-ecefit-alternative.json` for 4B/2B). No credential files remained on the pod (checked before termination).
+
+## Final ship set (all three sizes = phase-2c soup50 + 4 rotations + authored-dev NLL-fit T), staged in `imajev-release/hf/imajev-<size>/`
+| size | JevBench hard / ECE | original | ImajevBench public | private-1 hidden | phase-2b (previous) |
+|---|---|---|---|---|---|
+| 2B | 60.4 / 0.123 | 93.1 | 71.7 | 74.3 | 56.8 / 0.163, 70.3, 70.8 |
+| 4B | 70.3 / 0.116 | 98.6 | 82.4 | 84.2 | 67.6 / 0.088, 82.4, 84.7 |
+| 9B | 69.4 / 0.092 | 100 | 82.1 | 84.7 | 69.4 / 0.104, 82.8, 84.2 |
+MLX parity (Mac, staged `imajev-release/hf/imajev-9b/mlx`): MLX 9b-soup50 ImajevBench: 230/279 = 82.4% tracks {'joint': (96, 122), 'text': (29, 37), 'visual': (105, 120)} (torch pod run 229/279 = 82.1%); argmax agreement 277/279 = 99.3%, mean |Δp| 0.0057, max 0.29 → PASS.

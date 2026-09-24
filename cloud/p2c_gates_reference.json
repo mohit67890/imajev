@@ -1,0 +1,67 @@
+{
+ "note": "Phase-2c ship gates (owner requirement 2026-09-24): image accuracy must not regress and unknown behaviour must be retained. References are the phase-2b BEST adapters (reports/decision-p2b/pod/train-out-p2b/<size>/). Both 4B lanes (delta and fresh) use the 4b row. unknown_correct_rate / false_abstention_rate are filled by scripts/p2/make_gates_reference.py from the phase-2b decision-p2b test predictions before the bundle is built. Percent units; track values are [correct, total].",
+ "tolerances": {
+  "imajevbench_acc_points": 1.0,
+  "track_items": 2,
+  "probe_points": 2.0,
+  "irrelevance_points": 2.0,
+  "false_abstention_points": 2.0
+ },
+ "sizes": {
+  "4b": {
+   "imajevbench_acc": 82.4,
+   "visual": [
+    105,
+    120
+   ],
+   "joint": [
+    99,
+    122
+   ],
+   "state_probe": 68.5,
+   "pairs_probe": 98.3,
+   "irrelevance": 79.7,
+   "unknown_correct_rate": 100.0,
+   "false_abstention_rate": 0.24,
+   "unknown_rows": 14,
+   "answerable_rows": 421
+  },
+  "9b": {
+   "imajevbench_acc": 82.8,
+   "visual": [
+    106,
+    120
+   ],
+   "joint": [
+    96,
+    122
+   ],
+   "state_probe": 69.5,
+   "pairs_probe": 80.0,
+   "irrelevance": 83.4,
+   "unknown_correct_rate": 92.86,
+   "false_abstention_rate": 0.24,
+   "unknown_rows": 14,
+   "answerable_rows": 421
+  },
+  "2b": {
+   "imajevbench_acc": 70.3,
+   "visual": [
+    95,
+    120
+   ],
+   "joint": [
+    83,
+    122
+   ],
+   "state_probe": 69.5,
+   "pairs_probe": 100.0,
+   "irrelevance": 67.8,
+   "unknown_correct_rate": 85.71,
+   "false_abstention_rate": 0.95,
+   "unknown_rows": 14,
+   "answerable_rows": 421
+  }
+ },
+ "unknown_reference_source": "reports/decision-p2b/pod/train-out-p2b/<size>/eval-best-decision-p2b-test/predictions.jsonl"
+}

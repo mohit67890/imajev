@@ -1,7 +1,7 @@
 # JevBench (public splits) — imajev v1.1 2B
 
 Run 22 Sept 2026 with the official harness (`fstandhartinger/jevbench`, MIT; cloned at `.cache/external/jevbench`, run with the
-stdlib-only `.venv-jevbench`), adapter `typesafe` pointed at the local playground (`http://127.0.0.1:8765/v1/systemone`, MLX on the
+stdlib-only `.venv-jevbench`), adapter `typesafe` pointed at the local playground (`http://<host>/v1/systemone`, MLX on the
 Mac Studio, v1.1 adapter + readout, v1.1 temperature calibration). No code changes to the harness; results in `original/`, `hard/`, `easy/`
 (`results.jsonl`, `summary.json`, raw responses). 231/231 requests answered, schema validity 1.0, cost $0.
 
@@ -48,7 +48,7 @@ without the private 109 hard items; on speed and cost it would score near the to
 ```sh
 cd .cache/external/jevbench
 TYPESAFE_API_KEY=local ../../.venv-jevbench/bin/python -m jevbench.cli run --tasks datasets/public/hard.jsonl \
-  --adapter typesafe --endpoint http://127.0.0.1:8765 --model imajev-v1.1 --price-in-per-m 0 --price-out-per-m 0 --cap-usd 1 \
+  --adapter typesafe --endpoint http://<host> --model imajev-v1.1 --price-in-per-m 0 --price-out-per-m 0 --cap-usd 1 \
   --results ../../reports/decision-v1.1/jevbench/hard/results.jsonl --raw-dir ../../reports/decision-v1.1/jevbench/hard/raw \
   --manifest ../../reports/decision-v1.1/jevbench/hard/manifest.json
 ../../.venv-jevbench/bin/python -m jevbench.cli summarize --tasks datasets/public/hard.jsonl \

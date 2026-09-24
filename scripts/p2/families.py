@@ -25,8 +25,22 @@ FAMILIES: dict[str, dict] = {
     "contradiction": {"unknown_rate": 0.55, "rule": "Two authoritative parts of the document disagree about the fact asked. If the document states a resolution rule (e.g. 'the signed schedule prevails'), the answer follows it; otherwise the honest answer is unknown."},
     "probability_estimate": {"unknown_rate": 0.05, "type": "score", "rule": "The question asks how probable an outcome is, and the answer is a probability BAND given as ordered levels (for example 0-20%, 20-40%, 40-60%, 60-80%, 80-100%). The document must contain countable or weighable evidence (base rates, past occurrences, stated odds, a scoring table, competing signals) so that one band is clearly right after weighing it; a reader who takes only the most salient signal lands on an adjacent band."},
     "tradeoff": {"unknown_rate": 0.05, "type": "choice", "rule": "Each option satisfies some of the stated constraints and violates others; the document states priorities (a ranking of goals, hard versus soft constraints, a budget cap, an SLA) that decide which trade-off is correct. The tempting option is the one that wins on the most visible criterion but breaks a higher-priority constraint."},
+    # ---- phase 2c (opt-in: only via --families, so default phase-2 plans stay byte-identical) ----
+    "judge_pairwise": {
+        "unknown_rate": 0.15, "type": "choice", "opt_in": True,
+        "rule": "The document holds a request (a customer ask, a task brief or an internal instruction), a rubric or policy that says what a good response must do (and, when criteria can conflict, which one ranks higher), and TWO candidate responses labelled Response A and Response B. The question asks which response better satisfies the rubric or policy. The better response must win on the rubric's HIGHEST-ranked criterion that separates them, even though the other response looks more polished, longer, more confident or wins on a lower-ranked criterion. Both responses must be plausible; the deciding difference is one concrete fact, number, unit, omitted requirement, format rule or policy breach. When the rubric genuinely cannot separate them (the separating criterion is not covered, or the ranking between two conflicting criteria is not stated), the honest answer is unknown.",
+        "shape": {"choice": "\"type\": \"choice\": options are exactly {\"text\": \"Response A\"}, {\"text\": \"Response B\"} and either {\"text\": \"Both equally\"} or {\"text\": \"Neither is acceptable\"} (use the one the rubric makes meaningful; each with a one-sentence description); \"intended\": the exact text of the correct option."},
+        "justification": "Also give \"justification\": one or two sentences naming the rubric criterion that decides it and the concrete difference between the responses (quote the number, clause or omission); the answerers are checked against it.",
+    },
+    "judge_rubric_score": {
+        "unknown_rate": 0.05, "type": "score", "levels": (2, 9), "opt_in": True,
+        "rule": "The document holds a request, a candidate response to grade (when the document holds several responses, the question names the one to grade), and a grading rubric with between 2 and 9 ordered levels, each defined by concrete conditions (caps such as 'any factual error caps the score at 2', required elements, point deductions). The question asks which rubric level the response earns. A reader who grades on overall impression lands on an adjacent level; the correct level follows only from checking each rubric condition against the response (a wrong unit, a missed edge case, a dropped fact from the request, a format rule, a policy line). The rubric's levels are the question's levels.",
+        "shape": {"score": "\"type\": \"score\": the rubric's ordered levels (between 2 and 9 of them, exactly as many as the rubric in the document defines), each {\"value\": <integer starting at 0 or 1, increasing by 1>, \"description\": <one sentence stating the level's condition>}; \"intended\": the integer level the rubric assigns to the response."},
+        "justification": "Also give \"justification\": one or two sentences naming the rubric condition that fixes the level and the part of the response that meets or fails it; the answerers are checked against it.",
+    },
 }
-FAMILY_IDS = list(FAMILIES)
+ALL_FAMILY_IDS = list(FAMILIES)
+FAMILY_IDS = [f for f in ALL_FAMILY_IDS if not FAMILIES[f].get("opt_in")]  # the default mix; opt-in families need --families
 
 BRIEFS: dict[str, list[str]] = {
     "policy_exception": [
@@ -167,6 +181,27 @@ BRIEFS: dict[str, list[str]] = {
         "State priorities that change with a condition (weekday versus weekend, tier, region); the case's condition decides which trade-off is correct.",
         "Present options where the document's own stated preference contradicts a general best practice; the answer must follow the document's stated preference.",
     ],
+    "judge_pairwise": [
+        "The request asks for a calculation with an explicit unit and rounding rule; Response A is fluent and well formatted but reports the figure in the wrong unit, Response B is terse but correct. The rubric ranks correctness above presentation.",
+        "The request lists four explicit requirements (a deadline, a named recipient, a reference number, a word limit); Response A meets all four, Response B is warmer and more detailed but drops the reference number. The rubric says a missed explicit requirement outweighs tone.",
+        "A support policy forbids promising refunds before an adjuster approves them; Response A promises a refund 'as a goodwill gesture', Response B explains the approval step without promising. The rubric's first criterion is policy compliance.",
+        "The request carries a fact from earlier in the thread (an order number, a changed address, a corrected amount); one response silently uses the stale value. Ask which response better satisfies the rubric, which ranks retained facts above completeness.",
+        "Both responses are correct on the main answer; one handles the edge case the request explicitly raises (a zero quantity, a leap day, an overlapping booking, a partial refund) and the other ignores it. The rubric awards the edge case explicitly.",
+        "The rubric has two criteria that pull in opposite directions (brevity and completeness, speed and verification); Response A wins one, Response B the other. If the question's answer is meant to be determined, state the ranking in a footnote or a later section, far from the criteria list; if it is meant to be unknown, state no ranking at all.",
+        "The request asks for output in a strict format (a table with named columns, a numbered list, a single line, ISO dates); Response A has better content but breaks the format, Response B follows it with slightly thinner content. The rubric states that format compliance is a gate.",
+        "Response A reaches the right conclusion with a flawed method (two errors that cancel out); Response B shows a correct method and reaches the same conclusion. The rubric scores the method, not only the final answer.",
+        "Neither response is fully compliant: A breaks a hard rule and B misses a soft preference. The rubric distinguishes hard rules from preferences; ask which response is better (or whether neither is acceptable, if the rubric requires every hard rule).",
+    ],
+    "judge_rubric_score": [
+        "A 9-level rubric (0 to 8) with explicit deductions: start at 8, minus 2 for each factual error, minus 1 for each missing required element, capped at 3 if any policy line is breached. The response has one factual error and one missing element; the intended level is computed from the deductions.",
+        "A 5-level rubric (1 to 5) where level 5 needs every explicit requirement, level 4 allows one cosmetic slip, level 3 one substantive omission, level 2 an error, level 1 an off-task reply. The response looks complete but silently drops one requirement stated late in the request.",
+        "A pass/fail (2-level) rubric with four gate conditions, every one of which must hold for a pass; the response satisfies three clearly and fails the fourth in a way that is easy to miss (a unit, a date format, a named approver).",
+        "A 7-level rubric (0 to 6) with a hard cap: 'any unit or currency error caps the score at 2'. The response is otherwise excellent but gives one figure in the wrong unit; the overall impression suggests 5 or 6, the cap fixes it at no more than 2.",
+        "A 4-level rubric (0 to 3) for a customer reply: 3 = resolves the issue and follows the tone guide, 2 = resolves but breaks the tone guide, 1 = partially resolves, 0 = does not resolve or breaches policy. The reply resolves the issue but contains one phrase the tone guide forbids.",
+        "A 6-level rubric (1 to 6) for a calculation answer: points for the correct method, the correct figure, the stated rounding rule, the unit, and a sanity check; the level is the number of items met plus one. The response meets exactly three items; a skim suggests four.",
+        "A 3-level rubric (0 to 2) for a policy lookup: 2 = cites the governing clause including the later amendment, 1 = right outcome but cites the superseded clause, 0 = wrong outcome. The response gets the outcome right from the superseded clause.",
+        "An 8-level rubric (1 to 8) where each level lists the checks a response must pass cumulatively; the response passes the first five checks and fails the sixth, while the seventh (which it happens to meet) is irrelevant because the levels are cumulative.",
+    ],
 }
 for fam, briefs in BRIEFS.items():
     assert fam in FAMILIES and len(briefs) >= 6, fam
@@ -177,7 +212,8 @@ STATE_SHAPES = ("string", "object")
 
 
 def pick_families(rng: random.Random, n: int = 3) -> list[str]:
-    """Three distinct families per document, with unknown-heavy families sampled so that ~17% of questions are unknown."""
+    """Three distinct families per document, with unknown-heavy families sampled so that ~17% of questions are unknown.
+    Only the default mix (FAMILY_IDS); opt-in families (phase 2c judges) are reached through gen_write.py --families."""
     weights = {f: (0.6 if FAMILIES[f]["unknown_rate"] >= 0.5 else 1.0) for f in FAMILY_IDS}
     chosen: list[str] = []
     pool = dict(weights)
@@ -220,11 +256,12 @@ def writer_prompt(domain: dict, doc_kind: str, families: list[str], types: list[
         target = ("The honest intended answer for this question must be UNKNOWN (set \"intended\": null and give \"unknown_reason\" as one of "
                   "insufficient_evidence, false_premise, not_listed, mismatched_reference)." if unk else
                   "The intended answer must be one specific option/level/boolean, fully determined by the document.")
-        shape = {"noul": "\"type\": \"noul\": a yes/no question; \"intended\": true or false.",
-                 "choice": "\"type\": \"choice\": 3 to 8 options, each an object {\"text\": <short option text>, \"description\": <one sentence>}; \"intended\": the exact text of the correct option. Distractors must be plausible; include the near-miss the hardness rule implies.",
-                 "score": "\"type\": \"score\": 3 to 7 ordered levels, each {\"value\": <integer starting at 0 or 1, increasing>, \"description\": <one sentence>}; \"intended\": the integer value."}[typ]
-        qspecs.append(f"Question {i}: family \"{fam}\". Hardness rule: {rule} Brief: {brief} {shape} {target} "
-                      f"Also give \"justification\": one sentence citing the parts of the document that decide it.")
+        shape = FAMILIES[fam].get("shape", {}).get(typ) or {
+            "noul": "\"type\": \"noul\": a yes/no question; \"intended\": true or false.",
+            "choice": "\"type\": \"choice\": 3 to 8 options, each an object {\"text\": <short option text>, \"description\": <one sentence>}; \"intended\": the exact text of the correct option. Distractors must be plausible; include the near-miss the hardness rule implies.",
+            "score": "\"type\": \"score\": 3 to 7 ordered levels, each {\"value\": <integer starting at 0 or 1, increasing>, \"description\": <one sentence>}; \"intended\": the integer value."}[typ]
+        just = FAMILIES[fam].get("justification") or "Also give \"justification\": one sentence citing the parts of the document that decide it."
+        qspecs.append(f"Question {i}: family \"{fam}\". Hardness rule: {rule} Brief: {brief} {shape} {target} {just}")
     state_rule = ("Return the document as a single string under \"document\"." if state_shape == "string" else
                   "Return the document as a JSON object under \"document\" (nested fields, lists and tables as arrays of objects, as an application would store it); it must contain all facts as data, not as one prose blob.")
     return (f"Domain: {domain['brief']}. Document kind: {doc_kind}. Random seed: {seed}.\n"

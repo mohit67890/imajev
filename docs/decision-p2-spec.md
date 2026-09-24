@@ -42,6 +42,16 @@ without touching the image data. Target: ≥ 12,000 kept teacher questions from 
 - **Record schema:** decision-v1 schema (`docs/decision-v2-pseudolabel-spec.md`), `source: "p2_teacher"`, `source_split: "teacher"`,
   `pseudo_label: "p2-teacher-agreed"`, `template_id: "p2.<family>.v1"`, `unknown_by_construction`, `state_variant`, `domain`,
   `provenance {writer, answerers, agreement, justification}`. Validates with `vision_decision.contracts.Request`.
+- **Optional trainer fields (v1.1 recipe flags, `docs/full-run-runbook.md`):**
+  - `target_probs`: `{option value: probability}` for the record's single field. Keys follow the same aliases as
+    `target_distribution`: `true`/`false` for booleans, the integer as a string for ordinal levels, and `unknown`, `null` or
+    `__unknown__` for unknown. Values are non-negative and are renormalised. Missing options count as 0, and unrecognised keys
+    are an error. It is used only with `--soft-targets`. Gold for dev accuracy is `target` when present, else the argmax of
+    `target_probs`. If a no-match augmentation relabels a row, the row falls back to its hard target. Multi-field records should
+    keep per-field `target_distributions` instead.
+  - `rationale`: a short plain-text reason (for example the writer's one-line justification). It is used only with
+    `--rationale-weight`, which appends it as `" Because: <rationale>"` after the decision position, capped at
+    `--rationale-max-tokens`. It is never shown at inference.
 
 ## What is excluded
 
@@ -59,7 +69,8 @@ answers that fail to parse; any question one answerer gets wrong.
 | pod | `pod_run_p2_gen.sh` | one H100: vLLM serves the writer (write + qwen answers), then gpt-oss-20b (answers), then assemble; DONE markers |
 
 Tests: `tests/test_p2_generation.py` (fake clients; prompt rendering, schema validation, option keys, answer parsing, retries, agreement,
-unknown share, partition, licence receipt, contamination lint, request validity).
+unknown share, partition, licence receipt, contamination lint, request validity; phase 2c: judge prompts and the judge CLI path,
+programmatic schema/ids/determinism, independent answer recomputation for every kind, zero JevBench 8-gram overlap, assembly).
 
 ## Sizes, time and cost (one H100 SXM, vLLM, ~2k tokens/s aggregate)
 
@@ -72,6 +83,62 @@ unknown share, partition, licence receipt, contamination lint, request validity)
 
 About 5.5–6 h and $20 at $3.49/h. Expected yield after agreement and lint: 60–70% of 18,000 → 11,000–12,500 kept questions
 (jevk5 kept ~50% with a single-teacher double answer). If the yield falls short of 12,000, rerun `gen_write.py --start 6000 --docs 2000`.
+
+## Phase 2c: judge families and exact-answer generators (24 Sept 2026)
+
+**Why.** After phase 2b our adapters still trail JevK5/Hopper on two JevBench tiers: `judge_hard` (grading whether, or how well,
+a response satisfies a request under stated criteria: method, edge cases, units, format, retained facts) and `temporal_numeric`
+/ `probability` (exact date, time-zone, duration and arithmetic answers). The phase-2 writer families touch both only indirectly
+(`judge_answer`, `rubric`, `date_number_trap`), and LLM-written numeric items are the ones the two answerers most often disagree
+on, so few survive the keep rule. Phase 2c adds (a) two writer families that make the judge setting the whole point of a question,
+and (b) Eikos-style exact-answer families whose answers are computed by code, so correctness does not depend on the writer and the
+answerer agreement filter only removes items the teacher models cannot solve. We studied the STRUCTURE of the public JevBench items
+(state shapes, question types, option types, 2-10 score levels); no item text is reused, and every rule, brief and generated
+document is checked against the JevBench 8-gram lint (tests assert zero shared 8-grams).
+
+**Judge writer families** (`scripts/p2/families.py`, opt-in: reached only with `gen_write.py --families`, so default phase-2 plans
+stay byte-identical and `FAMILY_IDS` keeps its 17 members; `ALL_FAMILY_IDS` lists all 19):
+
+| Family | Type | Unknown rate | What the document holds / what decides it |
+|---|---|---:|---|
+| `judge_pairwise` | choice: Response A / Response B / Both equally or Neither is acceptable | 15% | a request, a rubric or policy with (usually) a ranking of criteria, and two plausible responses; the better one wins on the highest-ranked separating criterion (a unit, a dropped requirement, a stale fact, a format gate, a policy breach) while the other looks more polished; unknown when the rubric cannot separate them |
+| `judge_rubric_score` | score, 2-9 levels copied from the rubric | 5% | a request, a response and a rubric with concrete level conditions (caps, deductions, cumulative checks); impression-based grading lands on an adjacent level |
+
+Both families carry 8-9 briefs and a family-specific justification requirement ("name the rubric criterion that decides it and
+the concrete difference; the answerers are checked against it"). The intended answer and justification fields are the existing
+writer schema, so `gen_answer.py` / `assemble_p2.py` are unchanged. Run:
+`gen_write.py --docs N --families judge_pairwise,judge_rubric_score --tag p2c-judge --out writer-p2c-judge.jsonl` (the third question
+of each document is drawn from the default families).
+
+**Programmatic exact-answer families** (`scripts/p2/gen_programmatic.py`, no model in the loop, seeded and deterministic):
+
+| Family | Batch tag | Kinds (templates = kind x type x wording) |
+|---|---|---|
+| `temporal_arithmetic` | `prog-temporal` | business-day deadlines with closure days, calendar roll-over, time-zone ordering and elapsed time, UTC cut-offs, mixed-unit duration sums, overnight shifts, notice by post with deemed receipt, business-hour SLAs, month-based eligibility, weekday offsets, recurring schedules with moved occurrences, lateness bands (score), grace periods (13 kinds, 53 templates) |
+| `probability_exact` | `prog-probability` | single draws, pairs and at-least-one without replacement, 2x2 conditional tables, Bayes with natural frequencies, independent both/any, constrained committee counts, ordered slots, expected cost, random assignment, clean-sample thresholds (noul), probability bands (score, 4-10 levels), binomial exactly-one (14 kinds, 50 templates) |
+| `numeric_reconciliation` | `prog-numeric` | invoice totals (discount, tax, untaxed delivery), PO-vs-invoice line and amount, bank reconciliation, stacked discounts and voucher order, lb/kg manifests, proration, net from tax-inclusive price, budgets with pending items and transfers, FX with card fees, stock roll-forward variance, change bands (score), usage-based cost split, free-delivery thresholds (13 kinds, 50 templates) |
+
+Each document is a realistic artifact in one of the 24 domains (domain vocabulary, fictional organisations and people, one of
+six currencies, string or JSON-object state) with three questions of three different kinds of one family. Options are the correct
+value plus the typical mistakes (calendar instead of business days, local time read as UTC, with instead of without replacement,
+P(B|A) for P(A|B), tax on the undiscounted subtotal, additive discounts, the wrong allocation key ...), deduplicated by text,
+option key and canonical value so exactly one option is right. About 3% of questions withhold one needed input ("pending",
+"to be confirmed") and are intended `unknown` (insufficient_evidence). `plan.params[i]` stores the inputs, the canonical answer and
+every option's canonical value; `tests/test_p2_generation.py` recomputes every kind independently (numpy business days, tz-aware
+datetimes, brute-force enumeration of draws/assignments/panels, Decimal money) and checks unique ids, per-seed determinism and zero
+JevBench 8-gram overlap. The generator itself regenerates any document that shares a single 8-gram with the public files.
+
+    python scripts/p2/gen_programmatic.py --docs 3000 --seed prog-v1 --out data/decision-p2/teacher/writer-prog.jsonl
+    python scripts/p2/gen_answer.py --answerer qwen35 --writer data/decision-p2/teacher/writer-prog.jsonl --out .../answers-prog-qwen35.jsonl   # (and a second answerer)
+    python scripts/p2/assemble_p2.py --writer .../writer-prog.jsonl --answers ... --out .../records-prog.jsonl \
+        --batch-filter 'prog-*' --dedupe-threshold 100000 --min-unknown-share 0
+
+Templated documents share boilerplate by construction, so the within-batch near-duplicate lint (built for paraphrasing LLM
+writers) would drop almost all of them: disable it with a high `--dedupe-threshold` for `prog-*` batches; diversity comes from the
+template, entity and number randomisation instead. The keep rule is unchanged (both answerers must match the computed answer), so
+records still say `p2-teacher-agreed`; the programmatic origin is visible in `provenance.writer.model == "programmatic"` and the
+`prog-*` batch. The unknown share of these batches is low by design (exact-answer families); mix them with p2b-unknown when
+building a manifest.
 
 ## What comes next (not in this spec)
 

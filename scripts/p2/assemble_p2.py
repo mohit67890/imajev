@@ -6,6 +6,14 @@ and write records in the decision-v1 schema.
         --out data/decision-p2/teacher/records.jsonl
 
 Keep rule: a question is kept only when EVERY answerer's parsed value equals the writer's intended value (unknown == unknown).
+Soft targets (phase 2c, `--soft-from qwen35`): distribution-mode rows of that answerer (`gen_answer.py --mode distribution`, marked
+`mode: "distribution"`) are taken out of the agreement vote and become the soft teacher. A kept question with such a row gets
+`target_probs` (renormalised over its labels + "unknown", "unknown" always present) and `rationale`, provided the teacher's argmax
+equals the intended answer; an answerable question whose argmax differs is dropped (this includes every row where the teacher puts
+more than half its mass on `unknown`). An intended-unknown question whose argmax is not `unknown` keeps its hard target without
+`target_probs` (`--soft-unknown-policy keep-hard`, the owner rule: never drop unknown-gold rows) or is dropped (`drop`). A question
+without a usable distribution keeps its hard target. The report's `unknown_mass` audits the teacher's mass on `unknown` for questions
+whose intended answer is a real option (mean, rows above 0.2 are flagged not dropped, share above 0.5).
 Contamination: any record whose document or question shares >= 2 word 8-grams with the JevBench public files is dropped.
 Licence: teacher outputs are released under Apache-2.0 (the writer and answerers are Apache-2.0 models; no Jev output, no
 JevBench item and no paid API was used); the evidence file and receipt are written next to the records.
@@ -14,7 +22,8 @@ from __future__ import annotations
 import argparse, collections, datetime as dt, hashlib, json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent)); sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from p2_common import ANSWERERS, ROOT, WQuestion, WRITER_MODEL, contamination_count, jevbench_public_files, ngrams, read_jsonl, reference_ngrams, to_field
+from p2_common import (ANSWERERS, ROOT, WQuestion, WRITER_MODEL, argmax_label, contamination_count, jevbench_public_files, ngrams, project_probs,
+                       read_jsonl, reference_ngrams, to_field, value_to_label)
 from v1_text.common import stable_partition, verified_license, write_jsonl
 
 SOURCE = "p2_teacher"
@@ -121,11 +130,54 @@ def agreement(answers_by_key: dict, key: tuple, intended, n_answerers: int, unkn
     return all(r.get("parse_error") is None and r.get("value") == intended for r in rows), rows
 
 
+UNKNOWN_MASS_FLAG = 0.2   # flagged (kept) when the soft teacher puts more than this on unknown for an answerable question
+
+
+def split_soft_rows(answers: list[dict], soft_from: str | None) -> tuple[list[dict], list[dict]]:
+    """(agreement answers, soft-teacher distribution rows). Without --soft-from every row votes, as before."""
+    if not soft_from:
+        return answers, []
+    soft = [r for r in answers if r.get("mode") == "distribution" and r.get("answerer") == soft_from]
+    return [r for r in answers if not (r.get("mode") == "distribution" and r.get("answerer") == soft_from)], soft
+
+
+def soft_label(field: dict, intended, row: dict | None) -> tuple[str, dict | None, float | None]:
+    """Judge one soft-teacher row against the intended answer.
+    Returns (status, probs, unknown mass): status in missing | parse_error | agree | disagree."""
+    if row is None:
+        return "missing", None, None
+    if row.get("parse_error") or not row.get("probs"):
+        return "parse_error", None, None
+    probs, err = project_probs(row["probs"], field)
+    if err:
+        return "parse_error", None, None
+    status = "agree" if argmax_label(probs, field) == value_to_label(intended) else "disagree"
+    return status, probs, probs["unknown"]
+
+
+def unknown_mass_audit(masses: list[tuple[str, float]], kept_masses: list[float]) -> dict:
+    n = len(masses); over2 = [k for k, m in masses if m > UNKNOWN_MASS_FLAG]; over5 = [k for k, m in masses if m > 0.5]
+    return {"answerable_rows": n, "mean": (sum(m for _, m in masses) / n) if n else None,
+            "over_0_2": len(over2), "over_0_2_ids": over2[:50], "over_0_5": len(over5), "over_0_5_share": (len(over5) / n) if n else None,
+            "kept_rows": len(kept_masses), "kept_mean": (sum(kept_masses) / len(kept_masses)) if kept_masses else None,
+            "kept_over_0_2": sum(m > UNKNOWN_MASS_FLAG for m in kept_masses), "kept_over_0_5": sum(m > 0.5 for m in kept_masses),
+            "note": f"rows above {UNKNOWN_MASS_FLAG} are flagged (provenance.soft_teacher.unknown_mass_high), not dropped; rows above 0.5 have "
+                    "argmax unknown and are dropped by the argmax == intended rule"}
+
+
 def build_records(writer_rows: list[dict], answers: list[dict], n_answerers: int, license_obj: dict, reference: set, seed: str = "decision-p2",
-                  min_shared_ngrams: int = 2, unknown_rule: str = "strict", dedupe: "NearDuplicateIndex | None" = None) -> tuple[list[dict], dict]:
+                  min_shared_ngrams: int = 2, unknown_rule: str = "strict", dedupe: "NearDuplicateIndex | None" = None,
+                  soft_from: str | None = None, soft_unknown_policy: str = "keep-hard") -> tuple[list[dict], dict]:
+    answers, soft_rows = split_soft_rows(answers, soft_from)
     by_key = collections.defaultdict(list)
     for r in answers:
         by_key[(r["doc_id"], r["qi"])].append(r)
+    soft_by_key: dict = {}
+    for r in soft_rows:  # a later usable row replaces an earlier one; an error row never replaces a usable one
+        k = (r["doc_id"], r["qi"])
+        if k not in soft_by_key or not (r.get("parse_error") or not r.get("probs")) or (soft_by_key[k].get("parse_error") or not soft_by_key[k].get("probs")):
+            soft_by_key[k] = r
+    masses: list[tuple[str, float]] = []; kept_masses: list[float] = []
     counts = collections.Counter(); kept: list[dict] = []; fam_counts = collections.Counter(); fam_kept = collections.Counter()
     dup_pairs: list[tuple[int, str, str]] = []
     for w in writer_rows:
@@ -141,11 +193,22 @@ def build_records(writer_rows: list[dict], answers: list[dict], n_answerers: int
         for qi, q in enumerate(out["questions"]):
             counts["questions"] += 1; fam_counts[q["family"]] += 1
             field, intended = to_field(WQuestion.model_validate(q), field_id="decision")
+            soft_status, soft_probs, soft_unknown = "off", None, None
+            if soft_from:
+                soft_row = soft_by_key.get((w["doc_id"], qi))
+                soft_status, soft_probs, soft_unknown = soft_label(field, intended, soft_row)
+                if intended is not None and soft_unknown is not None:
+                    masses.append((f"{SOURCE}:{w['doc_id']}:{qi}", soft_unknown))
             ok, rows = agreement(by_key, (w["doc_id"], qi), intended, n_answerers, unknown_rule)
-            if len(rows) < n_answerers:
+            if len(rows) < n_answerers or (soft_from and n_answerers == 0 and soft_status in ("missing", "parse_error")):
                 counts["missing_answers"] += 1; continue
             if not ok:
                 counts["disagreed"] += 1; continue
+            if soft_status == "disagree":
+                if intended is None and soft_unknown_policy == "keep-hard":
+                    counts["soft_disagreed_unknown_kept_hard"] += 1; soft_status, soft_probs = "disagree_kept_hard", None
+                else:
+                    counts["soft_disagreed"] += 1; continue
             if doc_hits + contamination_count(q["question"], reference) >= min_shared_ngrams:
                 counts["contaminated"] += 1; continue
             unknown = intended is None
@@ -158,6 +221,19 @@ def build_records(writer_rows: list[dict], answers: list[dict], n_answerers: int
                    "unknown_by_construction": {"decision": unknown}, "state_variant": w["plan"]["state_shape"],
                    "provenance": {"writer": w["writer"], "answerers": [{k: r.get(k) for k in ("answerer", "repo", "revision", "value", "confidence")} for r in rows],
                                   "agreement": True, "unknown_rule": unknown_rule if unknown else "strict", "justification": q["justification"]}}
+            if soft_from:
+                counts[f"soft_{soft_status}"] += 1
+                srow = soft_by_key.get((w["doc_id"], qi)) or {}
+                rec["provenance"]["soft_teacher"] = {"answerer": soft_from, "repo": srow.get("repo"), "revision": srow.get("revision"), "status": soft_status}
+                if soft_probs is not None:
+                    rec["target_probs"] = soft_probs
+                    rationale = srow.get("rationale")
+                    if isinstance(rationale, str) and rationale.strip():
+                        rec["rationale"] = rationale.strip()
+                    rec["provenance"]["soft_teacher"]["unknown_mass"] = soft_unknown
+                    if not unknown:
+                        kept_masses.append(soft_unknown)
+                        rec["provenance"]["soft_teacher"]["unknown_mass_high"] = soft_unknown > UNKNOWN_MASS_FLAG
             kept.append(rec); counts["kept"] += 1; fam_kept[q["family"]] += 1
             if unknown: counts["kept_unknown"] += 1
     counts["writer_docs"] = len(writer_rows)
@@ -167,6 +243,10 @@ def build_records(writer_rows: list[dict], answers: list[dict], n_answerers: int
               "by_partition": dict(collections.Counter(r["partition"] for r in kept)),
               "by_type": dict(collections.Counter(r["request"]["fields"][0]["type"] for r in kept)),
               "by_domain": dict(collections.Counter(r["domain"] for r in kept))}
+    if soft_from:
+        report["soft_from"] = soft_from; report["soft_unknown_policy"] = soft_unknown_policy
+        report["with_target_probs"] = sum("target_probs" in r for r in kept); report["with_rationale"] = sum("rationale" in r for r in kept)
+        report["unknown_mass"] = unknown_mass_audit(masses, kept_masses)
     return kept, report
 
 
@@ -184,13 +264,18 @@ def main(argv=None) -> int:
                     help="writer.jsonl / records.jsonl files whose documents or states a new document must not near-duplicate "
                          "(default: data/decision-p2/teacher/writer.jsonl and data/decision-p2/human/records.jsonl when present)")
     ap.add_argument("--dedupe-threshold", type=int, default=5, help="shared word 8-grams at or above which a document is a near-duplicate")
+    ap.add_argument("--soft-from", default=None, choices=sorted(ANSWERERS),
+                    help="answerer whose distribution-mode rows (gen_answer.py --mode distribution, passed in --answers) give target_probs + rationale; "
+                         "keep rule: its argmax must equal the intended answer")
+    ap.add_argument("--soft-unknown-policy", choices=("keep-hard", "drop"), default="keep-hard",
+                    help="intended-unknown questions whose soft argmax is not unknown: keep with the hard target only (default) or drop")
     a = ap.parse_args(argv)
     import fnmatch
     writer_rows = read_jsonl(a.writer); answers = [r for p in a.answers for r in read_jsonl(p)]
     if a.batch_filter:
         writer_rows = [w for w in writer_rows if fnmatch.fnmatch(str(w.get("batch", w.get("plan", {}).get("batch", "p2"))), a.batch_filter)]
         wanted = {w["doc_id"] for w in writer_rows}; answers = [r for r in answers if r["doc_id"] in wanted]
-    n_answerers = len({r["answerer"] for r in answers})
+    n_answerers = len({r["answerer"] for r in split_soft_rows(answers, a.soft_from)[0]})
     license_dir = a.license_dir or (ROOT / "data/decision-p2/licenses" / SOURCE)
     evidence = write_license_evidence(license_dir, WRITER_MODEL, ANSWERERS)
     rel = evidence.relative_to(ROOT) if evidence.is_relative_to(ROOT) else evidence
@@ -199,14 +284,15 @@ def main(argv=None) -> int:
     dedupe_paths = a.dedupe_against if a.dedupe_against is not None else [q for q in (ROOT / "data/decision-p2/teacher/writer.jsonl", ROOT / "data/decision-p2/human/records.jsonl") if q.is_file()]
     batch_ids = {w["doc_id"] for w in writer_rows}
     dedupe = NearDuplicateIndex.from_files(dedupe_paths, exclude_ids=batch_ids, threshold=a.dedupe_threshold) if dedupe_paths else NearDuplicateIndex(a.dedupe_threshold)
-    kept, report = build_records(writer_rows, answers, n_answerers, license_obj, reference, seed=a.seed, unknown_rule=a.unknown_rule, dedupe=dedupe)
+    kept, report = build_records(writer_rows, answers, n_answerers, license_obj, reference, seed=a.seed, unknown_rule=a.unknown_rule, dedupe=dedupe,
+                                 soft_from=a.soft_from, soft_unknown_policy=a.soft_unknown_policy)
     report["dedupe_files"] = [str(q) for q in dedupe_paths]; report["dedupe_threshold"] = a.dedupe_threshold
     # Every record must pass the serving contract (state nesting <= 8, sizes, option counts) or it crashes the trainer's loader.
     sys.path.insert(0, str(ROOT / "src")); from decision_data import expand_fields, render
     valid, contract_dropped = [], collections.Counter()
     for r in kept:
         try:
-            for item in expand_fields(r): render(item)
+            for item in expand_fields(r): render(item, soft_targets="target_probs" in item)
             valid.append(r)
         except Exception as exc:
             contract_dropped[(str(exc).split("\n")[1] if "\n" in str(exc) else str(exc))[:60]] += 1
@@ -228,7 +314,8 @@ def main(argv=None) -> int:
               f"Partitions: {report['by_partition']}", f"Types: {report['by_type']}", "",
               "| Family | questions | kept |", "|---|---:|---:|"] + [f"| {f} | {v['questions']} | {v['kept']} |" for f, v in report["by_family"].items()]
     a.out.with_name("README.md").write_text("\n".join(readme) + "\n")
-    print(json.dumps({k: report[k] for k in ("counts", "unknown_share", "by_partition", "by_type", "records", "near_duplicate_pairs")}))
+    print(json.dumps({k: report[k] for k in ("counts", "unknown_share", "by_partition", "by_type", "records", "near_duplicate_pairs", "with_target_probs",
+                                             "with_rationale", "unknown_mass") if k in report}))
     if report["unknown_share"] is not None and report["unknown_share"] < a.min_unknown_share:
         print(f"WARNING: unknown share {report['unknown_share']:.1%} below {a.min_unknown_share:.0%}; generate more unknown-family documents")
     return 0

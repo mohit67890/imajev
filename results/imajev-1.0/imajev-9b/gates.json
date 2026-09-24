@@ -1,0 +1,96 @@
+{
+ "run": "9b-soup50",
+ "size": "9b",
+ "shippable": true,
+ "checks": [
+  {
+   "gate": "a.imajevbench_acc",
+   "value": 82.08,
+   "op": ">=",
+   "bound": 81.8,
+   "pass": true,
+   "note": "229/279"
+  },
+  {
+   "gate": "a.visual_items",
+   "value": 104,
+   "op": ">=",
+   "bound": 104,
+   "pass": true,
+   "note": "ref 106/120"
+  },
+  {
+   "gate": "a.joint_items",
+   "value": 96,
+   "op": ">=",
+   "bound": 94,
+   "pass": true,
+   "note": "ref 96/122"
+  },
+  {
+   "gate": "b.state_probe",
+   "value": 73.5,
+   "op": ">=",
+   "bound": 67.5,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "gate": "b.pairs_probe",
+   "value": 90.0,
+   "op": ">=",
+   "bound": 78.0,
+   "pass": true,
+   "note": ""
+  },
+  {
+   "gate": "c.unknown_correct_rate",
+   "value": 100.0,
+   "op": ">=",
+   "bound": 92.86,
+   "pass": true,
+   "note": "14 unknown-gold rows"
+  },
+  {
+   "gate": "c.false_abstention_rate",
+   "value": 0.24,
+   "op": "<=",
+   "bound": 2.24,
+   "pass": true,
+   "note": "421 answerable rows"
+  },
+  {
+   "gate": "d.irrelevance",
+   "value": 83.95,
+   "op": ">=",
+   "bound": 81.4,
+   "pass": true,
+   "note": ""
+  }
+ ],
+ "reference": {
+  "imajevbench_acc": 82.8,
+  "visual": [
+   106,
+   120
+  ],
+  "joint": [
+   96,
+   122
+  ],
+  "state_probe": 69.5,
+  "pairs_probe": 80.0,
+  "irrelevance": 83.4,
+  "unknown_correct_rate": 92.86,
+  "false_abstention_rate": 0.24,
+  "unknown_rows": 14,
+  "answerable_rows": 421
+ },
+ "tolerances": {
+  "imajevbench_acc_points": 1.0,
+  "track_items": 2,
+  "probe_points": 2.0,
+  "irrelevance_points": 2.0,
+  "false_abstention_points": 2.0
+ }
+}

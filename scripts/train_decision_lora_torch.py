@@ -13,7 +13,8 @@ import torch
 import torch.distributed as dist
 import faulthandler,sys
 None  # periodic stack dumps disabled: they coincided with the SIGSEGVs (the dump thread walks frames without the GIL)  # a stack every 4 minutes of silence: a stalled run explains itself
-from decision_data import load_records,load_image,render,pixel_budget,batch_plan,with_noise_state,approx_tokens
+from decision_data import load_records,load_image,render,pixel_budget,batch_plan,with_noise_state,approx_tokens,permute_options,resolve_probs_target
+from decision_recipe import decision_loss,gold,rationale_ids,collate_with_rationale
 from torch_decision import TorchDecision,TARGETS
 
 parser=argparse.ArgumentParser();parser.add_argument('--output',required=True);parser.add_argument('--model',required=True);parser.add_argument('--revision')
@@ -22,7 +23,16 @@ parser.add_argument('--init-adapter',help='v1 PEFT adapter used to initialize th
 parser.add_argument('--accumulate',type=int,default=8);parser.add_argument('--batch-size',type=int,default=1,help='maximum examples per micro-batch');parser.add_argument('--token-budget',type=int,default=0,help='padded tokens per micro-batch (longest x count); 0 = fixed batch size, no bucketing');parser.add_argument('--workers',type=int,default=0);parser.add_argument('--no-checkpointing',action='store_true');parser.add_argument('--max-steps',type=int,default=0,help='stop after N optimizer steps (throughput probes)');parser.add_argument('--clip',type=float,default=1.0);parser.add_argument('--rank',type=int,default=16);parser.add_argument('--alpha',type=float,default=32)
 parser.add_argument('--max-length',type=int,default=4096,help='refuse processed examples beyond this token length; never truncate');parser.add_argument('--lora-targets',default='',help='comma-separated LoRA target module names (default: all language-layer projections); ignored when --init-adapter is given (its structure is kept)');parser.add_argument('--dev2-version',default='',help='second dev manifest (e.g. a reasoning-style set) evaluated at every dev checkpoint');parser.add_argument('--dev2-cases',type=int,default=400);parser.add_argument('--select',choices=['dev_loss','dev2_accuracy','mean_accuracy'],default='dev_loss',help='what "best" checkpoint means');parser.add_argument('--pad-multiple',type=int,default=0,help='pad each micro-batch to a multiple of this many tokens (0 = exact); fewer kernel shapes for the JIT kernels')
 parser.add_argument('--pixels',type=int,default=400000);parser.add_argument('--dev-every',type=int,default=50);parser.add_argument('--save-every',type=int,default=0,help='also save a resumable checkpoint every N steps without a dev pass (0 = only at dev checkpoints)');parser.add_argument('--dev-cases',type=int,default=200);parser.add_argument('--limit',type=int,default=0)
-parser.add_argument('--seed',type=int,default=0);parser.add_argument('--version',default='decision-v0');parser.add_argument('--max-hours',type=float,default=0,help='stop cleanly after this many hours (cost cap)');args=parser.parse_args()
+parser.add_argument('--seed',type=int,default=0);parser.add_argument('--version',default='decision-v0');parser.add_argument('--max-hours',type=float,default=0,help='stop cleanly after this many hours (cost cap)')
+# v1.1 recipe flags (all opt-in; see docs/full-run-runbook.md "v1.1 recipe flags"). Defaults leave the run byte-identical.
+parser.add_argument('--soft-targets',action='store_true',help='train toward a record\'s target_probs (label -> probability, unknown included) with soft cross-entropy; gold for dev accuracy stays target (or the argmax of target_probs)')
+parser.add_argument('--soft-weight',type=float,default=1.0,help='with --soft-targets: loss = w * soft CE + (1 - w) * hard CE on the gold option')
+parser.add_argument('--permute-options',action='store_true',help='permute choice options per example per epoch, keyed on seed+epoch+record id (ordinal and boolean fields keep their order)')
+parser.add_argument('--rationale-weight',type=float,default=0.0,help='add W x LM cross-entropy over " Because: <rationale>" appended after the decision position (training only)')
+parser.add_argument('--rationale-max-tokens',type=int,default=64,help='cap on appended rationale tokens (prefix included)');args=parser.parse_args()
+if not 0<=args.soft_weight<=1:parser.error('--soft-weight must be in [0, 1]')
+if args.rationale_weight<0:parser.error('--rationale-weight must be >= 0')
+RATIONALE_CAP=args.rationale_max_tokens if args.rationale_weight>0 else 0  # 0 = no rationale tokens planned or appended
 world=int(os.environ.get('WORLD_SIZE',1));rank=int(os.environ.get('RANK',0));main=rank==0
 if world>1:
  dist.init_process_group('nccl' if args.device=='cuda' else 'gloo')
@@ -40,8 +50,11 @@ path=args.model
 if not Path(path).is_dir():
  from huggingface_hub import snapshot_download
  path=snapshot_download(args.model,revision=args.revision)
-config=dict({k:v for k,v in vars(args).items() if k not in ('output','device','max_hours','workers','max_steps')},world_size=world,manifest_sha256=hashlib.sha256(Path(f'data/manifests/{VERSION}.jsonl').read_bytes()).hexdigest(),train_cases=len(train),dev_cases=len(dev),targets=TARGETS,
- loss='cross-entropy over float32 candidate-label logits at the served decision position; no label smoothing')
+RECIPE_DEFAULTS=dict(soft_targets=False,soft_weight=1.0,permute_options=False,rationale_weight=0.0,rationale_max_tokens=64)  # recorded only when changed, so existing outputs resume
+config=dict({k:v for k,v in vars(args).items() if k not in ('output','device','max_hours','workers','max_steps') and not (k in RECIPE_DEFAULTS and v==RECIPE_DEFAULTS[k])},world_size=world,manifest_sha256=hashlib.sha256(Path(f'data/manifests/{VERSION}.jsonl').read_bytes()).hexdigest(),train_cases=len(train),dev_cases=len(dev),targets=TARGETS,
+ loss='cross-entropy over float32 candidate-label logits at the served decision position; no label smoothing'
+ +(f'; target_probs rows: {args.soft_weight} x soft cross-entropy + {1-args.soft_weight:g} x hard cross-entropy' if args.soft_targets else '')
+ +(f'; plus {args.rationale_weight} x LM cross-entropy over up to {args.rationale_max_tokens} appended rationale tokens (training only)' if args.rationale_weight>0 else ''))
 p=out/'config.json'
 VOLATILE={'dev_every','dev_cases','save_every'}  # checkpoint cadence may change on resume; everything that affects the data order or the optimisation may not
 strip=lambda c:{k:v for k,v in c.items() if k not in VOLATILE}
@@ -58,7 +71,7 @@ if args.device.startswith('cuda') and not args.no_checkpointing:model.gradient_c
 params=[q for q in model.parameters() if q.requires_grad]+list(engine.readout.parameters());# One deterministic plan of length-bucketed micro-batches per epoch, identical on every rank; rank r takes every world-th batch.
 budget=args.token_budget or 10**9
 def plan(epoch):
- return batch_plan(train,args.pixels,budget,args.batch_size,args.seed,epoch)
+ return batch_plan(train,args.pixels,budget,args.batch_size,args.seed,epoch,rationale_tokens=RATIONALE_CAP)
 epochs_needed=math.ceil(args.epochs);plans=[plan(e) for e in range(epochs_needed)];flat=[(e,b) for e in range(epochs_needed) for b in plans[e]]
 flat=flat[:round(len(flat)*args.epochs/epochs_needed)];per_step=args.accumulate*world;original_microbatches=len(flat);steps=math.ceil(len(flat)/per_step)
 # A distributed optimizer step must have the same accumulation count on every rank. Repeat a
@@ -68,7 +81,7 @@ if needed:flat += [flat[i%len(flat)] for i in range(needed)]
 # Balance each optimizer step across ranks: sort the step's batches by padded cost and deal them out in snake order,
 # so no rank ends up with all the heavy batches while the others wait at the gradient sync.
 def cost(item):
- epoch,batch=item;return max(approx_tokens(train[j],args.pixels) for j in batch)*len(batch)
+ epoch,batch=item;return max(approx_tokens(train[j],args.pixels,RATIONALE_CAP) for j in batch)*len(batch)
 balanced=[]
 for s0 in range(0,steps*per_step,per_step):
  group=sorted(flat[s0:s0+per_step],key=cost,reverse=True);slots=[[] for _ in range(world)]
@@ -84,24 +97,35 @@ def rate(step):  # linear warm-up, cosine decay to 10%, as in the MLX run
  if step<args.warmup:return (step+1)/args.warmup
  return .1+.9*.5*(1+math.cos(math.pi*(step-args.warmup)/max(1,steps-args.warmup)))
 scheduler=torch.optim.lr_scheduler.LambdaLR(optimizer,rate)
-def make(record,rng):
+def make(record,rng,epoch=None):
+ """One example. rng is None for dev rows: served option order, no noise, no rationale."""
+ if args.soft_targets:record=resolve_probs_target(record)  # target_probs-only rows get their gold before augmentation reads it
  if rng is not None:record=with_noise_state(record,rng)
- header,choices,texts,target=render(record,rng);labels=engine.labels(len(choices),len(record['images']))
+ # --permute-options: the permutation is its own step keyed on the record id, so render must not shuffle again.
+ permute=rng is not None and args.permute_options
+ if permute:record=permute_options(record,args.seed,epoch)
+ header,choices,texts,target=render(record,rng,shuffle=not permute,soft_targets=args.soft_targets);labels=engine.labels(len(choices),len(record['images']))
  images=[load_image(x['image'],pixel_budget(record,args.pixels)) for x in record['images']]
- return (*engine.render_example(images,header+'\n'.join(f'{l}: {t}' for l,t in zip(labels,texts)),labels),target)
+ example=(*engine.render_example(images,header+'\n'.join(f'{l}: {t}' for l,t in zip(labels,texts)),labels),target)
+ if rng is not None and RATIONALE_CAP:example+=(rationale_ids(engine.processor.tokenizer,record,RATIONALE_CAP),)
+ return example
+def collate(examples):  # engine.collate, plus the right-padded rationale block when --rationale-weight is on
+ if not RATIONALE_CAP:return engine.collate(examples)
+ return collate_with_rationale(engine.collate,examples,engine.processor.tokenizer.pad_token_id)
 def collate_within_budget(examples):
  """Collate a planned micro-batch; if its real padded size overshoots the plan (the estimate is approximate, and
- mixed text/image batches overshoot most), split it in halves. Every example is still trained on."""
- inputs,ids,targets=engine.collate(examples);length=inputs['input_ids'].shape[-1]
+ mixed text/image batches overshoot most), split it in halves. Every example is still trained on.
+ The padded length includes appended rationale tokens, so they count toward the budget."""
+ collated=collate(examples);length=collated[0]['input_ids'].shape[-1]
  limit=budget if length<=2048 else budget*0.6  # full-attention layers grow quadratically with sequence length
  if len(examples)>1 and length*len(examples)>limit:
   half=len(examples)//2;return collate_within_budget(examples[:half])+collate_within_budget(examples[half:])
- return [((inputs,ids,targets),examples)]
+ return [(collated,examples)]
 class Stream(torch.utils.data.Dataset):  # item = one planned micro-batch for this rank as a list of collated chunks; deterministic, so a resumed run continues the same sequence
  def __init__(self,first_step):self.items=[flat[i] for i in range(first_step*per_step,steps*per_step) if i%world==rank]
  def __len__(self):return len(self.items)
  def __getitem__(self,i):
-  epoch,batch=self.items[i];return collate_within_budget([make(train[j],random.Random(f'{args.seed}:{epoch}:{j}')) for j in batch])
+  epoch,batch=self.items[i];return collate_within_budget([make(train[j],random.Random(f'{args.seed}:{epoch}:{j}'),epoch) for j in batch])
 class Dev(torch.utils.data.Dataset):
  def __init__(self,rows=None):self.rows=dev if rows is None else rows
  def __len__(self):return len(range(rank,len(self.rows),world))
@@ -109,13 +133,18 @@ class Dev(torch.utils.data.Dataset):
 def loader(dataset,collated):
  extra=dict(batch_size=None) if collated else dict(batch_size=min(args.batch_size,8),collate_fn=engine.collate)
  return torch.utils.data.DataLoader(dataset,shuffle=False,num_workers=args.workers,prefetch_factor=4 if args.workers else None,**extra)
+rationale_total=[0.0]  # summed rationale LM loss since the last log entry (--rationale-weight)
 def batch_loss(batch):
- inputs,token_ids,targets=batch;logits=engine.candidate_logits_batch(inputs,token_ids)
- def one(x,t):  # hard label, or a soft distribution over the listed candidates
-  if isinstance(t,list):return -(torch.tensor(t,device=x.device,dtype=x.dtype)*x.log_softmax(0)).sum()
-  return torch.nn.functional.cross_entropy(x[None],torch.tensor([t],device=x.device))[None].squeeze()
- mode=lambda t:max(range(len(t)),key=t.__getitem__) if isinstance(t,list) else t
- return torch.stack([one(x,t) for x,t in zip(logits,targets)]).sum(),sum(int(x.argmax())==mode(t) for x,t in zip(logits,targets)),len(targets)
+ """(summed loss, readout hits, examples). Hits compare the readout argmax with gold() only: rationale tokens never
+ enter the readout (dev rows carry none, and training rows read the decision position, not the rationale)."""
+ if len(batch)==4:  # decision prompts plus an appended rationale block
+  inputs,token_ids,targets,extra=batch;logits,rationale=engine.candidate_logits_with_rationale(inputs,token_ids,extra['position'],extra['labels'])
+  rationale=rationale.sum();rationale_total[0]+=float(rationale.detach())
+ else:
+  inputs,token_ids,targets=batch;logits=engine.candidate_logits_batch(inputs,token_ids);rationale=None
+ loss=torch.stack([decision_loss(x,t,args.soft_weight) for x,t in zip(logits,targets)]).sum()  # hard label, a target_distribution list, or a --soft-targets SoftTarget
+ if rationale is not None:loss=loss+args.rationale_weight*rationale
+ return loss,sum(int(x.argmax())==gold(t) for x,t in zip(logits,targets)),len(targets)
 def dev_loss(rows=None):
  model.eval();total=0;hits=0;n=0
  with torch.no_grad():
@@ -168,7 +197,7 @@ for step in range(step0,steps):
    collated=None;gc.collect();torch.cuda.empty_cache()
    if len(examples)<2:raise torch.OutOfMemoryError(f'step {step+1}: a single example does not fit in memory')
    half=len(examples)//2;say(f'step {step+1}: chunk of {len(examples)} exceeded memory, retrying as {half}+{len(examples)-half}')
-   for part in (examples[:half],examples[half:]):train_chunk(engine.collate(part),part)
+   for part in (examples[:half],examples[half:]):train_chunk(collate(part),part)
   try:
    for collated,examples in batch:train_chunk(collated,examples)
   except torch.OutOfMemoryError:  # a single example did not fit; every collective below is still reached, so ranks stay in step
@@ -184,6 +213,7 @@ for step in range(step0,steps):
   if q.grad is not None:q.grad/=examples
  norm=float(torch.nn.utils.clip_grad_norm_(params,args.clip));optimizer.step();scheduler.step()
  loss_sum,seen_all,skipped_all=across(sum(losses),seen,skipped);count=examples;entry=dict(examples_in_step=int(examples),skipped_oom_batches=int(skipped_all),step=step+1,of=steps,loss=loss_sum/count,grad_norm=norm,seconds=time.monotonic()-start,examples_per_second=seen_all/(time.monotonic()-window),gpus=world);assert math.isfinite(entry['loss']) and math.isfinite(norm)
+ if RATIONALE_CAP:entry['rationale_loss']=across(rationale_total[0])[0]/count;rationale_total[0]=0.0  # unweighted, per example; already included (x weight) in loss
  out_of_time=bool(across(float(bool(args.max_hours and (time.monotonic()-started)/3600>args.max_hours)) if main else 0.0)[0]);last=step+1==steps or out_of_time or (args.max_steps and step+1-step0>=args.max_steps)
  if (step+1)%args.dev_every==0 or last:
   score=evaluate_dev(entry)

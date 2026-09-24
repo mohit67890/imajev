@@ -153,6 +153,91 @@ def parse_answer(raw: str, field: dict) -> tuple[Any, float | None, str | None]:
     return None, conf, f"bad level {a!r}"
 
 
+# ------------------------------------------------------------------------------------------------- soft targets (phase 2c)
+# A question's LABELS are the strings a distribution is keyed by, identical to the trainer's `target_probs` aliases
+# (scripts/decision_data.py:distribution_weights): "true"/"false" for booleans, option keys for choices, the integer as a string
+# for ordinal levels, and "unknown" (always present, always last) for abstention.
+UNKNOWN_LABEL = "unknown"
+_UNKNOWN_ALIASES = ("unknown", "__unknown__", "null", "none")
+
+
+def field_labels(field: dict, with_unknown: bool = True) -> list[str]:
+    if field["type"] == "boolean":
+        labels = ["true", "false"]
+    elif field["type"] == "choice":
+        labels = [str(o["value"]) for o in field["options"]]
+    else:
+        labels = [str(l["value"]) for l in field["levels"]]
+    return labels + [UNKNOWN_LABEL] if with_unknown else labels
+
+
+def value_to_label(value) -> str:
+    """Our value space (bool / option key / int / None) -> label."""
+    if value is None:
+        return UNKNOWN_LABEL
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    return str(value)
+
+
+def label_to_value(field: dict, label: str):
+    """Label -> our value space; "unknown" -> None."""
+    if label == UNKNOWN_LABEL:
+        return None
+    if field["type"] == "boolean":
+        return label == "true"
+    if field["type"] == "ordinal":
+        return int(label)
+    return label
+
+
+def normalise_label(field: dict, key) -> str | None:
+    """Map a key as a model or an upstream file writes it onto one of the field's labels (None when unrecognised)."""
+    labels = field_labels(field, with_unknown=False)
+    k = str(key).strip()
+    if k.lower() in _UNKNOWN_ALIASES:
+        return UNKNOWN_LABEL
+    if field["type"] == "boolean":
+        return {"true": "true", "yes": "true", "false": "false", "no": "false"}.get(k.lower())
+    if k in labels:
+        return k
+    if field["type"] == "choice":
+        k2 = option_key(k)
+        return k2 if k2 in labels else None
+    if k.lstrip("-").isdigit() and str(int(k)) in labels:
+        return str(int(k))
+    return None
+
+
+def project_probs(probs, field: dict, strict: bool = False) -> tuple[dict | None, str | None]:
+    """Renormalise a {key: probability} mapping over the field's labels + "unknown" (missing labels count as 0; the result
+    always carries every label, "unknown" included). Unrecognised keys are ignored (strict=False, model output) or an error
+    (strict=True, stored data). Returns (probs, None) or (None, error)."""
+    import math
+    if not isinstance(probs, dict):
+        return None, "probabilities is not an object"
+    out = {lab: 0.0 for lab in field_labels(field)}
+    for k, v in probs.items():
+        lab = normalise_label(field, k)
+        if lab is None:
+            if strict:
+                return None, f"unrecognised label {k!r}"
+            continue
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) or v < 0:
+            return None, f"bad probability for {k!r}: {v!r}"
+        out[lab] += float(v)
+    total = sum(out.values())
+    if total <= 0:
+        return None, "probabilities sum to zero"
+    return {k: round(v / total, 6) for k, v in out.items()}, None
+
+
+def argmax_label(probs: dict, field: dict) -> str:
+    """First maximum in label order (real options first, unknown last), as the trainer resolves ties."""
+    labels = field_labels(field)
+    return max(labels, key=lambda lab: (probs.get(lab, 0.0), -labels.index(lab)))
+
+
 def _extract_json(text: str) -> str:
     text = text.strip()
     if text.startswith("```"):
@@ -170,9 +255,13 @@ class ChatClient:
     def __init__(self, base_url: str, model: str, api_key: str = "local", timeout: float = 600.0, opener=urllib.request.urlopen, sleep=time.sleep):
         self.base_url, self.model, self.api_key, self.timeout, self.opener, self.sleep = base_url.rstrip("/"), model, api_key, timeout, opener, sleep
 
-    def complete(self, messages: list[dict], temperature: float = 0.9, max_tokens: int = 6000, json_mode: bool = True, extra: dict | None = None) -> str:
+    def complete(self, messages: list[dict], temperature: float = 0.9, max_tokens: int = 6000, json_mode: bool = True, extra: dict | None = None,
+                 response_format: dict | None = None) -> str:
+        """`response_format` (e.g. a json_schema object) overrides the plain JSON mode when given."""
         body = {"model": self.model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens}
-        if json_mode:
+        if response_format is not None:
+            body["response_format"] = response_format
+        elif json_mode:
             body["response_format"] = {"type": "json_object"}
         if extra:
             body.update(extra)

@@ -1,14 +1,14 @@
 {
   "model": {
     "model": "imajev-4b-raw",
-    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "adapter": "-release/hf/imajev-4b/mlx",
     "backend": "mlx",
     "loaded": true,
-    "load_seconds": 2.546
+    "load_seconds": 3.59
   },
   "threshold": 0.8,
   "api": "http://127.0.0.1:8765",
-  "run_at": "2026-09-24T02:32:51.154Z",
+  "run_at": "2026-09-24T13:38:27.899Z",
   "passed": 20,
   "total": 21,
   "rows": [
@@ -27,18 +27,18 @@
       "answers": {
         "contradicted_field": {
           "top": "none of these",
-          "unknown": 0.00010434965651045868,
+          "unknown": 0.0009414015540516601,
           "abstained": false,
           "probabilities": {
-            "account.city": 0.001020508570404461,
-            "account.seats": 0.0007684348586384584,
-            "account.plan": 0.0017169468172551685,
-            "none of these": 0.9964941097537019
+            "account.city": 0.00487412098733574,
+            "account.seats": 0.005753517106297414,
+            "account.plan": 0.006057312261948569,
+            "none of these": 0.9833150496444183
           }
         }
       },
-      "server_ms": 368.2,
-      "round_trip_ms": 374
+      "server_ms": 547.6,
+      "round_trip_ms": 550
     },
     {
       "scenario": "crm",
@@ -55,18 +55,18 @@
       "answers": {
         "contradicted_field": {
           "top": "account.city",
-          "unknown": 0.0000161595633240779,
+          "unknown": 0.00010305617106003893,
           "abstained": false,
           "probabilities": {
-            "account.city": 0.997023859277449,
-            "account.seats": 0.00003936770209823672,
-            "account.plan": 0.00003774108480934517,
-            "none of these": 0.0028990319356434085
+            "account.city": 0.9942987077379054,
+            "account.seats": 0.00010969293792189136,
+            "account.plan": 0.00009629509149113624,
+            "none of these": 0.005495304232681544
           }
         }
       },
-      "server_ms": 210.3,
-      "round_trip_ms": 211
+      "server_ms": 542.8,
+      "round_trip_ms": 544
     },
     {
       "scenario": "crm",
@@ -83,18 +83,18 @@
       "answers": {
         "contradicted_field": {
           "top": "account.seats",
-          "unknown": 0.000029959644082996724,
+          "unknown": 0.000282384498529896,
           "abstained": false,
           "probabilities": {
-            "account.city": 0.00011722752443404565,
-            "account.seats": 0.9855218347580214,
-            "account.plan": 0.006969281116561397,
-            "none of these": 0.007391656600983222
+            "account.city": 0.0005254850243108518,
+            "account.seats": 0.9420753849350766,
+            "account.plan": 0.02832847364676799,
+            "none of these": 0.029070656393844603
           }
         }
       },
-      "server_ms": 199.3,
-      "round_trip_ms": 250
+      "server_ms": 540.4,
+      "round_trip_ms": 541
     },
     {
       "scenario": "crm",
@@ -111,18 +111,18 @@
       "answers": {
         "contradicted_field": {
           "top": "account.plan",
-          "unknown": 0.000013009734261171164,
+          "unknown": 0.00015358894688733833,
           "abstained": false,
           "probabilities": {
-            "account.city": 0.00003577755987445271,
-            "account.seats": 0.0000870266447265575,
-            "account.plan": 0.9981109951013099,
-            "none of these": 0.0017662006940891148
+            "account.city": 0.00012777696451959266,
+            "account.seats": 0.00038041158520918253,
+            "account.plan": 0.9873814483529518,
+            "none of these": 0.012110363097319407
           }
         }
       },
-      "server_ms": 185.2,
-      "round_trip_ms": 186
+      "server_ms": 540.2,
+      "round_trip_ms": 541
     },
     {
       "scenario": "refund",
@@ -139,18 +139,18 @@
       "answers": {
         "blocking_rule": {
           "top": "none: the refund is allowed",
-          "unknown": 0.00015195318903902635,
+          "unknown": 0.0010774502023475302,
           "abstained": false,
           "probabilities": {
-            "policy.window": 0.00015604751774080428,
-            "policy.opened": 0.08691245945748059,
-            "policy.final_sale": 0.0005879366445424681,
-            "none: the refund is allowed": 0.9123435563802361
+            "policy.window": 0.0007008086622966038,
+            "policy.opened": 0.060972399142546325,
+            "policy.final_sale": 0.002464964001148789,
+            "none: the refund is allowed": 0.9358618281940083
           }
         }
       },
-      "server_ms": 210.8,
-      "round_trip_ms": 212
+      "server_ms": 456.5,
+      "round_trip_ms": 458
     },
     {
       "scenario": "refund",
@@ -167,18 +167,18 @@
       "answers": {
         "blocking_rule": {
           "top": "policy.window",
-          "unknown": 0.00013734434107064259,
+          "unknown": 0.0017267783646467913,
           "abstained": false,
           "probabilities": {
-            "policy.window": 0.9954950625475474,
-            "policy.opened": 0.0022892284597736874,
-            "policy.final_sale": 0.00010561009479981484,
-            "none: the refund is allowed": 0.002110098897879096
+            "policy.window": 0.9826476253782722,
+            "policy.opened": 0.01037811902281053,
+            "policy.final_sale": 0.0005791986611023832,
+            "none: the refund is allowed": 0.006395056937814877
           }
         }
       },
-      "server_ms": 197.6,
-      "round_trip_ms": 199
+      "server_ms": 460.9,
+      "round_trip_ms": 462
     },
     {
       "scenario": "refund",
@@ -195,18 +195,18 @@
       "answers": {
         "blocking_rule": {
           "top": "policy.opened",
-          "unknown": 0.0000025846374167209385,
+          "unknown": 0.000059904471796139416,
           "abstained": false,
           "probabilities": {
-            "policy.window": 0.0000028988588608197917,
-            "policy.opened": 0.9997312882830074,
-            "policy.final_sale": 0.00001172038572200034,
-            "none: the refund is allowed": 0.00025409247240978016
+            "policy.window": 0.00004045399634172568,
+            "policy.opened": 0.9980427709726465,
+            "policy.final_sale": 0.00016653360272472615,
+            "none: the refund is allowed": 0.0017502414282870077
           }
         }
       },
-      "server_ms": 197.8,
-      "round_trip_ms": 199
+      "server_ms": 462.2,
+      "round_trip_ms": 463
     },
     {
       "scenario": "refund",
@@ -223,18 +223,18 @@
       "answers": {
         "blocking_rule": {
           "top": "policy.final_sale",
-          "unknown": 0.000013739225665779164,
+          "unknown": 0.00011314934556093635,
           "abstained": false,
           "probabilities": {
-            "policy.window": 0.00003155043540915059,
-            "policy.opened": 0.0004494535940828149,
-            "policy.final_sale": 0.9985877508914888,
-            "none: the refund is allowed": 0.0009312450790193129
+            "policy.window": 0.00009803879335835306,
+            "policy.opened": 0.0016042594308902228,
+            "policy.final_sale": 0.994565587273292,
+            "none: the refund is allowed": 0.0037321145024593774
           }
         }
       },
-      "server_ms": 195.2,
-      "round_trip_ms": 196
+      "server_ms": 458,
+      "round_trip_ms": 459
     },
     {
       "scenario": "invoice",
@@ -250,14 +250,14 @@
       "wrong": [],
       "answers": {
         "paid": {
-          "top": "0.063",
-          "unknown": 0.12267881611911298,
+          "top": "0.128",
+          "unknown": 0.24819803637958948,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 183,
-      "round_trip_ms": 184
+      "server_ms": 360.8,
+      "round_trip_ms": 362
     },
     {
       "scenario": "invoice",
@@ -273,14 +273,14 @@
       "wrong": [],
       "answers": {
         "paid": {
-          "top": "0.999",
-          "unknown": 0.00011290081577044976,
+          "top": "0.994",
+          "unknown": 0.0023672071635280094,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 187.8,
-      "round_trip_ms": 189
+      "server_ms": 360.7,
+      "round_trip_ms": 362
     },
     {
       "scenario": "invoice",
@@ -296,14 +296,14 @@
       "wrong": [],
       "answers": {
         "paid": {
-          "top": "0.000",
-          "unknown": 0.00011051750923534396,
+          "top": "0.001",
+          "unknown": 0.0014610337929162984,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 168.3,
-      "round_trip_ms": 169
+      "server_ms": 359.7,
+      "round_trip_ms": 361
     },
     {
       "scenario": "moderation",
@@ -320,18 +320,18 @@
       "answers": {
         "verdict": {
           "top": "publish",
-          "unknown": 0.00018684208213760206,
+          "unknown": 0.007490082937283633,
           "abstained": false,
           "probabilities": {
-            "publish": 0.9999522797406074,
-            "remove: spam or advertising": 0.000028676088243298595,
-            "remove: harassment of a person": 0.000010138913751286572,
-            "remove: shares someone's private details": 0.000008905257397995364
+            "publish": 0.9997234575127045,
+            "remove: spam or advertising": 0.00013342046269734193,
+            "remove: harassment of a person": 0.00005400114080424792,
+            "remove: shares someone's private details": 0.00008912088379392934
           }
         }
       },
-      "server_ms": 217.8,
-      "round_trip_ms": 219
+      "server_ms": 544.7,
+      "round_trip_ms": 546
     },
     {
       "scenario": "moderation",
@@ -348,18 +348,18 @@
       "answers": {
         "verdict": {
           "top": "remove: spam or advertising",
-          "unknown": 0.000013655822836468792,
+          "unknown": 0.0007065532127526499,
           "abstained": false,
           "probabilities": {
-            "publish": 0.00068331528889205,
-            "remove: spam or advertising": 0.9993035937566622,
-            "remove: harassment of a person": 0.000005327335791340235,
-            "remove: shares someone's private details": 0.000007763618654444547
+            "publish": 0.004748108544671621,
+            "remove: spam or advertising": 0.9950134559180988,
+            "remove: harassment of a person": 0.00006528491219672063,
+            "remove: shares someone's private details": 0.00017315062503290231
           }
         }
       },
-      "server_ms": 174.1,
-      "round_trip_ms": 175
+      "server_ms": 542.9,
+      "round_trip_ms": 544
     },
     {
       "scenario": "moderation",
@@ -376,18 +376,18 @@
       "answers": {
         "verdict": {
           "top": "remove: harassment of a person",
-          "unknown": 0.0011671059058583476,
+          "unknown": 0.009778155449293524,
           "abstained": false,
           "probabilities": {
-            "publish": 0.020162109712937075,
-            "remove: spam or advertising": 0.00023288888988574305,
-            "remove: harassment of a person": 0.9787354573755267,
-            "remove: shares someone's private details": 0.0008695440216505522
+            "publish": 0.03496797576544555,
+            "remove: spam or advertising": 0.0008004315439198205,
+            "remove: harassment of a person": 0.9504480533481804,
+            "remove: shares someone's private details": 0.013783539342454267
           }
         }
       },
-      "server_ms": 226,
-      "round_trip_ms": 227
+      "server_ms": 542.8,
+      "round_trip_ms": 544
     },
     {
       "scenario": "moderation",
@@ -404,18 +404,18 @@
       "answers": {
         "verdict": {
           "top": "remove: shares someone's private details",
-          "unknown": 0.0002625987981207864,
+          "unknown": 0.0014791460092337624,
           "abstained": false,
           "probabilities": {
-            "publish": 0.00042560297140818585,
-            "remove: spam or advertising": 0.00008588517447885527,
-            "remove: harassment of a person": 0.023523525164928845,
-            "remove: shares someone's private details": 0.9759649866891841
+            "publish": 0.0014920934473164036,
+            "remove: spam or advertising": 0.00032943998365018507,
+            "remove: harassment of a person": 0.04445115904648703,
+            "remove: shares someone's private details": 0.9537273075225463
           }
         }
       },
-      "server_ms": 197.9,
-      "round_trip_ms": 199
+      "server_ms": 542,
+      "round_trip_ms": 543
     },
     {
       "scenario": "review",
@@ -431,31 +431,31 @@
       "wrong": [],
       "answers": {
         "satisfaction": {
-          "top": "3.92",
-          "unknown": 0.00007240686506208399,
+          "top": "3.88",
+          "unknown": 0.0004501531514677763,
           "abstained": false,
           "probabilities": {
-            "0": 0.0000684257980373425,
-            "1": 0.00005718896641433292,
-            "2": 0.0007068488569228705,
-            "3": 0.07530643451618692,
-            "4": 0.9238611018624385
+            "0": 0.00019471210620816153,
+            "1": 0.00024317396394296536,
+            "2": 0.001115520969585334,
+            "3": 0.11143297734961792,
+            "4": 0.8870136156106456
           }
         },
         "problem_area": {
           "top": "no complaint",
-          "unknown": 0.00008794297322367092,
+          "unknown": 0.0007773476867214909,
           "abstained": false,
           "probabilities": {
-            "delivery": 0.0014864447212395956,
-            "product quality": 0.00017713071599749166,
-            "price": 0.00004258841018692334,
-            "no complaint": 0.9982938361525759
+            "delivery": 0.007214015245760435,
+            "product quality": 0.0011028397072397702,
+            "price": 0.0002306941982355746,
+            "no complaint": 0.9914524508487642
           }
         }
       },
-      "server_ms": 381.9,
-      "round_trip_ms": 383
+      "server_ms": 948.5,
+      "round_trip_ms": 949
     },
     {
       "scenario": "review",
@@ -471,31 +471,31 @@
       "wrong": [],
       "answers": {
         "satisfaction": {
-          "top": "1.89",
-          "unknown": 0.00012317259219045507,
+          "top": "1.93",
+          "unknown": 0.0008666699895040422,
           "abstained": false,
           "probabilities": {
-            "0": 0.0008358632518212064,
-            "1": 0.11796786391171853,
-            "2": 0.8729431344867362,
-            "3": 0.007929449576163797,
-            "4": 0.0003236887735602627
+            "0": 0.002529219298225009,
+            "1": 0.09759484408048118,
+            "2": 0.8660267771791945,
+            "3": 0.03221453933647778,
+            "4": 0.0016346201056215252
           }
         },
         "problem_area": {
           "top": "delivery",
-          "unknown": 0.0000026709009711483493,
+          "unknown": 0.00011816177723914449,
           "abstained": false,
           "probabilities": {
-            "delivery": 0.999977057147227,
-            "product quality": 0.00000982204019288058,
-            "price": 0.0000019689020258760505,
-            "no complaint": 0.000011151910554254122
+            "delivery": 0.9997072872458814,
+            "product quality": 0.00005805951012644541,
+            "price": 0.000014210289398001129,
+            "no complaint": 0.0002204429545941081
           }
         }
       },
-      "server_ms": 313.7,
-      "round_trip_ms": 315
+      "server_ms": 970.3,
+      "round_trip_ms": 972
     },
     {
       "scenario": "review",
@@ -511,31 +511,31 @@
       "wrong": [],
       "answers": {
         "satisfaction": {
-          "top": "0.89",
-          "unknown": 0.000047415452510558564,
+          "top": "0.92",
+          "unknown": 0.0010055000653216416,
           "abstained": false,
           "probabilities": {
-            "0": 0.10901618492853857,
-            "1": 0.8893468118402644,
-            "2": 0.001510630072721512,
-            "3": 0.0000973447228419179,
-            "4": 0.000029028435633633585
+            "0": 0.08799562343586244,
+            "1": 0.9039744585710191,
+            "2": 0.00718037527948029,
+            "3": 0.0005494885509429775,
+            "4": 0.0003000541626951992
           }
         },
         "problem_area": {
           "top": "product quality",
-          "unknown": 0.000005003219248051364,
+          "unknown": 0.00012080003759377787,
           "abstained": false,
           "probabilities": {
-            "delivery": 0.000001984962535559942,
-            "product quality": 0.9999798051126001,
-            "price": 0.0000032069108306049127,
-            "no complaint": 0.000015003014033807813
+            "delivery": 0.000015127255823364912,
+            "product quality": 0.9998155552970208,
+            "price": 0.00002090492473130629,
+            "no complaint": 0.0001484125224244721
           }
         }
       },
-      "server_ms": 337.1,
-      "round_trip_ms": 338
+      "server_ms": 983.2,
+      "round_trip_ms": 985
     },
     {
       "scenario": "inbox",
@@ -551,24 +551,24 @@
       "wrong": [],
       "answers": {
         "needs_action": {
-          "top": "0.001",
-          "unknown": 0.00003088211926796018,
+          "top": "0.018",
+          "unknown": 0.0017239523031229603,
           "abstained": false,
           "probabilities": null
         },
         "deadline": {
           "top": "no deadline or later",
-          "unknown": 0.004236989188555386,
+          "unknown": 0.06723646558974047,
           "abstained": false,
           "probabilities": {
-            "today or tomorrow": 0.0033698414548007645,
-            "within a week": 0.005473240408705034,
-            "no deadline or later": 0.9911569181364942
+            "today or tomorrow": 0.005603380294127776,
+            "within a week": 0.013770927003532463,
+            "no deadline or later": 0.9806256927023398
           }
         }
       },
-      "server_ms": 280.2,
-      "round_trip_ms": 282
+      "server_ms": 696.2,
+      "round_trip_ms": 698
     },
     {
       "scenario": "inbox",
@@ -584,24 +584,24 @@
       "wrong": [],
       "answers": {
         "needs_action": {
-          "top": "0.998",
-          "unknown": 0.00007811431230473099,
+          "top": "0.975",
+          "unknown": 0.004382812535480777,
           "abstained": false,
           "probabilities": null
         },
         "deadline": {
           "top": "today or tomorrow",
-          "unknown": 0.0004175558006476782,
+          "unknown": 0.008551473722745258,
           "abstained": false,
           "probabilities": {
-            "today or tomorrow": 0.9402822303588103,
-            "within a week": 0.001995244197549269,
-            "no deadline or later": 0.05772252544364048
+            "today or tomorrow": 0.8926250096316221,
+            "within a week": 0.005579607769018957,
+            "no deadline or later": 0.10179538259935901
           }
         }
       },
-      "server_ms": 310.1,
-      "round_trip_ms": 311
+      "server_ms": 721.8,
+      "round_trip_ms": 723
     },
     {
       "scenario": "inbox",
@@ -617,24 +617,24 @@
       "wrong": [],
       "answers": {
         "needs_action": {
-          "top": "0.997",
-          "unknown": 0.00009216675342101058,
+          "top": "0.976",
+          "unknown": 0.0032057624323951436,
           "abstained": false,
           "probabilities": null
         },
         "deadline": {
           "top": "no deadline or later",
-          "unknown": 0.0011398683853987206,
+          "unknown": 0.03204516170866923,
           "abstained": false,
           "probabilities": {
-            "today or tomorrow": 0.0005287918760330404,
-            "within a week": 0.01148339616978039,
-            "no deadline or later": 0.9879878119541866
+            "today or tomorrow": 0.0010941825543659485,
+            "within a week": 0.021243904036673967,
+            "no deadline or later": 0.9776619134089601
           }
         }
       },
-      "server_ms": 262,
-      "round_trip_ms": 263
+      "server_ms": 709.6,
+      "round_trip_ms": 711
     }
   ]
 }

@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from .runner import canonical_bytes, digest, file_digest, scoring_digest
+from .runner import canonical_bytes, digest, file_digest, run_hashes
 from .schema import model_payload
 
 PROMPT_VERSION = "api-v2"  # v2: text-only wording no longer says "No image is supplied"
@@ -313,7 +313,7 @@ def run_api(records: list[dict], root: Path, output: Path, provider, *, constrai
     manifest = {"format_version": "0.1.0", "adapter": "api-structured-generation", "purpose": purpose,
                 "provider": provider.name, "model_requested": provider.model, "constrained_json": constrained,
                 "base_url": getattr(provider, "base_url", None),
-                "prompt_version": PROMPT_VERSION, "option_order_seed": order_seed, "records_sha256": digest(records), "scoring_sha256": scoring_digest(records),
+                "prompt_version": PROMPT_VERSION, "option_order_seed": order_seed, **run_hashes(records),
                 "reasoning_effort": getattr(provider, "reasoning_effort", None) or "provider default",
                 "record_count": len(records), "reviewed": all(r["annotation_status"] == "reviewed" for r in records),
                 "started_at": datetime.now(timezone.utc).isoformat(), "concurrency": workers,

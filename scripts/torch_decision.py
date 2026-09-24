@@ -94,3 +94,14 @@ class TorchDecision:
    indices=self._readout_indices(ids)
    result.append(self.readout(hidden[i])[indices] if self.readout is not None and indices is not None else hidden[i]@head[torch.tensor(ids,device=self.device)].float().T)
   return result
+ def candidate_logits_with_rationale(self,inputs,token_ids,position,labels):
+  """--rationale-weight path: candidate logits read at `position` (the decision position, unchanged by the
+  appended rationale block under causal attention) plus the per-example rationale LM loss [B]."""
+  from decision_recipe import rationale_lm_loss
+  inputs={k:v.to(self.device) for k,v in inputs.items()};base=self.model.get_base_model() if hasattr(self.model,'get_base_model') else self.model
+  states=base.model(**inputs).last_hidden_state;hidden=states[:,position].float();head=base.lm_head.weight
+  result=[]
+  for i,ids in enumerate(token_ids):
+   indices=self._readout_indices(ids)
+   result.append(self.readout(hidden[i])[indices] if self.readout is not None and indices is not None else hidden[i]@head[torch.tensor(ids,device=self.device)].float().T)
+  return result,rationale_lm_loss(states,head,labels,position+1)

@@ -34,6 +34,18 @@ def scoring_digest(records):
     return digest([{"id": r["id"], "split": r["split"], "payload": model_payload(r), "gold": r["gold"]} for r in records])
 
 
+def inputs_digest(records):
+    """Hash of the model inputs only (ids, splits, payloads; no gold). A run made on a public release whose test gold
+    is withheld binds to this, so the label holders can verify and score it against the full records."""
+    return digest([{"id": r["id"], "split": r["split"], "payload": model_payload(r)} for r in records])
+
+
+def run_hashes(records):
+    """Dataset hashes every run manifest carries."""
+    return {"records_sha256": digest(records), "scoring_sha256": scoring_digest(records),
+            "inputs_sha256": inputs_digest(records), "gold_withheld": any(r.get("gold_withheld") for r in records)}
+
+
 def domain(field):
     if field["type"] == "boolean":
         return [("true", True), ("false", False)]
@@ -138,8 +150,7 @@ def run(records, root, output, adapter="first", endpoint=None, timeout=60., seed
     # New directory per run: no accidental overwrite, stale resume or mixed model output.
     output.mkdir(parents=True, exist_ok=False)
     config = {"format_version": "0.0.1", "adapter": adapter, "endpoint": endpoint,
-              "timeout_seconds": timeout, "seed": seed, "records_sha256": digest(records),
-              "scoring_sha256": scoring_digest(records),
+              "timeout_seconds": timeout, "seed": seed, **run_hashes(records),
               "record_count": len(records), "reviewed": all(x["annotation_status"] == "reviewed" for x in records),
               "started_at": datetime.now(timezone.utc).isoformat(), "concurrency": 1,
               "cost_basis": "not_measured", "retries": 0,
@@ -196,7 +207,9 @@ def verify_run(records, predictions_path):
     if completion.get("status") != "complete" or completion.get("completed_count") != len(records):
         raise ValueError("Incomplete run or dataset count mismatch")
     if manifest.get("scoring_sha256") != scoring_digest(records) and manifest.get("records_sha256") != digest(records):
-        raise ValueError("Run dataset hash does not match selected records")
+        # A run made on gold-withheld public records binds to the model inputs only.
+        if not (manifest.get("gold_withheld") and manifest.get("inputs_sha256") == inputs_digest(records)):
+            raise ValueError("Run dataset hash does not match selected records")
     for key, artifact in (("manifest_sha256", manifest_path), ("predictions_sha256", path), ("raw_sha256", path.parent / "raw.jsonl")):
         if not artifact.is_file() or completion.get(key) != file_digest(artifact):
             raise ValueError(f"Run artifact integrity mismatch: {artifact.name}")

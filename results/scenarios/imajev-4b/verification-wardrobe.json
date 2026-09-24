@@ -1,14 +1,14 @@
 {
   "model": {
     "model": "imajev-4b",
-    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "adapter": "-release/hf/imajev-4b/mlx",
     "backend": "mlx",
     "loaded": true,
-    "load_seconds": 1.446
+    "load_seconds": 3.577
   },
   "threshold": 0.8,
-  "api": "http://127.0.0.1:8765",
-  "run_at": "2026-09-24T02:28:40.061Z",
+  "api": "http://<host>",
+  "run_at": "2026-09-24T13:35:54.623Z",
   "passed": 38,
   "total": 49,
   "rows": [
@@ -27,24 +27,24 @@
       "answers": {
         "wrong_field": {
           "top": "none of these",
-          "unknown": 0.004853191748718383,
+          "unknown": 0.004053822558891099,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.014142340773692136,
-            "order.colour": 0.030393037487521715,
-            "order.pattern": 0.021396439089767908,
-            "none of these": 0.9340681826490183
+            "order.item": 0.012177775011707338,
+            "order.colour": 0.022278222343343625,
+            "order.pattern": 0.012745371970382703,
+            "none of these": 0.9527986306745664
           }
         },
         "matches_order": {
-          "top": "0.967",
-          "unknown": 0.006970580752994535,
+          "top": "0.975",
+          "unknown": 0.012724116309933359,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 956.2,
-      "round_trip_ms": 960
+      "server_ms": 1402.3,
+      "round_trip_ms": 1405
     },
     {
       "scenario": "ordered",
@@ -61,24 +61,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.pattern",
-          "unknown": 0.006373862480784752,
+          "unknown": 0.006261877825959966,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.0233704837443668,
-            "order.colour": 0.02943657449233537,
-            "order.pattern": 0.8717666370382156,
-            "none of these": 0.07542630472508237
+            "order.item": 0.013507967755677463,
+            "order.colour": 0.023439832497663494,
+            "order.pattern": 0.8815398311434498,
+            "none of these": 0.08151236860320916
           }
         },
         "matches_order": {
-          "top": "0.280",
-          "unknown": 0.032259426442385185,
+          "top": "0.363",
+          "unknown": 0.05399834150500365,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 855.3,
-      "round_trip_ms": 857
+      "server_ms": 1407.6,
+      "round_trip_ms": 1409
     },
     {
       "scenario": "ordered",
@@ -95,24 +95,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.pattern",
-          "unknown": 0.010759568584240443,
+          "unknown": 0.010064590511988386,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.037889724209822506,
-            "order.colour": 0.043297729219732024,
-            "order.pattern": 0.7794727084101467,
-            "none of these": 0.1393398381602987
+            "order.item": 0.019801368409424626,
+            "order.colour": 0.029972304463423433,
+            "order.pattern": 0.7889818253290604,
+            "none of these": 0.1612445017980916
           }
         },
         "matches_order": {
-          "top": "0.402",
-          "unknown": 0.030185147730300968,
+          "top": "0.491",
+          "unknown": 0.04649474234593637,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 847.2,
-      "round_trip_ms": 848
+      "server_ms": 1393.5,
+      "round_trip_ms": 1395
     },
     {
       "scenario": "ordered",
@@ -129,24 +129,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.colour",
-          "unknown": 0.003424665091154796,
+          "unknown": 0.003928131012980122,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.012553206373256959,
-            "order.colour": 0.9248551439974354,
-            "order.pattern": 0.017324232393074006,
-            "none of these": 0.04526741723623369
+            "order.item": 0.008760565798111132,
+            "order.colour": 0.9318118836047615,
+            "order.pattern": 0.011180966106255184,
+            "none of these": 0.048246584490872095
           }
         },
         "matches_order": {
-          "top": "0.071",
-          "unknown": 0.023595781822696647,
+          "top": "0.095",
+          "unknown": 0.04797312514211609,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 843.3,
-      "round_trip_ms": 844
+      "server_ms": 1396,
+      "round_trip_ms": 1397
     },
     {
       "scenario": "ordered",
@@ -163,24 +163,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.colour",
-          "unknown": 0.012597255272146059,
+          "unknown": 0.00972843277907226,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.02808012724662242,
-            "order.colour": 0.6167182120374757,
-            "order.pattern": 0.3096375612183408,
-            "none of these": 0.04556409949756117
+            "order.item": 0.015506006077038472,
+            "order.colour": 0.6608282291506395,
+            "order.pattern": 0.2803538696298103,
+            "none of these": 0.04331189514251168
           }
         },
         "matches_order": {
-          "top": "0.078",
-          "unknown": 0.044803289408074716,
+          "top": "0.098",
+          "unknown": 0.07054955513744013,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 849.9,
-      "round_trip_ms": 851
+      "server_ms": 1396.1,
+      "round_trip_ms": 1397
     },
     {
       "scenario": "ordered",
@@ -197,24 +197,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.colour",
-          "unknown": 0.012207675446932008,
+          "unknown": 0.009932339297012755,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.03036878160176133,
-            "order.colour": 0.6875163637073325,
-            "order.pattern": 0.22223520082101336,
-            "none of these": 0.05987965386989282
+            "order.item": 0.01755667971211709,
+            "order.colour": 0.70563061986817,
+            "order.pattern": 0.2174020627609636,
+            "none of these": 0.05941063765874935
           }
         },
         "matches_order": {
-          "top": "0.081",
-          "unknown": 0.057724944719413376,
+          "top": "0.094",
+          "unknown": 0.06606418474480386,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 843.7,
-      "round_trip_ms": 845
+      "server_ms": 1395.5,
+      "round_trip_ms": 1396
     },
     {
       "scenario": "ordered",
@@ -231,24 +231,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.colour",
-          "unknown": 0.0048653681345804094,
+          "unknown": 0.005877660554255155,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.01974728174256171,
-            "order.colour": 0.8871559483624178,
-            "order.pattern": 0.026766051963141076,
-            "none of these": 0.06633071793187932
+            "order.item": 0.013565484458941736,
+            "order.colour": 0.8926114072981451,
+            "order.pattern": 0.017884324230150943,
+            "none of these": 0.07593878401276226
           }
         },
         "matches_order": {
-          "top": "0.122",
-          "unknown": 0.028273044977274328,
+          "top": "0.161",
+          "unknown": 0.05395909997010713,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 846.7,
-      "round_trip_ms": 848
+      "server_ms": 1396.5,
+      "round_trip_ms": 1398
     },
     {
       "scenario": "ordered",
@@ -259,30 +259,30 @@
       "route": {
         "kind": "flag",
         "title": "Return it: doesn't match your order",
-        "detail": "More than one thing looks off; most clearly the pattern."
+        "detail": "More than one thing looks off; most clearly the colour."
       },
       "wrong": [],
       "answers": {
         "wrong_field": {
-          "top": "order.pattern",
-          "unknown": 0.013058436597362303,
+          "top": "order.colour",
+          "unknown": 0.010507541339094675,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.030034860487552054,
-            "order.colour": 0.4302390642615092,
-            "order.pattern": 0.4739228861183307,
-            "none of these": 0.06580318913260803
+            "order.item": 0.016976516189131874,
+            "order.colour": 0.5536132330962305,
+            "order.pattern": 0.37226137433665957,
+            "none of these": 0.05714887637797812
           }
         },
         "matches_order": {
-          "top": "0.105",
-          "unknown": 0.042922756625158785,
+          "top": "0.136",
+          "unknown": 0.06957705342901976,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 862,
-      "round_trip_ms": 865
+      "server_ms": 1398.7,
+      "round_trip_ms": 1400
     },
     {
       "scenario": "ordered",
@@ -299,24 +299,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.colour",
-          "unknown": 0.013152383982923274,
+          "unknown": 0.011449415308598311,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.03433494550572162,
-            "order.colour": 0.5556272359736874,
-            "order.pattern": 0.33116191754341423,
-            "none of these": 0.07887590097717675
+            "order.item": 0.01950661941660188,
+            "order.colour": 0.5678202575317658,
+            "order.pattern": 0.33772047671401245,
+            "none of these": 0.07495264633761989
           }
         },
         "matches_order": {
-          "top": "0.104",
-          "unknown": 0.051598968272472165,
+          "top": "0.127",
+          "unknown": 0.06765740649268595,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 841.5,
-      "round_trip_ms": 843
+      "server_ms": 1395.5,
+      "round_trip_ms": 1397
     },
     {
       "scenario": "ordered",
@@ -333,24 +333,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.003359768682399455,
+          "unknown": 0.003891018148721242,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.9452617834465138,
-            "order.colour": 0.015418658471209365,
-            "order.pattern": 0.018365073571800315,
-            "none of these": 0.020954484510476597
+            "order.item": 0.9495766190504641,
+            "order.colour": 0.011027783681606175,
+            "order.pattern": 0.0158235089214522,
+            "none of these": 0.023572088346477504
           }
         },
         "matches_order": {
-          "top": "0.078",
-          "unknown": 0.03790423877097621,
+          "top": "0.138",
+          "unknown": 0.07165520487726905,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 850.7,
-      "round_trip_ms": 852
+      "server_ms": 1396.2,
+      "round_trip_ms": 1397
     },
     {
       "scenario": "ordered",
@@ -367,24 +367,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.006612815055495522,
+          "unknown": 0.00702015685096448,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8830302943163866,
-            "order.colour": 0.022585151866449066,
-            "order.pattern": 0.07126080172264421,
-            "none of these": 0.02312375209452007
+            "order.item": 0.8899216005960122,
+            "order.colour": 0.01673129451567634,
+            "order.pattern": 0.06686253001800789,
+            "none of these": 0.026484574870303493
           }
         },
         "matches_order": {
-          "top": "0.084",
-          "unknown": 0.06172032958113054,
+          "top": "0.126",
+          "unknown": 0.094544928508782,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 858.1,
-      "round_trip_ms": 859
+      "server_ms": 1398,
+      "round_trip_ms": 1399
     },
     {
       "scenario": "ordered",
@@ -401,24 +401,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.007312411206668497,
+          "unknown": 0.0075494965930869035,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8845427753009447,
-            "order.colour": 0.023939910866358712,
-            "order.pattern": 0.0655247742777945,
-            "none of these": 0.025992539554901984
+            "order.item": 0.8840141803753268,
+            "order.colour": 0.01626923389922157,
+            "order.pattern": 0.0708943687067169,
+            "none of these": 0.028822217018734806
           }
         },
         "matches_order": {
-          "top": "0.082",
-          "unknown": 0.061084863551559884,
+          "top": "0.123",
+          "unknown": 0.09225615653137678,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 843.2,
-      "round_trip_ms": 844
+      "server_ms": 1395.7,
+      "round_trip_ms": 1397
     },
     {
       "scenario": "ordered",
@@ -435,24 +435,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.009489164463261776,
+          "unknown": 0.0093257347685696,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8574384080195939,
-            "order.colour": 0.07664027025764508,
-            "order.pattern": 0.03305027049818451,
-            "none of these": 0.03287105122457652
+            "order.item": 0.8521691775926159,
+            "order.colour": 0.09306452919764166,
+            "order.pattern": 0.024778467736294094,
+            "none of these": 0.029987825473448245
           }
         },
         "matches_order": {
-          "top": "0.079",
-          "unknown": 0.08338295039728166,
+          "top": "0.091",
+          "unknown": 0.09590332805030358,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 846.3,
-      "round_trip_ms": 847
+      "server_ms": 1399.4,
+      "round_trip_ms": 1400
     },
     {
       "scenario": "ordered",
@@ -469,24 +469,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.010613799038388917,
+          "unknown": 0.010780778149373775,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8544406937821956,
-            "order.colour": 0.05237877807231754,
-            "order.pattern": 0.06916900532451929,
-            "none of these": 0.024011522820967596
+            "order.item": 0.8508509646661138,
+            "order.colour": 0.07474383848019794,
+            "order.pattern": 0.05031699274016009,
+            "none of these": 0.02408820411352818
           }
         },
         "matches_order": {
-          "top": "0.078",
-          "unknown": 0.09999655520131986,
+          "top": "0.081",
+          "unknown": 0.11044543106811193,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 845.4,
-      "round_trip_ms": 846
+      "server_ms": 1409.9,
+      "round_trip_ms": 1411
     },
     {
       "scenario": "ordered",
@@ -503,24 +503,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.010694236284884624,
+          "unknown": 0.011116380468155426,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8596839596151996,
-            "order.colour": 0.0552856697365094,
-            "order.pattern": 0.05746485343503934,
-            "none of these": 0.02756551721325158
+            "order.item": 0.8471066241231603,
+            "order.colour": 0.07826078346150914,
+            "order.pattern": 0.04607773478181193,
+            "none of these": 0.028554857633518598
           }
         },
         "matches_order": {
-          "top": "0.070",
-          "unknown": 0.08909592106483598,
+          "top": "0.076",
+          "unknown": 0.1011726029961368,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 854.8,
-      "round_trip_ms": 856
+      "server_ms": 1397.2,
+      "round_trip_ms": 1398
     },
     {
       "scenario": "ordered",
@@ -537,24 +537,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.00882921094339513,
+          "unknown": 0.009451811907289087,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8623367906041146,
-            "order.colour": 0.07020499445773153,
-            "order.pattern": 0.03468427753097808,
-            "none of these": 0.03277393740717585
+            "order.item": 0.8437275353119316,
+            "order.colour": 0.09327833977142105,
+            "order.pattern": 0.028970962373055357,
+            "none of these": 0.034023162543592105
           }
         },
         "matches_order": {
-          "top": "0.094",
-          "unknown": 0.08335320250282924,
+          "top": "0.113",
+          "unknown": 0.10120308803823302,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 842.8,
-      "round_trip_ms": 844
+      "server_ms": 1397.7,
+      "round_trip_ms": 1399
     },
     {
       "scenario": "ordered",
@@ -571,24 +571,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.00982237768461754,
+          "unknown": 0.01046081738598134,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8602776398860764,
-            "order.colour": 0.0485255921190949,
-            "order.pattern": 0.06773543326423356,
-            "none of these": 0.023461334730595126
+            "order.item": 0.8508900439807768,
+            "order.colour": 0.07018299060498162,
+            "order.pattern": 0.0541253751590549,
+            "none of these": 0.024801590255186592
           }
         },
         "matches_order": {
-          "top": "0.087",
-          "unknown": 0.1015957645528986,
+          "top": "0.096",
+          "unknown": 0.1182589114993104,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 849,
-      "round_trip_ms": 850
+      "server_ms": 1395.3,
+      "round_trip_ms": 1396
     },
     {
       "scenario": "ordered",
@@ -605,24 +605,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.010976744010558755,
+          "unknown": 0.011749235109291973,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8395661168525205,
-            "order.colour": 0.05983977935154746,
-            "order.pattern": 0.07065833679286415,
-            "none of these": 0.029935767003067906
+            "order.item": 0.8225707749663606,
+            "order.colour": 0.07746513073196996,
+            "order.pattern": 0.06846245530245905,
+            "none of these": 0.03150163899921045
           }
         },
         "matches_order": {
-          "top": "0.077",
-          "unknown": 0.09028905307105703,
+          "top": "0.088",
+          "unknown": 0.10693420984140234,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 843.5,
-      "round_trip_ms": 844
+      "server_ms": 1395.4,
+      "round_trip_ms": 1396
     },
     {
       "scenario": "ordered",
@@ -639,24 +639,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.006092087234543783,
+          "unknown": 0.005280330127678277,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.913082755540264,
-            "order.colour": 0.02294794485739498,
-            "order.pattern": 0.021495466170328728,
-            "none of these": 0.04247383343201227
+            "order.item": 0.9315319940997239,
+            "order.colour": 0.012478281431661563,
+            "order.pattern": 0.011853240577109627,
+            "none of these": 0.0441364838915049
           }
         },
         "matches_order": {
-          "top": "0.111",
-          "unknown": 0.03404440590912192,
+          "top": "0.170",
+          "unknown": 0.07194549293791522,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 847.9,
-      "round_trip_ms": 849
+      "server_ms": 1399.2,
+      "round_trip_ms": 1400
     },
     {
       "scenario": "ordered",
@@ -673,24 +673,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.013397351367470046,
+          "unknown": 0.010573625238691556,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.7051440826068569,
-            "order.colour": 0.03148989885858136,
-            "order.pattern": 0.2250336474936431,
-            "none of these": 0.038332371040918696
+            "order.item": 0.7367383426665771,
+            "order.colour": 0.019542922265921865,
+            "order.pattern": 0.20173439170417495,
+            "none of these": 0.04198434336332602
           }
         },
         "matches_order": {
-          "top": "0.105",
-          "unknown": 0.05489017441904321,
+          "top": "0.151",
+          "unknown": 0.09574284080484387,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 857.2,
-      "round_trip_ms": 858
+      "server_ms": 1394.9,
+      "round_trip_ms": 1396
     },
     {
       "scenario": "ordered",
@@ -700,31 +700,31 @@
       "got": "flag",
       "route": {
         "kind": "flag",
-        "title": "Return it: doesn't match your order",
-        "detail": "More than one thing looks off; most clearly the item."
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
       },
       "wrong": [],
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.012006210032262089,
+          "unknown": 0.009735726420782529,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.7850806607161024,
-            "order.colour": 0.032723860432621654,
-            "order.pattern": 0.14056947567602318,
-            "none of these": 0.04162600317525278
+            "order.item": 0.8040109703248046,
+            "order.colour": 0.018596613038134917,
+            "order.pattern": 0.13109099330128934,
+            "none of these": 0.0463014233357711
           }
         },
         "matches_order": {
-          "top": "0.123",
-          "unknown": 0.06438705794798812,
+          "top": "0.180",
+          "unknown": 0.09527889225002861,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 845.8,
-      "round_trip_ms": 847
+      "server_ms": 1397.3,
+      "round_trip_ms": 1398
     },
     {
       "scenario": "ordered",
@@ -741,24 +741,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.012142040294513299,
+          "unknown": 0.01042906323531837,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.7988250778035797,
-            "order.colour": 0.1294913689125706,
-            "order.pattern": 0.02908575698621004,
-            "none of these": 0.04259779629763972
+            "order.item": 0.780813932402544,
+            "order.colour": 0.15938175846567212,
+            "order.pattern": 0.016912857098800138,
+            "none of these": 0.042891452032983696
           }
         },
         "matches_order": {
-          "top": "0.074",
-          "unknown": 0.0632037165503188,
+          "top": "0.090",
+          "unknown": 0.08918341272849586,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 850.7,
-      "round_trip_ms": 852
+      "server_ms": 1395.2,
+      "round_trip_ms": 1396
     },
     {
       "scenario": "ordered",
@@ -775,24 +775,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.01501571100040759,
+          "unknown": 0.01283392777563567,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.7621500090881752,
-            "order.colour": 0.08645574156397674,
-            "order.pattern": 0.11714304278421178,
-            "none of these": 0.034251206563636276
+            "order.item": 0.7550518688783616,
+            "order.colour": 0.11798846866819543,
+            "order.pattern": 0.09326077526628415,
+            "none of these": 0.03369888718715883
           }
         },
         "matches_order": {
-          "top": "0.060",
-          "unknown": 0.0752412692233485,
+          "top": "0.074",
+          "unknown": 0.1046269291668882,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 860.9,
-      "round_trip_ms": 862
+      "server_ms": 1399.6,
+      "round_trip_ms": 1400
     },
     {
       "scenario": "ordered",
@@ -809,24 +809,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.0141699067301532,
+          "unknown": 0.012199135365032365,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.7834337571711936,
-            "order.colour": 0.09417240282858932,
-            "order.pattern": 0.08437625208700099,
-            "none of these": 0.03801758791321618
+            "order.item": 0.780124912950248,
+            "order.colour": 0.11953819736446228,
+            "order.pattern": 0.06350090181394073,
+            "none of these": 0.03683598787134898
           }
         },
         "matches_order": {
-          "top": "0.061",
-          "unknown": 0.07407404838141925,
+          "top": "0.075",
+          "unknown": 0.10080511696254985,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 844.5,
-      "round_trip_ms": 845
+      "server_ms": 1397,
+      "round_trip_ms": 1398
     },
     {
       "scenario": "ordered",
@@ -843,24 +843,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.010397597976538766,
+          "unknown": 0.00962903281289609,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8361711948169933,
-            "order.colour": 0.09859482291280958,
-            "order.pattern": 0.026052011368798037,
-            "none of these": 0.0391819709013991
+            "order.item": 0.8126268377751119,
+            "order.colour": 0.12698983824885496,
+            "order.pattern": 0.016654368554947428,
+            "none of these": 0.04372895542108569
           }
         },
         "matches_order": {
-          "top": "0.092",
-          "unknown": 0.06722154363864773,
+          "top": "0.118",
+          "unknown": 0.09655756649039239,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 846.6,
-      "round_trip_ms": 847
+      "server_ms": 1399.7,
+      "round_trip_ms": 1400
     },
     {
       "scenario": "ordered",
@@ -877,24 +877,24 @@
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.013698401103088287,
+          "unknown": 0.01170408385926507,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.7919320389799955,
-            "order.colour": 0.06762067873145802,
-            "order.pattern": 0.10754090117656097,
-            "none of these": 0.032906381111985454
+            "order.item": 0.7813570101702126,
+            "order.colour": 0.09357610987073997,
+            "order.pattern": 0.09098889801227782,
+            "none of these": 0.0340779819467696
           }
         },
         "matches_order": {
-          "top": "0.073",
-          "unknown": 0.08170336519772932,
+          "top": "0.086",
+          "unknown": 0.11100495370164158,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 846,
-      "round_trip_ms": 847
+      "server_ms": 1395.1,
+      "round_trip_ms": 1396
     },
     {
       "scenario": "ordered",
@@ -904,31 +904,31 @@
       "got": "flag",
       "route": {
         "kind": "flag",
-        "title": "Return it: wrong item",
-        "detail": "Return reason, filled in for you: the item is not what I ordered."
+        "title": "Return it: doesn't match your order",
+        "detail": "More than one thing looks off; most clearly the item."
       },
       "wrong": [],
       "answers": {
         "wrong_field": {
           "top": "order.item",
-          "unknown": 0.013208546874054782,
+          "unknown": 0.012019963377785646,
           "abstained": false,
           "probabilities": {
-            "order.item": 0.8108989304342576,
-            "order.colour": 0.06956270529708482,
-            "order.pattern": 0.08230251340714968,
-            "none of these": 0.037235850861507894
+            "order.item": 0.7909295569365792,
+            "order.colour": 0.09837717945608312,
+            "order.pattern": 0.0710786731903853,
+            "none of these": 0.03961459041695237
           }
         },
         "matches_order": {
-          "top": "0.070",
-          "unknown": 0.07671642211276256,
+          "top": "0.086",
+          "unknown": 0.10625798289431898,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 848.5,
-      "round_trip_ms": 850
+      "server_ms": 1398.1,
+      "round_trip_ms": 1399
     },
     {
       "scenario": "dresscode",
@@ -944,24 +944,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.919",
-          "unknown": 0.01707702619897753,
+          "top": "0.920",
+          "unknown": 0.025449714608122273,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "nothing, it follows the rule",
-          "unknown": 0.017617546323878172,
+          "unknown": 0.023852887085042532,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.05868426233242281,
-            "it has a pattern or print": 0.10197815712354168,
-            "nothing, it follows the rule": 0.8393375805440355
+            "the colour is not dark": 0.04683194109974897,
+            "it has a pattern or print": 0.07544142518034586,
+            "nothing, it follows the rule": 0.8777266337199051
           }
         }
       },
-      "server_ms": 856.4,
-      "round_trip_ms": 858
+      "server_ms": 1565.8,
+      "round_trip_ms": 1567
     },
     {
       "scenario": "dresscode",
@@ -977,24 +977,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.917",
-          "unknown": 0.015253988784916584,
+          "top": "0.925",
+          "unknown": 0.022118133401188386,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "nothing, it follows the rule",
-          "unknown": 0.014627928828328264,
+          "unknown": 0.020922535112536684,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.05890258000838851,
-            "it has a pattern or print": 0.08422983058065303,
-            "nothing, it follows the rule": 0.8568675894109584
+            "the colour is not dark": 0.04591801204474673,
+            "it has a pattern or print": 0.05956946629788092,
+            "nothing, it follows the rule": 0.8945125216573723
           }
         }
       },
-      "server_ms": 850.2,
-      "round_trip_ms": 851
+      "server_ms": 1425.6,
+      "round_trip_ms": 1426
     },
     {
       "scenario": "dresscode",
@@ -1010,57 +1010,57 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.252",
-          "unknown": 0.023551969827796112,
+          "top": "0.298",
+          "unknown": 0.027068166900499808,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "it has a pattern or print",
-          "unknown": 0.016272858535794178,
+          "unknown": 0.0163034845618361,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.06474110531702017,
-            "it has a pattern or print": 0.8675742923342592,
-            "nothing, it follows the rule": 0.06768460234872065
+            "the colour is not dark": 0.0695965992584801,
+            "it has a pattern or print": 0.8397097755559654,
+            "nothing, it follows the rule": 0.09069362518555456
           }
         }
       },
-      "server_ms": 839.6,
-      "round_trip_ms": 840
+      "server_ms": 1406.9,
+      "round_trip_ms": 1408
     },
     {
       "scenario": "dresscode",
       "case": "floral dress, dress_code.rule=plain, dark colours only",
-      "pass": true,
+      "pass": false,
       "expect": "flag",
-      "got": "flag",
+      "got": "human",
       "route": {
-        "kind": "flag",
-        "title": "Pick something else",
-        "detail": "Why: it has a pattern or print."
+        "kind": "human",
+        "title": "Your call",
+        "detail": "imajev is not sure this one passes."
       },
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.172",
-          "unknown": 0.025314573505358543,
+          "top": "0.205",
+          "unknown": 0.031068964903514906,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "it has a pattern or print",
-          "unknown": 0.015735468541643316,
+          "unknown": 0.012575840238746017,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.07451398015276964,
-            "it has a pattern or print": 0.8775678014902778,
-            "nothing, it follows the rule": 0.04791821835695253
+            "the colour is not dark": 0.0768647114766767,
+            "it has a pattern or print": 0.8750073234569838,
+            "nothing, it follows the rule": 0.04812796506633945
           }
         }
       },
-      "server_ms": 843.6,
-      "round_trip_ms": 845
+      "server_ms": 1412.1,
+      "round_trip_ms": 1413
     },
     {
       "scenario": "dresscode",
@@ -1076,24 +1076,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.136",
-          "unknown": 0.022149726622647303,
+          "top": "0.172",
+          "unknown": 0.028410054558554436,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "it has a pattern or print",
-          "unknown": 0.019485683364797588,
+          "unknown": 0.015952070436059295,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.09745466991947188,
-            "it has a pattern or print": 0.844318886850208,
-            "nothing, it follows the rule": 0.058226443230320175
+            "the colour is not dark": 0.09612034630437773,
+            "it has a pattern or print": 0.8431692998680721,
+            "nothing, it follows the rule": 0.06071035382755019
           }
         }
       },
-      "server_ms": 850.6,
-      "round_trip_ms": 852
+      "server_ms": 1417.2,
+      "round_trip_ms": 1419
     },
     {
       "scenario": "dresscode",
@@ -1109,24 +1109,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.933",
-          "unknown": 0.011976936047376171,
+          "top": "0.940",
+          "unknown": 0.016924991725793273,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "nothing, it follows the rule",
-          "unknown": 0.015994872455328824,
+          "unknown": 0.02428350897207453,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.040052445499153454,
-            "it has a pattern or print": 0.05632354071167574,
-            "nothing, it follows the rule": 0.9036240137891708
+            "the colour is not dark": 0.03319518190826061,
+            "it has a pattern or print": 0.04578066113663547,
+            "nothing, it follows the rule": 0.921024156955104
           }
         }
       },
-      "server_ms": 835.9,
-      "round_trip_ms": 837
+      "server_ms": 1414.8,
+      "round_trip_ms": 1416
     },
     {
       "scenario": "dresscode",
@@ -1142,24 +1142,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.940",
-          "unknown": 0.010278612142321819,
+          "top": "0.951",
+          "unknown": 0.014464012999742253,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "nothing, it follows the rule",
-          "unknown": 0.017437737939416574,
+          "unknown": 0.027692996696543865,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.03891940232480769,
-            "it has a pattern or print": 0.05270702208240555,
-            "nothing, it follows the rule": 0.9083735755927868
+            "the colour is not dark": 0.03104577601181611,
+            "it has a pattern or print": 0.04284129870143132,
+            "nothing, it follows the rule": 0.9261129252867526
           }
         }
       },
-      "server_ms": 862,
-      "round_trip_ms": 863
+      "server_ms": 1398.8,
+      "round_trip_ms": 1400
     },
     {
       "scenario": "dresscode",
@@ -1175,24 +1175,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.041",
-          "unknown": 0.01548483565045568,
+          "top": "0.049",
+          "unknown": 0.01660250222533698,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "it has a pattern or print",
-          "unknown": 0.07816564086683281,
+          "unknown": 0.08593644399185399,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.06127752902143286,
-            "it has a pattern or print": 0.8070687980963234,
-            "nothing, it follows the rule": 0.13165367288224383
+            "the colour is not dark": 0.041849105112968764,
+            "it has a pattern or print": 0.84652869921732,
+            "nothing, it follows the rule": 0.11162219566971125
           }
         }
       },
-      "server_ms": 855.7,
-      "round_trip_ms": 857
+      "server_ms": 1385.9,
+      "round_trip_ms": 1387
     },
     {
       "scenario": "dresscode",
@@ -1208,24 +1208,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.023",
-          "unknown": 0.011682178331582428,
+          "top": "0.031",
+          "unknown": 0.01623990807716868,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "it has a pattern or print",
-          "unknown": 0.012739105130198998,
+          "unknown": 0.008362461275427608,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.011753648111400523,
-            "it has a pattern or print": 0.966644603334176,
-            "nothing, it follows the rule": 0.021601748554423553
+            "the colour is not dark": 0.005154019311422287,
+            "it has a pattern or print": 0.9789178755932707,
+            "nothing, it follows the rule": 0.015928105095306986
           }
         }
       },
-      "server_ms": 861.1,
-      "round_trip_ms": 862
+      "server_ms": 1390.6,
+      "round_trip_ms": 1391
     },
     {
       "scenario": "dresscode",
@@ -1241,24 +1241,24 @@
       "wrong": [],
       "answers": {
         "follows_rule": {
-          "top": "0.040",
-          "unknown": 0.019692143163007145,
+          "top": "0.045",
+          "unknown": 0.02110831258236154,
           "abstained": false,
           "probabilities": null
         },
         "broken_part": {
           "top": "it has a pattern or print",
-          "unknown": 0.0487450419466404,
+          "unknown": 0.040928662839570945,
           "abstained": false,
           "probabilities": {
-            "the colour is not dark": 0.03528501258809748,
-            "it has a pattern or print": 0.8995113927228612,
-            "nothing, it follows the rule": 0.06520359468904138
+            "the colour is not dark": 0.019836293108346,
+            "it has a pattern or print": 0.9304489409474948,
+            "nothing, it follows the rule": 0.04971476594415925
           }
         }
       },
-      "server_ms": 838.1,
-      "round_trip_ms": 839
+      "server_ms": 1391.9,
+      "round_trip_ms": 1393
     },
     {
       "scenario": "tag",
@@ -1269,53 +1269,53 @@
       "route": {
         "kind": "human",
         "title": "Check the tags",
-        "detail": "imajev is not sure about: category, colour."
+        "detail": "imajev is not sure about: colour."
       },
       "wrong": [],
       "answers": {
         "category": {
           "top": "top",
-          "unknown": 0.04775345805547706,
+          "unknown": 0.06515298051099201,
           "abstained": false,
           "probabilities": {
-            "top": 0.7495383850322659,
-            "bottoms": 0.023589081256918866,
-            "dress": 0.15153287317965713,
-            "knitwear or outerwear": 0.02568995096731816,
-            "shoes": 0.0231952289890624,
-            "bag": 0.026454480574777534
+            "top": 0.840558502367628,
+            "bottoms": 0.013154818215340253,
+            "dress": 0.09650812384672752,
+            "knitwear or outerwear": 0.019873460234995338,
+            "shoes": 0.012838285391721662,
+            "bag": 0.017066809943587186
           }
         },
         "colour": {
           "top": "red",
-          "unknown": 0.02729604707628966,
+          "unknown": 0.028735738495108708,
           "abstained": false,
           "probabilities": {
-            "black": 0.2021210467620732,
-            "white": 0.02909843726060401,
-            "grey": 0.03919842019511263,
-            "blue or navy": 0.06585165062795327,
-            "red": 0.4569901155362047,
-            "green": 0.04486278776553483,
-            "beige or brown": 0.03341464382390787,
-            "multicolour": 0.1284628980286095
+            "black": 0.20438646702408958,
+            "white": 0.02207971569177087,
+            "grey": 0.021871919021394518,
+            "blue or navy": 0.04055128356241181,
+            "red": 0.5913449496543612,
+            "green": 0.025960172083966334,
+            "beige or brown": 0.023600323489731054,
+            "multicolour": 0.07020516947227455
           }
         },
         "pattern": {
           "top": "checked",
-          "unknown": 0.012789905845828014,
+          "unknown": 0.01386208816734115,
           "abstained": false,
           "probabilities": {
-            "plain": 0.011116162262841494,
-            "striped": 0.025628118980376882,
-            "checked": 0.9228800442370483,
-            "floral": 0.015545592418602127,
-            "graphic print": 0.02483008210113114
+            "plain": 0.008205277433999002,
+            "striped": 0.03487412750312152,
+            "checked": 0.9331823806618825,
+            "floral": 0.010677508439481866,
+            "graphic print": 0.013060705961515106
           }
         }
       },
-      "server_ms": 931.9,
-      "round_trip_ms": 933
+      "server_ms": 1932.6,
+      "round_trip_ms": 1933
     },
     {
       "scenario": "tag",
@@ -1332,47 +1332,47 @@
       "answers": {
         "category": {
           "top": "dress",
-          "unknown": 0.006875932399642512,
+          "unknown": 0.005929351837513599,
           "abstained": false,
           "probabilities": {
-            "top": 0.005383268700628636,
-            "bottoms": 0.0034429902676362378,
-            "dress": 0.9799250105825054,
-            "knitwear or outerwear": 0.0028323933726268576,
-            "shoes": 0.003290547895530074,
-            "bag": 0.005125789181072875
+            "top": 0.0036452038408448244,
+            "bottoms": 0.0020242963219611267,
+            "dress": 0.9882030360860748,
+            "knitwear or outerwear": 0.0018613960116351967,
+            "shoes": 0.001563631018569056,
+            "bag": 0.0027024367209148876
           }
         },
         "colour": {
           "top": "blue or navy",
-          "unknown": 0.03193891729912831,
+          "unknown": 0.05248016952777745,
           "abstained": false,
           "probabilities": {
-            "black": 0.0412869078424944,
-            "white": 0.0346846296368404,
-            "grey": 0.028961594423499586,
-            "blue or navy": 0.6096249841756217,
-            "red": 0.03896715365487116,
-            "green": 0.034361618484994985,
-            "beige or brown": 0.028503551451195652,
-            "multicolour": 0.18360956033048206
+            "black": 0.046279052292892406,
+            "white": 0.046854376636628725,
+            "grey": 0.02288817172918036,
+            "blue or navy": 0.6505884677731416,
+            "red": 0.0372499395959683,
+            "green": 0.029583628026058528,
+            "beige or brown": 0.02391388305427428,
+            "multicolour": 0.14264248089185572
           }
         },
         "pattern": {
           "top": "floral",
-          "unknown": 0.013177661548281662,
+          "unknown": 0.012855060059008154,
           "abstained": false,
           "probabilities": {
-            "plain": 0.017242755340804643,
-            "striped": 0.01664091408398648,
-            "checked": 0.02062192045684302,
-            "floral": 0.8786463398215106,
-            "graphic print": 0.06684807029685523
+            "plain": 0.01165047985893871,
+            "striped": 0.01900081846273541,
+            "checked": 0.012623272765676496,
+            "floral": 0.9115678505070853,
+            "graphic print": 0.04515757840556408
           }
         }
       },
-      "server_ms": 933.4,
-      "round_trip_ms": 934
+      "server_ms": 1930.8,
+      "round_trip_ms": 1932
     },
     {
       "scenario": "tag",
@@ -1389,47 +1389,47 @@
       "answers": {
         "category": {
           "top": "bottoms",
-          "unknown": 0.012575410748049649,
+          "unknown": 0.01425009957257846,
           "abstained": false,
           "probabilities": {
-            "top": 0.006051610965659241,
-            "bottoms": 0.9634392191585217,
-            "dress": 0.0077408919814504155,
-            "knitwear or outerwear": 0.005045557213523384,
-            "shoes": 0.010636324021364059,
-            "bag": 0.0070863966594813
+            "top": 0.002883235855672561,
+            "bottoms": 0.9820920933270715,
+            "dress": 0.003164134491115026,
+            "knitwear or outerwear": 0.0022134636270386373,
+            "shoes": 0.005752091137999986,
+            "bag": 0.003894981561102336
           }
         },
         "colour": {
           "top": "blue or navy",
-          "unknown": 0.031977761736690063,
+          "unknown": 0.06517410685045137,
           "abstained": false,
           "probabilities": {
-            "black": 0.07111532416356256,
-            "white": 0.017480575103056797,
-            "grey": 0.04848096898991821,
-            "blue or navy": 0.7342121275782865,
-            "red": 0.021180645996507274,
-            "green": 0.016501174971035003,
-            "beige or brown": 0.031554344524913035,
-            "multicolour": 0.05947483867272069
+            "black": 0.10394229783571969,
+            "white": 0.023886713435236837,
+            "grey": 0.05852077172974773,
+            "blue or navy": 0.7025930675557394,
+            "red": 0.022856481149184912,
+            "green": 0.015508570383062364,
+            "beige or brown": 0.0333252783913878,
+            "multicolour": 0.03936681951992134
           }
         },
         "pattern": {
           "top": "plain",
-          "unknown": 0.07456922215622164,
+          "unknown": 0.11494998814451537,
           "abstained": false,
           "probabilities": {
-            "plain": 0.5803443240220713,
-            "striped": 0.20503480885724487,
-            "checked": 0.053548875656268216,
-            "floral": 0.03546019320364775,
-            "graphic print": 0.1256117982607679
+            "plain": 0.6789912080237598,
+            "striped": 0.19841220667308757,
+            "checked": 0.03699654997173984,
+            "floral": 0.02332603512734595,
+            "graphic print": 0.06227400020406678
           }
         }
       },
-      "server_ms": 923.1,
-      "round_trip_ms": 924
+      "server_ms": 1952,
+      "round_trip_ms": 1953
     },
     {
       "scenario": "tag",
@@ -1446,104 +1446,104 @@
       "answers": {
         "category": {
           "top": "knitwear or outerwear",
-          "unknown": 0.01286132295922541,
+          "unknown": 0.012928106614700573,
           "abstained": false,
           "probabilities": {
-            "top": 0.03560319478233319,
-            "bottoms": 0.0072623056605869585,
-            "dress": 0.017302006785503456,
-            "knitwear or outerwear": 0.9213612014389218,
-            "shoes": 0.008670865301482126,
-            "bag": 0.00980042603117258
+            "top": 0.03580136159335966,
+            "bottoms": 0.00433090878271535,
+            "dress": 0.008364529737395387,
+            "knitwear or outerwear": 0.9395226149343353,
+            "shoes": 0.005261514282990043,
+            "bag": 0.006719070669204222
           }
         },
         "colour": {
           "top": "green",
-          "unknown": 0.022186876953588328,
+          "unknown": 0.025782000475179246,
           "abstained": false,
           "probabilities": {
-            "black": 0.04592711734270804,
-            "white": 0.020454971776296224,
-            "grey": 0.03109446448357752,
-            "blue or navy": 0.07656533230462116,
-            "red": 0.04436708363279246,
-            "green": 0.7117974762356633,
-            "beige or brown": 0.02719956256208886,
-            "multicolour": 0.04259399166225252
+            "black": 0.0493819025272349,
+            "white": 0.02115209329641641,
+            "grey": 0.02626051367966634,
+            "blue or navy": 0.05094661285228085,
+            "red": 0.04076402732307087,
+            "green": 0.7674143848995056,
+            "beige or brown": 0.02209189806727329,
+            "multicolour": 0.021988567354551635
           }
         },
         "pattern": {
           "top": "plain",
-          "unknown": 0.022534880643345773,
+          "unknown": 0.0375836575573527,
           "abstained": false,
           "probabilities": {
-            "plain": 0.7377140484109677,
-            "striped": 0.13257499111844837,
-            "checked": 0.028670727811501612,
-            "floral": 0.056976079217479284,
-            "graphic print": 0.04406415344160303
+            "plain": 0.7922864578670797,
+            "striped": 0.1247317592679348,
+            "checked": 0.018412512605730774,
+            "floral": 0.035844756108886384,
+            "graphic print": 0.028724514150368304
           }
         }
       },
-      "server_ms": 925.7,
-      "round_trip_ms": 927
+      "server_ms": 1959.2,
+      "round_trip_ms": 1961
     },
     {
       "scenario": "tag",
       "case": "boat shoes",
-      "pass": false,
+      "pass": true,
       "expect": "ok",
-      "got": "human",
+      "got": "ok",
       "route": {
-        "kind": "human",
-        "title": "Check the tags",
-        "detail": "imajev is not sure about: colour."
+        "kind": "ok",
+        "title": "Tagged: beige or brown · plain · shoes",
+        "detail": "Added to your wardrobe, ready to filter."
       },
       "wrong": [],
       "answers": {
         "category": {
           "top": "shoes",
-          "unknown": 0.008823563106381686,
+          "unknown": 0.011644600569050013,
           "abstained": false,
           "probabilities": {
-            "top": 0.0038979134939709503,
-            "bottoms": 0.0034607297087090733,
-            "dress": 0.02793129360849502,
-            "knitwear or outerwear": 0.0036717984615024122,
-            "shoes": 0.9510679215273021,
-            "bag": 0.009970343200020328
+            "top": 0.0030814683125737524,
+            "bottoms": 0.0035305602512192866,
+            "dress": 0.029133965116793465,
+            "knitwear or outerwear": 0.0033624739074758847,
+            "shoes": 0.9484408984015426,
+            "bag": 0.012450634010395003
           }
         },
         "colour": {
           "top": "beige or brown",
-          "unknown": 0.017329768958119354,
+          "unknown": 0.01812219204669539,
           "abstained": false,
           "probabilities": {
-            "black": 0.07123652816685058,
-            "white": 0.019312003967848067,
-            "grey": 0.03632114831646745,
-            "blue or navy": 0.041441936531634575,
-            "red": 0.02730454462983128,
-            "green": 0.01842504594232346,
-            "beige or brown": 0.7532078244615028,
-            "multicolour": 0.03275096798354181
+            "black": 0.06557628091094826,
+            "white": 0.01662992898014895,
+            "grey": 0.024077560046746868,
+            "blue or navy": 0.02261124406220834,
+            "red": 0.01646458805027989,
+            "green": 0.009140645117868346,
+            "beige or brown": 0.8292366761277616,
+            "multicolour": 0.016263076704037698
           }
         },
         "pattern": {
           "top": "plain",
-          "unknown": 0.03664912355714687,
+          "unknown": 0.04799604868513003,
           "abstained": false,
           "probabilities": {
-            "plain": 0.8153747870853258,
-            "striped": 0.08575209086059786,
-            "checked": 0.025115656961638727,
-            "floral": 0.019520421206988423,
-            "graphic print": 0.05423704388544923
+            "plain": 0.8591545194121797,
+            "striped": 0.06652041120958627,
+            "checked": 0.01669124209756643,
+            "floral": 0.014587240596064274,
+            "graphic print": 0.043046586684603275
           }
         }
       },
-      "server_ms": 821.3,
-      "round_trip_ms": 823
+      "server_ms": 1820.5,
+      "round_trip_ms": 1823
     },
     {
       "scenario": "tag",
@@ -1560,47 +1560,47 @@
       "answers": {
         "category": {
           "top": "bag",
-          "unknown": 0.00960717230031391,
+          "unknown": 0.005789939497901888,
           "abstained": false,
           "probabilities": {
-            "top": 0.0027410036396713798,
-            "bottoms": 0.0024193331341214293,
-            "dress": 0.004793063569120928,
-            "knitwear or outerwear": 0.0032951921765558994,
-            "shoes": 0.007138820006403515,
-            "bag": 0.9796125874741268
+            "top": 0.0010503229197669603,
+            "bottoms": 0.0010028528126330642,
+            "dress": 0.0017258204897103383,
+            "knitwear or outerwear": 0.001323285914670201,
+            "shoes": 0.002292577774918748,
+            "bag": 0.9926051400883007
           }
         },
         "colour": {
           "top": "red",
-          "unknown": 0.02221773347392583,
+          "unknown": 0.01972353455689853,
           "abstained": false,
           "probabilities": {
-            "black": 0.06722125734273789,
-            "white": 0.019949160637806045,
-            "grey": 0.026528957355782576,
-            "blue or navy": 0.039685152585598286,
-            "red": 0.6830241062277258,
-            "green": 0.03034100290037808,
-            "beige or brown": 0.06213540265988385,
-            "multicolour": 0.07111496029008743
+            "black": 0.07422588233887024,
+            "white": 0.013575059024557383,
+            "grey": 0.014213683048942825,
+            "blue or navy": 0.021333359615335383,
+            "red": 0.7755433846997805,
+            "green": 0.01630488307665212,
+            "beige or brown": 0.04873389043505129,
+            "multicolour": 0.03606985776081029
           }
         },
         "pattern": {
           "top": "plain",
-          "unknown": 0.038691690865661536,
+          "unknown": 0.04855992200159937,
           "abstained": false,
           "probabilities": {
-            "plain": 0.7458151817910869,
-            "striped": 0.10540764031248764,
-            "checked": 0.030286361370799604,
-            "floral": 0.05282403070975569,
-            "graphic print": 0.0656667858158702
+            "plain": 0.7985932276553874,
+            "striped": 0.08880970364738798,
+            "checked": 0.019390023412703815,
+            "floral": 0.04153430689156272,
+            "graphic print": 0.05167273839295806
           }
         }
       },
-      "server_ms": 810.6,
-      "round_trip_ms": 812
+      "server_ms": 1867.8,
+      "round_trip_ms": 1870
     },
     {
       "scenario": "owned",
@@ -1616,14 +1616,14 @@
       "wrong": [],
       "answers": {
         "same_item": {
-          "top": "0.934",
-          "unknown": 0.010450917196891375,
+          "top": "0.950",
+          "unknown": 0.012406976885834222,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 317.8,
-      "round_trip_ms": 319
+      "server_ms": 494.5,
+      "round_trip_ms": 496
     },
     {
       "scenario": "owned",
@@ -1639,14 +1639,14 @@
       "wrong": [],
       "answers": {
         "same_item": {
-          "top": "0.011",
-          "unknown": 0.0048177804339721315,
+          "top": "0.015",
+          "unknown": 0.009225478404861827,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 311.4,
-      "round_trip_ms": 313
+      "server_ms": 506,
+      "round_trip_ms": 507
     },
     {
       "scenario": "match",
@@ -1663,21 +1663,21 @@
       "answers": {
         "same_colour": {
           "top": "white trainers",
-          "unknown": 0.004068628859084872,
+          "unknown": 0.0028385015060872027,
           "abstained": false,
           "probabilities": {
-            "white trainers": 0.9510453434456589,
-            "tan boat shoes": 0.008290102864464202,
-            "brown chelsea boots": 0.00687529760779805,
-            "red ankle boots": 0.004278927055774171,
-            "grey ballet flats": 0.00912380953252051,
-            "beige sandals": 0.006631830450543072,
-            "none of these": 0.013754689043241054
+            "white trainers": 0.9419460005833973,
+            "tan boat shoes": 0.007098291365001725,
+            "brown chelsea boots": 0.004486882540133494,
+            "red ankle boots": 0.003205625046789115,
+            "grey ballet flats": 0.00898725882968277,
+            "beige sandals": 0.005014253345594774,
+            "none of these": 0.029261688289400793
           }
         }
       },
-      "server_ms": 522.8,
-      "round_trip_ms": 524
+      "server_ms": 894,
+      "round_trip_ms": 896
     },
     {
       "scenario": "match",
@@ -1696,21 +1696,21 @@
       "answers": {
         "same_colour": {
           "top": "none of these",
-          "unknown": 0.025680723961271874,
+          "unknown": 0.014663670626952249,
           "abstained": false,
           "probabilities": {
-            "white trainers": 0.13012684242388478,
-            "tan boat shoes": 0.04637153698909574,
-            "brown chelsea boots": 0.12512585150396344,
-            "red ankle boots": 0.02704724731198098,
-            "grey ballet flats": 0.21719254660003506,
-            "beige sandals": 0.03181711835219796,
-            "none of these": 0.422318856818842
+            "white trainers": 0.08661050501130294,
+            "tan boat shoes": 0.032496935547564325,
+            "brown chelsea boots": 0.13980821189919912,
+            "red ankle boots": 0.016737348575172662,
+            "grey ballet flats": 0.15846192233921289,
+            "beige sandals": 0.01929576432382956,
+            "none of these": 0.5465893123037184
           }
         }
       },
-      "server_ms": 709.1,
-      "round_trip_ms": 710
+      "server_ms": 1586.4,
+      "round_trip_ms": 1588
     },
     {
       "scenario": "match",
@@ -1727,21 +1727,21 @@
       "answers": {
         "same_colour": {
           "top": "none of these",
-          "unknown": 0.031747223479444385,
+          "unknown": 0.018752322313921536,
           "abstained": false,
           "probabilities": {
-            "white trainers": 0.24926056625938206,
-            "tan boat shoes": 0.057605106609691786,
-            "brown chelsea boots": 0.08909456897997325,
-            "red ankle boots": 0.03582840134339238,
-            "grey ballet flats": 0.08281814097598125,
-            "beige sandals": 0.04586796847626626,
-            "none of these": 0.43952524735531306
+            "white trainers": 0.1827296494684887,
+            "tan boat shoes": 0.041992017990561264,
+            "brown chelsea boots": 0.07113125410653927,
+            "red ankle boots": 0.031539824679178735,
+            "grey ballet flats": 0.07393854105908383,
+            "beige sandals": 0.03015647004399936,
+            "none of these": 0.5685122426521488
           }
         }
       },
-      "server_ms": 693.3,
-      "round_trip_ms": 694
+      "server_ms": 1149.8,
+      "round_trip_ms": 1151
     },
     {
       "scenario": "match",
@@ -1758,21 +1758,21 @@
       "answers": {
         "same_colour": {
           "top": "none of these",
-          "unknown": 0.026195420822059605,
+          "unknown": 0.01635666860686795,
           "abstained": false,
           "probabilities": {
-            "white trainers": 0.056787130466443625,
-            "tan boat shoes": 0.03262962915356247,
-            "brown chelsea boots": 0.13420001985597402,
-            "red ankle boots": 0.1016504031935466,
-            "grey ballet flats": 0.12886370623712795,
-            "beige sandals": 0.046526919007624325,
-            "none of these": 0.49934219208572106
+            "white trainers": 0.047663426047407385,
+            "tan boat shoes": 0.024708092165640495,
+            "brown chelsea boots": 0.09966419778760782,
+            "red ankle boots": 0.11012455117475799,
+            "grey ballet flats": 0.11528818242350185,
+            "beige sandals": 0.030097623574305506,
+            "none of these": 0.572453926826779
           }
         }
       },
-      "server_ms": 698.8,
-      "round_trip_ms": 700
+      "server_ms": 1119,
+      "round_trip_ms": 1120
     }
   ]
 }

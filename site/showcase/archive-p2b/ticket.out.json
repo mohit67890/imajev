@@ -1,0 +1,48 @@
+{
+  "model": "imajev-4b",
+  "answers": {
+    "department": {
+      "type": "choice",
+      "choice": "billing",
+      "probabilities": {
+        "billing": 0.999274271707124,
+        "technical_support": 7.438633156559031e-05,
+        "sales": 0.0006338868578202301,
+        "product_questions": 1.7455103490139935e-05
+      },
+      "confidence": 0.9989277179365422,
+      "unknown_probability": 0.00010474569550946845,
+      "abstained": false
+    },
+    "urgent": {
+      "type": "noul",
+      "noul": 0.9904369389629506,
+      "unknown_probability": 0.00012461751609410527,
+      "abstained": false
+    },
+    "frustration": {
+      "type": "score",
+      "score": 1.0069797922249026,
+      "legend": {
+        "0": "calm and matter-of-fact",
+        "1": "impatient: chasing a reply or repeating themselves",
+        "2": "angry: threatening to escalate, churn or dispute"
+      },
+      "probabilities": {
+        "0": 0.011916555163744196,
+        "1": 0.969187097447609,
+        "2": 0.0188963473886468
+      },
+      "confidence": 0.95345233013914,
+      "unknown_probability": 0.00034422593244209677,
+      "abstained": false
+    }
+  },
+  "usage": {
+    "prefill_ms": 133.1,
+    "questions_ms": 275.6,
+    "input_tokens": 219,
+    "total_ms": 415.3,
+    "images": []
+  }
+}

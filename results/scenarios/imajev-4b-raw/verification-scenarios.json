@@ -1,15 +1,15 @@
 {
   "model": {
     "model": "imajev-4b-raw",
-    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "adapter": "-release/hf/imajev-4b/mlx",
     "backend": "mlx",
     "loaded": true,
-    "load_seconds": 2.546
+    "load_seconds": 3.59
   },
   "threshold": 0.8,
-  "api": "http://127.0.0.1:8765",
-  "run_at": "2026-09-24T02:30:08.725Z",
-  "passed": 21,
+  "api": "http://<host>",
+  "run_at": "2026-09-24T13:38:15.513Z",
+  "passed": 19,
   "total": 21,
   "rows": [
     {
@@ -27,29 +27,29 @@
       "answers": {
         "contradicted_field": {
           "top": "none of these",
-          "unknown": 0.000046893725174189184,
+          "unknown": 0.0012165988629559454,
           "abstained": false,
           "probabilities": {
-            "listing.color": 0.0029712009687889347,
-            "listing.product_type": 0.00017243919648358733,
-            "none of these": 0.9968563598347275
+            "listing.color": 0.01207333870976465,
+            "listing.product_type": 0.0006666583795668261,
+            "none of these": 0.9872600029106685
           }
         },
         "color_matches": {
-          "top": "0.995",
-          "unknown": 0.00008239756834222431,
+          "top": "0.983",
+          "unknown": 0.0009862917042129868,
           "abstained": false,
           "probabilities": null
         },
         "type_matches": {
           "top": "1.000",
-          "unknown": 0.0000031052178491127166,
+          "unknown": 0.0000933828957445983,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 567,
-      "round_trip_ms": 570
+      "server_ms": 1370.4,
+      "round_trip_ms": 1374
     },
     {
       "scenario": "listing",
@@ -66,29 +66,29 @@
       "answers": {
         "contradicted_field": {
           "top": "listing.color",
-          "unknown": 0.00009963182017030215,
+          "unknown": 0.0019010215340489198,
           "abstained": false,
           "probabilities": {
-            "listing.color": 0.9749689368993751,
-            "listing.product_type": 0.0003726292505144232,
-            "none of these": 0.024658433850110427
+            "listing.color": 0.9286171925314096,
+            "listing.product_type": 0.0012260054609221055,
+            "none of these": 0.07015680200766833
           }
         },
         "color_matches": {
-          "top": "0.082",
-          "unknown": 0.0003346631589647005,
+          "top": "0.173",
+          "unknown": 0.002685814081344365,
           "abstained": false,
           "probabilities": null
         },
         "type_matches": {
           "top": "1.000",
-          "unknown": 0.0000013291922491060045,
+          "unknown": 0.00007900558821509011,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 482.8,
-      "round_trip_ms": 485
+      "server_ms": 1268.3,
+      "round_trip_ms": 1272
     },
     {
       "scenario": "listing",
@@ -105,29 +105,29 @@
       "answers": {
         "contradicted_field": {
           "top": "listing.color",
-          "unknown": 0.000005594633004301496,
+          "unknown": 0.0001902481501942806,
           "abstained": false,
           "probabilities": {
-            "listing.color": 0.9995281348559116,
-            "listing.product_type": 0.00002163441401839045,
-            "none of these": 0.0004502307300699982
+            "listing.color": 0.9966502447907133,
+            "listing.product_type": 0.00015313055855703054,
+            "none of these": 0.003196624650729643
           }
         },
         "color_matches": {
-          "top": "0.002",
-          "unknown": 0.00017126380170828635,
+          "top": "0.012",
+          "unknown": 0.001593855584908111,
           "abstained": false,
           "probabilities": null
         },
         "type_matches": {
           "top": "1.000",
-          "unknown": 0.000002460664815071533,
+          "unknown": 0.00010250908453724949,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 481.9,
-      "round_trip_ms": 484
+      "server_ms": 1271.5,
+      "round_trip_ms": 1273
     },
     {
       "scenario": "listing",
@@ -144,29 +144,29 @@
       "answers": {
         "contradicted_field": {
           "top": "listing.product_type",
-          "unknown": 0.000003614830273185093,
+          "unknown": 0.00009839178692045836,
           "abstained": false,
           "probabilities": {
-            "listing.color": 0.000028932493146536614,
-            "listing.product_type": 0.9998310223779817,
-            "none of these": 0.00014004512887182328
+            "listing.color": 0.0003085356415861424,
+            "listing.product_type": 0.9986869873129336,
+            "none of these": 0.0010044770454802783
           }
         },
         "color_matches": {
-          "top": "0.995",
-          "unknown": 0.0002553764608825578,
+          "top": "0.984",
+          "unknown": 0.002273881674669502,
           "abstained": false,
           "probabilities": null
         },
         "type_matches": {
-          "top": "0.000",
-          "unknown": 0.000010264922084439599,
+          "top": "0.001",
+          "unknown": 0.0004968856351552784,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 480.9,
-      "round_trip_ms": 482
+      "server_ms": 1252.4,
+      "round_trip_ms": 1253
     },
     {
       "scenario": "listing",
@@ -183,29 +183,29 @@
       "answers": {
         "contradicted_field": {
           "top": "listing.product_type",
-          "unknown": 4.536621167591736e-7,
+          "unknown": 0.000015648748975545856,
           "abstained": false,
           "probabilities": {
-            "listing.color": 0.0000014821504551202356,
-            "listing.product_type": 0.9999803175178414,
-            "none of these": 0.000018200331703436465
+            "listing.color": 0.0000321123080837773,
+            "listing.product_type": 0.9997853720573365,
+            "none of these": 0.00018251563457970073
           }
         },
         "color_matches": {
-          "top": "0.999",
-          "unknown": 0.00012524587160631155,
+          "top": "0.996",
+          "unknown": 0.0011033719133038292,
           "abstained": false,
           "probabilities": null
         },
         "type_matches": {
           "top": "0.000",
-          "unknown": 0.0000033162121004828316,
+          "unknown": 0.00027143880723963336,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 466.2,
-      "round_trip_ms": 467
+      "server_ms": 1234.6,
+      "round_trip_ms": 1236
     },
     {
       "scenario": "returns",
@@ -221,26 +221,26 @@
       "wrong": [],
       "answers": {
         "same_item": {
-          "top": "0.999",
-          "unknown": 0.000007197574917386401,
+          "top": "0.998",
+          "unknown": 0.00020849751191020653,
           "abstained": false,
           "probabilities": null
         },
         "returned_colour": {
           "top": "pink",
-          "unknown": 0.0008801276963672417,
+          "unknown": 0.0043315122301988826,
           "abstained": false,
           "probabilities": {
-            "pink": 0.9930680653065409,
-            "beige": 0.00039064732170878563,
-            "black": 0.005341033977484023,
-            "white": 0.0005109299997430409,
-            "blue": 0.0006893233945232663
+            "pink": 0.9785180212229121,
+            "beige": 0.0013384261858315598,
+            "black": 0.013898631003937303,
+            "white": 0.0030696448212184355,
+            "blue": 0.003175276766100649
           }
         }
       },
-      "server_ms": 427.4,
-      "round_trip_ms": 428
+      "server_ms": 1029.4,
+      "round_trip_ms": 1031
     },
     {
       "scenario": "returns",
@@ -257,25 +257,25 @@
       "answers": {
         "same_item": {
           "top": "0.000",
-          "unknown": 7.395230837321045e-7,
+          "unknown": 0.00011111793669161178,
           "abstained": false,
           "probabilities": null
         },
         "returned_colour": {
           "top": "beige",
-          "unknown": 0.23748790461999567,
+          "unknown": 0.2676082602410171,
           "abstained": false,
           "probabilities": {
-            "pink": 0.006546521855780726,
-            "beige": 0.955253139394986,
-            "black": 0.02739895574028626,
-            "white": 0.004377302768212697,
-            "blue": 0.0064240802407342324
+            "pink": 0.024630990173172735,
+            "beige": 0.8747717128162643,
+            "black": 0.06718655792024414,
+            "white": 0.015051212113186602,
+            "blue": 0.018359526977132234
           }
         }
       },
-      "server_ms": 438.3,
-      "round_trip_ms": 439
+      "server_ms": 1027.8,
+      "round_trip_ms": 1029
     },
     {
       "scenario": "qc",
@@ -292,24 +292,24 @@
       "answers": {
         "has_fault": {
           "top": "1.000",
-          "unknown": 6.098016307498973e-7,
+          "unknown": 0.00004445017408525674,
           "abstained": false,
           "probabilities": null
         },
         "fault_type": {
           "top": "chipped or broken edge",
-          "unknown": 0.0000033883551910410767,
+          "unknown": 0.00009132138059119666,
           "abstained": false,
           "probabilities": {
-            "chipped or broken edge": 0.999984215031221,
-            "crack": 0.0000068146683107305166,
-            "discoloured or burnt": 0.000005049721159853143,
-            "nothing is wrong": 0.000003920579308322928
+            "chipped or broken edge": 0.9994775020440286,
+            "crack": 0.0002487563825360557,
+            "discoloured or burnt": 0.00008691166033670058,
+            "nothing is wrong": 0.00018682991309864003
           }
         }
       },
-      "server_ms": 2073.5,
-      "round_trip_ms": 2074
+      "server_ms": 2870.6,
+      "round_trip_ms": 2873
     },
     {
       "scenario": "qc",
@@ -325,95 +325,95 @@
       "wrong": [],
       "answers": {
         "has_fault": {
-          "top": "0.002",
-          "unknown": 0.0000846619757017889,
+          "top": "0.015",
+          "unknown": 0.00135095724982579,
           "abstained": false,
           "probabilities": null
         },
         "fault_type": {
           "top": "nothing is wrong",
-          "unknown": 0.001044633672062521,
+          "unknown": 0.0031931706478135285,
           "abstained": false,
           "probabilities": {
-            "chipped or broken edge": 0.0010593693644710342,
-            "crack": 0.0005735569238835383,
-            "discoloured or burnt": 0.0003309472645392618,
-            "nothing is wrong": 0.9980361264471062
+            "chipped or broken edge": 0.006492085144817879,
+            "crack": 0.004064845561170211,
+            "discoloured or burnt": 0.0021188421902722885,
+            "nothing is wrong": 0.9873242271037396
           }
         }
       },
-      "server_ms": 2073.4,
-      "round_trip_ms": 2075
+      "server_ms": 2855.3,
+      "round_trip_ms": 2858
     },
     {
       "scenario": "retake",
       "case": "as shipped",
-      "pass": true,
+      "pass": false,
       "expect": "flag",
-      "got": "flag",
+      "got": "human",
       "route": {
-        "kind": "flag",
-        "title": "Ask for a new photo",
-        "detail": "Retake: hold the phone still and a little further away."
+        "kind": "human",
+        "title": "Answer with a warning",
+        "detail": "The model is unsure the photo is enough."
       },
       "wrong": [],
       "answers": {
         "answerable": {
-          "top": "0.007",
-          "unknown": 0.014647613173331533,
+          "top": "0.206",
+          "unknown": 0.4101845867844422,
           "abstained": false,
           "probabilities": null
         },
         "problem": {
           "top": "blurry",
-          "unknown": 0.008891252947286694,
+          "unknown": 0.019819314153806094,
           "abstained": false,
           "probabilities": {
-            "bad framing": 0.08598683901512376,
-            "blurry": 0.9108141455792391,
-            "too dark": 0.00045157564323402026,
-            "too bright": 0.0020129332963622366,
-            "no problem": 0.0007345064660408264
+            "bad framing": 0.09562963035422609,
+            "blurry": 0.8963021073024089,
+            "too dark": 0.0009999992088929512,
+            "too bright": 0.005412902072837043,
+            "no problem": 0.0016553610616350158
           }
         }
       },
-      "server_ms": 1047.1,
-      "round_trip_ms": 1048
+      "server_ms": 1671.7,
+      "round_trip_ms": 1673
     },
     {
       "scenario": "retake",
       "case": "user.question=What is the use-by date?",
-      "pass": true,
+      "pass": false,
       "expect": "flag",
-      "got": "flag",
+      "got": "human",
       "route": {
-        "kind": "flag",
-        "title": "Ask for a new photo",
-        "detail": "Retake: hold the phone still and a little further away."
+        "kind": "human",
+        "title": "Answer with a warning",
+        "detail": "The model is unsure the photo is enough."
       },
       "wrong": [],
       "answers": {
         "answerable": {
-          "top": "0.157",
-          "unknown": 0.3122573282573495,
-          "abstained": false,
+          "top": "0.377",
+          "unknown": 0.7458625102212328,
+          "abstained": true,
           "probabilities": null
         },
         "problem": {
           "top": "blurry",
-          "unknown": 0.01890861652891048,
+          "unknown": 0.04838826855162828,
           "abstained": false,
           "probabilities": {
-            "bad framing": 0.014749432460859989,
-            "blurry": 0.9824111793892204,
-            "too dark": 0.00040991350658259687,
-            "too bright": 0.0016639369382518956,
-            "no problem": 0.0007655377050850117
+            "bad framing": 0.029511324246014704,
+            "blurry": 0.9641886416549731,
+            "too dark": 0.0009266436157685307,
+            "too bright": 0.0038127619427611925,
+            "no problem": 0.0015606285404824798
           }
         }
       },
-      "server_ms": 1006.9,
-      "round_trip_ms": 1008
+      "server_ms": 1643.3,
+      "round_trip_ms": 1644
     },
     {
       "scenario": "retake",
@@ -429,26 +429,26 @@
       "wrong": [],
       "answers": {
         "answerable": {
-          "top": "0.988",
-          "unknown": 0.004019041881077797,
+          "top": "0.964",
+          "unknown": 0.02948899830927751,
           "abstained": false,
           "probabilities": null
         },
         "problem": {
           "top": "blurry",
-          "unknown": 0.0009078755295041493,
+          "unknown": 0.00476853114549843,
           "abstained": false,
           "probabilities": {
-            "bad framing": 0.28177186178736213,
-            "blurry": 0.7153699916989835,
-            "too dark": 0.0003427075713137286,
-            "too bright": 0.0011496439628781514,
-            "no problem": 0.0013657949794625018
+            "bad framing": 0.20215883100147333,
+            "blurry": 0.7890974906558164,
+            "too dark": 0.0009583051414885417,
+            "too bright": 0.004843916769722538,
+            "no problem": 0.0029414564314992338
           }
         }
       },
-      "server_ms": 1007.1,
-      "round_trip_ms": 1008
+      "server_ms": 1681.6,
+      "round_trip_ms": 1683
     },
     {
       "scenario": "archive",
@@ -465,24 +465,24 @@
       "answers": {
         "wrong_field": {
           "top": "none",
-          "unknown": 0.000047560472562280504,
+          "unknown": 0.0012160446362030376,
           "abstained": false,
           "probabilities": {
-            "record.subject": 0.00034153529363329066,
-            "record.medium": 0.0004922704415591386,
-            "record.setting": 0.0004964562887601613,
-            "none": 0.9986697379760474
+            "record.subject": 0.00295702160264795,
+            "record.medium": 0.006222994913640309,
+            "record.setting": 0.003926914663850295,
+            "none": 0.9868930688198615
           }
         },
         "subject_matches": {
-          "top": "1.000",
-          "unknown": 0.00002315027501484448,
+          "top": "0.999",
+          "unknown": 0.0005021252493820315,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 1061.4,
-      "round_trip_ms": 1062
+      "server_ms": 1717.4,
+      "round_trip_ms": 1718
     },
     {
       "scenario": "archive",
@@ -499,24 +499,24 @@
       "answers": {
         "wrong_field": {
           "top": "record.subject",
-          "unknown": 6.943864091757567e-7,
+          "unknown": 0.00011608921025584811,
           "abstained": false,
           "probabilities": {
-            "record.subject": 0.999964711413622,
-            "record.medium": 0.000005837118852717432,
-            "record.setting": 0.000005388480914185454,
-            "none": 0.00002406298661110492
+            "record.subject": 0.9987087708970174,
+            "record.medium": 0.00010026501081215788,
+            "record.setting": 0.00014597129446015063,
+            "none": 0.0010449927977103002
           }
         },
         "subject_matches": {
-          "top": "0.000",
-          "unknown": 0.00006106554545753527,
+          "top": "0.005",
+          "unknown": 0.0029172525776584354,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 1065.5,
-      "round_trip_ms": 1066
+      "server_ms": 1718.5,
+      "round_trip_ms": 1720
     },
     {
       "scenario": "archive",
@@ -533,24 +533,24 @@
       "answers": {
         "wrong_field": {
           "top": "record.subject",
-          "unknown": 5.42059626618914e-7,
+          "unknown": 0.00010633784516042508,
           "abstained": false,
           "probabilities": {
-            "record.subject": 0.9999695426762522,
-            "record.medium": 0.000003950993390867557,
-            "record.setting": 0.000004628774906075028,
-            "none": 0.000021877555450948217
+            "record.subject": 0.9988979088933821,
+            "record.medium": 0.00009969735519392725,
+            "record.setting": 0.00016913887827267222,
+            "none": 0.0008332548731513546
           }
         },
         "subject_matches": {
-          "top": "0.000",
-          "unknown": 0.00004080599622929482,
+          "top": "0.003",
+          "unknown": 0.0021091887365508525,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 1066,
-      "round_trip_ms": 1067
+      "server_ms": 1747.1,
+      "round_trip_ms": 1748
     },
     {
       "scenario": "archive",
@@ -567,24 +567,24 @@
       "answers": {
         "wrong_field": {
           "top": "record.medium",
-          "unknown": 0.000014150575684824311,
+          "unknown": 0.0003394900265768674,
           "abstained": false,
           "probabilities": {
-            "record.subject": 0.00014975989708314785,
-            "record.medium": 0.9981250047754026,
-            "record.setting": 0.0001335898229271019,
-            "none": 0.0015916455045872093
+            "record.subject": 0.00039258449099687534,
+            "record.medium": 0.9931812863087085,
+            "record.setting": 0.0004636890604086037,
+            "none": 0.005962440139886076
           }
         },
         "subject_matches": {
-          "top": "0.999",
-          "unknown": 0.0005170397266494139,
+          "top": "0.993",
+          "unknown": 0.005184894754855845,
           "abstained": false,
           "probabilities": null
         }
       },
-      "server_ms": 1067.2,
-      "round_trip_ms": 1069
+      "server_ms": 1714.9,
+      "round_trip_ms": 1716
     },
     {
       "scenario": "audit",
@@ -601,30 +601,30 @@
       "answers": {
         "what_changed": {
           "top": "an object was removed",
-          "unknown": 1.9821819682697815e-7,
+          "unknown": 0.0000033391069284507673,
           "abstained": false,
           "probabilities": {
-            "nothing relevant changed": 1.919237113579685e-7,
-            "an object was added": 1.6414379029840332e-7,
-            "an object was removed": 0.9999988541410803,
-            "an object changed colour": 7.806933080324952e-8,
-            "something was covered or blurred out": 7.117220872489486e-7
+            "nothing relevant changed": 0.0000035595948851091107,
+            "an object was added": 0.000005279839840808861,
+            "an object was removed": 0.9999829445251334,
+            "an object changed colour": 0.000001273994182093072,
+            "something was covered or blurred out": 0.000006942045958652017
           }
         },
         "field_to_update": {
           "top": "checklist.all_items_still_there",
-          "unknown": 2.2438867118387532e-8,
+          "unknown": 0.000002383877774181397,
           "abstained": false,
           "probabilities": {
-            "checklist.all_items_still_there": 0.9999989299466727,
-            "checklist.no_new_items": 3.5424727628685025e-7,
-            "checklist.colours_as_before": 5.171699698119098e-8,
-            "none of these": 6.640890540692665e-7
+            "checklist.all_items_still_there": 0.9999697296059367,
+            "checklist.no_new_items": 0.000005924388356192004,
+            "checklist.colours_as_before": 0.0000018500091397458287,
+            "none of these": 0.000022495996567413018
           }
         }
       },
-      "server_ms": 1666,
-      "round_trip_ms": 1669
+      "server_ms": 2609.1,
+      "round_trip_ms": 2610
     },
     {
       "scenario": "audit",
@@ -641,30 +641,30 @@
       "answers": {
         "what_changed": {
           "top": "nothing relevant changed",
-          "unknown": 0.0000059277950248389565,
+          "unknown": 0.0017141444875090194,
           "abstained": false,
           "probabilities": {
-            "nothing relevant changed": 0.9998593357621346,
-            "an object was added": 0.00004384321168046153,
-            "an object was removed": 0.00003307801106135726,
-            "an object changed colour": 0.0000045527304057270005,
-            "something was covered or blurred out": 0.000059190284717893536
+            "nothing relevant changed": 0.9984766160838332,
+            "an object was added": 0.0003541257801491872,
+            "an object was removed": 0.0006181039656636599,
+            "an object changed colour": 0.00008422409897821328,
+            "something was covered or blurred out": 0.0004669300713758178
           }
         },
         "field_to_update": {
           "top": "none of these",
-          "unknown": 0.000005298990211831969,
+          "unknown": 0.00016445223835165096,
           "abstained": false,
           "probabilities": {
-            "checklist.all_items_still_there": 0.00006897586362050598,
-            "checklist.no_new_items": 0.000029165831189903468,
-            "checklist.colours_as_before": 0.00005414415164213901,
-            "none of these": 0.9998477141535475
+            "checklist.all_items_still_there": 0.0011742472604861422,
+            "checklist.no_new_items": 0.0002948648513393273,
+            "checklist.colours_as_before": 0.0004949125200515282,
+            "none of these": 0.9980359753681229
           }
         }
       },
-      "server_ms": 1663.7,
-      "round_trip_ms": 1666
+      "server_ms": 2620.6,
+      "round_trip_ms": 2622
     },
     {
       "scenario": "ticket",
@@ -681,34 +681,34 @@
       "answers": {
         "department": {
           "top": "billing",
-          "unknown": 0.0001075822458803457,
+          "unknown": 0.0012436268655208857,
           "abstained": false,
           "probabilities": {
-            "billing": 0.9987616764669512,
-            "technical_support": 0.0004046712064433905,
-            "sales": 0.0008131102557253205,
-            "product_questions": 0.000020542070879983375
+            "billing": 0.9953800310912528,
+            "technical_support": 0.0023547676694278693,
+            "sales": 0.002138990374028545,
+            "product_questions": 0.00012621086529068435
           }
         },
         "urgent": {
-          "top": "1.000",
-          "unknown": 0.00000733520632538723,
+          "top": "0.998",
+          "unknown": 0.0002783843623232742,
           "abstained": false,
           "probabilities": null
         },
         "frustration": {
-          "top": "1.01",
-          "unknown": 0.0003517020918401569,
+          "top": "1.00",
+          "unknown": 0.002867086774134963,
           "abstained": false,
           "probabilities": {
-            "0": 0.012708839519948707,
-            "1": 0.9669851266104659,
-            "2": 0.020306033869585394
+            "0": 0.03418045318050869,
+            "1": 0.9306886535206819,
+            "2": 0.03513089329880944
           }
         }
       },
-      "server_ms": 438.6,
-      "round_trip_ms": 440
+      "server_ms": 1321.8,
+      "round_trip_ms": 1323
     },
     {
       "scenario": "ticket",
@@ -725,34 +725,34 @@
       "answers": {
         "department": {
           "top": "product_questions",
-          "unknown": 0.00010107575441703941,
+          "unknown": 0.0010976054323615853,
           "abstained": false,
           "probabilities": {
-            "billing": 0.000043528689604840456,
-            "technical_support": 0.00015587956402118584,
-            "sales": 0.0002782219715526754,
-            "product_questions": 0.9995223697748213
+            "billing": 0.00017393317392538725,
+            "technical_support": 0.0022214506036409656,
+            "sales": 0.0012307994616824079,
+            "product_questions": 0.9963738167607512
           }
         },
         "urgent": {
-          "top": "0.001",
-          "unknown": 0.00010623346560663522,
+          "top": "0.011",
+          "unknown": 0.00410340113893256,
           "abstained": false,
           "probabilities": null
         },
         "frustration": {
-          "top": "0.00",
-          "unknown": 0.0002969439843709695,
+          "top": "0.01",
+          "unknown": 0.005666066383700964,
           "abstained": false,
           "probabilities": {
-            "0": 0.997058389102784,
-            "1": 0.002828975030737698,
-            "2": 0.0001126358664782992
+            "0": 0.989756186058632,
+            "1": 0.009772741857477986,
+            "2": 0.0004710720838899494
           }
         }
       },
-      "server_ms": 423.9,
-      "round_trip_ms": 426
+      "server_ms": 1271.9,
+      "round_trip_ms": 1273
     },
     {
       "scenario": "ticket",
@@ -769,34 +769,34 @@
       "answers": {
         "department": {
           "top": "technical_support",
-          "unknown": 0.0001376161514265121,
+          "unknown": 0.00233869691278534,
           "abstained": false,
           "probabilities": {
-            "billing": 0.00004175863486366495,
-            "technical_support": 0.9998009711096809,
-            "sales": 0.00006700489226615884,
-            "product_questions": 0.00009026536318920762
+            "billing": 0.00018804338661945443,
+            "technical_support": 0.9991179274678316,
+            "sales": 0.0003283713520394646,
+            "product_questions": 0.000365657793509511
           }
         },
         "urgent": {
-          "top": "0.999",
-          "unknown": 0.000020253611969554978,
+          "top": "0.998",
+          "unknown": 0.000721341429823632,
           "abstained": false,
           "probabilities": null
         },
         "frustration": {
-          "top": "1.02",
-          "unknown": 0.015244855243714609,
+          "top": "0.95",
+          "unknown": 0.05766220316430848,
           "abstained": false,
           "probabilities": {
-            "0": 0.21761687678374625,
-            "1": 0.5429703054142835,
-            "2": 0.23941281780197024
+            "0": 0.21464496186124718,
+            "1": 0.6210586239159419,
+            "2": 0.16429641422281085
           }
         }
       },
-      "server_ms": 420.3,
-      "round_trip_ms": 423
+      "server_ms": 1285.5,
+      "round_trip_ms": 1287
     }
   ]
 }

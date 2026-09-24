@@ -39,6 +39,9 @@ class BenchmarkRecord(_StrictModel):
     gold: Gold
     annotation_status: Literal["draft", "reviewed"]
     provenance: dict[str, Any]
+    # Public releases withhold test labels: gold is null and the review/construction truth is stripped.
+    # Such records can be run (the model input is complete) but never scored.
+    gold_withheld: StrictBool = False
 
 
 def _model_input_sha256(record: BenchmarkRecord) -> str:
@@ -289,7 +292,9 @@ def validate_records(
             raise ValueError(f"record {record.id!r}: {record.track} track requires at least one image")
         if require_reviewed and record.annotation_status != "reviewed":
             raise ValueError(f"record {record.id!r}: reviewed annotation is required")
-        review_error = _review_error(record)
+        if record.gold_withheld and record.gold is not None:
+            raise ValueError(f"record {record.id!r}: gold_withheld records must have gold null")
+        review_error = None if record.gold_withheld else _review_error(record)
         if review_error:
             raise ValueError(f"record {record.id!r}: {review_error}")
 
@@ -305,7 +310,14 @@ def validate_records(
                     raise ValueError(f"image {identity[1]!r} leaks across splits")
         validated.append(record)
 
-    return [record.model_dump(mode="json") for record in validated]
+    # gold_withheld is emitted only when set, so full-label datasets hash exactly as before.
+    return [record.model_dump(mode="json", exclude=None if record.gold_withheld else {"gold_withheld"})
+            for record in validated]
+
+
+def gold_withheld(records: list[dict[str, Any]]) -> list[str]:
+    """IDs of records whose labels are withheld (public test split); they cannot be scored."""
+    return [r["id"] for r in records if r.get("gold_withheld")]
 
 
 def model_payload(record: dict[str, Any]) -> dict[str, Any]:

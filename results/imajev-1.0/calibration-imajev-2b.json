@@ -1,26 +1,40 @@
 {
  "schema_version": "1.1",
- "calibration_version": "p2b-2b-best-jevstyle-dev",
+ "calibration_version": "p2c-2b-soup50-authored-dev",
  "temperatures": {
-  "boolean:2": 1.61,
-  "choice:2": 1.61,
-  "choice:3-5": 1.61,
-  "choice:6-10": 1.61,
-  "choice:11-25": 1.61,
-  "choice:26-254": 1.61,
-  "ordinal:2": 1.61,
-  "ordinal:3-5": 1.61,
-  "ordinal:6-10": 1.61
+  "boolean:2": 1.646,
+  "boolean:3-5": 1.646,
+  "boolean:6-10": 1.646,
+  "boolean:11-25": 1.646,
+  "boolean:26-254": 1.646,
+  "choice:2": 1.646,
+  "choice:3-5": 1.646,
+  "choice:6-10": 1.646,
+  "choice:11-25": 1.646,
+  "choice:26-254": 1.646,
+  "ordinal:2": 1.646,
+  "ordinal:3-5": 1.646,
+  "ordinal:6-10": 1.646,
+  "ordinal:11-25": 1.646,
+  "ordinal:26-254": 1.646
  },
  "unknown_offsets": {},
  "fit": {
   "set": "data/manifests/decision-p2b-jevstyle-dev.jsonl (150 authored JevBench-style items, no JevBench items)",
-  "method": "single temperature by NLL, applied to every (type, option-count) bucket",
-  "note": "the pod's held-out-domain fold (accuracy ~85%) under-corrects on JevBench hard (accuracy ~68%); offsets left at 0 pending the off-distribution (MMLU/irrelevance) check; 2026-09-24: written out for every (type, option-count) bucket, because the server serves any bucket missing from the file uncalibrated (T=1)",
-  "counts_note": "one temperature fitted on all 150 dev items and applied to every bucket, so every bucket's count is the size of that fit set"
+  "method": "single temperature by NLL, applied to every (type, option-count) bucket (phase-2b policy)",
+  "adapter": "phase-2c soup50 = 0.5 x phase-2b 2b adapter + 0.5 x phase-2c 2b best (LoRA + readout averaged)",
+  "temperature": 1.646,
+  "nll_raw": 0.9877460472442439,
+  "nll_calibrated": 0.910434647489021,
+  "note": "the pod's phase-2c calibration fold gives T~1 (soft-target model is calibrated in-distribution) and does nothing on JevBench hard; served JevBench hard with this file: 60.4 / ECE 0.123 (rot4+cal); offsets 0 (unknown handling gated separately)",
+  "date": "2026-09-24"
  },
  "counts": {
   "boolean:2": 150,
+  "boolean:3-5": 150,
+  "boolean:6-10": 150,
+  "boolean:11-25": 150,
+  "boolean:26-254": 150,
   "choice:2": 150,
   "choice:3-5": 150,
   "choice:6-10": 150,
@@ -28,6 +42,8 @@
   "choice:26-254": 150,
   "ordinal:2": 150,
   "ordinal:3-5": 150,
-  "ordinal:6-10": 150
+  "ordinal:6-10": 150,
+  "ordinal:11-25": 150,
+  "ordinal:26-254": 150
  }
 }

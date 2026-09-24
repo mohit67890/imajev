@@ -7,7 +7,7 @@
 import puppeteer from 'puppeteer-core';
 import { mkdirSync } from 'node:fs';
 
-const OUT = new URL('./assets/readme/', import.meta.url).pathname;
+const OUT = decodeURIComponent(new URL('./assets/readme/', import.meta.url).pathname);
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 mkdirSync(OUT, { recursive: true });
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new' });

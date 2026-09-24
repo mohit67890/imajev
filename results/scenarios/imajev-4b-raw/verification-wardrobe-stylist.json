@@ -1,15 +1,15 @@
 {
   "model": {
     "model": "imajev-4b-raw",
-    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "adapter": "-release/hf/imajev-4b/mlx",
     "backend": "mlx",
     "loaded": true,
-    "load_seconds": 2.546
+    "load_seconds": 3.59
   },
   "threshold": 0.8,
-  "api": "http://127.0.0.1:8765",
-  "run_at": "2026-09-24T02:31:19.707Z",
-  "passed": 19,
+  "api": "http://<host>",
+  "run_at": "2026-09-24T13:40:42.099Z",
+  "passed": 21,
   "total": 24,
   "rows": [
     {
@@ -27,56 +27,56 @@
       "answers": {
         "piece_colour": {
           "top": "red",
-          "unknown": 0.00017000481920218392,
+          "unknown": 0.0032978397738571284,
           "abstained": false,
           "probabilities": {
-            "black": 0.03007025002940136,
-            "white": 0.00029857503221121214,
-            "grey": 0.00021973283884346335,
-            "navy or blue": 0.00023980497145186774,
-            "beige or brown": 0.000226319065062799,
-            "red": 0.9583361506409339,
-            "green": 0.000277574230924393,
-            "multicolour": 0.010331593191170937
+            "black": 0.11064281940010233,
+            "white": 0.0018296848065509404,
+            "grey": 0.0014495019783738162,
+            "navy or blue": 0.0011095684190490407,
+            "beige or brown": 0.0014681242870608327,
+            "red": 0.8593388852987556,
+            "green": 0.002994045785466854,
+            "multicolour": 0.021167370024640614
           }
         },
         "piece_pattern": {
           "top": "checked",
-          "unknown": 0.00017320754998451874,
+          "unknown": 0.0013002138062359694,
           "abstained": false,
           "probabilities": {
-            "plain": 0.000123079730789532,
-            "striped": 0.00023301614617985566,
-            "checked": 0.999425537397078,
-            "floral": 0.00021836672595267344
+            "plain": 0.0006335109148698045,
+            "striped": 0.0017376446321336933,
+            "checked": 0.9968408146987098,
+            "floral": 0.0007880297542867198
           }
         },
         "pick_bottoms": {
           "top": "Black jeans",
-          "unknown": 0.0020434192354813973,
+          "unknown": 0.004493915669575147,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.0006214900606353743,
-            "Blue jeans": 0.008839186975865764,
-            "Black jeans": 0.9445795709680613,
-            "Grey trousers": 0.045806768789233517,
-            "Beige shorts": 0.0001529832062039857
+            "Beige chinos": 0.0011306289422662065,
+            "Blue jeans": 0.03659310780631082,
+            "Black jeans": 0.8376421306769077,
+            "Grey trousers": 0.12352654076115989,
+            "Beige shorts": 0.0011075918133553327
           }
         },
         "pick_shoes": {
           "top": "Grey ballet flats",
-          "unknown": 0.0015508343724470396,
+          "unknown": 0.007097682856893191,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.0000608274997938114,
-            "Tan chelsea boots": 0.00004753461707670823,
-            "Grey ballet flats": 0.9998592806060026,
-            "Cream sandals": 0.000032357277126866785
+            "Caramel boat shoes": 0.0002841007746735972,
+            "Tan chelsea boots": 0.000306528349430911,
+            "Grey ballet flats": 0.9991614681785851,
+            "Cream sandals": 0.00024790269731044125
           }
         }
       },
-      "server_ms": 1306,
-      "round_trip_ms": 1309
+      "server_ms": 2423.9,
+      "round_trip_ms": 2426
     },
     {
       "scenario": "style-m03",
@@ -93,56 +93,56 @@
       "answers": {
         "piece_colour": {
           "top": "red",
-          "unknown": 0.00023367153124919488,
+          "unknown": 0.0027472293332633274,
           "abstained": false,
           "probabilities": {
-            "black": 0.01602563281306497,
-            "white": 0.0006158803519361813,
-            "grey": 0.00029677228646846966,
-            "navy or blue": 0.00033866602833450385,
-            "beige or brown": 0.0002910908465200162,
-            "red": 0.972833359386912,
-            "green": 0.00043208814426474724,
-            "multicolour": 0.00916651014249919
+            "black": 0.05991686756892597,
+            "white": 0.0035611511264712244,
+            "grey": 0.0015185162296971638,
+            "navy or blue": 0.001125478933205552,
+            "beige or brown": 0.0015722571738465922,
+            "red": 0.9128793709640439,
+            "green": 0.0035203964798205356,
+            "multicolour": 0.015905961523989025
           }
         },
         "piece_pattern": {
           "top": "checked",
-          "unknown": 0.0001639477031939831,
+          "unknown": 0.0011905270338096817,
           "abstained": false,
           "probabilities": {
-            "plain": 0.00012966157744788561,
-            "striped": 0.00025573678208573624,
-            "checked": 0.9993459838137971,
-            "floral": 0.00026861782666931234
+            "plain": 0.0006772215789155283,
+            "striped": 0.0019798919304637626,
+            "checked": 0.9963982861497607,
+            "floral": 0.0009446003408600451
           }
         },
         "pick_bottoms": {
           "top": "Beige chinos",
-          "unknown": 0.0004096352106604495,
+          "unknown": 0.005962960101653305,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.9950466150120004,
-            "Blue jeans": 0.0005062395156217008,
-            "Black jeans": 0.0013127517086764398,
-            "Grey trousers": 0.0001980173023889944,
-            "Beige shorts": 0.0029363764613124445
+            "Beige chinos": 0.7619768897869963,
+            "Blue jeans": 0.007958569884655074,
+            "Black jeans": 0.004836464307248101,
+            "Grey trousers": 0.0029725671214693,
+            "Beige shorts": 0.22225550889963122
           }
         },
         "pick_shoes": {
           "top": "Cream sandals",
-          "unknown": 0.0014240120065785065,
+          "unknown": 0.0029886606569639847,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00046637089026823865,
-            "Tan chelsea boots": 0.0001926564398866564,
-            "Grey ballet flats": 0.0007962655908792068,
-            "Cream sandals": 0.9985447070789659
+            "Caramel boat shoes": 0.0006461941586567246,
+            "Tan chelsea boots": 0.0005591044991410048,
+            "Grey ballet flats": 0.0028774040286727565,
+            "Cream sandals": 0.9959172973135295
           }
         }
       },
-      "server_ms": 1097.6,
-      "round_trip_ms": 1100
+      "server_ms": 2416.6,
+      "round_trip_ms": 2418
     },
     {
       "scenario": "style-m03",
@@ -159,56 +159,56 @@
       "answers": {
         "piece_colour": {
           "top": "red",
-          "unknown": 0.00018251630589420507,
+          "unknown": 0.0024127807248343117,
           "abstained": false,
           "probabilities": {
-            "black": 0.014391580545010054,
-            "white": 0.0003217175749405761,
-            "grey": 0.00022940586639891338,
-            "navy or blue": 0.0002716575777799041,
-            "beige or brown": 0.0002982048842552498,
-            "red": 0.9737134640209881,
-            "green": 0.00041672457675446986,
-            "multicolour": 0.010357244953872696
+            "black": 0.0612816527102175,
+            "white": 0.0017867530598501826,
+            "grey": 0.001389476001182507,
+            "navy or blue": 0.0012082819750480558,
+            "beige or brown": 0.0017056194049383103,
+            "red": 0.907535816529441,
+            "green": 0.0047576694187137815,
+            "multicolour": 0.020334730900608663
           }
         },
         "piece_pattern": {
           "top": "checked",
-          "unknown": 0.0001263309930848809,
+          "unknown": 0.0010608457822989079,
           "abstained": false,
           "probabilities": {
-            "plain": 0.0000802195371056362,
-            "striped": 0.00022075458454347413,
-            "checked": 0.9995261241160397,
-            "floral": 0.00017290176231122536
+            "plain": 0.0004896960870471678,
+            "striped": 0.0018273337551852724,
+            "checked": 0.9968883917033338,
+            "floral": 0.0007945784544338665
           }
         },
         "pick_bottoms": {
           "top": "Blue jeans",
-          "unknown": 0.000978144485644666,
+          "unknown": 0.004583984858657439,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.0007734173591414985,
-            "Blue jeans": 0.9973132533531801,
-            "Black jeans": 0.001454867369461095,
-            "Grey trousers": 0.00018892176870917527,
-            "Beige shorts": 0.0002695401495080903
+            "Beige chinos": 0.0050678963494829,
+            "Blue jeans": 0.9855249094186365,
+            "Black jeans": 0.005425528650944981,
+            "Grey trousers": 0.0012309096965443635,
+            "Beige shorts": 0.0027507558843912552
           }
         },
         "pick_shoes": {
           "top": "Tan chelsea boots",
-          "unknown": 0.003863633021661952,
+          "unknown": 0.010919653957335032,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.4938869087391371,
-            "Tan chelsea boots": 0.5035206202241581,
-            "Grey ballet flats": 0.0018653841693677391,
-            "Cream sandals": 0.0007270868673370856
+            "Caramel boat shoes": 0.33688284071515884,
+            "Tan chelsea boots": 0.6533826851869339,
+            "Grey ballet flats": 0.006926071900917543,
+            "Cream sandals": 0.0028084021969897997
           }
         }
       },
-      "server_ms": 1268,
-      "round_trip_ms": 1271
+      "server_ms": 2406.6,
+      "round_trip_ms": 2408
     },
     {
       "scenario": "style-w03",
@@ -225,66 +225,66 @@
       "answers": {
         "piece_colour": {
           "top": "black",
-          "unknown": 0.0006618113334009957,
+          "unknown": 0.00670920079206993,
           "abstained": false,
           "probabilities": {
-            "black": 0.9327524295178857,
-            "white": 0.023307437659057326,
-            "grey": 0.0025060170490168194,
-            "navy or blue": 0.0015019708437237693,
-            "beige or brown": 0.00038958999927021033,
-            "red": 0.0005725424213720287,
-            "green": 0.00023801432865404562,
-            "multicolour": 0.03873199818102005
+            "black": 0.9071782583605522,
+            "white": 0.038221009209649257,
+            "grey": 0.011837659496468818,
+            "navy or blue": 0.004106847047802997,
+            "beige or brown": 0.002094968000255958,
+            "red": 0.001666028237762052,
+            "green": 0.0015957591306700882,
+            "multicolour": 0.03329947051683858
           }
         },
         "piece_pattern": {
           "top": "striped",
-          "unknown": 0.00005211121081240406,
+          "unknown": 0.0008286212038679169,
           "abstained": false,
           "probabilities": {
-            "plain": 0.00010983015924065966,
-            "striped": 0.9995171677852126,
-            "checked": 0.00011086591151559772,
-            "floral": 0.0002621361440311155
+            "plain": 0.0008328865569099594,
+            "striped": 0.9980617056319874,
+            "checked": 0.0004605825346117647,
+            "floral": 0.0006448252764909506
           }
         },
         "pick_bottoms": {
           "top": "Black jeans",
-          "unknown": 0.004090967343220501,
+          "unknown": 0.0077249731819314365,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.0019620808037575967,
-            "Blue jeans": 0.02621084248766031,
-            "Black jeans": 0.8105311778849771,
-            "Grey trousers": 0.16073108559854216,
-            "Beige shorts": 0.0005648132250628994
+            "Beige chinos": 0.0022731749364304317,
+            "Blue jeans": 0.06801666604714801,
+            "Black jeans": 0.6377366059786884,
+            "Grey trousers": 0.2890324222997213,
+            "Beige shorts": 0.002941130738011869
           }
         },
         "pick_shoes": {
           "top": "Grey ballet flats",
-          "unknown": 0.00010833864743452378,
+          "unknown": 0.0007489619315709766,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00001058709297464811,
-            "Tan chelsea boots": 0.000004434562488665125,
-            "Grey ballet flats": 0.9994918575554398,
-            "Burgundy ankle boots": 0.00048271274537991973,
-            "Cream sandals": 0.000010408043716927091
+            "Caramel boat shoes": 0.00009800725978366932,
+            "Tan chelsea boots": 0.0000883327107962124,
+            "Grey ballet flats": 0.9977432518422004,
+            "Burgundy ankle boots": 0.001854490097455819,
+            "Cream sandals": 0.00021591808976397973
           }
         },
         "pick_bags": {
           "top": "Black backpack",
-          "unknown": 0.0016041389274887013,
+          "unknown": 0.005047335550906498,
           "abstained": false,
           "probabilities": {
-            "Red backpack": 0.00029318948413359944,
-            "Black backpack": 0.9997068105158664
+            "Red backpack": 0.0044527523595555415,
+            "Black backpack": 0.9955472476404444
           }
         }
       },
-      "server_ms": 1236.1,
-      "round_trip_ms": 1238
+      "server_ms": 2758.6,
+      "round_trip_ms": 2760
     },
     {
       "scenario": "style-w03",
@@ -298,304 +298,72 @@
         "detail": ""
       },
       "wrong": [],
-      "answers": {
-        "piece_colour": {
-          "top": "white",
-          "unknown": 0.00210548261897827,
-          "abstained": false,
-          "probabilities": {
-            "black": 0.3021555532653153,
-            "white": 0.5903465978525512,
-            "grey": 0.005757648252791251,
-            "navy or blue": 0.002775444772643597,
-            "beige or brown": 0.0014382132199149578,
-            "red": 0.0014107236172205314,
-            "green": 0.0007899961558749069,
-            "multicolour": 0.09532582286368833
-          }
-        },
-        "piece_pattern": {
-          "top": "striped",
-          "unknown": 0.00006379452950464494,
-          "abstained": false,
-          "probabilities": {
-            "plain": 0.0001446525291668849,
-            "striped": 0.9994322392415581,
-            "checked": 0.00014110663161830242,
-            "floral": 0.00028200159765673854
-          }
-        },
-        "pick_bottoms": {
-          "top": "Beige chinos",
-          "unknown": 0.0010257158596903915,
-          "abstained": false,
-          "probabilities": {
-            "Beige chinos": 0.9649722972081077,
-            "Blue jeans": 0.000593787337328898,
-            "Black jeans": 0.001136490696877606,
-            "Grey trousers": 0.00025596428994065093,
-            "Beige shorts": 0.033041460467745025
-          }
-        },
-        "pick_shoes": {
-          "top": "Cream sandals",
-          "unknown": 0.0003022759972574467,
-          "abstained": false,
-          "probabilities": {
-            "Caramel boat shoes": 0.0000942359250560304,
-            "Tan chelsea boots": 0.00003244510663585789,
-            "Grey ballet flats": 0.00026550942387498387,
-            "Burgundy ankle boots": 0.0003058626135921088,
-            "Cream sandals": 0.9993019469308411
-          }
-        },
-        "pick_bags": {
-          "top": "Black backpack",
-          "unknown": 0.7191324840993023,
-          "abstained": true,
-          "probabilities": {
-            "Red backpack": 0.27250058064918503,
-            "Black backpack": 0.727499419350815
-          }
-        }
-      },
-      "server_ms": 1208.3,
-      "round_trip_ms": 1211
-    },
-    {
-      "scenario": "style-w03",
-      "case": "me.likes=denim, tan or brown",
-      "pass": false,
-      "expect": "ok",
-      "got": "ok",
-      "route": {
-        "kind": "ok",
-        "title": "Outfit suggested",
-        "detail": ""
-      },
-      "wrong": [
-        "pick_shoes=Burgundy ankle boots (want Caramel boat shoes or Tan chelsea boots)"
-      ],
       "answers": {
         "piece_colour": {
           "top": "black",
-          "unknown": 0.0021187383873737756,
+          "unknown": 0.013801235851916813,
           "abstained": false,
           "probabilities": {
-            "black": 0.8306467678359996,
-            "white": 0.06331970953345106,
-            "grey": 0.0047586114097279975,
-            "navy or blue": 0.0026412825427718136,
-            "beige or brown": 0.0013522229063204572,
-            "red": 0.002452083413480166,
-            "green": 0.0010792276332994442,
-            "multicolour": 0.09375009472494955
+            "black": 0.5659104813559551,
+            "white": 0.3306439041436013,
+            "grey": 0.015364904197914196,
+            "navy or blue": 0.0056197821370664695,
+            "beige or brown": 0.005335105899482013,
+            "red": 0.003297312655435462,
+            "green": 0.003494366969393967,
+            "multicolour": 0.07033414264115143
           }
         },
         "piece_pattern": {
           "top": "striped",
-          "unknown": 0.00008140362531521899,
+          "unknown": 0.0009176843710322823,
           "abstained": false,
           "probabilities": {
-            "plain": 0.00014425977734104273,
-            "striped": 0.9993263018636361,
-            "checked": 0.00018275687477853204,
-            "floral": 0.00034668148424421254
+            "plain": 0.0010759720627403454,
+            "striped": 0.997610526725115,
+            "checked": 0.0005881709594446693,
+            "floral": 0.0007253302527000793
           }
         },
         "pick_bottoms": {
-          "top": "Blue jeans",
-          "unknown": 0.0015058448263874514,
+          "top": "Beige shorts",
+          "unknown": 0.007516229353675939,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.0011231508933065083,
-            "Blue jeans": 0.9959929897835317,
-            "Black jeans": 0.0013599104810365034,
-            "Grey trousers": 0.00034481634119868607,
-            "Beige shorts": 0.001179132500926616
-          }
-        },
-        "pick_shoes": {
-          "top": "Burgundy ankle boots",
-          "unknown": 0.0013115128617114942,
-          "abstained": false,
-          "probabilities": {
-            "Caramel boat shoes": 0.42601942514328683,
-            "Tan chelsea boots": 0.10495564687409226,
-            "Grey ballet flats": 0.0015938248199841578,
-            "Burgundy ankle boots": 0.46653293671158963,
-            "Cream sandals": 0.0008981664510470193
-          }
-        },
-        "pick_bags": {
-          "top": "Red backpack",
-          "unknown": 0.029615430235344117,
-          "abstained": false,
-          "probabilities": {
-            "Red backpack": 0.9705055949325045,
-            "Black backpack": 0.029494405067495507
-          }
-        }
-      },
-      "server_ms": 1212.3,
-      "round_trip_ms": 1214
-    },
-    {
-      "scenario": "style-m01",
-      "case": "me.likes=black, grey or navy",
-      "pass": true,
-      "expect": "ok",
-      "got": "ok",
-      "route": {
-        "kind": "ok",
-        "title": "Outfit suggested",
-        "detail": ""
-      },
-      "wrong": [],
-      "answers": {
-        "piece_colour": {
-          "top": "navy or blue",
-          "unknown": 0.00006036966659933127,
-          "abstained": false,
-          "probabilities": {
-            "black": 0.0010351756212637808,
-            "white": 0.0000496215482931149,
-            "grey": 0.0003006950045561804,
-            "navy or blue": 0.998371041773929,
-            "beige or brown": 0.00004283214916735678,
-            "red": 0.000043262762125958574,
-            "green": 0.0000347869114012294,
-            "multicolour": 0.00012258422926339987
-          }
-        },
-        "piece_pattern": {
-          "top": "plain",
-          "unknown": 0.00037871136464306086,
-          "abstained": false,
-          "probabilities": {
-            "plain": 0.9880553553047424,
-            "striped": 0.009267830064618671,
-            "checked": 0.0018007642924530996,
-            "floral": 0.000876050338185761
-          }
-        },
-        "pick_bottoms": {
-          "top": "Black jeans",
-          "unknown": 0.0035202501542646245,
-          "abstained": false,
-          "probabilities": {
-            "Beige chinos": 0.0059259079006587865,
-            "Blue jeans": 0.007338213902863367,
-            "Black jeans": 0.6700601269628758,
-            "Grey trousers": 0.30867403450278263,
-            "Beige shorts": 0.0009014400718379993,
-            "Gingham midi skirt": 0.007100276658981465
-          }
-        },
-        "pick_shoes": {
-          "top": "Grey ballet flats",
-          "unknown": 0.003477740757648998,
-          "abstained": false,
-          "probabilities": {
-            "Caramel boat shoes": 0.0000820572141693174,
-            "Tan chelsea boots": 0.00003857989002884489,
-            "Grey ballet flats": 0.9968065357867862,
-            "Burgundy ankle boots": 0.003017256267657537,
-            "Cream sandals": 0.0000555708413581282
-          }
-        },
-        "pick_bags": {
-          "top": "Black backpack",
-          "unknown": 0.0007792268541774085,
-          "abstained": false,
-          "probabilities": {
-            "Red backpack": 0.00006150800792759178,
-            "Black backpack": 0.9999384919920724
-          }
-        }
-      },
-      "server_ms": 1210.9,
-      "round_trip_ms": 1212
-    },
-    {
-      "scenario": "style-m01",
-      "case": "me.likes=white, cream or beige",
-      "pass": true,
-      "expect": "ok",
-      "got": "ok",
-      "route": {
-        "kind": "ok",
-        "title": "Outfit suggested",
-        "detail": ""
-      },
-      "wrong": [],
-      "answers": {
-        "piece_colour": {
-          "top": "navy or blue",
-          "unknown": 0.0006437450860391859,
-          "abstained": false,
-          "probabilities": {
-            "black": 0.003192672412702451,
-            "white": 0.0006402646719303711,
-            "grey": 0.0013472597775754515,
-            "navy or blue": 0.9919123617777481,
-            "beige or brown": 0.0004933684894576391,
-            "red": 0.0007240095607108457,
-            "green": 0.0006263952260251185,
-            "multicolour": 0.001063668083849997
-          }
-        },
-        "piece_pattern": {
-          "top": "plain",
-          "unknown": 0.0010823055541767537,
-          "abstained": false,
-          "probabilities": {
-            "plain": 0.9719651817588423,
-            "striped": 0.021016171554695925,
-            "checked": 0.004130945113465513,
-            "floral": 0.0028877015729963317
-          }
-        },
-        "pick_bottoms": {
-          "top": "Beige chinos",
-          "unknown": 0.00011686225479276292,
-          "abstained": false,
-          "probabilities": {
-            "Beige chinos": 0.9818494349316347,
-            "Blue jeans": 0.0001489616326981762,
-            "Black jeans": 0.0002274382768429861,
-            "Grey trousers": 0.00012925236059937564,
-            "Beige shorts": 0.017315943142658215,
-            "Gingham midi skirt": 0.00032896965556654693
+            "Beige chinos": 0.3485539421923062,
+            "Blue jeans": 0.006351654764878321,
+            "Black jeans": 0.0045518763940057055,
+            "Grey trousers": 0.0024404810513717293,
+            "Beige shorts": 0.6381020455974381
           }
         },
         "pick_shoes": {
           "top": "Cream sandals",
-          "unknown": 0.0005226704465045169,
+          "unknown": 0.001089193323975903,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00017466980790331317,
-            "Tan chelsea boots": 0.000040295261043408264,
-            "Grey ballet flats": 0.0001982277894649487,
-            "Burgundy ankle boots": 0.0002783547189233389,
-            "Cream sandals": 0.999308452422665
+            "Caramel boat shoes": 0.00024740563705518776,
+            "Tan chelsea boots": 0.00021307047577009776,
+            "Grey ballet flats": 0.0013167199698405458,
+            "Burgundy ankle boots": 0.001391356128769295,
+            "Cream sandals": 0.9968314477885648
           }
         },
         "pick_bags": {
           "top": "Black backpack",
-          "unknown": 0.8947872936330199,
+          "unknown": 0.7292425821055615,
           "abstained": true,
           "probabilities": {
-            "Red backpack": 0.2844734013021487,
-            "Black backpack": 0.7155265986978513
+            "Red backpack": 0.4205694754190524,
+            "Black backpack": 0.5794305245809476
           }
         }
       },
-      "server_ms": 1221.6,
-      "round_trip_ms": 1224
+      "server_ms": 2749,
+      "round_trip_ms": 2750
     },
     {
-      "scenario": "style-m01",
+      "scenario": "style-w03",
       "case": "me.likes=denim, tan or brown",
       "pass": true,
       "expect": "ok",
@@ -608,68 +376,298 @@
       "wrong": [],
       "answers": {
         "piece_colour": {
-          "top": "navy or blue",
-          "unknown": 0.0007662103912972429,
+          "top": "black",
+          "unknown": 0.013372574307594705,
           "abstained": false,
           "probabilities": {
-            "black": 0.0038647213620761553,
-            "white": 0.00045339947283101154,
-            "grey": 0.0014419809024685233,
-            "navy or blue": 0.9892613624244923,
-            "beige or brown": 0.0008937323462623011,
-            "red": 0.0011853001097806134,
-            "green": 0.0012421761496108567,
-            "multicolour": 0.0016573272324781967
+            "black": 0.828836676646537,
+            "white": 0.07858516779226196,
+            "grey": 0.013338348800185543,
+            "navy or blue": 0.005489764044181534,
+            "beige or brown": 0.0050092283662566284,
+            "red": 0.005541157318909347,
+            "green": 0.005506590265922785,
+            "multicolour": 0.05769306676574519
           }
         },
         "piece_pattern": {
-          "top": "plain",
-          "unknown": 0.0012611084761588271,
+          "top": "striped",
+          "unknown": 0.0011103474113565736,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9767431090627733,
-            "striped": 0.017205873779513214,
-            "checked": 0.003778787312568592,
-            "floral": 0.002272229845144881
+            "plain": 0.0010229985846114602,
+            "striped": 0.997400103957077,
+            "checked": 0.000700525352938224,
+            "floral": 0.0008763721053732468
           }
         },
         "pick_bottoms": {
           "top": "Blue jeans",
-          "unknown": 0.002671843365236126,
+          "unknown": 0.007173958986632594,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.009008658248504602,
-            "Blue jeans": 0.9705553149113548,
-            "Black jeans": 0.0026364590504390204,
-            "Grey trousers": 0.001036040664024676,
-            "Beige shorts": 0.009103215330775212,
-            "Gingham midi skirt": 0.0076603117949016735
+            "Beige chinos": 0.00644300956260258,
+            "Blue jeans": 0.9794150836320682,
+            "Black jeans": 0.004758447190060954,
+            "Grey trousers": 0.0018012534933528855,
+            "Beige shorts": 0.007582206121915378
           }
         },
         "pick_shoes": {
           "top": "Caramel boat shoes",
-          "unknown": 0.001666146159357111,
+          "unknown": 0.0077736489201728955,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.8902944995328425,
-            "Tan chelsea boots": 0.04837325221130493,
-            "Grey ballet flats": 0.0009978095487874047,
-            "Burgundy ankle boots": 0.0597579781180431,
-            "Cream sandals": 0.0005764605890221073
+            "Caramel boat shoes": 0.3692573523193457,
+            "Tan chelsea boots": 0.3452618127510201,
+            "Grey ballet flats": 0.007771963683270269,
+            "Burgundy ankle boots": 0.2740399050600691,
+            "Cream sandals": 0.0036689661862949127
           }
         },
         "pick_bags": {
           "top": "Red backpack",
-          "unknown": 0.27291159827052797,
+          "unknown": 0.04604562207860713,
           "abstained": false,
           "probabilities": {
-            "Red backpack": 0.8509032531964812,
-            "Black backpack": 0.1490967468035188
+            "Red backpack": 0.9544274911216131,
+            "Black backpack": 0.045572508878387034
           }
         }
       },
-      "server_ms": 1227.4,
-      "round_trip_ms": 1231
+      "server_ms": 2749.4,
+      "round_trip_ms": 2751
+    },
+    {
+      "scenario": "style-m01",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.0016391226826977898,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.010182425079401095,
+            "white": 0.0007980157645197484,
+            "grey": 0.0024749430490285996,
+            "navy or blue": 0.9843197906197234,
+            "beige or brown": 0.0005161151353862806,
+            "red": 0.0004368010113104807,
+            "green": 0.0005623328428613788,
+            "multicolour": 0.0007095764977690182
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.004574413189343842,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.9613930113576951,
+            "striped": 0.028641561810348742,
+            "checked": 0.006267530015777673,
+            "floral": 0.003697896816178545
+          }
+        },
+        "pick_bottoms": {
+          "top": "Black jeans",
+          "unknown": 0.008908969471592068,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.007823307663398896,
+            "Blue jeans": 0.03540100329947109,
+            "Black jeans": 0.5659775361503507,
+            "Grey trousers": 0.382306874660202,
+            "Beige shorts": 0.0022422111369082938,
+            "Gingham midi skirt": 0.006249067089669015
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.008261015618863322,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.0004920963750017958,
+            "Tan chelsea boots": 0.00032667335648956766,
+            "Grey ballet flats": 0.9944268899645999,
+            "Burgundy ankle boots": 0.004296178294380993,
+            "Cream sandals": 0.000458162009527622
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.002934857754107377,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.0008838365511684413,
+            "Black backpack": 0.9991161634488315
+          }
+        }
+      },
+      "server_ms": 2762.2,
+      "round_trip_ms": 2763
+    },
+    {
+      "scenario": "style-m01",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.007298798643933941,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.019735209631825942,
+            "white": 0.010066945244973055,
+            "grey": 0.006687289879130261,
+            "navy or blue": 0.9488835110560363,
+            "beige or brown": 0.003222085003699346,
+            "red": 0.0035708379091822983,
+            "green": 0.0049984195858041374,
+            "multicolour": 0.002835701689348639
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.00805844192263825,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.93723953914832,
+            "striped": 0.0447741395130181,
+            "checked": 0.010287067773745204,
+            "floral": 0.0076992535649166504
+          }
+        },
+        "pick_bottoms": {
+          "top": "Beige chinos",
+          "unknown": 0.0016390671698802855,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.8611090314490029,
+            "Blue jeans": 0.0017944085006351724,
+            "Black jeans": 0.0012895195763014196,
+            "Grey trousers": 0.0015326546660494357,
+            "Beige shorts": 0.1324935172288762,
+            "Gingham midi skirt": 0.0017808685791349268
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.0011472661576171221,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.0002942847446653135,
+            "Tan chelsea boots": 0.00014233812133399425,
+            "Grey ballet flats": 0.000684247208400513,
+            "Burgundy ankle boots": 0.0008990735173842844,
+            "Cream sandals": 0.997980056408216
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.8450408949413802,
+          "abstained": true,
+          "probabilities": {
+            "Red backpack": 0.3285289073182707,
+            "Black backpack": 0.6714710926817292
+          }
+        }
+      },
+      "server_ms": 2769.3,
+      "round_trip_ms": 2771
+    },
+    {
+      "scenario": "style-m01",
+      "case": "me.likes=denim, tan or brown",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.0070866817690958695,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.023503111595066135,
+            "white": 0.005667761347820183,
+            "grey": 0.007167667651349355,
+            "navy or blue": 0.941045896828231,
+            "beige or brown": 0.004937948007683013,
+            "red": 0.004935248905727404,
+            "green": 0.009002931830862029,
+            "multicolour": 0.0037394338332608083
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.009954061596861569,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.937341010412989,
+            "striped": 0.044546542915740624,
+            "checked": 0.010655486589704753,
+            "floral": 0.007456960081565646
+          }
+        },
+        "pick_bottoms": {
+          "top": "Blue jeans",
+          "unknown": 0.005382925920873822,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.023117435063685132,
+            "Blue jeans": 0.9562644468298469,
+            "Black jeans": 0.004937453810785081,
+            "Grey trousers": 0.0021967282330073645,
+            "Beige shorts": 0.0074539382533120235,
+            "Gingham midi skirt": 0.006029997809363473
+          }
+        },
+        "pick_shoes": {
+          "top": "Caramel boat shoes",
+          "unknown": 0.009233743473560223,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.691103662124733,
+            "Tan chelsea boots": 0.23183668152641676,
+            "Grey ballet flats": 0.004681978313050213,
+            "Burgundy ankle boots": 0.06971399469768734,
+            "Cream sandals": 0.002663683338112688
+          }
+        },
+        "pick_bags": {
+          "top": "Red backpack",
+          "unknown": 0.3097719259881631,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.7874509150998609,
+            "Black backpack": 0.21254908490013918
+          }
+        }
+      },
+      "server_ms": 2760.5,
+      "round_trip_ms": 2762
     },
     {
       "scenario": "style-w01",
@@ -686,65 +684,65 @@
       "answers": {
         "piece_colour": {
           "top": "navy or blue",
-          "unknown": 0.0006750853806248749,
+          "unknown": 0.007074597005205014,
           "abstained": false,
           "probabilities": {
-            "black": 0.002017146899656948,
-            "white": 0.0006762457557907399,
-            "grey": 0.0005407780234444169,
-            "navy or blue": 0.9452875397286993,
-            "beige or brown": 0.00048406403591959464,
-            "red": 0.0007915513175480543,
-            "green": 0.0006202675142399186,
-            "multicolour": 0.049582406724700996
+            "black": 0.012762136133510911,
+            "white": 0.005651636825978798,
+            "grey": 0.002893754206271238,
+            "navy or blue": 0.9037693247383711,
+            "beige or brown": 0.002526176589402842,
+            "red": 0.003102552226334898,
+            "green": 0.004412269535879051,
+            "multicolour": 0.06488214974425112
           }
         },
         "piece_pattern": {
           "top": "floral",
-          "unknown": 0.0002308047737914312,
+          "unknown": 0.0011423590907813526,
           "abstained": false,
           "probabilities": {
-            "plain": 0.00022063357219120227,
-            "striped": 0.00007310928838828306,
-            "checked": 0.0000933495487940135,
-            "floral": 0.9996129075906265
+            "plain": 0.0018364910695564348,
+            "striped": 0.0006487044701793808,
+            "checked": 0.0004479211998537758,
+            "floral": 0.9970668832604104
           }
         },
         "pick_layers": {
           "top": "Navy blazer",
-          "unknown": 0.0043579993611316805,
+          "unknown": 0.04227183341667302,
           "abstained": false,
           "probabilities": {
-            "Denim jacket": 0.008781611214050095,
-            "Navy blazer": 0.9762777513724918,
-            "White blazer": 0.0012653142057091938,
-            "Green cardigan": 0.01367532320774883
+            "Denim jacket": 0.04278429083674144,
+            "Navy blazer": 0.9111836089093984,
+            "White blazer": 0.006122842331136005,
+            "Green cardigan": 0.0399092579227241
           }
         },
         "pick_shoes": {
           "top": "Grey ballet flats",
-          "unknown": 0.0001075349578597818,
+          "unknown": 0.0007759638856870938,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00000885250689653114,
-            "Tan chelsea boots": 0.000004351098111546111,
-            "Grey ballet flats": 0.9995440465759461,
-            "Burgundy ankle boots": 0.000423914600296736,
-            "Cream sandals": 0.000018835218749165153
+            "Caramel boat shoes": 0.00007227638743165784,
+            "Tan chelsea boots": 0.00007531902787457959,
+            "Grey ballet flats": 0.9979446878852072,
+            "Burgundy ankle boots": 0.0016690789877488515,
+            "Cream sandals": 0.00023863771173768077
           }
         },
         "pick_bags": {
           "top": "Black backpack",
-          "unknown": 0.004682990460552585,
+          "unknown": 0.011649808303854748,
           "abstained": false,
           "probabilities": {
-            "Red backpack": 0.00014325303710647564,
-            "Black backpack": 0.9998567469628935
+            "Red backpack": 0.004265497708664566,
+            "Black backpack": 0.9957345022913354
           }
         }
       },
-      "server_ms": 1230.6,
-      "round_trip_ms": 1233
+      "server_ms": 2720.5,
+      "round_trip_ms": 2721
     },
     {
       "scenario": "style-w01",
@@ -761,65 +759,65 @@
       "answers": {
         "piece_colour": {
           "top": "navy or blue",
-          "unknown": 0.0010252227480710297,
+          "unknown": 0.009677347974134463,
           "abstained": false,
           "probabilities": {
-            "black": 0.0018162606983788275,
-            "white": 0.0030277262665449156,
-            "grey": 0.0007063656606756758,
-            "navy or blue": 0.9238946272903414,
-            "beige or brown": 0.0006973926430914598,
-            "red": 0.0008814798743815381,
-            "green": 0.0006898510772699004,
-            "multicolour": 0.06828629648931622
+            "black": 0.007772947689756529,
+            "white": 0.021380410624422457,
+            "grey": 0.0030677310920271734,
+            "navy or blue": 0.8763902823870272,
+            "beige or brown": 0.0036383922720294648,
+            "red": 0.0037449257267020983,
+            "green": 0.005114045412798471,
+            "multicolour": 0.07889126479523663
           }
         },
         "piece_pattern": {
           "top": "floral",
-          "unknown": 0.00017015953616532353,
+          "unknown": 0.0009180738335258079,
           "abstained": false,
           "probabilities": {
-            "plain": 0.0001364765696930085,
-            "striped": 0.0000495036221267118,
-            "checked": 0.000058658718186533085,
-            "floral": 0.9997553610899937
+            "plain": 0.001255665659517167,
+            "striped": 0.00048672171987353233,
+            "checked": 0.00031266012261751903,
+            "floral": 0.9979449524979918
           }
         },
         "pick_layers": {
           "top": "White blazer",
-          "unknown": 0.0014497949913958956,
+          "unknown": 0.01379233413827045,
           "abstained": false,
           "probabilities": {
-            "Denim jacket": 0.0008379888523894622,
-            "Navy blazer": 0.0005990416378161366,
-            "White blazer": 0.996890181440732,
-            "Green cardigan": 0.0016727880690623278
+            "Denim jacket": 0.005101628916236792,
+            "Navy blazer": 0.006229340644245023,
+            "White blazer": 0.9810259663245607,
+            "Green cardigan": 0.0076430641149573915
           }
         },
         "pick_shoes": {
           "top": "Cream sandals",
-          "unknown": 0.00021699598654672262,
+          "unknown": 0.0008725756932892562,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00003191501250431772,
-            "Tan chelsea boots": 0.000013646969353991796,
-            "Grey ballet flats": 0.0002629489459310483,
-            "Burgundy ankle boots": 0.0001175798196733315,
-            "Cream sandals": 0.9995739092525373
+            "Caramel boat shoes": 0.0001343225266768109,
+            "Tan chelsea boots": 0.00011294804826603878,
+            "Grey ballet flats": 0.001257020514701936,
+            "Burgundy ankle boots": 0.0006738323225038802,
+            "Cream sandals": 0.9978218765878513
           }
         },
         "pick_bags": {
           "top": "Black backpack",
-          "unknown": 0.8712103526656324,
+          "unknown": 0.7871713164265821,
           "abstained": true,
           "probabilities": {
-            "Red backpack": 0.10202639551480262,
-            "Black backpack": 0.8979736044851974
+            "Red backpack": 0.2269020830592604,
+            "Black backpack": 0.7730979169407395
           }
         }
       },
-      "server_ms": 1241.1,
-      "round_trip_ms": 1243
+      "server_ms": 2722.4,
+      "round_trip_ms": 2723
     },
     {
       "scenario": "style-w01",
@@ -836,65 +834,65 @@
       "answers": {
         "piece_colour": {
           "top": "navy or blue",
-          "unknown": 0.0011060394166187732,
+          "unknown": 0.00855260889568292,
           "abstained": false,
           "probabilities": {
-            "black": 0.0017411809702641207,
-            "white": 0.0012187491357378293,
-            "grey": 0.0008038525488248051,
-            "navy or blue": 0.893265675556076,
-            "beige or brown": 0.001289351121639988,
-            "red": 0.0014311772269175807,
-            "green": 0.0013645238216321333,
-            "multicolour": 0.09888548961890758
+            "black": 0.008124467675406772,
+            "white": 0.007642297034106515,
+            "grey": 0.003242163418419388,
+            "navy or blue": 0.8629378508827603,
+            "beige or brown": 0.005978047619695297,
+            "red": 0.005163921210948017,
+            "green": 0.009656328333564437,
+            "multicolour": 0.09725492382509925
           }
         },
         "piece_pattern": {
           "top": "floral",
-          "unknown": 0.00024055935127982782,
+          "unknown": 0.0011808169479166854,
           "abstained": false,
           "probabilities": {
-            "plain": 0.0001920477959575219,
-            "striped": 0.0000842310246931844,
-            "checked": 0.00012807784084310924,
-            "floral": 0.9995956433385061
+            "plain": 0.0014998768597288925,
+            "striped": 0.0007667074177461541,
+            "checked": 0.0006039631085992112,
+            "floral": 0.9971294526139257
           }
         },
         "pick_layers": {
           "top": "Denim jacket",
-          "unknown": 0.01039401093147684,
+          "unknown": 0.01862442825619059,
           "abstained": false,
           "probabilities": {
-            "Denim jacket": 0.9055355685892496,
-            "Navy blazer": 0.004390699933000032,
-            "White blazer": 0.0019941264645490725,
-            "Green cardigan": 0.08807960501320136
+            "Denim jacket": 0.94766371335671,
+            "Navy blazer": 0.016792760285867108,
+            "White blazer": 0.0034029315725173934,
+            "Green cardigan": 0.03214059478490554
           }
         },
         "pick_shoes": {
           "top": "Caramel boat shoes",
-          "unknown": 0.003838064028586561,
+          "unknown": 0.014012157121589552,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.6169586844412575,
-            "Tan chelsea boots": 0.14132341561134656,
-            "Grey ballet flats": 0.006527513882266524,
-            "Burgundy ankle boots": 0.23245792577818505,
-            "Cream sandals": 0.0027324602869444464
+            "Caramel boat shoes": 0.4415199537059626,
+            "Tan chelsea boots": 0.34986118315023307,
+            "Grey ballet flats": 0.023140564801515124,
+            "Burgundy ankle boots": 0.17832644384373078,
+            "Cream sandals": 0.007151854498558503
           }
         },
         "pick_bags": {
           "top": "Red backpack",
-          "unknown": 0.23076827614285314,
+          "unknown": 0.16623676795000952,
           "abstained": false,
           "probabilities": {
-            "Red backpack": 0.5304619239123016,
-            "Black backpack": 0.4695380760876985
+            "Red backpack": 0.7198187694597473,
+            "Black backpack": 0.2801812305402527
           }
         }
       },
-      "server_ms": 1226.7,
-      "round_trip_ms": 1229
+      "server_ms": 2723,
+      "round_trip_ms": 2724
     },
     {
       "scenario": "style-w08",
@@ -911,65 +909,65 @@
       "answers": {
         "piece_colour": {
           "top": "black",
-          "unknown": 0.00005410156621523861,
+          "unknown": 0.0015063545755065434,
           "abstained": false,
           "probabilities": {
-            "black": 0.9991502066913222,
-            "white": 0.0001470462710055934,
-            "grey": 0.00019680470132501292,
-            "navy or blue": 0.0001028230108319113,
-            "beige or brown": 0.000043783601710097645,
-            "red": 0.00013712975812842985,
-            "green": 0.00003254530301021591,
-            "multicolour": 0.00018966066266661708
+            "black": 0.9926832131255231,
+            "white": 0.0013519808187769005,
+            "grey": 0.002068200540219606,
+            "navy or blue": 0.000864436615239055,
+            "beige or brown": 0.0005754630973811238,
+            "red": 0.0009230714531890891,
+            "green": 0.0007691663632648256,
+            "multicolour": 0.0007644679864063407
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.0010249725797489813,
+          "unknown": 0.007378826940391599,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9722813305843866,
-            "striped": 0.0016350970623456621,
-            "checked": 0.0005786754162824414,
-            "floral": 0.025504896936985225
+            "plain": 0.9225725675644508,
+            "striped": 0.011366354605415687,
+            "checked": 0.0025728245193094093,
+            "floral": 0.06348825331082412
           }
         },
         "pick_layers": {
           "top": "Navy blazer",
-          "unknown": 0.0041255677648898,
+          "unknown": 0.032471955197210925,
           "abstained": false,
           "probabilities": {
-            "Denim jacket": 0.0032294803060368632,
-            "Navy blazer": 0.9866681363196318,
-            "White blazer": 0.0007863356383196312,
-            "Green cardigan": 0.009316047736011744
+            "Denim jacket": 0.008201166058767943,
+            "Navy blazer": 0.953782266866309,
+            "White blazer": 0.004776096279550356,
+            "Green cardigan": 0.033240470795372734
           }
         },
         "pick_shoes": {
           "top": "Grey ballet flats",
-          "unknown": 0.000049669586923213916,
+          "unknown": 0.00046527999017140274,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00000713814994858337,
-            "Tan chelsea boots": 0.0000032712785739287043,
-            "Grey ballet flats": 0.9995716142392608,
-            "Burgundy ankle boots": 0.0004087175527248372,
-            "Cream sandals": 0.000009258779491895305
+            "Caramel boat shoes": 0.000053471085595682374,
+            "Tan chelsea boots": 0.000059820007544482224,
+            "Grey ballet flats": 0.9982249051459497,
+            "Burgundy ankle boots": 0.0014875433572277288,
+            "Cream sandals": 0.0001742604036823414
           }
         },
         "pick_bags": {
           "top": "Black backpack",
-          "unknown": 0.0005351213069417764,
+          "unknown": 0.0026808025107830256,
           "abstained": false,
           "probabilities": {
-            "Red backpack": 0.0002514214787009405,
-            "Black backpack": 0.9997485785212991
+            "Red backpack": 0.0035158753487304155,
+            "Black backpack": 0.9964841246512696
           }
         }
       },
-      "server_ms": 1238.8,
-      "round_trip_ms": 1241
+      "server_ms": 2726.6,
+      "round_trip_ms": 2728
     },
     {
       "scenario": "style-w08",
@@ -986,70 +984,70 @@
       "answers": {
         "piece_colour": {
           "top": "black",
-          "unknown": 0.00038916151544906403,
+          "unknown": 0.007101980457164821,
           "abstained": false,
           "probabilities": {
-            "black": 0.9955304245368946,
-            "white": 0.0011349296407427438,
-            "grey": 0.0007867126890973527,
-            "navy or blue": 0.00029316326356820327,
-            "beige or brown": 0.0002799457046267201,
-            "red": 0.0007953197986821834,
-            "green": 0.0002712650388517907,
-            "multicolour": 0.0009082393275364325
+            "black": 0.9686913748930381,
+            "white": 0.011222701064681793,
+            "grey": 0.0054103347584949805,
+            "navy or blue": 0.0017485833556278192,
+            "beige or brown": 0.002713536382562386,
+            "red": 0.004213119020099165,
+            "green": 0.0035377356650919717,
+            "multicolour": 0.0024626148604037054
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.002388226234381106,
+          "unknown": 0.011026261585259834,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9616416673963557,
-            "striped": 0.0027241417855685766,
-            "checked": 0.0011291538928121132,
-            "floral": 0.03450503692526366
+            "plain": 0.9061096639922948,
+            "striped": 0.014959859695970792,
+            "checked": 0.0038120207566055683,
+            "floral": 0.0751184555551289
           }
         },
         "pick_layers": {
           "top": "White blazer",
-          "unknown": 0.00029509243311990143,
+          "unknown": 0.0025796345813251633,
           "abstained": false,
           "probabilities": {
-            "Denim jacket": 0.00009210646510305693,
-            "Navy blazer": 0.00006805656181055843,
-            "White blazer": 0.9992397782132661,
-            "Green cardigan": 0.0006000587598201676
+            "Denim jacket": 0.0004797989965624315,
+            "Navy blazer": 0.0009778548573128256,
+            "White blazer": 0.9934462640205551,
+            "Green cardigan": 0.0050960821255696025
           }
         },
         "pick_shoes": {
           "top": "Cream sandals",
-          "unknown": 0.0001354043131482532,
+          "unknown": 0.0005269862042485015,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.0000585804024552522,
-            "Tan chelsea boots": 0.00002955664301045319,
-            "Grey ballet flats": 0.00013124455480869078,
-            "Burgundy ankle boots": 0.0002515764124238253,
-            "Cream sandals": 0.9995290419873017
+            "Caramel boat shoes": 0.0001307884243581671,
+            "Tan chelsea boots": 0.00015213839328392681,
+            "Grey ballet flats": 0.0006661536332358372,
+            "Burgundy ankle boots": 0.001180109861507972,
+            "Cream sandals": 0.9978708096876141
           }
         },
         "pick_bags": {
-          "top": "Black backpack",
-          "unknown": 0.6513623787803182,
+          "top": "Red backpack",
+          "unknown": 0.5317630507180332,
           "abstained": true,
           "probabilities": {
-            "Red backpack": 0.44080480436466163,
-            "Black backpack": 0.5591951956353384
+            "Red backpack": 0.7440727755005827,
+            "Black backpack": 0.25592722449941724
           }
         }
       },
-      "server_ms": 1210.9,
-      "round_trip_ms": 1212
+      "server_ms": 2727.6,
+      "round_trip_ms": 2729
     },
     {
       "scenario": "style-w08",
       "case": "me.likes=denim, tan or brown",
-      "pass": false,
+      "pass": true,
       "expect": "ok",
       "got": "ok",
       "route": {
@@ -1057,72 +1055,69 @@
         "title": "Outfit suggested",
         "detail": ""
       },
-      "wrong": [
-        "pick_layers=Green cardigan (want Denim jacket)",
-        "pick_shoes=Burgundy ankle boots (want Caramel boat shoes or Tan chelsea boots)"
-      ],
+      "wrong": [],
       "answers": {
         "piece_colour": {
           "top": "black",
-          "unknown": 0.0004577314597565418,
+          "unknown": 0.006136528192539086,
           "abstained": false,
           "probabilities": {
-            "black": 0.9938545432721918,
-            "white": 0.0006616230363400973,
-            "grey": 0.0009621411729871622,
-            "navy or blue": 0.00032851364494840426,
-            "beige or brown": 0.0004924487881457643,
-            "red": 0.001780161025426507,
-            "green": 0.0007803195798170687,
-            "multicolour": 0.001140249480143183
+            "black": 0.9668128716980704,
+            "white": 0.005211469768816857,
+            "grey": 0.00590749009978962,
+            "navy or blue": 0.001918351213230754,
+            "beige or brown": 0.003595989861433397,
+            "red": 0.006293466443109798,
+            "green": 0.007792261344706862,
+            "multicolour": 0.0024680995708423275
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.0031193860125851994,
+          "unknown": 0.015703076929494797,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9457194006263331,
-            "striped": 0.003007737020936853,
-            "checked": 0.001339141765499717,
-            "floral": 0.04993372058723033
+            "plain": 0.8882864594244182,
+            "striped": 0.016529419356248465,
+            "checked": 0.0043229876015026675,
+            "floral": 0.09086113361783071
           }
         },
         "pick_layers": {
-          "top": "Green cardigan",
-          "unknown": 0.0054296757693806826,
+          "top": "Denim jacket",
+          "unknown": 0.016601628519257512,
           "abstained": false,
           "probabilities": {
-            "Denim jacket": 0.24755907090636592,
-            "Navy blazer": 0.0012160693917994952,
-            "White blazer": 0.0028312364419891883,
-            "Green cardigan": 0.7483936232598454
+            "Denim jacket": 0.8954599661609512,
+            "Navy blazer": 0.007748539763004448,
+            "White blazer": 0.005996716561556067,
+            "Green cardigan": 0.09079477751448833
           }
         },
         "pick_shoes": {
-          "top": "Burgundy ankle boots",
-          "unknown": 0.0009678992782088036,
+          "top": "Tan chelsea boots",
+          "unknown": 0.005390698544215915,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.3475606844036948,
-            "Tan chelsea boots": 0.13932788651495417,
-            "Grey ballet flats": 0.0013936943996434945,
-            "Burgundy ankle boots": 0.5109585925955286,
-            "Cream sandals": 0.0007591420861789644
+            "Caramel boat shoes": 0.27656593791741113,
+            "Tan chelsea boots": 0.5061520637496875,
+            "Grey ballet flats": 0.007145727560992799,
+            "Burgundy ankle boots": 0.2073584463856519,
+            "Cream sandals": 0.002777824386256664
           }
         },
         "pick_bags": {
           "top": "Red backpack",
-          "unknown": 0.01133230304116731,
+          "unknown": 0.033388745716632626,
           "abstained": false,
           "probabilities": {
-            "Red backpack": 0.9866859443250247,
-            "Black backpack": 0.01331405567497533
+            "Red backpack": 0.9662037265258736,
+            "Black backpack": 0.033796273474126455
           }
         }
       },
-      "server_ms": 1194.7,
-      "round_trip_ms": 1196
+      "server_ms": 2723.9,
+      "round_trip_ms": 2725
     },
     {
       "scenario": "style-m04",
@@ -1139,65 +1134,65 @@
       "answers": {
         "piece_colour": {
           "top": "navy or blue",
-          "unknown": 0.002810165249110595,
+          "unknown": 0.0216438084679097,
           "abstained": false,
           "probabilities": {
-            "black": 0.004343831240505024,
-            "white": 0.0003756323536736725,
-            "grey": 0.0017910524820403488,
-            "navy or blue": 0.9832280277609727,
-            "beige or brown": 0.0017260691209245393,
-            "red": 0.0009278437556044145,
-            "green": 0.0006314340159214534,
-            "multicolour": 0.00697610927035781
+            "black": 0.027047191520137463,
+            "white": 0.0029722843662002146,
+            "grey": 0.007458176909063495,
+            "navy or blue": 0.9387245856633832,
+            "beige or brown": 0.00670064533027962,
+            "red": 0.0034495319490113916,
+            "green": 0.003321623388113507,
+            "multicolour": 0.010325960873811043
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.006153029779576947,
+          "unknown": 0.02685128380277101,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9462973184956581,
-            "striped": 0.04354655162466938,
-            "checked": 0.0047209640411214615,
-            "floral": 0.005435165838550946
+            "plain": 0.9037656132433965,
+            "striped": 0.0760787090225057,
+            "checked": 0.009292863424434715,
+            "floral": 0.010862814309662953
           }
         },
         "pick_tops": {
-          "top": "Navy polo",
-          "unknown": 0.0031968169825435386,
+          "top": "Black tank top",
+          "unknown": 0.015243299183048849,
           "abstained": false,
           "probabilities": {
-            "Navy polo": 0.7795754144171763,
-            "Red check flannel": 0.016074576665989448,
-            "Black-and-white stripe tee": 0.032233970503581524,
-            "Black tank top": 0.17211603841325274
+            "Navy polo": 0.4108750274537542,
+            "Red check flannel": 0.03679642490352858,
+            "Black-and-white stripe tee": 0.074674865349652,
+            "Black tank top": 0.4776536822930652
           }
         },
         "pick_shoes": {
           "top": "Grey ballet flats",
-          "unknown": 0.0002843341204688142,
+          "unknown": 0.0012514891694978372,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00001307739212820361,
-            "Tan chelsea boots": 0.000006850153999060418,
-            "Grey ballet flats": 0.9990897551117212,
-            "Burgundy ankle boots": 0.0008827498472302892,
-            "Cream sandals": 0.000007567494921354935
+            "Caramel boat shoes": 0.00010569767303291971,
+            "Tan chelsea boots": 0.00010071487569876006,
+            "Grey ballet flats": 0.9974162767228945,
+            "Burgundy ankle boots": 0.0022547532226925185,
+            "Cream sandals": 0.00012255750568136635
           }
         },
         "pick_bags": {
           "top": "Black backpack",
-          "unknown": 0.00038382466699279157,
+          "unknown": 0.002266568694447528,
           "abstained": false,
           "probabilities": {
-            "Red backpack": 0.0001303324144522116,
-            "Black backpack": 0.9998696675855478
+            "Red backpack": 0.0015195957420142277,
+            "Black backpack": 0.9984804042579858
           }
         }
       },
-      "server_ms": 1215,
-      "round_trip_ms": 1216
+      "server_ms": 2740.6,
+      "round_trip_ms": 2742
     },
     {
       "scenario": "style-m04",
@@ -1214,65 +1209,65 @@
       "answers": {
         "piece_colour": {
           "top": "navy or blue",
-          "unknown": 0.0015456217191299406,
+          "unknown": 0.01687090250246205,
           "abstained": false,
           "probabilities": {
-            "black": 0.001997288082018346,
-            "white": 0.0005791506949111355,
-            "grey": 0.0017781706052914816,
-            "navy or blue": 0.9897244433343367,
-            "beige or brown": 0.0014148438259499524,
-            "red": 0.0006082513415418337,
-            "green": 0.00045723784818568536,
-            "multicolour": 0.0034406142677647746
+            "black": 0.014607374133855707,
+            "white": 0.010365047640071323,
+            "grey": 0.009027937769597068,
+            "navy or blue": 0.9415407846535128,
+            "beige or brown": 0.008954169566263812,
+            "red": 0.003911304423124779,
+            "green": 0.003807922968239172,
+            "multicolour": 0.007785458845335327
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.008237592613505264,
+          "unknown": 0.028936157481094224,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9399208275795836,
-            "striped": 0.04658839721949849,
-            "checked": 0.00655435574897946,
-            "floral": 0.006936419451938461
+            "plain": 0.9057128400296611,
+            "striped": 0.07149914927657557,
+            "checked": 0.010903401960168242,
+            "floral": 0.01188460873359499
           }
         },
         "pick_tops": {
           "top": "Red check flannel",
-          "unknown": 0.3645037408705434,
-          "abstained": false,
+          "unknown": 0.5800750368265462,
+          "abstained": true,
           "probabilities": {
-            "Navy polo": 0.0671414126265249,
-            "Red check flannel": 0.8370938715463783,
-            "Black-and-white stripe tee": 0.0902841759229681,
-            "Black tank top": 0.005480539904128729
+            "Navy polo": 0.03514979263774826,
+            "Red check flannel": 0.7010648170606177,
+            "Black-and-white stripe tee": 0.2252674684571512,
+            "Black tank top": 0.038517921844482675
           }
         },
         "pick_shoes": {
           "top": "Cream sandals",
-          "unknown": 0.0002634104367304199,
+          "unknown": 0.0008304017430918438,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.00007063351886247406,
-            "Tan chelsea boots": 0.000027963185524240162,
-            "Grey ballet flats": 0.0003048110551846845,
-            "Burgundy ankle boots": 0.0003248790148074247,
-            "Cream sandals": 0.9992717132256211
+            "Caramel boat shoes": 0.0002307822708784311,
+            "Tan chelsea boots": 0.0001667002582277313,
+            "Grey ballet flats": 0.0012263942488193078,
+            "Burgundy ankle boots": 0.0013749574389263512,
+            "Cream sandals": 0.9970011657831481
           }
         },
         "pick_bags": {
           "top": "Black backpack",
-          "unknown": 0.7919394772559692,
+          "unknown": 0.7975460147021928,
           "abstained": true,
           "probabilities": {
-            "Red backpack": 0.35679172657599356,
-            "Black backpack": 0.6432082734240064
+            "Red backpack": 0.3826544957729435,
+            "Black backpack": 0.6173455042270565
           }
         }
       },
-      "server_ms": 1206.8,
-      "round_trip_ms": 1208
+      "server_ms": 2745.6,
+      "round_trip_ms": 2747
     },
     {
       "scenario": "style-m04",
@@ -1289,65 +1284,65 @@
       "answers": {
         "piece_colour": {
           "top": "navy or blue",
-          "unknown": 0.0011934567189926003,
+          "unknown": 0.01001963957068468,
           "abstained": false,
           "probabilities": {
-            "black": 0.0010052462238550044,
-            "white": 0.00015397953931934499,
-            "grey": 0.000784970982828866,
-            "navy or blue": 0.9928703908730809,
-            "beige or brown": 0.0017359802868184137,
-            "red": 0.00024435978321925663,
-            "green": 0.00021385363017683198,
-            "multicolour": 0.0029912186807013346
+            "black": 0.007964896417196252,
+            "white": 0.0019399756133066397,
+            "grey": 0.004200681806717395,
+            "navy or blue": 0.96694244362684,
+            "beige or brown": 0.009530356945597961,
+            "red": 0.001505843686564069,
+            "green": 0.0019365882567945875,
+            "multicolour": 0.005979213646983123
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.003778387204266673,
+          "unknown": 0.01980708053874699,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9692050213738573,
-            "striped": 0.025164977818971663,
-            "checked": 0.0033745323067780365,
-            "floral": 0.0022554685003929567
+            "plain": 0.9326876255971437,
+            "striped": 0.05412106382142853,
+            "checked": 0.007470375056635995,
+            "floral": 0.0057209355247917915
           }
         },
         "pick_tops": {
           "top": "Red check flannel",
-          "unknown": 0.012357923668326208,
+          "unknown": 0.07317806910028693,
           "abstained": false,
           "probabilities": {
-            "Navy polo": 0.011947873485527394,
-            "Red check flannel": 0.9834679708509291,
-            "Black-and-white stripe tee": 0.002744695611617368,
-            "Black tank top": 0.0018394600519261541
+            "Navy polo": 0.010067375652555836,
+            "Red check flannel": 0.9650081629479437,
+            "Black-and-white stripe tee": 0.014676777884418478,
+            "Black tank top": 0.010247683515082064
           }
         },
         "pick_shoes": {
           "top": "Caramel boat shoes",
-          "unknown": 0.0030874551552245015,
+          "unknown": 0.010604324096957857,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.8744025579050339,
-            "Tan chelsea boots": 0.0565992294930304,
-            "Grey ballet flats": 0.002253412710022971,
-            "Burgundy ankle boots": 0.06574162280793004,
-            "Cream sandals": 0.0010031770839826833
+            "Caramel boat shoes": 0.5811624632082638,
+            "Tan chelsea boots": 0.3612734037452302,
+            "Grey ballet flats": 0.006908052469513538,
+            "Burgundy ankle boots": 0.04683158980934662,
+            "Cream sandals": 0.003824490767645819
           }
         },
         "pick_bags": {
           "top": "Red backpack",
-          "unknown": 0.5253363161744855,
+          "unknown": 0.5384101001852192,
           "abstained": true,
           "probabilities": {
-            "Red backpack": 0.8428077519754751,
-            "Black backpack": 0.157192248024525
+            "Red backpack": 0.7409303079729452,
+            "Black backpack": 0.2590696920270547
           }
         }
       },
-      "server_ms": 1226.8,
-      "round_trip_ms": 1230
+      "server_ms": 2739,
+      "round_trip_ms": 2740
     },
     {
       "scenario": "style-w02",
@@ -1364,66 +1359,66 @@
       "answers": {
         "piece_colour": {
           "top": "green",
-          "unknown": 0.00012277562621035483,
+          "unknown": 0.0007733100150228557,
           "abstained": false,
           "probabilities": {
-            "black": 0.0006305583319079922,
-            "white": 0.00008302505837146422,
-            "grey": 0.0001238913614863316,
-            "navy or blue": 0.00018357993129126298,
-            "beige or brown": 0.00008163733012707596,
-            "red": 0.00026630382760053873,
-            "green": 0.9984211868057865,
-            "multicolour": 0.0002098173534288234
+            "black": 0.004587716973420656,
+            "white": 0.000532078034272187,
+            "grey": 0.000754458746918167,
+            "navy or blue": 0.0005829483155107453,
+            "beige or brown": 0.00039112638981678285,
+            "red": 0.0006632237278928627,
+            "green": 0.9919443322388856,
+            "multicolour": 0.0005441155732830876
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.0006039911608556219,
+          "unknown": 0.00633692744715579,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9870865674761514,
-            "striped": 0.0077950410860987435,
-            "checked": 0.0007274990849855318,
-            "floral": 0.0043908923527643294
+            "plain": 0.9632731778987795,
+            "striped": 0.02420146010982957,
+            "checked": 0.0019535000592668574,
+            "floral": 0.01057186193212402
           }
         },
         "pick_tops": {
           "top": "Navy polo",
-          "unknown": 0.20648010457199106,
+          "unknown": 0.31840715761599636,
           "abstained": false,
           "probabilities": {
-            "Navy polo": 0.8042311887239663,
-            "Black-and-white stripe tee": 0.029690111182465916,
-            "Black tank top": 0.1660787000935678
+            "Navy polo": 0.5032854568611934,
+            "Black-and-white stripe tee": 0.08153554990735866,
+            "Black tank top": 0.41517899323144786
           }
         },
         "pick_bottoms": {
           "top": "Black jeans",
-          "unknown": 0.002738881864191894,
+          "unknown": 0.006073682611220571,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.0018538034772778754,
-            "Blue jeans": 0.00749973025804423,
-            "Black jeans": 0.9412881000633346,
-            "Grey trousers": 0.049048196538732124,
-            "Beige shorts": 0.00031016966261110797
+            "Beige chinos": 0.0021784137308138575,
+            "Blue jeans": 0.030778465035193978,
+            "Black jeans": 0.8174560902473953,
+            "Grey trousers": 0.1473482352491368,
+            "Beige shorts": 0.002238795737460105
           }
         },
         "pick_shoes": {
           "top": "Grey ballet flats",
-          "unknown": 0.00006878393121322488,
+          "unknown": 0.000750498711499013,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.000006541531698479913,
-            "Tan chelsea boots": 0.0000038646877752968646,
-            "Grey ballet flats": 0.9999831630440529,
-            "Cream sandals": 0.0000064307364732780595
+            "Caramel boat shoes": 0.000041978931419365365,
+            "Tan chelsea boots": 0.00004485647056655255,
+            "Grey ballet flats": 0.999810989285893,
+            "Cream sandals": 0.00010217531212115202
           }
         }
       },
-      "server_ms": 1244.6,
-      "round_trip_ms": 1246
+      "server_ms": 2938.6,
+      "round_trip_ms": 2940
     },
     {
       "scenario": "style-w02",
@@ -1440,66 +1435,66 @@
       "answers": {
         "piece_colour": {
           "top": "green",
-          "unknown": 0.00018809374571607514,
+          "unknown": 0.0008145426334858025,
           "abstained": false,
           "probabilities": {
-            "black": 0.000749819579524225,
-            "white": 0.0002241139564310281,
-            "grey": 0.00020702668468007234,
-            "navy or blue": 0.00016557230754604376,
-            "beige or brown": 0.00008381966506112628,
-            "red": 0.0003278434607752394,
-            "green": 0.9979736452376459,
-            "multicolour": 0.0002681591083363765
+            "black": 0.0025631603969191196,
+            "white": 0.0014658994739301027,
+            "grey": 0.0007480561912417777,
+            "navy or blue": 0.00031983170372398725,
+            "beige or brown": 0.0004067875687522656,
+            "red": 0.0006756742583741966,
+            "green": 0.9932729572808469,
+            "multicolour": 0.0005476331262116772
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.0005318025122440416,
+          "unknown": 0.005206405034388225,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9855377562760618,
-            "striped": 0.00958668290142509,
-            "checked": 0.0007308423750936769,
-            "floral": 0.004144718447419519
+            "plain": 0.9624760538918067,
+            "striped": 0.02595833210205024,
+            "checked": 0.00200073595143805,
+            "floral": 0.009564878054704986
           }
         },
         "pick_tops": {
           "top": "Black-and-white stripe tee",
-          "unknown": 0.9817426229307783,
+          "unknown": 0.9554242444144165,
           "abstained": true,
           "probabilities": {
-            "Navy polo": 0.14751041799223844,
-            "Black-and-white stripe tee": 0.7121454553507897,
-            "Black tank top": 0.1403441266569719
+            "Navy polo": 0.1716822370110029,
+            "Black-and-white stripe tee": 0.6091576780132207,
+            "Black tank top": 0.21916008497577635
           }
         },
         "pick_bottoms": {
-          "top": "Beige chinos",
-          "unknown": 0.0004495551359740146,
+          "top": "Beige shorts",
+          "unknown": 0.005855413275018585,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.9902586218787449,
-            "Blue jeans": 0.00041661387156063283,
-            "Black jeans": 0.0006577276170432172,
-            "Grey trousers": 0.0001608961407811529,
-            "Beige shorts": 0.008506140491870175
+            "Beige chinos": 0.4636872069526395,
+            "Blue jeans": 0.007419835338349761,
+            "Black jeans": 0.0034259060313222003,
+            "Grey trousers": 0.0023528412146354245,
+            "Beige shorts": 0.5231142104630532
           }
         },
         "pick_shoes": {
           "top": "Cream sandals",
-          "unknown": 0.00014682222135252855,
+          "unknown": 0.0006535265314670962,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.000041971491213360225,
-            "Tan chelsea boots": 0.000017881469067243577,
-            "Grey ballet flats": 0.00011001626269884565,
-            "Cream sandals": 0.9998301307770207
+            "Caramel boat shoes": 0.00011474923646182898,
+            "Tan chelsea boots": 0.00008947039647983812,
+            "Grey ballet flats": 0.0008592082817050142,
+            "Cream sandals": 0.9989365720853534
           }
         }
       },
-      "server_ms": 1216.1,
-      "round_trip_ms": 1217
+      "server_ms": 2875.1,
+      "round_trip_ms": 2877
     },
     {
       "scenario": "style-w02",
@@ -1516,66 +1511,66 @@
       "answers": {
         "piece_colour": {
           "top": "green",
-          "unknown": 0.000200599689959921,
+          "unknown": 0.0006559759067326878,
           "abstained": false,
           "probabilities": {
-            "black": 0.000952264238895888,
-            "white": 0.00013938681991489937,
-            "grey": 0.00022394075922193407,
-            "navy or blue": 0.00017358717707767355,
-            "beige or brown": 0.00017167726689523797,
-            "red": 0.00038686754921020454,
-            "green": 0.9976349664649039,
-            "multicolour": 0.0003173097238803227
+            "black": 0.0025341940924023237,
+            "white": 0.0006712500825707938,
+            "grey": 0.0007045564084787266,
+            "navy or blue": 0.0003416585495487176,
+            "beige or brown": 0.0005306084480029065,
+            "red": 0.0006996259307045612,
+            "green": 0.9939669495066054,
+            "multicolour": 0.0005511569816866103
           }
         },
         "piece_pattern": {
           "top": "plain",
-          "unknown": 0.0007046760986876901,
+          "unknown": 0.006800380664973034,
           "abstained": false,
           "probabilities": {
-            "plain": 0.9835174982458159,
-            "striped": 0.01060129785633151,
-            "checked": 0.001039122683378415,
-            "floral": 0.004842081214474161
+            "plain": 0.9554512596532962,
+            "striped": 0.03001520287333238,
+            "checked": 0.0027720901866955827,
+            "floral": 0.011761447286675712
           }
         },
         "pick_tops": {
           "top": "Navy polo",
-          "unknown": 0.9307617899256138,
+          "unknown": 0.9141835758440118,
           "abstained": true,
           "probabilities": {
-            "Navy polo": 0.817803710244318,
-            "Black-and-white stripe tee": 0.061757002689200535,
-            "Black tank top": 0.12043928706648148
+            "Navy polo": 0.5699467385435982,
+            "Black-and-white stripe tee": 0.20831049622974726,
+            "Black tank top": 0.22174276522665448
           }
         },
         "pick_bottoms": {
           "top": "Blue jeans",
-          "unknown": 0.00035144419134010686,
+          "unknown": 0.0027432490184037444,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.00019205718778516213,
-            "Blue jeans": 0.9994786605771893,
-            "Black jeans": 0.00020370216800939442,
-            "Grey trousers": 0.00005182897739974326,
-            "Beige shorts": 0.00007375108961639546
+            "Beige chinos": 0.0017129530004682098,
+            "Blue jeans": 0.995239886657875,
+            "Black jeans": 0.0013961807297533867,
+            "Grey trousers": 0.00047066825548281214,
+            "Beige shorts": 0.0011803113564205247
           }
         },
         "pick_shoes": {
           "top": "Caramel boat shoes",
-          "unknown": 0.0029875927238669888,
+          "unknown": 0.01009554196483072,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.8363109019316128,
-            "Tan chelsea boots": 0.15798029402990627,
-            "Grey ballet flats": 0.0042961803893595,
-            "Cream sandals": 0.0014126236491213812
+            "Caramel boat shoes": 0.525609325995638,
+            "Tan chelsea boots": 0.4520328630153494,
+            "Grey ballet flats": 0.01608502332061258,
+            "Cream sandals": 0.006272787668399946
           }
         }
       },
-      "server_ms": 1193.9,
-      "round_trip_ms": 1195
+      "server_ms": 2841.6,
+      "round_trip_ms": 2842
     },
     {
       "scenario": "style-r04",
@@ -1594,69 +1589,69 @@
       "answers": {
         "piece_colour": {
           "top": "white",
-          "unknown": 0.00044791577789639087,
+          "unknown": 0.008106703777160695,
           "abstained": false,
           "probabilities": {
-            "black": 0.002843952387629138,
-            "white": 0.9848626738876756,
-            "grey": 0.006103918966855925,
-            "navy or blue": 0.0006280656158074296,
-            "beige or brown": 0.0006209256826052315,
-            "red": 0.001356563189791367,
-            "green": 0.00048118718273426565,
-            "multicolour": 0.003102713086901073
+            "black": 0.024928345524658484,
+            "white": 0.9226701338767134,
+            "grey": 0.02769892752731459,
+            "navy or blue": 0.003738476858222994,
+            "beige or brown": 0.004868588602403402,
+            "red": 0.005735231079383211,
+            "green": 0.004388759353487492,
+            "multicolour": 0.005971537177816436
           }
         },
         "piece_pattern": {
           "top": "striped",
-          "unknown": 0.002063072444110753,
+          "unknown": 0.008034523453633216,
           "abstained": false,
           "probabilities": {
-            "plain": 0.11216265967873136,
-            "striped": 0.8760452473700682,
-            "checked": 0.003226746628652472,
-            "floral": 0.008565346322548042
+            "plain": 0.16881130503560043,
+            "striped": 0.8106097999016149,
+            "checked": 0.005930271538744054,
+            "floral": 0.014648623524040665
           }
         },
         "pick_tops": {
-          "top": "Navy polo",
-          "unknown": 0.24430887750478694,
-          "abstained": false,
+          "top": "Black tank top",
+          "unknown": 0.30789690355922006,
+          "abstained": true,
           "probabilities": {
-            "Navy polo": 0.560479981363522,
-            "Red check flannel": 0.02579971870176015,
-            "Black-and-white stripe tee": 0.17678965105847452,
-            "Black tank top": 0.23693064887624332
+            "Navy polo": 0.2308875020537687,
+            "Red check flannel": 0.08971369672450087,
+            "Black-and-white stripe tee": 0.23478345896797406,
+            "Black tank top": 0.44461534225375626
           }
         },
         "pick_bottoms": {
-          "top": "Black jeans",
-          "unknown": 0.01122574169420101,
+          "top": "Grey trousers",
+          "unknown": 0.01723535554841815,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.0021938241987002694,
-            "Blue jeans": 0.010652364050651812,
-            "Black jeans": 0.6411935758876968,
-            "Grey trousers": 0.33026881372592887,
-            "Beige shorts": 0.0011315264723545115,
-            "Gingham midi skirt": 0.014559895664667779
+            "Beige chinos": 0.003702955113235306,
+            "Blue jeans": 0.034311484148565184,
+            "Black jeans": 0.43499403349863264,
+            "Grey trousers": 0.5130989195315125,
+            "Beige shorts": 0.002439689959473493,
+            "Gingham midi skirt": 0.011452917748580892
           }
         },
         "pick_shoes": {
           "top": "Grey ballet flats",
-          "unknown": 0.00015301460076818732,
+          "unknown": 0.0011108266316760158,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.000009891712231907684,
-            "Tan chelsea boots": 0.000005099567436533203,
-            "Grey ballet flats": 0.9994391064034953,
-            "Burgundy ankle boots": 0.0005398720890658793,
-            "Cream sandals": 0.000006030227770411152
+            "Caramel boat shoes": 0.000089643924777632,
+            "Tan chelsea boots": 0.00009072139089700833,
+            "Grey ballet flats": 0.9976147075805033,
+            "Burgundy ankle boots": 0.0020752812756508186,
+            "Cream sandals": 0.0001296458281712533
           }
         }
       },
-      "server_ms": 1257.6,
-      "round_trip_ms": 1259
+      "server_ms": 2689.8,
+      "round_trip_ms": 2692
     },
     {
       "scenario": "style-r04",
@@ -1675,150 +1670,150 @@
       "answers": {
         "piece_colour": {
           "top": "white",
-          "unknown": 0.0002700828129401051,
+          "unknown": 0.004365369892433962,
           "abstained": false,
           "probabilities": {
-            "black": 0.0017503098226813395,
-            "white": 0.993163610078145,
-            "grey": 0.00209299442719668,
-            "navy or blue": 0.0002768541328372137,
-            "beige or brown": 0.0004126903888355116,
-            "red": 0.0006305822202649404,
-            "green": 0.00023029669301126773,
-            "multicolour": 0.001442662237028035
+            "black": 0.010779656015091916,
+            "white": 0.9648522379895734,
+            "grey": 0.011224661918500372,
+            "navy or blue": 0.0013388525815577737,
+            "beige or brown": 0.003648469489951526,
+            "red": 0.002818013553697232,
+            "green": 0.0021528977000889247,
+            "multicolour": 0.0031852107515389166
           }
         },
         "piece_pattern": {
           "top": "striped",
-          "unknown": 0.0011465711277643378,
+          "unknown": 0.005000136165745883,
           "abstained": false,
           "probabilities": {
-            "plain": 0.048456204142839326,
-            "striped": 0.9451038759299116,
-            "checked": 0.0019966384432785833,
-            "floral": 0.0044432814839704664
-          }
-        },
-        "pick_tops": {
-          "top": "Black-and-white stripe tee",
-          "unknown": 0.9744341290264149,
-          "abstained": true,
-          "probabilities": {
-            "Navy polo": 0.04255853209670076,
-            "Red check flannel": 0.348188118461721,
-            "Black-and-white stripe tee": 0.5726654768405322,
-            "Black tank top": 0.03658787260104614
-          }
-        },
-        "pick_bottoms": {
-          "top": "Beige chinos",
-          "unknown": 0.001334514159759764,
-          "abstained": false,
-          "probabilities": {
-            "Beige chinos": 0.9680183787899515,
-            "Blue jeans": 0.0008610885542085721,
-            "Black jeans": 0.0026137064621292038,
-            "Grey trousers": 0.0008519133716293584,
-            "Beige shorts": 0.02533339870418745,
-            "Gingham midi skirt": 0.002321514117893953
-          }
-        },
-        "pick_shoes": {
-          "top": "Cream sandals",
-          "unknown": 0.0007334466142579217,
-          "abstained": false,
-          "probabilities": {
-            "Caramel boat shoes": 0.00018753573411367134,
-            "Tan chelsea boots": 0.00006859717525233514,
-            "Grey ballet flats": 0.0007520893592326398,
-            "Burgundy ankle boots": 0.0010323123426515216,
-            "Cream sandals": 0.9979594653887498
-          }
-        }
-      },
-      "server_ms": 979.6,
-      "round_trip_ms": 981
-    },
-    {
-      "scenario": "style-r04",
-      "case": "me.likes=denim, tan or brown",
-      "pass": false,
-      "expect": "ok",
-      "got": "ok",
-      "route": {
-        "kind": "ok",
-        "title": "Outfit suggested",
-        "detail": ""
-      },
-      "wrong": [
-        "piece_pattern=striped (want plain)"
-      ],
-      "answers": {
-        "piece_colour": {
-          "top": "white",
-          "unknown": 0.0007712163569789318,
-          "abstained": false,
-          "probabilities": {
-            "black": 0.004964103549822503,
-            "white": 0.9804189859102879,
-            "grey": 0.004934877324572494,
-            "navy or blue": 0.0007720744997878122,
-            "beige or brown": 0.0008826905240062278,
-            "red": 0.002839932713604982,
-            "green": 0.0012085818821146416,
-            "multicolour": 0.003978753595803442
-          }
-        },
-        "piece_pattern": {
-          "top": "striped",
-          "unknown": 0.0017126321918751177,
-          "abstained": false,
-          "probabilities": {
-            "plain": 0.06656141241553541,
-            "striped": 0.9254776649553235,
-            "checked": 0.0029160227075522675,
-            "floral": 0.005044899921588923
+            "plain": 0.09282030117083556,
+            "striped": 0.8939848676004104,
+            "checked": 0.004463554956080956,
+            "floral": 0.008731276272673132
           }
         },
         "pick_tops": {
           "top": "Red check flannel",
-          "unknown": 0.5598414758355001,
+          "unknown": 0.9553437884394665,
           "abstained": true,
           "probabilities": {
-            "Navy polo": 0.04556905296369386,
-            "Red check flannel": 0.845093817978574,
-            "Black-and-white stripe tee": 0.09044174670297021,
-            "Black tank top": 0.018895382354761937
+            "Navy polo": 0.02821018722897826,
+            "Red check flannel": 0.49333235065696424,
+            "Black-and-white stripe tee": 0.39681952941795984,
+            "Black tank top": 0.08163793269609766
+          }
+        },
+        "pick_bottoms": {
+          "top": "Beige chinos",
+          "unknown": 0.022445056164145594,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.7012564011885811,
+            "Blue jeans": 0.011956020287993474,
+            "Black jeans": 0.013917746389603788,
+            "Grey trousers": 0.012442951495888093,
+            "Beige shorts": 0.24748689686846148,
+            "Gingham midi skirt": 0.012939983769472004
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.002683259067880816,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.0004869741830358905,
+            "Tan chelsea boots": 0.00042369025538695605,
+            "Grey ballet flats": 0.003716867741212915,
+            "Burgundy ankle boots": 0.0035103215368106682,
+            "Cream sandals": 0.9918621462835535
+          }
+        }
+      },
+      "server_ms": 2607.3,
+      "round_trip_ms": 2608
+    },
+    {
+      "scenario": "style-r04",
+      "case": "me.likes=denim, tan or brown",
+      "pass": false,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [
+        "piece_pattern=striped (want plain)"
+      ],
+      "answers": {
+        "piece_colour": {
+          "top": "white",
+          "unknown": 0.009607835696754267,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.024469567156509876,
+            "white": 0.913470499496261,
+            "grey": 0.024071492150786352,
+            "navy or blue": 0.0034366116784574157,
+            "beige or brown": 0.008464494661459269,
+            "red": 0.009349378719553372,
+            "green": 0.01005839370667471,
+            "multicolour": 0.006679562430297931
+          }
+        },
+        "piece_pattern": {
+          "top": "striped",
+          "unknown": 0.0075961206515833355,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.1480816460188567,
+            "striped": 0.8345740460294975,
+            "checked": 0.0062659522594863725,
+            "floral": 0.011078355692159435
+          }
+        },
+        "pick_tops": {
+          "top": "Red check flannel",
+          "unknown": 0.5310461675108947,
+          "abstained": true,
+          "probabilities": {
+            "Navy polo": 0.03143459858170163,
+            "Red check flannel": 0.755940944799173,
+            "Black-and-white stripe tee": 0.1390536078971783,
+            "Black tank top": 0.07357084872194723
           }
         },
         "pick_bottoms": {
           "top": "Blue jeans",
-          "unknown": 0.0005458662170273332,
+          "unknown": 0.0037364458386129613,
           "abstained": false,
           "probabilities": {
-            "Beige chinos": 0.00037988787831746556,
-            "Blue jeans": 0.9980090696315895,
-            "Black jeans": 0.0005651651463994581,
-            "Grey trousers": 0.00020580697227519642,
-            "Beige shorts": 0.00020335954553759382,
-            "Gingham midi skirt": 0.0006367108258807829
+            "Beige chinos": 0.0030141347252751736,
+            "Blue jeans": 0.9890006871863792,
+            "Black jeans": 0.0026002421925302214,
+            "Grey trousers": 0.001497948101800465,
+            "Beige shorts": 0.0012663573505782848,
+            "Gingham midi skirt": 0.0026206304434365883
           }
         },
         "pick_shoes": {
-          "top": "Caramel boat shoes",
-          "unknown": 0.0038423769578841823,
+          "top": "Tan chelsea boots",
+          "unknown": 0.009811341419595528,
           "abstained": false,
           "probabilities": {
-            "Caramel boat shoes": 0.5767362727297095,
-            "Tan chelsea boots": 0.2852649729853814,
-            "Grey ballet flats": 0.0027878181174419816,
-            "Burgundy ankle boots": 0.13350211127416192,
-            "Cream sandals": 0.0017088248933051853
+            "Caramel boat shoes": 0.3582594434274096,
+            "Tan chelsea boots": 0.5695865870937536,
+            "Grey ballet flats": 0.007629055236874703,
+            "Burgundy ankle boots": 0.06061490599322476,
+            "Cream sandals": 0.003910008248737174
           }
         }
       },
-      "server_ms": 981.2,
-      "round_trip_ms": 983
+      "server_ms": 2600.3,
+      "round_trip_ms": 2601
     }
   ]
 }

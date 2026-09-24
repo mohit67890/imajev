@@ -5,7 +5,7 @@ Every line here is a lesson from the 21–22 Sept shakedowns. Follow it in order
 ## Before renting anything
 1. `scripts/v1/assemble_manifest.py` then `scripts/v1/audit_manifest.py`: zero missing images, read the flags.
 2. `scripts/v1/upload_sources.sh <sources>` and upload the manifest named by its hash. Pods pull from
-   `gs://imajev-emoland-925e3`; uploading from the Mac straight to a pod runs at ~1 MB/s, to the bucket at ~10–40 MB/s.
+   `gs://<bucket>/`; uploading from the Mac straight to a pod runs at ~1 MB/s, to the bucket at ~10–40 MB/s.
 3. Local end-to-end test on the tiny manifest (`decision-v1t`) after any change to the loader, training or evaluation:
    `--device mps --batch-size 1 --max-batch 1` (left-padded batches give NaN on Apple MPS; batching is CUDA-only).
 4. Prices: the capacity tool reports the cheapest tier. Secure-cloud pods cost more (4x H200: $18.36/hr, not $14.36).
@@ -32,6 +32,34 @@ Every line here is a lesson from the 21–22 Sept shakedowns. Follow it in order
 - One epoch. The 3.6k-example run memorised after ~1.2 epochs; the 60k run was still improving at the end of its single pass.
 - Learning rate 1.5e-4 was healthy at 64 examples/step. Bucketed steps carry ~160 examples on 4 GPUs: use 2e-4, warm-up 100 steps.
 - First 10 minutes of any run: confirm examples/s, GPU utilisation near 100%, zero skipped batches, falling loss. Stop if not.
+
+## v1.1 recipe flags (`train_decision_lora_torch.py`, all opt-in; 24 Sept 2026)
+With none of these flags the run is byte-identical to before (same losses, same `config.json`, so existing outputs resume).
+Changed flags are recorded in `config.json` and in its `loss` string. Helpers and CPU tests: `scripts/decision_recipe.py`,
+`tests/test_trainer_soft_targets.py`.
+
+| Flag | Default | What it does |
+|---|---|---|
+| `--soft-targets` | off | Rows carrying `target_probs` (option value -> probability, `unknown` included) train with soft cross-entropy (the KL gradient) instead of one-hot CE. Rows without it keep hard CE; `target_distribution` rows keep their existing soft CE either way. Dev accuracy scores the readout argmax against `target` when present, else the argmax of `target_probs`. |
+| `--soft-weight W` | 1.0 | With `--soft-targets`: loss = W x soft CE + (1 - W) x hard CE on the gold option. |
+| `--permute-options` | off | Shuffles `choice` options per example per epoch, seeded by `seed:epoch:record id`. Targets are stored as option values, so the gold index and soft vector follow the options. `ordinal` levels (Jev `score`: an ordered scale) and `boolean` (Jev `noul`: fixed yes/no) are never permuted. `unknown` always stays last, as served. |
+| `--rationale-weight W` | 0 | Training rows with a `rationale` get `" Because: <rationale>"` appended after the decision position, and W x the LM cross-entropy over those tokens is added to the loss. |
+| `--rationale-max-tokens N` | 64 | Cap on appended rationale tokens (prefix included). |
+
+Notes:
+- **Permutation already happens.** The default path already shuffles `choice` options: `render()` uses the per-example rng,
+  seeded by `seed:epoch:manifest index`. `--permute-options` makes this an explicit step keyed on the record id instead. The order
+  then stays the same under `--limit`, manifest reordering and multi-field expansion, and `render()` skips its own shuffle. With
+  either scheme, the model sees every option order during training, so its readout learns not to depend on position. That is why the
+  decision path can serve one order (`decide` defaults to `--rotations 1`) instead of averaging N rotated prompts, which costs N
+  forward passes. The `predict` CLI and `backend.score_request` still default to 4 rotations.
+- **Rationale.** The rationale is right-padded after the left-padded prompts. The decision position is therefore P-1 for every
+  row, and causal attention means its hidden state is unchanged. The first rationale token is not an LM target, so the decision
+  position gets only the readout loss. Dev rows never get a rationale, so dev loss and accuracy are the readout alone. Nothing is
+  generated at inference. Appended tokens count toward `--token-budget` in both places: the planner (`approx_tokens`) and the
+  real padded length checked when a batch is collated. Expect slightly fewer examples per micro-batch. `log.jsonl` gains
+  `rationale_loss` (unweighted, per example).
+- The MLX trainer (`train_decision_lora.py`) does not implement these flags.
 
 ## Evaluation
 - Unbatched evaluation took ~20 minutes on 4x H200 (about $6). Use the batched evaluator, or set `SKIP_EVAL=1` and evaluate the
@@ -159,3 +187,9 @@ Held-out sources 39.5% -> 46.8%; held-out unanswerable yes/no (TUBench): 1/225 c
 - RunPod pods reserve ports 8001 and 8081 (a proxy answers 405 there); pick 8010/8020/8030/8090 for extra vLLM servers.
 - jevbench `openai_compat` sends `max_tokens 4096`; thinking models exhaust it and the runner stops after 10 consecutive
   empty replies. The pod copy reads `OPENAI_COMPAT_MAX_TOKENS` / `OPENAI_COMPAT_TIMEOUT_S`; port that patch upstream.
+- **2026-09-24 phase-2c pod (AP-IN-2, 8×H100, CUDA 13.0 host): vLLM 0.30's torch 2.13 / NCCL 2.29 fails every multi-GPU server
+  with "NCCL error: unhandled cuda error" — NCCL_DEBUG=WARN shows `Failed to bind NVLink SHARP (NVLS) Multicast memory … CUDA error 401`.
+  Fix: `export NCCL_NVLS_ENABLE=0` before starting vLLM (the training venv's torch 2.8 / NCCL 2.27 does not hit it). Put it at the top of
+  every pod script; test with a 2-GPU TP server (allow ≥5 min for startup before calling it failed).
+- Build Mac tarballs for pods with `COPYFILE_DISABLE=1 tar --no-xattrs` and CHECK THE LISTING (`tar tzf | grep`) before uploading;
+  a chained `cp … && cp …` that fails midway silently skips the rest — verify required files by name.

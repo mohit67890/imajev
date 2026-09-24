@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Stream each validated decision-v1 source to the bucket as one tar (no local copy). Skips sources already uploaded with the same record hash.
 set -uo pipefail
-B=gs://imajev-emoland-925e3/decision-v1; P=emoland-925e3; export COPYFILE_DISABLE=1
+B=gs://<bucket>/decision-v1; P=<gcp-project>; export COPYFILE_DISABLE=1
 for src in "$@"; do
   d=data/decision-v1/$src
   python3 -c "import json,sys;sys.exit(0 if json.load(open('$d/validation.json'))['summary']['errors']==0 else 1)" 2>/dev/null || { echo "$src: not validated, skipped"; continue; }

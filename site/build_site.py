@@ -154,9 +154,9 @@ def style_ax(ax, t, xgrid=True):
 
 def chart_imajevbench(t, name):
     rows = [  # (label, correct, low, high, ours, group)
-        ("imajev-9b", 231, .77, .88, True, "A"), ("imajev-4b", 230, .77, .88, True, "A"),
-        ("Qwen3.5-9B base", 214, .70, .82, False, "A"), ("Qwen3.5-4B base", 197, .64, .78, False, "A"),
-        ("imajev-2b", 196, .64, .77, True, "A"), ("Gemma 4 E4B-it", 176, .55, .72, False, "A"),
+        ("imajev-4b", 230, .77, .89, True, "A"), ("imajev-9b", 229, .76, .88, True, "A"),
+        ("Qwen3.5-9B base", 214, .70, .82, False, "A"), ("imajev-2b", 200, .65, .78, True, "A"),
+        ("Qwen3.5-4B base", 197, .64, .78, False, "A"), ("Gemma 4 E4B-it", 176, .55, .72, False, "A"),
         ("Qwen3.5-2B base", 168, .53, .67, False, "A"), ("SmolVLM2-2.2B", 80, .22, .36, False, "A"),
         ("Jev-Omni (12B)", 219, .73, .84, False, "B"),
     ]
@@ -185,12 +185,12 @@ def chart_imajevbench(t, name):
 
 
 def chart_jevbench(t, name):
-    rows = [("JevK5 v0.2.0", 73.9, False), ("imajev-9b, 4 rotations", 69.4, True), ("imajev-9b", 68.5, True),
-            ("imajev-4b", 67.6, True), ("Hopper", 67.6, False), ("imajev-2b", 56.8, True),
+    rows = [("JevK5 v0.2.0", 73.9, False), ("Eikos-4B", 73.9, False), ("imajev-4b", 70.3, True),
+            ("imajev-9b", 69.4, True), ("Hopper", 67.6, False), ("imajev-2b", 60.4, True),
             ("cua-s1-4b (GUI-action LoRA)", 52.3, False), ("Qwen3.5-4B base, generation", 48.6, False), ("mojev 0.85B", 33.3, False)]
     fig = base_fig(t, 8.8, 5.0, "JevBench public hard split (111 items, text-only)",
-                   "Same protocol for every system: jevbench harness, typesafe adapter, one H100, serial. Competitive, not first.",
-                   "Our runs, 24 Sept 2026; not the official board (sealed items, 4-axis score). Source: results/benchmarks/")
+                   "Same protocol for every system: jevbench harness, typesafe adapter, one H100, serial. Competitive, not #1.",
+                   "Our runs, 24 Sept 2026; imajev as served (4 rotations, calibration file); not the official board (sealed items, 4-axis score). Source: results/benchmarks/")
     ax = fig.add_axes([0.30, 0.13, 0.63, 0.70])
     for i, (lab, v, ours) in enumerate(rows):
         col = t["accent"] if ours else t["other"]
@@ -205,11 +205,11 @@ def chart_jevbench(t, name):
 
 
 def chart_calibration(t, name):
-    raw = load("reports/decision-p2b/pod/train-out-p2b/4b/jevbench-best-raw/hard/summary.json")["ece"]
-    cal = load("reports/decision-p2b/calib-pod/out/jevbench-4b/hard/summary.json")["ece"]
+    raw = load("reports/decision-p2c/pod/4b-delta/jevbench-soup50-raw/hard/summary.json")["ece"]
+    cal = load("reports/decision-p2c/pod/4b-delta/jevbench-soup50-rot4cal/hard/summary.json")["ece"]
     fig = base_fig(t, 8.8, 5.4, "Calibration: imajev-4b on JevBench hard",
                    f"Stated confidence vs accuracy, 5 equal-count bins (~22 items each). Temperature scaling changes no answer.",
-                   "Served by the released server (torch, 1×H100). ECE: the benchmark's 10-bin definition. Source: results/ in the repository")
+                   "Served by the released server (torch, 1×H100); calibrated = shipped file + 4 rotations, as served. ECE: the benchmark's 10-bin definition. Source: results/ in the repository")
     ax = fig.add_axes([0.10, 0.15, 0.55, 0.68])
     ax.plot([0, 1], [0, 1], color=t["hair"], linewidth=1.2, zorder=1)
     ax.text(0.93, 0.96, "perfect", rotation=45, fontproperties=fp(MONO, 8), color=t["muted"], ha="center")
@@ -220,8 +220,8 @@ def chart_calibration(t, name):
             chunk = rows[i * len(rows) // k:(i + 1) * len(rows) // k]
             out.append((sum(c for c, _ in chunk) / len(chunk), sum(ok for _, ok in chunk) / len(chunk), len(chunk)))
         return out
-    series_pts = {"raw": equal_count_bins("reports/decision-p2b/pod/train-out-p2b/4b/jevbench-best-raw/hard/results.jsonl"),
-                  "calibrated": equal_count_bins("reports/decision-p2b/calib-pod/out/jevbench-4b/hard/results.jsonl")}
+    series_pts = {"raw": equal_count_bins("reports/decision-p2c/pod/4b-delta/jevbench-soup50-raw/hard/results.jsonl"),
+                  "calibrated": equal_count_bins("reports/decision-p2c/pod/4b-delta/jevbench-soup50-rot4cal/hard/results.jsonl")}
     for series, col, lab in ((raw, t["other"], "raw"), (cal, t["accent"], "calibrated")):
         xs, ys, ns = zip(*series_pts[lab])
         ax.plot(xs, ys, color=col, linewidth=2, zorder=2)
@@ -238,7 +238,7 @@ def chart_calibration(t, name):
     ax.set_xlabel("stated confidence", fontproperties=fp(SANS, 9.5), color=t["ink2"])
     ax.set_ylabel("observed accuracy", fontproperties=fp(SANS, 9.5), color=t["ink2"])
     # side table: served hard ECE per size
-    rows = [("imajev-2b", .187, .138), ("imajev-4b", .215, .112), ("imajev-9b", .236, .106)]
+    rows = [("imajev-2b", .176, .123), ("imajev-4b", .164, .116), ("imajev-9b", .187, .092)]
     x0 = 0.71
     fig.text(x0, 0.78, "hard ECE, served", fontproperties=fp(MONO, 8.4), color=t["muted"])
     fig.text(x0, 0.72, "size", fontproperties=fp(SANS_M, 9.5), color=t["ink2"]); fig.text(x0 + 0.12, 0.72, "raw", fontproperties=fp(SANS_M, 9.5), color=t["ink2"])
@@ -254,10 +254,10 @@ def chart_calibration(t, name):
 
 
 def chart_uplift(t, name):
-    rows = [("2B", 60.2, 70.3), ("4B", 70.6, 82.4), ("9B", 76.7, 82.8)]
+    rows = [("2B", 60.2, 71.7), ("4B", 70.6, 82.4), ("9B", 76.7, 82.1)]
     fig = base_fig(t, 8.8, 4.2, "What the adapter adds on photos and state",
                    "ImajevBench accuracy of each untuned Qwen3.5 base (grey) and the same base with the imajev adapter (colour).",
-                   "Paired cluster tests vs base: 2B +10.0 pts p=0.019 · 4B +11.8 p=0.0008 · 9B +6.1 p=0.074 (n.s.). Source: bench/LEADERBOARD.md")
+                   "Paired cluster tests vs base on the shipped adapters: 2B +11.5 pts p=0.005 · 4B +11.8 p=0.0006 · 9B +5.4 p=0.131 (n.s.). Source: bench/LEADERBOARD.md")
     ax = fig.add_axes([0.13, 0.17, 0.80, 0.62])
     for i, (lab, a, b) in enumerate(rows):
         ax.plot([a, b], [i, i], color=t["hair"], linewidth=6, solid_capstyle="round", zorder=1)
@@ -458,10 +458,10 @@ def build_report():
         rs = sorted((max(r["probs"].values()), bool(r["correct"])) for r in jl(path) if r.get("probs"))
         return [[round(sum(c for c, _ in ch) / len(ch), 4), round(sum(o for _, o in ch) / len(ch), 4), len(ch)]
                 for ch in (rs[i * len(rs) // k:(i + 1) * len(rs) // k] for i in range(k))]
-    calibration = {s: {"raw": bins(f"reports/decision-p2b/pod/train-out-p2b/{s}/jevbench-best-raw/hard/results.jsonl"),
-                       "served": bins(f"reports/decision-p2b/calib-pod/out/jevbench-{s}/hard/results.jsonl"),
-                       "ece_raw": load(f"reports/decision-p2b/pod/train-out-p2b/{s}/jevbench-best-raw/hard/summary.json")["ece"]["ece"],
-                       "ece_served": load(f"reports/decision-p2b/calib-pod/out/jevbench-{s}/hard/summary.json")["ece"]["ece"]} for s in ("2b", "4b", "9b")}
+    calibration = {s: {"raw": bins(f"reports/decision-p2c/pod/{s}-delta/jevbench-soup50-raw/hard/results.jsonl"),
+                       "served": bins(f"reports/decision-p2c/pod/{s}-delta/jevbench-soup50-rot4cal/hard/results.jsonl"),
+                       "ece_raw": load(f"reports/decision-p2c/pod/{s}-delta/jevbench-soup50-raw/hard/summary.json")["ece"]["ece"],
+                       "ece_served": load(f"reports/decision-p2c/pod/{s}-delta/jevbench-soup50-rot4cal/hard/summary.json")["ece"]["ece"]} for s in ("2b", "4b", "9b")}
     data = {"listing": listing, "gallery": gallery, "calibration": calibration,
             "verification": {"passed": ver["passed"], "total": ver["total"], "threshold": ver["threshold"], "model": ver["model"]["model"]}}
     html = (SITE / "report_template.html").read_text().replace("/*__DATA__*/{}", json.dumps(data, ensure_ascii=False))
@@ -520,7 +520,7 @@ def automation_curve():
     import sys
     sys.path.insert(0, str(ROOT / "src"))
     from imajev_bench.scoring import _correct
-    preds = jl("reports/decision-p2b/pod/4b/imajevbench-best/predictions.jsonl")
+    preds = jl("reports/decision-p2c/pod/4b-delta/imajevbench-soup50/predictions.jsonl")
     ids = {p["id"] for p in preds}
     recs = {r["id"]: r for r in jl("data/imajev-bench/v2-lite-v1/records-final-v2.jsonl") if r["id"] in ids}
     items = []

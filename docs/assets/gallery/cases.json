@@ -1,12 +1,12 @@
 {
  "model": {
   "model": "imajev-4b",
-  "adapter": "../imajev-release/hf/imajev-4b/mlx",
+  "adapter": "-release/hf/imajev-4b/mlx",
   "backend": "mlx",
   "loaded": true,
-  "load_seconds": 3.532
+  "load_seconds": 3.577
  },
- "passed": 20,
+ "passed": 19,
  "total": 21,
  "threshold": 0.8,
  "cases": [

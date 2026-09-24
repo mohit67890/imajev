@@ -12,7 +12,17 @@ reasoning-on generation are separate rows.
 | imajev-2b phase 2 (best) | typesafe server, raw | 55.0 / ECE 0.234 | 91.7 | 100 | 2026-09-24 | `reports/decision-p2/pod/train-out/2b/jevbench-{best,last}/` |
 | imajev-4b phase 2 (best / last) | typesafe server, raw | 62.2 / 63.1 | 98.6 | 100 | 2026-09-23 | `reports/decision-p2/pod/train-out/4b/jevbench-*/` |
 | imajev-9b phase 2 (best / last) | typesafe server, raw | 67.6 / 66.7 | 98.6 | 100 | 2026-09-23 | `reports/decision-p2/pod/train-out/9b/jevbench-*/` |
-| imajev-{2b,4b,9b} phase 2b (best/last × raw, rot4, cal, rot4cal) | typesafe server | pending (running) | | | 2026-09-24 | `reports/decision-p2b/pod/train-out-p2b/<size>/jevbench-<tag>-<variant>/` (after pull) |
+| imajev-2b phase 2b (best; rot4+cal, authored-dev T 1.61) | typesafe server | 56.8 / 0.163 | | | 2026-09-24 | `reports/decision-p2b/pod/train-out-p2b/2b/jevbench-<tag>-<variant>/`; `reports/decision-p2b/README.md` |
+| imajev-4b phase 2b (best; cal, authored-dev T 2.32) | typesafe server | 67.6 / 0.088 | | | 2026-09-24 | `reports/decision-p2b/pod/train-out-p2b/4b/jevbench-<tag>-<variant>/` |
+| imajev-9b phase 2b (step 260; rot4+cal, authored-dev T 2.19) | typesafe server | 69.4 / 0.104 | | | 2026-09-24 | `reports/decision-p2b/pod/train-out-p2b/9b/jevbench-<tag>-<variant>/` |
+| imajev-4b phase 2c best (step 260, soft-target delta from 2b; raw / pod-fold cal T 1.045) — FAILS image gate (ImajevBench 79.6) | typesafe server | 71.2 / 0.165 (cal 0.159) | 98.6 | 100 | 2026-09-24 | `reports/decision-p2c/pod/4b-delta/jevbench-best-{raw,cal}/` |
+| imajev-4b phase 2c last (step 747) | typesafe server | 70.3 / 0.162 (cal 0.126) | 100 | 100 | 2026-09-24 | `reports/decision-p2c/pod/4b-delta/jevbench-last-{raw,cal}/` |
+| **imajev-4b phase 2c soup50** (½ phase-2b + ½ 2c-best adapters; raw / cal T 1.72 authored-dev / rot4 / rot4+cal) — ship candidate, all gates pass, ImajevBench 82.4 | typesafe server | 69.4 / 0.164; cal 69.4 / 0.109; rot4 70.3 / 0.171; **rot4+cal 70.3 / 0.116** | 98.6 | 100 | 2026-09-24 | `reports/decision-p2c/pod/4b-delta/jevbench-soup50-{raw,cal,rot4,rot4cal}/`; adapter `reports/decision-p2c/pod/adapters/4b-soup50/` |
+| imajev-4b phase 2c soup75 (¼ + ¾) — fails image gate (80.6) | typesafe server | 69.4 / 0.142 | 98.6 | 100 | 2026-09-24 | `reports/decision-p2c/pod/4b-delta/jevbench-soup75-raw/` |
+| imajev-2b phase 2c best / last (raw; pod-fold cal T 1.31 / 1.43) — best fails joint gate by 1 item | typesafe server | 55.9 / 0.209 (cal 0.161); last 56.8 / 0.233 (cal 0.168) | 90.3 / 88.9 | 100 | 2026-09-24 | `reports/decision-p2c/pod/2b-delta/jevbench-{best,last}-{raw,cal}/` |
+| **imajev-2b phase 2c soup50** (raw / cal T 1.65 authored-dev / rot4 / rot4+cal) — ship candidate, all gates pass, ImajevBench 71.7 | typesafe server | 58.6 / 0.176; cal 58.6 / 0.075; rot4 60.4 / 0.207; **rot4+cal 60.4 / 0.123** | 91.7 (rot4 93.1) | 100 | 2026-09-24 | `reports/decision-p2c/pod/2b-delta/jevbench-soup50-{raw,cal,rot4,rot4cal}/`; adapter `reports/decision-p2c/pod/adapters/2b-soup50/` |
+| imajev-9b phase 2c best / last (raw; pod-fold cal T 1.02 / …) — best passes all gates (ImajevBench 82.4) but hard below phase-2b | typesafe server | 66.7 / 0.161 (cal 0.123); last 68.5 / 0.168 (cal 0.114) | 100 | 100 | 2026-09-24 | `reports/decision-p2c/pod/9b-delta/jevbench-{best,last}-{raw,cal}/` |
+| **imajev-9b phase 2c soup50** (raw / cal T 1.75 authored-dev / rot4 / rot4+cal) — ship candidate, all gates pass, ImajevBench 82.1, private-1 84.7 | typesafe server | 69.4 / 0.187; cal 69.4 / 0.090; rot4 69.4 / 0.174; **rot4+cal 69.4 / 0.092** | 100 | 100 | 2026-09-24 | `reports/decision-p2c/pod/9b-delta/jevbench-soup50-{raw,cal,rot4,rot4cal}/`; adapter `reports/decision-p2c/pod/adapters/9b-soup50/` |
 | Qwen3.6-35B-A3B frozen, thinking off | vLLM + openai_compat, JSON schema | 61.3 / 0.329 | 88.9 | 100 | 2026-09-24 | `jevbench/qwen3.6-35b-a3b-frozen/nothink/` |
 | Qwen3.6-35B-A3B frozen, thinking on (16k budget) | vLLM + openai_compat, reasoning parser | **97.3** / 0.045 | 100 | 100 | 2026-09-24 | `jevbench/qwen3.6-35b-a3b-frozen/think/` |
 | mojev 0.85B (MoLeMo-Lab) | its own TypeSafe-compatible server, typesafe adapter | 33.3 / 0.268 | 63.9 | 91.7 | 2026-09-24 | `jevbench/mojev-0.85b/` |
@@ -26,6 +36,9 @@ reasoning-on generation are separate rows.
 ## ImajevBench v2.0-lite (279-item test split) — `../../../imajev-release/bench/LEADERBOARD.md` holds the full table with CIs, tracks, controls and the paired cluster tests
 Direct option scoring: imajev-9b 81.0 (v1.1) → 81.4 (phase 2); Qwen3.5-9B base 76.7; Qwen3.5-4B base 70.6 → imajev-4b phase 2 80.6; imajev-2b 63.1 (v2.1) → 68.5 (phase 2); Qwen3.5-2B base 60.2.
 Structured generation: Gemini 3.1 Pro 99.6, GPT-5.6 Luna 99.3, GPT-5.4 98.9, Gemini 3.8 Flash 98.2, Grok 4.3 91.4, Qwen3.5-9B 74.6, Qwen3.5-4B 67.4, Gemma 4 E4B-it 60.2, Qwen3.5-2B 59.9, Gemma 4 E2B-it 58.8.
+Phase 2b (pod, torch direct scoring, full rotations): imajev-2b 70.3, imajev-4b 82.4, imajev-9b 82.8 — `reports/decision-p2b/pod/train-out-p2b/<size>/imajevbench-best/`.
+Phase 2c (2026-09-24, same backend): imajev-4b 2c-best 79.6 (joint 92/122, text 24/37, visual 106/120; FAILS gate), 2c-last 79.9, soup50 **82.4** (97/26/107, all gates pass), soup75 80.6; imajev-2b 2c-best 71.0 (80/19/99; joint gate miss by 1), soup50 **71.7** (82/19/99, all gates pass); imajev-9b 2c-best 82.4 (96/29/105, all gates pass), soup50 **82.1** (96/29/104, all gates pass) — `reports/decision-p2c/pod/<size>-delta/imajevbench-<tag>/`, gates `reports/decision-p2c/pod/<run>/gates.json`.
+Hidden split private-1 (202 items, aggregates only, GPU 7 runner, same backend): phase-2b 2B 70.8 / 4B 84.7 / 9B 84.2; phase-2c 4B 2c-best 83.2, 4B soup50 84.2, 2B 2c-best 74.8, 2B soup50 74.3, 9B 2c-best 85.1, 9B soup50 84.7 — `reports/decision-p2c/pod/private1/<run>/score`.
 Controls: imajev-2b no-image (abstains 258/279), no-state 51.6, family-majority 35.8, image-blind best on contrast sets 66.7%.
 Run files: `imajev-release/bench/records/`, per-run predictions and manifests under `imajev-release/bench/` and `reports/imajev-bench/` (H100 bench pod pull); phase-2 rows under `reports/decision-p2/pod/train-out/<size>/imajevbench-best/`.
 Pending rows: Gemma 4 E2B/E4B and SmolVLM2-2.2B **direct option scoring** (MLX-only backends; Mac runs were stopped to avoid crashes) — marked pending on the leaderboard; mojev and cua-s1 on ImajevBench need a TypeSafe-protocol provider in the harness (follow-up).
@@ -71,3 +84,16 @@ claims up to 9× lower latency than Jev at parity on computer-use / gaming / too
 images (roadmap). Head `Contrastive-LM/CLM-v0.1-8B` (75 MB). Expect strong easy/standard and Retrieval-style tasks, weaker hard
 (multi-hop / numeric / traps need state–option interaction a dual encoder cannot model). Run: hard/original/easy + ImajevBench text track.
 Provenance note for our datasheet: CLM's synthetic negatives come from a paid API (Gemini 2.5 Flash-Lite); imajev's data does not.
+
+## To benchmark next: Eikos-4B and Eikos-27B (caiovicentino/eikos; HF caiovicentino1/Eikos-{4B,27B} + FP8/INT4/MLX; MIT deltas on Qwen3.5)
+Self-reported (their harness, vLLM 0.30, batching + prefix cache): JevBench public original/hard **4B 91.7 / 72.1**, **27B 100 / 82.9**;
+Jev in their table 98.6 / 73.0. Hard-split ECE 0.049 (4B) / 0.051 (27B); at ≥90% confidence 34.7% of decisions taken with 2.5% error (4B).
+Long-context: 88.3 (27B) / 74.2 (4B) with the decision hidden in 64k tokens. No images. Serving: `bash serve_vllm.sh <MODEL_DIR> 8001`
+then `python serve.py --model <MODEL_DIR> --vllm-url http://<host> --port 8000` (TypeSafe `/v1/systemone`). Official board: pending.
+Recipe (worth adopting): LoRA r64, 1 epoch, lr 1e-4; SOFT cross-entropy on option-LETTER logits with option PERMUTATION during training
+(order invariance learned, no rotations at inference); auxiliary rationale loss (0.3); PT↔EN view-consistency KL (0.5); programmatic
+exact-answer families (probability, temporal, financial, trade rules, entity sentiment); teachers Qwen3.8-27B ("blind labeling") and
+GLM-5.3-Flash for PT/policy items; 8-gram decontamination vs JevBench. Dataset `caiovicentino1/eikos-decisions` (CC-BY-4.0; 21.2k train /
+1.22k val / 1.19k held-out core + 1.58k long-context + 1.62k PT/EN views; 28 families; fields incl. `target_probs`, `teacher_probs`,
+`rationale`). Caveat for OUR use of that dataset: GLM-5.3-Flash rows are API-labelled (our no-paid-API-outputs rule) → usable only after
+filtering to Qwen3.8-27B-labelled and programmatic rows, with the CC-BY attribution. Run both sizes same-protocol on the next pod.

@@ -1,5 +1,6 @@
 """Shared loading and rendering for decision-v0 training and evaluation: one code path, so train == serve."""
 import json,math,random,hashlib
+from collections import namedtuple
 from pathlib import Path
 from PIL import Image
 from vision_decision.contracts import Request,UNKNOWN
@@ -8,8 +9,9 @@ from vision_decision.jev_api import flatten_instructions
 
 VERSION='decision-v0'
 
+# load_records splits on '\\n', not splitlines(): U+2028 inside JSON strings would otherwise cut a row (phase 2c)
 def load_records(partition=None,version=VERSION):
- rows=list(map(json.loads,Path(f'data/manifests/{version}.jsonl').read_text().splitlines()));index=Path(f'data/manifests/{version}-images.json')
+ rows=[json.loads(l) for l in Path(f'data/manifests/{version}.jsonl').read_text().split('\n') if l.strip()];index=Path(f'data/manifests/{version}-images.json')
  if index.exists():
   images=json.loads(index.read_text())['images'];rows=[dict(r,**images[r['id']]) for r in rows]
  for r in rows:r.setdefault('images',[dict(image=r['image'],sha256=r['sha256'])] if 'image' in r else [])
@@ -44,45 +46,93 @@ def load_image(path,pixels):
  image=Image.open(path).convert('RGB');scale=min(1,math.sqrt(pixels/(image.width*image.height)))
  return image.resize((max(1,int(image.width*scale)),max(1,int(image.height*scale))),Image.Resampling.LANCZOS) if scale<1 else image
 
-def render(record,rng=None):
- """(header, choices, texts, target_index). With rng, choice options are reshuffled; unknown stays last as served."""
+# Opt-in soft target (--soft-targets): `gold` is the index dev accuracy scores against (the record's
+# `target` when present, else the argmax of `target_probs`); `probs` is the distribution over the
+# rendered choices in their rendered order, unknown last.
+SoftTarget=namedtuple('SoftTarget','gold probs')
+
+def distribution_weights(record,choices,soft):
+ """Normalized weights of a label->probability dict over the rendered choices (same order).
+
+ Unknown is a trainable outcome too. Accepts the reserved key and the readable aliases emitted by
+ older typed-decision exports."""
+ aliases={UNKNOWN:{UNKNOWN,'unknown','null'}}
+ for value,_ in choices:aliases.setdefault(value,{str(value),str(value).lower()} if isinstance(value,bool) else {str(value)})
+ recognized=set().union(*aliases.values())
+ unknown_keys=set(soft)-recognized
+ if unknown_keys:raise ValueError(f"{record['id']}: target distribution has unknown keys {sorted(unknown_keys)}")
+ def weight(value):
+  found=[float(soft[k]) for k in aliases[value] if k in soft]
+  if len(found)>1:raise ValueError(f"{record['id']}: duplicate aliases in target distribution for {value}")
+  return found[0] if found else 0.0
+ weights=[weight(value) for value,_ in choices];total=sum(weights)
+ if not all(math.isfinite(w) and w>=0 for w in weights) or total<=0:raise ValueError(f"{record['id']}: invalid target distribution")
+ return [w/total for w in weights]
+
+def resolve_probs_target(record):
+ """--soft-targets: a record carrying `target_probs` but no `target` gets its gold from the argmax
+ (first maximum in the record's own option order). Returns the record unchanged when it has a target."""
+ if 'target' in record or not record.get('target_probs'):return record
+ parsed=Request.model_validate(record['request']);_,choices,_=compile_question(parsed.fields[0],parsed.state)
+ weights=distribution_weights(record,choices,record['target_probs']);value=choices[max(range(len(weights)),key=weights.__getitem__)][0]
+ return dict(record,target=None if value==UNKNOWN else value,abstention_cause=record.get('abstention_cause'))
+
+def permute_options(record,seed,epoch):
+ """--permute-options: shuffle a choice question's options, deterministically from seed+epoch+record id.
+
+ Targets are stored as option values (and `target_probs`/`target_distribution` are keyed by value),
+ so render() re-derives the target index and the soft vector in the new order: nothing to remap by hand.
+ Ordinal levels are an ordered scale and boolean yes/no is a fixed pair, so both are returned as is;
+ unknown is appended by compile_question and therefore always stays last, as served."""
+ field=record['request']['fields'][0]
+ if field['type']!='choice' or len(field['options'])<2:return record
+ copy=json.loads(json.dumps(record));random.Random(f"{seed}:{epoch}:{record['id']}:options").shuffle(copy['request']['fields'][0]['options'])
+ return copy
+
+def render(record,rng=None,shuffle=True,soft_targets=False):
+ """(header, choices, texts, target). With rng (and shuffle), choice options are reshuffled; unknown stays last as served.
+
+ target is the gold index, or a list (normalized `target_distribution`), or with soft_targets and a
+ `target_probs` dict a SoftTarget(gold index, probs)."""
  request=json.loads(json.dumps(record['request']));field=request['fields'][0]
- if rng is not None and field['type']=='choice':rng.shuffle(field['options'])
+ if rng is not None and shuffle and field['type']=='choice':rng.shuffle(field['options'])
  parsed=Request.model_validate(request);header,choices,texts=compile_question(parsed.fields[0],parsed.state)
+ if soft_targets:record=resolve_probs_target(record)
  wanted=UNKNOWN if record['target'] is None else record['target']
  index=[i for i,(value,_) in enumerate(choices) if value==wanted and type(value)==type(wanted)]
  assert len(index)==1,record['id']
+ if soft_targets and record.get('target_probs'):
+  return header,choices,texts,SoftTarget(index[0],distribution_weights(record,choices,record['target_probs']))
  soft=record.get('target_distribution')
  if soft:  # e.g. rating histograms: train toward the distribution, not just its mode
-  # Unknown is a trainable outcome too. Accept the reserved key and the readable
-  # aliases emitted by older typed-decision exports.
-  aliases={UNKNOWN:{UNKNOWN,'unknown','null'}}
-  for value,_ in choices:aliases.setdefault(value,{str(value),str(value).lower()} if isinstance(value,bool) else {str(value)})
-  recognized=set().union(*aliases.values())
-  unknown_keys=set(soft)-recognized
-  if unknown_keys:raise ValueError(f"{record['id']}: target distribution has unknown keys {sorted(unknown_keys)}")
-  def weight(value):
-   found=[float(soft[k]) for k in aliases[value] if k in soft]
-   if len(found)>1:raise ValueError(f"{record['id']}: duplicate aliases in target distribution for {value}")
-   return found[0] if found else 0.0
-  weights=[weight(value) for value,_ in choices];total=sum(weights)
-  if not all(math.isfinite(w) and w>=0 for w in weights) or total<=0:raise ValueError(f"{record['id']}: invalid target distribution")
-  return header,choices,texts,[w/total for w in weights]
+  return header,choices,texts,distribution_weights(record,choices,soft)
  return header,choices,texts,index[0]
 
-def approx_tokens(record,default_pixels):
- """Cheap length estimate for bucketing: one visual token per 32x32 pixels after the budget, plus text."""
+RATIONALE_PREFIX=' Because: '
+def rationale_text(record):
+ """The auxiliary rationale continuation for --rationale-weight, or None."""
+ r=record.get('rationale')
+ return RATIONALE_PREFIX+r.strip() if isinstance(r,str) and r.strip() else None
+
+def approx_rationale_tokens(record,cap):
+ """Token-budget estimate for the appended rationale (same ~3.2 chars/token rule as approx_tokens), capped."""
+ text=rationale_text(record) if cap>0 else None
+ return min(cap,int(len(text)/3.2)+1) if text else 0
+
+def approx_tokens(record,default_pixels,rationale_tokens=0):
+ """Cheap length estimate for bucketing: one visual token per 32x32 pixels after the budget, plus text
+ (plus the capped rationale continuation when --rationale-weight appends one; rationale_tokens is the cap)."""
  budget=pixel_budget(record,default_pixels);visual=sum(min(im.get('width',640)*im.get('height',480),budget)//1024 for im in record['images'])
  field=record['request']['fields'][0];text=len(field['question'])+sum(len(str(o.get('value','')))+len(str(o.get('description') or ''))+4 for o in field.get('options',field.get('levels',[])))+len(json.dumps(record['request'].get('state',{}),ensure_ascii=False))
- return int(visual+text/3.2+90)
+ return int(visual+text/3.2+90)+approx_rationale_tokens(record,rationale_tokens)
 
-def batch_plan(records,default_pixels,token_budget,max_batch,seed,epoch,chunk=4096):
+def batch_plan(records,default_pixels,token_budget,max_batch,seed,epoch,chunk=4096,rationale_tokens=0):
  """Deterministic batches of similar-length examples: padded size (longest x count) stays under token_budget."""
  order=list(range(len(records)));random.Random(f'{seed}:{epoch}').shuffle(order);batches=[]
  for start in range(0,len(order),chunk):
-  part=sorted(order[start:start+chunk],key=lambda i:approx_tokens(records[i],default_pixels));current=[];longest=0
+  part=sorted(order[start:start+chunk],key=lambda i:approx_tokens(records[i],default_pixels,rationale_tokens));current=[];longest=0
   for i in part:
-   n=approx_tokens(records[i],default_pixels)
+   n=approx_tokens(records[i],default_pixels,rationale_tokens)
    if current and (max(longest,n)*(len(current)+1)>token_budget or len(current)>=max_batch):batches.append(current);current=[];longest=0
    current.append(i);longest=max(longest,n)
   if current:batches.append(current)
@@ -110,5 +160,5 @@ def with_noise_state(record,rng,rate=.15,object_rate=.06,no_match_rate=.35,decoy
  if wrap:field['question']=flatten_instructions({'question':field['question']})
  if no_match:
   label=rng.choice(NO_MATCH);field['options'].append({'value':label})
-  if copy['abstention_cause']=='not_listed':copy['target']=label;copy['abstention_cause']=None
+  if copy['abstention_cause']=='not_listed':copy['target']=label;copy['abstention_cause']=None;copy.pop('target_probs',None)  # the probs describe the unaugmented options
  return copy

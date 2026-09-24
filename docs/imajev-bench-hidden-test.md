@@ -9,7 +9,7 @@ When someone sends us a model, we score it on the hidden set and publish aggrega
 ## The hidden set
 
 - **Current set:** `data/imajev-bench/private-1/records-audited.jsonl` (sha256 `b5b3fa93…d115cf`),
-  built by `scripts/imajev_bench/build_v2.py` with its own seed (11) and split salt, and finished by
+  built by `scripts/imajev_bench/build_v2.py` with its own unpublished seed and split salt, and finished by
   `scripts/imajev_bench/finish_private.sh`. 202 items, 66 evidence clusters, 15 Unknown; audited
   blind on 41 items with 0 label errors (audit files: `reports/imajev-bench-hidden/private/private-1-audit/`).
   - 36 AI-generated scenes plus 30 programmatic text items, all in one test split.
