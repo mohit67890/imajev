@@ -11,7 +11,8 @@ from vision_decision.contracts import UNKNOWN
 from decision_data import load_records,load_image,render,VERSION
 
 parser=argparse.ArgumentParser();parser.add_argument('--name',required=True);parser.add_argument('--bundle',default='artifacts/model.json');parser.add_argument('--adapter')
-parser.add_argument('--partition',default='test');parser.add_argument('--version',default=VERSION);parser.add_argument('--pixels',type=int,default=400000);parser.add_argument('--limit',type=int,default=0);parser.add_argument('--filter',action='append',default=[],help='key=value on the expanded record (e.g. group=held_out_source); repeatable');args=parser.parse_args()
+parser.add_argument('--partition',default='test');parser.add_argument('--version',default=VERSION);parser.add_argument('--pixels',type=int,default=400000);parser.add_argument('--limit',type=int,default=0);parser.add_argument('--filter',action='append',default=[],help='key=value on the expanded record (e.g. group=held_out_source); repeatable')
+parser.add_argument('--skip-reversed',action='store_true',help='skip the reversed-option-order pass (order sensitivity is then not measured)');args=parser.parse_args()
 out=Path('reports')/args.version/'eval'/args.name;out.mkdir(parents=True,exist_ok=True);rows=load_records(args.partition,args.version)
 for f in args.filter:
  k,v=f.split('=',1);rows=[r for r in rows if str(r.get(k))==v]
@@ -38,7 +39,7 @@ with p.open('a') as stream:
    labels=[name(c[0]) for c in choices],logits=[float({str(name(k)):v for k,v in result.raw_logits.items()}[str(name(c[0]))]) for c in choices] if result.raw_logits else None,
    raw_logits={str(name(k)):float(v) for k,v in result.raw_logits.items()} if result.raw_logits else None,has_image=bool(r['images']))
   row['correct']=row['prediction']==row['target']
-  if r['request']['fields'][0]['type']=='choice':
+  if r['request']['fields'][0]['type']=='choice' and not args.skip_reversed:
    h,c,t,_=render(reversed_record(r));row['reversed_prediction']=name(backend.score_questions(image,[(h,c,t)],rotations=1)[0][0].value)
   stream.write(json.dumps(row)+'\n');stream.flush()
   if (i+1)%50==0:print(args.name,i+1,'/',len(rows),flush=True)

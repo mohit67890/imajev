@@ -1,0 +1,242 @@
+[
+ {
+  "file": "samples/A-good.png",
+  "task": "A",
+  "kind": "good",
+  "drawn": "A"
+ },
+ {
+  "file": "samples/A-half.png",
+  "task": "A",
+  "kind": "half",
+  "drawn": "A"
+ },
+ {
+  "file": "samples/A-wrong.png",
+  "task": "A",
+  "kind": "wrong",
+  "drawn": "H"
+ },
+ {
+  "file": "samples/A-scribble.png",
+  "task": "A",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/C-good.png",
+  "task": "C",
+  "kind": "good",
+  "drawn": "C"
+ },
+ {
+  "file": "samples/C-half.png",
+  "task": "C",
+  "kind": "half",
+  "drawn": "C"
+ },
+ {
+  "file": "samples/C-wrong.png",
+  "task": "C",
+  "kind": "wrong",
+  "drawn": "O"
+ },
+ {
+  "file": "samples/C-scribble.png",
+  "task": "C",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/E-good.png",
+  "task": "E",
+  "kind": "good",
+  "drawn": "E"
+ },
+ {
+  "file": "samples/E-half.png",
+  "task": "E",
+  "kind": "half",
+  "drawn": "E"
+ },
+ {
+  "file": "samples/E-wrong.png",
+  "task": "E",
+  "kind": "wrong",
+  "drawn": "L"
+ },
+ {
+  "file": "samples/E-scribble.png",
+  "task": "E",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/H-good.png",
+  "task": "H",
+  "kind": "good",
+  "drawn": "H"
+ },
+ {
+  "file": "samples/H-half.png",
+  "task": "H",
+  "kind": "half",
+  "drawn": "H"
+ },
+ {
+  "file": "samples/H-wrong.png",
+  "task": "H",
+  "kind": "wrong",
+  "drawn": "A"
+ },
+ {
+  "file": "samples/H-scribble.png",
+  "task": "H",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/L-good.png",
+  "task": "L",
+  "kind": "good",
+  "drawn": "L"
+ },
+ {
+  "file": "samples/L-half.png",
+  "task": "L",
+  "kind": "half",
+  "drawn": "L"
+ },
+ {
+  "file": "samples/L-wrong.png",
+  "task": "L",
+  "kind": "wrong",
+  "drawn": "E"
+ },
+ {
+  "file": "samples/L-scribble.png",
+  "task": "L",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/O-good.png",
+  "task": "O",
+  "kind": "good",
+  "drawn": "O"
+ },
+ {
+  "file": "samples/O-half.png",
+  "task": "O",
+  "kind": "half",
+  "drawn": "O"
+ },
+ {
+  "file": "samples/O-wrong.png",
+  "task": "O",
+  "kind": "wrong",
+  "drawn": "C"
+ },
+ {
+  "file": "samples/O-scribble.png",
+  "task": "O",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/T-good.png",
+  "task": "T",
+  "kind": "good",
+  "drawn": "T"
+ },
+ {
+  "file": "samples/T-half.png",
+  "task": "T",
+  "kind": "half",
+  "drawn": "T"
+ },
+ {
+  "file": "samples/T-wrong.png",
+  "task": "T",
+  "kind": "wrong",
+  "drawn": "7"
+ },
+ {
+  "file": "samples/T-scribble.png",
+  "task": "T",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/1-good.png",
+  "task": "1",
+  "kind": "good",
+  "drawn": "1"
+ },
+ {
+  "file": "samples/1-half.png",
+  "task": "1",
+  "kind": "half",
+  "drawn": "1"
+ },
+ {
+  "file": "samples/1-wrong.png",
+  "task": "1",
+  "kind": "wrong",
+  "drawn": "7"
+ },
+ {
+  "file": "samples/1-scribble.png",
+  "task": "1",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/4-good.png",
+  "task": "4",
+  "kind": "good",
+  "drawn": "4"
+ },
+ {
+  "file": "samples/4-half.png",
+  "task": "4",
+  "kind": "half",
+  "drawn": "4"
+ },
+ {
+  "file": "samples/4-wrong.png",
+  "task": "4",
+  "kind": "wrong",
+  "drawn": "A"
+ },
+ {
+  "file": "samples/4-scribble.png",
+  "task": "4",
+  "kind": "scribble",
+  "drawn": null
+ },
+ {
+  "file": "samples/7-good.png",
+  "task": "7",
+  "kind": "good",
+  "drawn": "7"
+ },
+ {
+  "file": "samples/7-half.png",
+  "task": "7",
+  "kind": "half",
+  "drawn": "7"
+ },
+ {
+  "file": "samples/7-wrong.png",
+  "task": "7",
+  "kind": "wrong",
+  "drawn": "1"
+ },
+ {
+  "file": "samples/7-scribble.png",
+  "task": "7",
+  "kind": "scribble",
+  "drawn": null
+ }
+]

@@ -54,12 +54,43 @@ HF_HUB_OFFLINE=1 PYTHONPATH=src:scripts .venv/bin/python scripts/playground/serv
   --adapter reports/decision-v2.1/runs/h100x4/last-step1361-mlx \
   --calibration reports/decision-v2.1/calibration-v2.1-final.json --model-name imajev-2b
 ```
-- Scenarios, flips, variants, app rules and expected outcomes: `static/scenarios/scenarios.js` (`buildCase` is shared
-  by the page and the checker, so a checked combination is exactly what the page sends).
+- Scenarios, flips, variants, app rules and expected outcomes: `static/scenarios/scenarios.js`. Shared helpers
+  (`buildCase`, `sureAt`, `allCombinations`) are in `static/scenarios/engine.js`, used by the pages and the checker,
+  so a checked combination is exactly what the page sends.
 - Check every default, flip and variant against the running server before a demo or a recording:
-  `node scripts/playground/verify_scenarios.mjs` → `reports/scenarios/verification.json` (also copied to the page,
-  "See the check run"). Only combinations that pass belong in a GIF.
+  `node scripts/playground/verify_scenarios.mjs --pack scenarios` → `reports/scenarios/verification-scenarios.json`
+  (also copied to the page, "See the check run"). Only combinations that pass belong in a GIF.
+- "+ your photo" lets a viewer try their own image (resized to 1024 px in the browser); it is labelled "not checked".
 - Photos: `python scripts/playground/build_scenario_assets.py` copies them into `static/scenarios/assets/` and writes
   `attribution.json` with licence, source and whether the photo appears in any training row of the v1 → v2.1 manifests
   (the page shows "unseen in training", "seen in training" or "composite"). Takes ~5 minutes (greps the manifests).
 - Deep links keep the state: `#listing?listing.color=red`, `#qc?photo=good part`. `j` / `k` switch scenarios.
+
+## Wardrobe page (`/wardrobe/`)
+Five everyday clothing decisions on the same engine (`static/wardrobe/scenarios.js`): ordered vs. arrived, dress code,
+snap-and-tag, "do I already own this?", and which of my shoes match. Colour, pattern and category only; the model was
+not checked on style. Check with `node scripts/playground/verify_scenarios.mjs --pack wardrobe` (every reachable
+combination, 49 checks). Photos are 768-px demo copies in `static/wardrobe/assets/demo/`, credits built by
+`build_scenario_assets.py --wardrobe` (ABO pieces are also matched against training rows by product ID). The earlier
+closet browser and outfit builder are at `/wardrobe/closet.html`.
+
+## Stylist app (`/wardrobe/stylist.html`)
+A phone-app demo (phone frame on desktop, full screen on a phone): pick a piece from the closet, or snap one,
+and get bottoms / shoes / bag (or top / layer) from the same closet in the colours you like. imajev reads the photo
+(colour, pattern; category for a snapped photo) and ranks the closet items for each slot; the app applies the
+styling rules and the "never" colours in code before asking, and writes the "why" line from the catalogue tags.
+Logic and requests: `static/wardrobe/stylist.js` (shared with the checker). Check every closet piece x colour
+preference with `node scripts/playground/verify_scenarios.mjs --pack wardrobe --data stylist.js`
+(→ `static/wardrobe/stylist-verification.json`; the app shows "checked ✓ / ✗" on each exact request). The option
+wording was revised on these same cases, so the pass rate is development evidence, not a held-out score.
+
+## Tracing pad (`/tracing/`)
+A kids' app: pick a letter or number (A C E H L O T, 1 4 7), trace the dotted guide with a finger, tap Check.
+imajev reads which character the strokes show (it never sees the guide and is not told the answer: a task in the
+record primed it to "see" the asked-for character); the app compares that with the task and measures, per guide
+line, how much the strokes cover (every line ≥ 80% for a star). Shapes: `static/tracing/letters.json`; request and
+feedback rule: `static/tracing/scenarios.js`; samples: `build_tracing_samples.py` (good / half / wrong / scribble).
+Checks: `node scripts/playground/verify_scenarios.mjs --pack tracing` (imajev's reading, 30 checks); the app's
+geometry on the same samples is in `reports/scenarios/tracing-geometry.md` (run in the browser console:
+`for (const c of TRACING.CHARS) { choose(c); for (const k of ['good','half','wrong','scribble']) { await loadSample(k); console.log(c, k, coverage().weakest); } }`).
+Only generated tracings are checked, not real children's handwriting.

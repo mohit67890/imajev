@@ -1,0 +1,1112 @@
+{
+  "model": {
+    "model": "imajev-4b-raw",
+    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "backend": "mlx",
+    "loaded": true,
+    "load_seconds": 2.546
+  },
+  "threshold": 0.8,
+  "api": "http://127.0.0.1:8765",
+  "run_at": "2026-09-24T02:31:33.020Z",
+  "passed": 22,
+  "total": 30,
+  "rows": [
+    {
+      "scenario": "trace-A",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great A."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.00003859534354667265,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00000802775616869954,
+            "4": 0.000004912299790806413,
+            "7": 0.000005674336795978261,
+            "A": 0.9999225933731698,
+            "C": 0.000005678529527152498,
+            "E": 0.000013483965384261532,
+            "H": 0.00001070606361642143,
+            "L": 0.0000036953735983124806,
+            "O": 0.000001525903575065373,
+            "T": 0.0000023387218233531846,
+            "a scribble, not a letter or number": 0.000021363676550189385
+          }
+        }
+      },
+      "server_ms": 615,
+      "round_trip_ms": 618
+    },
+    {
+      "scenario": "trace-A",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an H!",
+        "detail": "Now try the letter A."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "H",
+          "unknown": 0.00001436945833759574,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00001696668129801491,
+            "4": 0.000015318262954643816,
+            "7": 0.000019441377303988077,
+            "A": 0.0000647195263583371,
+            "C": 0.000013919717766366213,
+            "E": 0.000055719982148977916,
+            "H": 0.99967330896056,
+            "L": 0.000046328471825206944,
+            "O": 0.000005125997202937225,
+            "T": 0.000024527810089400302,
+            "a scribble, not a letter or number": 0.00006462321249209163
+          }
+        }
+      },
+      "server_ms": 442.5,
+      "round_trip_ms": 444
+    },
+    {
+      "scenario": "trace-A",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [
+        "drawn=7 (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "7",
+          "unknown": 0.003853070420579911,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.03848273855471884,
+            "4": 0.00458584524390631,
+            "7": 0.6004388824056343,
+            "A": 0.0148312343960127,
+            "C": 0.003041599252995967,
+            "E": 0.005610858990665623,
+            "H": 0.017648781591336118,
+            "L": 0.019828005608322024,
+            "O": 0.0016797481358981352,
+            "T": 0.014286027705680849,
+            "a scribble, not a letter or number": 0.2795662781148291
+          }
+        }
+      },
+      "server_ms": 440.2,
+      "round_trip_ms": 442
+    },
+    {
+      "scenario": "trace-C",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great C."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "C",
+          "unknown": 0.00002433660483397147,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00000863125431942992,
+            "4": 0.000004657075445676923,
+            "7": 0.000013040065708916412,
+            "A": 0.00001866128432278419,
+            "C": 0.9998500522406447,
+            "E": 0.000022441523531132533,
+            "H": 0.000007762241608606578,
+            "L": 0.00001360380251526875,
+            "O": 0.000007890525491879099,
+            "T": 0.000002321193332327215,
+            "a scribble, not a letter or number": 0.00005093879307926207
+          }
+        }
+      },
+      "server_ms": 432.7,
+      "round_trip_ms": 434
+    },
+    {
+      "scenario": "trace-C",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an O!",
+        "detail": "Now try the letter C."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "O",
+          "unknown": 0.0006972511895765579,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.0004796636373007383,
+            "4": 0.00019432917347587576,
+            "7": 0.00024555860544312017,
+            "A": 0.0012320274977558952,
+            "C": 0.00274515814726182,
+            "E": 0.00024602323895419795,
+            "H": 0.00013553131375988958,
+            "L": 0.00021483444142119475,
+            "O": 0.992863928830408,
+            "T": 0.00014784107312714863,
+            "a scribble, not a letter or number": 0.0014951040410921166
+          }
+        }
+      },
+      "server_ms": 431.3,
+      "round_trip_ms": 432
+    },
+    {
+      "scenario": "trace-C",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an A!",
+        "detail": "Now try the letter C."
+      },
+      "wrong": [
+        "drawn=A (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.0011562227668491596,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.0022327200866204618,
+            "4": 0.1011007534859417,
+            "7": 0.010859783429670675,
+            "A": 0.876116408474624,
+            "C": 0.002070867747971619,
+            "E": 0.0009212080934408643,
+            "H": 0.0008852763474566404,
+            "L": 0.0016249656359978288,
+            "O": 0.0008161616042980875,
+            "T": 0.0005344956635144951,
+            "a scribble, not a letter or number": 0.0028373594304635847
+          }
+        }
+      },
+      "server_ms": 430.3,
+      "round_trip_ms": 431
+    },
+    {
+      "scenario": "trace-E",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great E."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "E",
+          "unknown": 0.00004084937875874851,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.000042173334445353963,
+            "4": 0.00004621378942843261,
+            "7": 0.00013267436162474715,
+            "A": 0.00009356611157816137,
+            "C": 0.00008186022752351407,
+            "E": 0.9988224890932736,
+            "H": 0.00025940782901527745,
+            "L": 0.00032571973828973125,
+            "O": 0.000012142672532574457,
+            "T": 0.00004802288719187302,
+            "a scribble, not a letter or number": 0.00013572995509667215
+          }
+        }
+      },
+      "server_ms": 433.6,
+      "round_trip_ms": 435
+    },
+    {
+      "scenario": "trace-E",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an L!",
+        "detail": "Now try the letter E."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "L",
+          "unknown": 0.00012650906346749964,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00007514263520235084,
+            "4": 0.00002398934611285277,
+            "7": 0.00011670412021212645,
+            "A": 0.000026426451874011913,
+            "C": 0.000017936211284096897,
+            "E": 0.000026122391518886415,
+            "H": 0.000025862104673978047,
+            "L": 0.9995837201917515,
+            "O": 0.000006549519894196083,
+            "T": 0.000029372052134550033,
+            "a scribble, not a letter or number": 0.00006817497534146127
+          }
+        }
+      },
+      "server_ms": 432.9,
+      "round_trip_ms": 434
+    },
+    {
+      "scenario": "trace-E",
+      "case": "scribble",
+      "pass": true,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "a scribble, not a letter or number",
+          "unknown": 0.012922726236777897,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.012502474719748087,
+            "4": 0.05502121038314347,
+            "7": 0.09238430087541544,
+            "A": 0.20938553103947258,
+            "C": 0.01956348760703724,
+            "E": 0.05157047133667582,
+            "H": 0.10327810264533856,
+            "L": 0.02153172052579174,
+            "O": 0.009324864326483053,
+            "T": 0.019095538800494513,
+            "a scribble, not a letter or number": 0.40634229774039954
+          }
+        }
+      },
+      "server_ms": 434.4,
+      "round_trip_ms": 435
+    },
+    {
+      "scenario": "trace-H",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great H."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "H",
+          "unknown": 0.000018533698864270047,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00001855240519442488,
+            "4": 0.00001656369458356525,
+            "7": 0.000018454313625770546,
+            "A": 0.00009144595328826555,
+            "C": 0.000018821327798320783,
+            "E": 0.000057187130531750095,
+            "H": 0.9996153191886139,
+            "L": 0.000051152851975783096,
+            "O": 0.000006589588701486,
+            "T": 0.000028198952091260713,
+            "a scribble, not a letter or number": 0.00007771459359549586
+          }
+        }
+      },
+      "server_ms": 433.7,
+      "round_trip_ms": 435
+    },
+    {
+      "scenario": "trace-H",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an A!",
+        "detail": "Now try the letter H."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.000029837835215164353,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.000007933426792917446,
+            "4": 0.000004937632749963673,
+            "7": 0.000005613193150960327,
+            "A": 0.9999203615587712,
+            "C": 0.000005214970189859267,
+            "E": 0.0000157943332532118,
+            "H": 0.00001375820474061498,
+            "L": 0.000003608121769985406,
+            "O": 0.0000015104586340103468,
+            "T": 0.000002854001134250844,
+            "a scribble, not a letter or number": 0.000018414098813114714
+          }
+        }
+      },
+      "server_ms": 432,
+      "round_trip_ms": 433
+    },
+    {
+      "scenario": "trace-H",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [
+        "drawn=A (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.006906574031980496,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.006146119300930159,
+            "4": 0.022600262648000646,
+            "7": 0.040453179615522965,
+            "A": 0.7203482705319265,
+            "C": 0.00659259559663935,
+            "E": 0.011299658487070263,
+            "H": 0.05822404380536484,
+            "L": 0.01251059549484888,
+            "O": 0.002962183466024814,
+            "T": 0.03538297512599994,
+            "a scribble, not a letter or number": 0.08348011592767168
+          }
+        }
+      },
+      "server_ms": 431.5,
+      "round_trip_ms": 432
+    },
+    {
+      "scenario": "trace-L",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great L."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "L",
+          "unknown": 0.00013136667472576138,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.0001027599756718784,
+            "4": 0.00002516765696367533,
+            "7": 0.0001081053802428649,
+            "A": 0.0000245310378414894,
+            "C": 0.000016368874218139635,
+            "E": 0.000022606945560805083,
+            "H": 0.000021855235025202848,
+            "L": 0.9995853822550332,
+            "O": 0.000005717778146998022,
+            "T": 0.00003856250849004733,
+            "a scribble, not a letter or number": 0.00004894235280567423
+          }
+        }
+      },
+      "server_ms": 439.9,
+      "round_trip_ms": 441
+    },
+    {
+      "scenario": "trace-L",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an E!",
+        "detail": "Now try the letter L."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "E",
+          "unknown": 0.0000431704580585595,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00004340486707034127,
+            "4": 0.00005008275754974945,
+            "7": 0.00008637611293604341,
+            "A": 0.00007323352217649983,
+            "C": 0.0001278751262058491,
+            "E": 0.9988662206776328,
+            "H": 0.00012649901703715437,
+            "L": 0.0004061600384951947,
+            "O": 0.000016395472928484878,
+            "T": 0.00004972673609411965,
+            "a scribble, not a letter or number": 0.000154025671873819
+          }
+        }
+      },
+      "server_ms": 440.3,
+      "round_trip_ms": 441
+    },
+    {
+      "scenario": "trace-L",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [
+        "drawn=7 (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "7",
+          "unknown": 0.007567650040765439,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.08133869557468892,
+            "4": 0.0528028013171561,
+            "7": 0.24408067765621705,
+            "A": 0.15996805293576213,
+            "C": 0.01793193204525855,
+            "E": 0.028692800746818445,
+            "H": 0.05157420895968099,
+            "L": 0.1254701988444314,
+            "O": 0.007394858479640018,
+            "T": 0.022455763285855725,
+            "a scribble, not a letter or number": 0.20829001015449064
+          }
+        }
+      },
+      "server_ms": 436.3,
+      "round_trip_ms": 437
+    },
+    {
+      "scenario": "trace-O",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great O."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "O",
+          "unknown": 0.0007517473885924103,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.0003933704674330209,
+            "4": 0.0001905119938381147,
+            "7": 0.00020155606060731258,
+            "A": 0.0015697120418225092,
+            "C": 0.002658930802881704,
+            "E": 0.0002560505925434151,
+            "H": 0.00013330378942240617,
+            "L": 0.00020703342662783638,
+            "O": 0.9926133891527782,
+            "T": 0.00013537336428269848,
+            "a scribble, not a letter or number": 0.0016407683077628366
+          }
+        }
+      },
+      "server_ms": 434.8,
+      "round_trip_ms": 436
+    },
+    {
+      "scenario": "trace-O",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like a C!",
+        "detail": "Now try the letter O."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "C",
+          "unknown": 0.000013952558456380167,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.000005465712776073326,
+            "4": 0.000002857869182183978,
+            "7": 0.000008736619843639338,
+            "A": 0.00001315720306607637,
+            "C": 0.9999071981019567,
+            "E": 0.00001596515248203755,
+            "H": 0.000005114637199614742,
+            "L": 0.000008691578546465765,
+            "O": 0.000004304938903793932,
+            "T": 0.0000014019734273252085,
+            "a scribble, not a letter or number": 0.000027106212616060016
+          }
+        }
+      },
+      "server_ms": 434.7,
+      "round_trip_ms": 436
+    },
+    {
+      "scenario": "trace-O",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an A!",
+        "detail": "Now try the letter O."
+      },
+      "wrong": [
+        "drawn=A (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.005469634006717689,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.0046767909953786295,
+            "4": 0.049523988711387044,
+            "7": 0.010999495146222187,
+            "A": 0.8439194670938782,
+            "C": 0.003872093145764376,
+            "E": 0.011753439878948172,
+            "H": 0.030696144207272413,
+            "L": 0.01716394637766606,
+            "O": 0.0014604066785272691,
+            "T": 0.005212250085621778,
+            "a scribble, not a letter or number": 0.020721977679333856
+          }
+        }
+      },
+      "server_ms": 430.5,
+      "round_trip_ms": 431
+    },
+    {
+      "scenario": "trace-T",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great T."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "T",
+          "unknown": 0.00008767144966369186,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00010229865960160337,
+            "4": 0.00003273379472978979,
+            "7": 0.00005664569007252901,
+            "A": 0.00004277968987939586,
+            "C": 0.000014864733086010758,
+            "E": 0.00007579381262563095,
+            "H": 0.00010840437038358044,
+            "L": 0.00011972493739218339,
+            "O": 0.000015046869772818597,
+            "T": 0.9991832496163918,
+            "a scribble, not a letter or number": 0.0002484578260645962
+          }
+        }
+      },
+      "server_ms": 433.2,
+      "round_trip_ms": 434
+    },
+    {
+      "scenario": "trace-T",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like a 7!",
+        "detail": "Now try the letter T."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "7",
+          "unknown": 0.000010464490710846431,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.000006977035846645659,
+            "4": 0.0000060289173525850205,
+            "7": 0.9998578771293384,
+            "A": 0.000020178317608575533,
+            "C": 0.000004357516271359187,
+            "E": 0.000005231097045040835,
+            "H": 0.000012716801318085476,
+            "L": 0.00001776471955251382,
+            "O": 0.0000013759571863398162,
+            "T": 0.000008283552234820129,
+            "a scribble, not a letter or number": 0.000059208956245630415
+          }
+        }
+      },
+      "server_ms": 432.3,
+      "round_trip_ms": 433
+    },
+    {
+      "scenario": "trace-T",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [
+        "drawn=A (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.005443832757162432,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.005842172668246243,
+            "4": 0.017406088567508485,
+            "7": 0.033755376990752095,
+            "A": 0.6953134420221626,
+            "C": 0.013179653944031484,
+            "E": 0.042067016079074954,
+            "H": 0.017742477397877914,
+            "L": 0.015727555839647144,
+            "O": 0.007375961532113377,
+            "T": 0.011865449832498112,
+            "a scribble, not a letter or number": 0.13972480512608762
+          }
+        }
+      },
+      "server_ms": 432.2,
+      "round_trip_ms": 433
+    },
+    {
+      "scenario": "trace-1",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great 1."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "1",
+          "unknown": 0.00007543333603762896,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.999220326830142,
+            "4": 0.00007451559183278424,
+            "7": 0.00021516589874794666,
+            "A": 0.000033926456261492705,
+            "C": 0.000015907964414450706,
+            "E": 0.000018735607051190084,
+            "H": 0.00001637319230844951,
+            "L": 0.00030337909476712237,
+            "O": 0.00001262024884815208,
+            "T": 0.000027066851818979486,
+            "a scribble, not a letter or number": 0.00006198226380754007
+          }
+        }
+      },
+      "server_ms": 432.7,
+      "round_trip_ms": 434
+    },
+    {
+      "scenario": "trace-1",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like a 7!",
+        "detail": "Now try the number 1."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "7",
+          "unknown": 0.0000086476406908673,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00000777916134003693,
+            "4": 0.000005890022572652746,
+            "7": 0.9998807031273984,
+            "A": 0.000026897603689846993,
+            "C": 0.00000388229228251562,
+            "E": 0.000004619661209397409,
+            "H": 0.00000881688046764652,
+            "L": 0.000009927743565279862,
+            "O": 0.0000012587246601183125,
+            "T": 0.000005398200329428424,
+            "a scribble, not a letter or number": 0.00004482658248472879
+          }
+        }
+      },
+      "server_ms": 432.9,
+      "round_trip_ms": 434
+    },
+    {
+      "scenario": "trace-1",
+      "case": "scribble",
+      "pass": true,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "a scribble, not a letter or number",
+          "unknown": 0.0105432650713297,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.05340586134170702,
+            "4": 0.05067018963913535,
+            "7": 0.2520412395489245,
+            "A": 0.08854707280947074,
+            "C": 0.013944960893651067,
+            "E": 0.026527144506775742,
+            "H": 0.054166262297642036,
+            "L": 0.03600846870264563,
+            "O": 0.004960996623015794,
+            "T": 0.02035205269388597,
+            "a scribble, not a letter or number": 0.39937575094314615
+          }
+        }
+      },
+      "server_ms": 431.3,
+      "round_trip_ms": 432
+    },
+    {
+      "scenario": "trace-4",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great 4."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "4",
+          "unknown": 0.0000405696328522867,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00002052079672668721,
+            "4": 0.9996466888629415,
+            "7": 0.0000549316506343282,
+            "A": 0.00010652069247388321,
+            "C": 0.0000074074174577239765,
+            "E": 0.000023709751316286548,
+            "H": 0.000038391395411332114,
+            "L": 0.00003153642272666895,
+            "O": 0.000004818106598145946,
+            "T": 0.000016395204019156686,
+            "a scribble, not a letter or number": 0.00004907969969424444
+          }
+        }
+      },
+      "server_ms": 435.6,
+      "round_trip_ms": 436
+    },
+    {
+      "scenario": "trace-4",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like an A!",
+        "detail": "Now try the number 4."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.00003771697037895607,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.000008771329431606893,
+            "4": 0.000005127891776876751,
+            "7": 0.000005694690604294262,
+            "A": 0.9999185755834595,
+            "C": 0.000006301638143927078,
+            "E": 0.000015393001892489383,
+            "H": 0.000011820584640293053,
+            "L": 0.0000039416250575802254,
+            "O": 0.0000019982121455600888,
+            "T": 0.0000024186937592240967,
+            "a scribble, not a letter or number": 0.00001995674908859728
+          }
+        }
+      },
+      "server_ms": 433,
+      "round_trip_ms": 434
+    },
+    {
+      "scenario": "trace-4",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [
+        "drawn=A (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.004076018047821254,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.011462716779072103,
+            "4": 0.1278249455981788,
+            "7": 0.3326899986550373,
+            "A": 0.4026232647551135,
+            "C": 0.003265908215139911,
+            "E": 0.00503086168294699,
+            "H": 0.01878511011234731,
+            "L": 0.021306610583052814,
+            "O": 0.001225310718731448,
+            "T": 0.0069794816189083725,
+            "a scribble, not a letter or number": 0.06880579128147143
+          }
+        }
+      },
+      "server_ms": 430.9,
+      "round_trip_ms": 432
+    },
+    {
+      "scenario": "trace-7",
+      "case": "good",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Well done! ⭐",
+        "detail": "That is a great 7."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "7",
+          "unknown": 0.000011738341949719193,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.00000913599045432335,
+            "4": 0.000007829677611113549,
+            "7": 0.9998500446009186,
+            "A": 0.00002489819712515667,
+            "C": 0.000005562283239669988,
+            "E": 0.0000065110004318405315,
+            "H": 0.00001151290952952364,
+            "L": 0.000014225532337587712,
+            "O": 0.0000016298475036449924,
+            "T": 0.000008319904030980271,
+            "a scribble, not a letter or number": 0.00006033005681754501
+          }
+        }
+      },
+      "server_ms": 432.2,
+      "round_trip_ms": 433
+    },
+    {
+      "scenario": "trace-7",
+      "case": "wrong",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "That looks like a 1!",
+        "detail": "Now try the number 7."
+      },
+      "wrong": [],
+      "answers": {
+        "drawn": {
+          "top": "1",
+          "unknown": 0.00005475580678989478,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.9995021692988578,
+            "4": 0.00004047687525720803,
+            "7": 0.00011799786241480548,
+            "A": 0.000019663802791660376,
+            "C": 0.000009930591303955579,
+            "E": 0.000011152266927748972,
+            "H": 0.000008840472953593229,
+            "L": 0.0002289351844696723,
+            "O": 0.000008024395373554261,
+            "T": 0.000012144227776149102,
+            "a scribble, not a letter or number": 0.00004066502187372779
+          }
+        }
+      },
+      "server_ms": 431.9,
+      "round_trip_ms": 433
+    },
+    {
+      "scenario": "trace-7",
+      "case": "scribble",
+      "pass": false,
+      "expect": [
+        "flag",
+        "human"
+      ],
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Nice try!",
+        "detail": "Let’s do it once more, slowly along the dots."
+      },
+      "wrong": [
+        "drawn=A (want a scribble, not a letter or number)"
+      ],
+      "answers": {
+        "drawn": {
+          "top": "A",
+          "unknown": 0.005859778488523411,
+          "abstained": false,
+          "probabilities": {
+            "1": 0.011469401217689905,
+            "4": 0.06124710398987818,
+            "7": 0.13219121227510258,
+            "A": 0.552618266101626,
+            "C": 0.006124337669547492,
+            "E": 0.014992106455022991,
+            "H": 0.028565090832174865,
+            "L": 0.020734971749191207,
+            "O": 0.0018360920652788226,
+            "T": 0.02725840706392625,
+            "a scribble, not a letter or number": 0.1429630105805617
+          }
+        }
+      },
+      "server_ms": 430.2,
+      "round_trip_ms": 431
+    }
+  ]
+}

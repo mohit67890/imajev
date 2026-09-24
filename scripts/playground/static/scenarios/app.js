@@ -8,6 +8,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const pct = x => `${Math.round((Number(x) || 0) * 100)}%`;
 const LS_THEME = 'imajev.pg.theme';   // shared with the playground
+const CUSTOM = '__your_photo';
 
 const S = {
   scenario: null,
@@ -22,6 +23,7 @@ const S = {
   inFlight: false,
   pending: false,
   blobs: new Map(),
+  custom: null,       // { slot, src } — the viewer's own photo (object URL); never part of the check run
   attribution: {},
 };
 
@@ -44,6 +46,7 @@ function leaves(obj, prefix = '') {
 
 function currentCase() {
   const built = window.buildCase(S.scenario, { flips: S.flips, variant: S.variant });
+  if (S.custom && S.variant === CUSTOM) built.images[S.custom.slot] = S.custom.src;
   for (const [path, value] of Object.entries(S.edits)) {
     const keys = path.split('.');
     let node = built.state;
@@ -97,7 +100,7 @@ function writeHash() {
     const index = flip.values.indexOf(value);
     if (index > 0) params.set(path, flip.names ? flip.names[index] : value);
   }
-  if (S.variant && S.variant !== S.scenario.variants.options[0].label) params.set('photo', S.variant);
+  if (S.variant && S.variant !== CUSTOM && S.variant !== S.scenario.variants.options[0].label) params.set('photo', S.variant);
   const query = params.toString();
   history.replaceState(null, '', `#${S.scenario.id}${query ? `?${query}` : ''}`);
 }
@@ -115,6 +118,8 @@ function openScenario({ scenario, flips, variant }) {
     ? (scenario.variants.options.find(o => o.label === variant) || scenario.variants.options[0]).label
     : null;
   S.answers = null;
+  if (S.custom) URL.revokeObjectURL(S.custom.src);
+  S.custom = null;
 
   document.querySelectorAll('#scenario-list a').forEach(a => a.setAttribute('aria-current', a.dataset.id === scenario.id ? 'page' : 'false'));
   $('kicker').textContent = scenario.kicker;
@@ -142,7 +147,11 @@ async function loadAttribution() {
     for (const option of s.variants?.options || []) dirs.add(dirOf(option.src));
   }
   await Promise.all([...dirs].map(async dir => {
-    try { S.attribution[dir] = await (await fetch(`${dir}/attribution.json`)).json(); } catch { S.attribution[dir] = []; }
+    try {
+      const response = await fetch(`${dir}/attribution.json`);
+      const rows = response.ok ? await response.json() : [];
+      S.attribution[dir] = Array.isArray(rows) ? rows : [];
+    } catch { S.attribution[dir] = []; }
   }));
 }
 
@@ -157,7 +166,8 @@ function renderEvidence() {
   $('shots').className = `shots n${built.images.length}`;
   $('shots').innerHTML = built.images.length ? built.images.map((src, i) => {
     const credit = creditFor(src);
-    const badge = credit ? (credit.synthetic ? '<span class="badge warn" title="Generated catalogue image, not a photograph">AI-generated</span>'
+    const badge = src.startsWith('blob:') ? '<span class="badge dim" title="Your upload is sent only to this local server and is not part of the check run">your photo · not checked</span>'
+      : credit ? (credit.synthetic ? '<span class="badge warn" title="Generated catalogue image, not a photograph">AI-generated</span>'
       : credit.edit ? '<span class="badge warn" title="' + esc(credit.edit) + '">composite</span>'
       : credit.held_out ? '<span class="badge" title="This photo is in no training row of the released model">unseen in training</span>'
       : '<span class="badge dim" title="This photo appears in training rows">seen in training</span>') : '';
@@ -174,11 +184,12 @@ function renderEvidence() {
   $('evidence-note').textContent = built.images.length === 2 ? 'two photos, one request' : built.images.length ? 'one photo' : 'text only';
 
   const variants = scenario.variants;
-  $('variants').hidden = !variants;
-  if (variants) {
-    $('variants').innerHTML = `<span class="label">Photo ${variants.slot + 1}:</span>` + variants.options.map(o =>
-      `<button type="button" class="seg${o.label === S.variant ? ' on' : ''}" data-variant="${esc(o.label)}" aria-pressed="${o.label === S.variant}">${esc(o.label)}</button>`).join('');
-  }
+  const slot = uploadSlot(scenario);
+  $('variants').hidden = !variants && slot == null;
+  const options = variants ? variants.options.map(o =>
+    `<button type="button" class="seg${o.label === S.variant ? ' on' : ''}" data-variant="${esc(o.label)}" aria-pressed="${o.label === S.variant}">${esc(o.label)}</button>`).join('') : '';
+  const mine = slot == null ? '' : `<label class="seg upload${S.variant === CUSTOM ? ' on' : ''}">+ your photo<input type="file" id="own-photo" accept="image/jpeg,image/png,image/webp" hidden></label>`;
+  $('variants').innerHTML = `<span class="label">Photo ${(variants ? variants.slot : slot) + 1}:</span>${options}${mine}`;
 
   const seen = new Map();
   for (const src of built.images) {
@@ -189,12 +200,50 @@ function renderEvidence() {
     `Photo: ${esc(c.credit)}${c.edit ? ` · ${esc(c.edit)}` : ''}`).join('<br>');
 }
 
+/* The viewer's own photo replaces the variant slot, or the only / last photo of a scenario without variants. */
+function uploadSlot(scenario) {
+  if (scenario.variants) return scenario.variants.slot;
+  return scenario.images.length ? scenario.images.length - 1 : null;
+}
+
+/* Phone photos are large: scale to a 1024-px edge in the browser (the model has an image-size limit). */
+async function shrink(file) {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, 1024 / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+}
+
+async function useOwnPhoto(file) {
+  if (!file) return;
+  try {
+    const blob = await shrink(file);
+    if (S.custom) URL.revokeObjectURL(S.custom.src);
+    const src = URL.createObjectURL(blob);
+    S.blobs.set(src, Promise.resolve(blob));
+    S.custom = { slot: uploadSlot(S.scenario), src };
+    S.variant = CUSTOM;
+    renderEvidence();
+    changed({ immediate: true });
+  } catch {
+    toast('Could not read that image');
+  }
+}
+
 /* ------------------------------------------------------------------ record */
 
 function renderRecord() {
   const built = currentCase();
   const flips = S.scenario.flips || [];
-  $('record-fields').innerHTML = leaves(built.state).map(([path, value]) => {
+  const fields = leaves(built.state);
+  if (!fields.length) {
+    $('record-fields').innerHTML = '<p class="empty-record">No record for this one: imajev answers from the photo alone.</p>';
+    return;
+  }
+  $('record-fields').innerHTML = fields.map(([path, value]) => {
     const flip = flips.find(f => f.path === path);
     const long = String(value).length > 60;
     let control;
@@ -290,7 +339,7 @@ async function run() {
     const form = new FormData();
     const request = { state: built.state, questions: built.questions };
     form.append('request', JSON.stringify(request));
-    for (const src of built.images) form.append('image', await blobFor(src), src.split('/').pop());
+    for (const src of built.images) form.append('image', await blobFor(src), src.startsWith('blob:') ? 'your-photo.jpg' : src.split('/').pop());
     const started = performance.now();
     const response = await fetch(`${API}/v1/systemone`, { method: 'POST', body: form });
     const roundTrip = performance.now() - started;
@@ -305,7 +354,7 @@ async function run() {
       $('latency').textContent = ms != null ? `${Math.round(ms)} ms` : '';
       $('latency').title = `server ${ms} ms · round trip ${Math.round(roundTrip)} ms`;
       $('meta-line').textContent = `${body.model || ''} · ${Object.keys(body.answers).length} questions · ${built.images.length ? `${built.images.length} photo${built.images.length === 1 ? '' : 's'}` : 'no photo'}`;
-      $('json').textContent = JSON.stringify({ request: { ...request, images: built.images.map(s => s.split('/').pop()) }, response: body }, null, 2);
+      $('json').textContent = JSON.stringify({ request: { ...request, images: built.images.map(s => (s.startsWith('blob:') ? 'your-photo.jpg' : s.split('/').pop())) }, response: body }, null, 2);
     }
   } catch (err) {
     $('error').textContent = `Request failed. ${err.message}. Is the server running? (scripts/playground/README.md)`;
@@ -329,7 +378,8 @@ function changed({ immediate = false } = {}) {
 function curl() {
   if (!S.lastRequest) return '';
   const base = API || location.origin;
-  const images = S.lastRequest.images.map(src => ` \\\n  -F image=@scripts/playground/static/scenarios/${src}`).join('');
+  const page = location.pathname.split('/').filter(Boolean).pop() || 'scenarios';
+  const images = S.lastRequest.images.map(src => ` \\\n  -F image=@${src.startsWith('blob:') ? 'your-photo.jpg' : `scripts/playground/static/${page}/${src}`}`).join('');
   const json = JSON.stringify(S.lastRequest.request).replace(/'/g, `'\\''`);
   return `curl -s ${base}/v1/systemone \\\n  -F 'request=${json}'${images}`;
 }
@@ -339,7 +389,8 @@ function curl() {
 async function showVerification() {
   const dialog = $('verification');
   try {
-    const data = await (await fetch('verification.json', { cache: 'no-cache' })).json();
+    const { model } = await (await fetch(`${API}/v1/models`)).json();
+    const data = await (await fetch(`verification-${model}.json`, { cache: 'no-cache' })).json();
     $('verification-body').innerHTML = `<p class="dim">${data.passed}/${data.total} checks pass on <b>${esc(data.model.model)}</b> at threshold ${pct(data.threshold)} · ${esc(data.run_at.slice(0, 16).replace('T', ' '))} UTC</p>
       <table><thead><tr><th></th><th>Scenario</th><th>Case</th><th>App does</th><th>ms</th></tr></thead><tbody>
       ${data.rows.map(r => `<tr class="${r.pass ? '' : 'fail'}"><td>${r.pass ? '✓' : '✗'}</td><td>${esc(r.scenario)}</td><td>${esc(r.case)}</td><td>${esc(r.route.title)}</td><td>${Math.round(r.server_ms)}</td></tr>`).join('')}
@@ -380,6 +431,9 @@ function wire() {
     if (!el) return;
     S.edits[el.dataset.edit] = el.value;
     changed();
+  });
+  $('variants').addEventListener('change', e => {
+    if (e.target.id === 'own-photo') useOwnPhoto(e.target.files[0]);
   });
   $('variants').addEventListener('click', e => {
     const b = e.target.closest('button[data-variant]');
@@ -425,6 +479,9 @@ async function init() {
   renderList();
   wire();
   await loadAttribution();
+  fetch(`${API}/v1/models`).then(r => r.json()).then(m => fetch(`verification-${m.model}.json`, { cache: 'no-cache' })).then(r => r.json()).then(v => {
+    $('check-summary').textContent = ` (${v.passed}/${v.total} pass on ${v.model.model})`;
+  }).catch(() => {});
   fetch(`${API}/v1/models`).then(r => r.json()).then(m => {
     $('model-chip').textContent = `${m.model} · ${m.backend}`;
     $('model-chip').classList.add('ok');

@@ -1,0 +1,266 @@
+{
+ "listing": {
+  "title": "Marketplace listing check",
+  "kicker": "Photo vs listing",
+  "problem": "A seller uploads a photo and fills in the listing. When the two disagree, buyers return the item. Nobody can check every listing by hand.",
+  "slots": [
+   "listing photo"
+  ],
+  "images": [
+   "assets/loafers.jpg"
+  ],
+  "state": {
+   "listing": {
+    "title": "Men's suede boat shoes",
+    "color": "red",
+    "product_type": "shoe"
+   }
+  },
+  "questions": {
+   "contradicted_field": {
+    "type": "choice",
+    "instructions": "Which field of `listing` does this photo contradict?",
+    "criteria": {
+     "listing.color": "the photo shows a different colour than `listing.color`",
+     "listing.product_type": "the photo shows a different kind of product than `listing.product_type`",
+     "none of these": "the photo is consistent with the listing"
+    }
+   },
+   "color_matches": {
+    "type": "noul",
+    "instructions": "The product in the photo matches `listing.color`.",
+    "criteria": {
+     "true": "the product is the listed colour",
+     "false": "the product is clearly a different colour from the listed one"
+    }
+   },
+   "type_matches": {
+    "type": "noul",
+    "instructions": "The photo shows the kind of product given in `listing.product_type`.",
+    "criteria": {
+     "true": "the product is that kind of product",
+     "false": "it is clearly a different kind of product"
+    }
+   }
+  },
+  "case": "listing.color=red"
+ },
+ "returns": {
+  "title": "Return check",
+  "kicker": "Two photos",
+  "problem": "A customer sends back an item for a refund. Is it the product you shipped, or something else in the box?",
+  "slots": [
+   "what we shipped",
+   "what came back"
+  ],
+  "images": [
+   "assets/slipon-listing.jpg",
+   "assets/loafers.jpg"
+  ],
+  "state": {
+   "order": {
+    "id": "ORD-20931",
+    "item": "Women's knit slip-on sneakers",
+    "colour": "pink and black"
+   },
+   "return": {
+    "reason": "doesn't fit"
+   }
+  },
+  "questions": {
+   "same_item": {
+    "type": "noul",
+    "instructions": "The second photo shows the same product as the first photo.",
+    "criteria": {
+     "true": "the second photo shows the same product as the first photo",
+     "false": "the second photo shows a different product"
+    }
+   },
+   "returned_colour": {
+    "type": "choice",
+    "instructions": "What is the main colour of the product in the second photo?",
+    "criteria": {
+     "pink": null,
+     "beige": null,
+     "black": null,
+     "white": null,
+     "blue": null
+    }
+   }
+  },
+  "case": "a different shoe"
+ },
+ "qc": {
+  "title": "Production-line QC",
+  "kicker": "Reference vs part",
+  "problem": "A camera photographs every part on the line. Rules-based vision breaks when parts vary, and a person cannot look at every photo.",
+  "slots": [
+   "known-good reference",
+   "part under inspection"
+  ],
+  "images": [
+   "assets/fryum-reference.jpg",
+   "assets/fryum-chipped.jpg"
+  ],
+  "state": {
+   "line": {
+    "station": "QC-3",
+    "product": "pipe-shaped snack",
+    "reference": "image 1 is a known-good part"
+   }
+  },
+  "questions": {
+   "has_fault": {
+    "type": "noul",
+    "instructions": "Given the reference part in the first image, does the part in the second image have a fault?",
+    "criteria": {
+     "true": "the part in the second image is damaged or defective",
+     "false": "the part in the second image is as good as the reference"
+    }
+   },
+   "fault_type": {
+    "type": "choice",
+    "instructions": "What is wrong with the part in the second image?",
+    "criteria": {
+     "chipped or broken edge": null,
+     "crack": null,
+     "discoloured or burnt": null,
+     "nothing is wrong": null
+    }
+   }
+  },
+  "case": "chipped part"
+ },
+ "archive": {
+  "title": "Archive record audit",
+  "kicker": "Photo vs catalogue",
+  "problem": "Museums and photo archives hold millions of records typed by hand decades ago. Some are wrong and nobody knows which.",
+  "slots": [
+   "archive scan"
+  ],
+  "images": [
+   "assets/cat-on-chair.jpg"
+  ],
+  "state": {
+   "record": {
+    "accession": "PH-1904-117",
+    "subject": "dog",
+    "medium": "black-and-white photograph",
+    "setting": "indoors"
+   }
+  },
+  "questions": {
+   "wrong_field": {
+    "type": "choice",
+    "instructions": "Which field of `record` does this photograph contradict?",
+    "criteria": {
+     "record.subject": "the animal is not the one recorded",
+     "record.medium": "the medium is wrong (e.g. the photo is black and white)",
+     "record.setting": "the scene is not the recorded setting",
+     "none": "the record is consistent with the photo"
+    }
+   },
+   "subject_matches": {
+    "type": "noul",
+    "instructions": "The photograph shows the animal recorded in `record.subject`.",
+    "criteria": {
+     "true": "the animal in the photo is the recorded subject",
+     "false": "it is clearly a different animal"
+    }
+   }
+  },
+  "case": "record.subject=dog"
+ },
+ "audit": {
+  "title": "Before / after audit",
+  "kicker": "What changed?",
+  "problem": "Collections, rentals and stockrooms are photographed before and after. Spotting what moved between two photos is slow, tedious work.",
+  "slots": [
+   "before",
+   "after"
+  ],
+  "images": [
+   "assets/tray-before.jpg",
+   "assets/tray-after.jpg"
+  ],
+  "state": {
+   "checklist": {
+    "subject": "a museum specimen tray",
+    "all_items_still_there": "yes, everything in the reference is still in the frame",
+    "no_new_items": "yes, nothing has been added",
+    "colours_as_before": "yes, every object keeps its colour"
+   },
+   "task": {
+    "what_counts": "treat the two photos as matching unless an item was added, removed, recoloured or hidden"
+   }
+  },
+  "questions": {
+   "what_changed": {
+    "type": "choice",
+    "instructions": "Image 1 is the reference, image 2 the target. Following `task.what_counts`, what changed?",
+    "criteria": {
+     "nothing relevant changed": null,
+     "an object was added": null,
+     "an object was removed": null,
+     "an object changed colour": null,
+     "something was covered or blurred out": null
+    }
+   },
+   "field_to_update": {
+    "type": "choice",
+    "instructions": "Somebody must update `checklist` after image 2 was taken. Which field needs changing? Changes that `task.what_counts` says to ignore do not count.",
+    "criteria": {
+     "checklist.all_items_still_there": "image 2 shows that 'all items still there' no longer holds",
+     "checklist.no_new_items": "image 2 shows that 'no new items' no longer holds",
+     "checklist.colours_as_before": "image 2 shows that 'colours as before' no longer holds",
+     "none of these": "every field still holds for image 2"
+    }
+   }
+  },
+  "case": "labels missing"
+ },
+ "ticket": {
+  "title": "Support ticket triage",
+  "kicker": "Text only, same API",
+  "problem": "Every ticket needs an owner and a priority before anyone reads it properly. Keyword rules misroute; a chat model needs parsing.",
+  "slots": [],
+  "images": [],
+  "state": {
+   "ticket": {
+    "id": "TKT-48812",
+    "body": "We were billed 480 USD twice on 3 September for the same 12 seats. I have now written three times and the only reply was an automated one. Our finance close is on Wednesday and I need the duplicate reversed before then.",
+    "plan": "Team (12 seats)"
+   }
+  },
+  "questions": {
+   "department": {
+    "type": "choice",
+    "instructions": "Which department should own this ticket?",
+    "criteria": {
+     "billing": "payments, invoices, refunds and subscription charges",
+     "technical_support": "the product is broken, erroring or unavailable",
+     "sales": "new seats, upgrades, quotes and renewals",
+     "product_questions": "how-to questions and feature requests"
+    }
+   },
+   "urgent": {
+    "type": "noul",
+    "instructions": "This ticket needs a reply today.",
+    "criteria": {
+     "true": "money is at stake, work is blocked, or the customer has a deadline within days",
+     "false": "it can wait for the normal queue"
+    }
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound?",
+    "criteria": [
+     "calm and matter-of-fact",
+     "impatient: chasing a reply or repeating themselves",
+     "angry: threatening to escalate, churn or dispute the charge"
+    ]
+   }
+  },
+  "case": "as shipped"
+ }
+}

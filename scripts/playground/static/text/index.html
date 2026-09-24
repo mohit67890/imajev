@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>imajev text</title>
+<meta name="description" content="Text-only decisions with imajev: email vs record, refund policy, missing data, moderation, reviews and inbox triage.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='%236e8bff'/></svg>">
+<link rel="stylesheet" href="../scenarios/style.css">
+<script src="../scenarios/engine.js" defer></script>
+<script src="scenarios.js" defer></script>
+<script src="../scenarios/app.js" defer></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../">imajev <span class="crumb">/</span> <span class="crumb-2">text</span></a>
+  <span class="chip" id="model-chip">connecting…</span>
+  <span class="spacer"></span>
+  <nav class="toplinks" aria-label="Pages"><a class="toplink" href="../scenarios/">Scenarios</a><a class="toplink" href="../text/" aria-current="page">Text</a><a class="toplink" href="../wardrobe/">Wardrobe</a><a class="toplink" href="../wardrobe/stylist.html">Stylist app</a><a class="toplink" href="../tracing/">Tracing pad</a><a class="toplink" href="../">Playground</a></nav>
+  <button id="theme-toggle" type="button" aria-label="Toggle colour theme">Light</button>
+</header>
+
+<div class="layout">
+  <nav class="rail" aria-label="Scenarios">
+        <p class="rail-title">Text-only decisions</p>
+    <ol id="scenario-list"></ol>
+    <p class="rail-note">Every combination you can click here is run against the model and compared with the right answer. <a href="#" id="show-verification">See the check run</a><span id="check-summary"></span>.</p>
+    <p class="rail-note">Same endpoint and request shape as the photo scenarios, with no image. Written on 24 Sept 2026 and checked once, with no rewording after the run.</p>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <header class="scenario-head">
+      <p class="kicker" id="kicker"></p>
+      <h1 id="title"></h1>
+      <p class="problem" id="problem"></p>
+      <p class="solves" id="solves"></p>
+    </header>
+
+    <section class="bench" aria-label="Evidence and record">
+      <div class="panel evidence">
+        <div class="panel-head"><h2>Evidence</h2><span class="panel-note" id="evidence-note"></span></div>
+        <div class="shots" id="shots"></div>
+        <div class="variants" id="variants" hidden></div>
+        <p class="credits" id="credits"></p>
+      </div>
+
+      <div class="panel record">
+        <div class="panel-head"><h2>Record <span class="dim">(state)</span></h2><span class="panel-note" id="record-note">click a value to change the record</span></div>
+        <div id="record-fields" class="fields"></div>
+      </div>
+    </section>
+
+    <section class="verdict" id="verdict" aria-live="polite">
+      <span class="verdict-icon" id="verdict-icon" aria-hidden="true"></span>
+      <div class="verdict-copy">
+        <p class="verdict-label">What the app does</p>
+        <p class="verdict-title" id="verdict-title">—</p>
+        <p class="verdict-detail" id="verdict-detail"></p>
+      </div>
+      <div class="verdict-meta">
+        <span class="latency" id="latency"></span>
+        <span class="meta-line" id="meta-line"></span>
+      </div>
+    </section>
+
+    <section class="answers" aria-label="Model answers">
+      <div class="answers-head">
+        <h2>What imajev returned</h2>
+        <span class="spacer"></span>
+        <label class="threshold" for="threshold">Decide automatically at ≥ <output id="threshold-out">80%</output>
+          <input type="range" id="threshold" min="0.5" max="0.99" step="0.01" value="0.8">
+        </label>
+      </div>
+      <div class="cards" id="cards"></div>
+      <div id="error" class="errorbox" role="alert" hidden></div>
+    </section>
+
+    <section class="dev">
+      <div class="dev-bar">
+        <button type="button" id="toggle-rule" aria-expanded="false">App rule</button>
+        <button type="button" id="toggle-json" aria-expanded="false">Request &amp; response JSON</button>
+        <button type="button" id="copy-curl">Copy curl</button>
+        <span class="spacer"></span>
+        <label class="live"><input type="checkbox" id="live" checked> Run on every change</label>
+        <button type="button" class="primary" id="run">Run</button>
+      </div>
+      <pre class="code" id="rule" hidden></pre>
+      <pre class="code" id="json" hidden></pre>
+    </section>
+  </main>
+</div>
+
+<dialog id="verification">
+  <form method="dialog" class="dlg-head"><h2>Check run</h2><button aria-label="Close">×</button></form>
+  <div id="verification-body"></div>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+</body>
+</html>

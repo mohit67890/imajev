@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>imajev tracing pad</title>
+<meta name="description" content="A kids' tracing pad on imajev: trace a letter or number, imajev reads what was written, the app checks the dots were covered.">
+<meta name="theme-color" content="#fff8e7">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='%236e8bff'/></svg>">
+<link rel="stylesheet" href="style.css">
+<script src="../scenarios/engine.js" defer></script>
+<script src="scenarios.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<div class="stage">
+  <aside class="explainer" aria-label="About this demo">
+    <nav class="links"><a href="../scenarios/">Scenarios</a><a href="../wardrobe/">Wardrobe</a><a href="../wardrobe/stylist.html">Stylist app</a><a href="../">Playground</a></nav>
+    <p class="eyebrow">A kids' app on imajev</p>
+    <h1>Trace it.<br><em>imajev checks it.</em></h1>
+    <p class="lede">A child traces the dotted letter with a finger and taps Check. A star if it is right, a friendly nudge if not.</p>
+    <ol class="how">
+      <li><b>imajev reads what was written</b>, from the strokes alone. It never sees the dotted guide and is not told the answer, so it cannot be fooled by either.</li>
+      <li><b>The app checks every line was traced</b>: how much of each dotted line the strokes pass over. Plain geometry, done on the device.</li>
+      <li><b>Both must agree</b> for a star. A wrong letter gets named (“That looks like an H!”).</li>
+    </ol>
+    <p class="note">Checked on generated sample tracings, not on real children's handwriting: <a href="#" id="about-checks">check run</a><span id="check-line"></span>. Drawings go only to the local imajev server; only stars are kept.</p>
+    <p class="note dim">imajev-4b · about 0.45 s per check on a Mac Studio.</p>
+  </aside>
+
+  <div class="device" role="application" aria-label="imajev tracing pad">
+    <div class="screen">
+      <header class="bar">
+        <div><p class="hello">Let's practise</p><h2 id="mode-title">Letters</h2></div>
+        <div class="stars" id="stars" aria-label="Stars earned">★ 0</div>
+      </header>
+
+      <div class="modes" role="tablist" aria-label="Letters or numbers">
+        <button role="tab" data-mode="letters" aria-selected="true">ABC</button>
+        <button role="tab" data-mode="numbers" aria-selected="false">123</button>
+      </div>
+      <div class="picker" id="picker" role="tablist" aria-label="Choose a character"></div>
+
+      <div class="pad-wrap">
+        <canvas id="guide" width="512" height="512" aria-hidden="true"></canvas>
+        <canvas id="ink" width="512" height="512" aria-label="Tracing area: draw over the dotted lines"></canvas>
+        <div class="feedback" id="feedback" hidden>
+          <p class="fb-title" id="fb-title"></p>
+          <p class="fb-detail" id="fb-detail"></p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="ghost" id="clear" aria-label="Clear the drawing">✕ Clear</button>
+        <button class="go" id="check">Check ✓</button>
+      </div>
+
+      <div class="readout" id="readout" aria-live="polite"></div>
+
+      <details class="grown-ups">
+        <summary>For grown-ups <span class="badge" id="check-badge"></span></summary>
+        <p class="small">Try a sample tracing (these exact drawings are in the check run):</p>
+        <div class="samples" id="samples"></div>
+        <p class="small" id="latency"></p>
+      </details>
+    </div>
+  </div>
+</div>
+
+<dialog id="checks-dialog">
+  <form method="dialog" class="dlg-head"><h2>Tracing check run</h2><button aria-label="Close">×</button></form>
+  <div id="checks-body"></div>
+</dialog>
+</body>
+</html>

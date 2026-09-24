@@ -1,0 +1,802 @@
+{
+  "model": {
+    "model": "imajev-4b-raw",
+    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "backend": "mlx",
+    "loaded": true,
+    "load_seconds": 2.546
+  },
+  "threshold": 0.8,
+  "api": "http://127.0.0.1:8765",
+  "run_at": "2026-09-24T02:30:08.725Z",
+  "passed": 21,
+  "total": 21,
+  "rows": [
+    {
+      "scenario": "listing",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Publish the listing",
+        "detail": "Photo and listing agree."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "none of these",
+          "unknown": 0.000046893725174189184,
+          "abstained": false,
+          "probabilities": {
+            "listing.color": 0.0029712009687889347,
+            "listing.product_type": 0.00017243919648358733,
+            "none of these": 0.9968563598347275
+          }
+        },
+        "color_matches": {
+          "top": "0.995",
+          "unknown": 0.00008239756834222431,
+          "abstained": false,
+          "probabilities": null
+        },
+        "type_matches": {
+          "top": "1.000",
+          "unknown": 0.0000031052178491127166,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 567,
+      "round_trip_ms": 570
+    },
+    {
+      "scenario": "listing",
+      "case": "listing.color=black",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Hold: listing.color is wrong",
+        "detail": "Ask the seller to fix this field before the listing goes live."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "listing.color",
+          "unknown": 0.00009963182017030215,
+          "abstained": false,
+          "probabilities": {
+            "listing.color": 0.9749689368993751,
+            "listing.product_type": 0.0003726292505144232,
+            "none of these": 0.024658433850110427
+          }
+        },
+        "color_matches": {
+          "top": "0.082",
+          "unknown": 0.0003346631589647005,
+          "abstained": false,
+          "probabilities": null
+        },
+        "type_matches": {
+          "top": "1.000",
+          "unknown": 0.0000013291922491060045,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 482.8,
+      "round_trip_ms": 485
+    },
+    {
+      "scenario": "listing",
+      "case": "listing.color=red",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Hold: listing.color is wrong",
+        "detail": "Ask the seller to fix this field before the listing goes live."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "listing.color",
+          "unknown": 0.000005594633004301496,
+          "abstained": false,
+          "probabilities": {
+            "listing.color": 0.9995281348559116,
+            "listing.product_type": 0.00002163441401839045,
+            "none of these": 0.0004502307300699982
+          }
+        },
+        "color_matches": {
+          "top": "0.002",
+          "unknown": 0.00017126380170828635,
+          "abstained": false,
+          "probabilities": null
+        },
+        "type_matches": {
+          "top": "1.000",
+          "unknown": 0.000002460664815071533,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 481.9,
+      "round_trip_ms": 484
+    },
+    {
+      "scenario": "listing",
+      "case": "listing.product_type=handbag",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Hold: listing.product_type is wrong",
+        "detail": "Ask the seller to fix this field before the listing goes live."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "listing.product_type",
+          "unknown": 0.000003614830273185093,
+          "abstained": false,
+          "probabilities": {
+            "listing.color": 0.000028932493146536614,
+            "listing.product_type": 0.9998310223779817,
+            "none of these": 0.00014004512887182328
+          }
+        },
+        "color_matches": {
+          "top": "0.995",
+          "unknown": 0.0002553764608825578,
+          "abstained": false,
+          "probabilities": null
+        },
+        "type_matches": {
+          "top": "0.000",
+          "unknown": 0.000010264922084439599,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 480.9,
+      "round_trip_ms": 482
+    },
+    {
+      "scenario": "listing",
+      "case": "listing.product_type=watch",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Hold: listing.product_type is wrong",
+        "detail": "Ask the seller to fix this field before the listing goes live."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "listing.product_type",
+          "unknown": 4.536621167591736e-7,
+          "abstained": false,
+          "probabilities": {
+            "listing.color": 0.0000014821504551202356,
+            "listing.product_type": 0.9999803175178414,
+            "none of these": 0.000018200331703436465
+          }
+        },
+        "color_matches": {
+          "top": "0.999",
+          "unknown": 0.00012524587160631155,
+          "abstained": false,
+          "probabilities": null
+        },
+        "type_matches": {
+          "top": "0.000",
+          "unknown": 0.0000033162121004828316,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 466.2,
+      "round_trip_ms": 467
+    },
+    {
+      "scenario": "returns",
+      "case": "same shoe, other angle",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Approve the refund",
+        "detail": "The returned item matches what was shipped."
+      },
+      "wrong": [],
+      "answers": {
+        "same_item": {
+          "top": "0.999",
+          "unknown": 0.000007197574917386401,
+          "abstained": false,
+          "probabilities": null
+        },
+        "returned_colour": {
+          "top": "pink",
+          "unknown": 0.0008801276963672417,
+          "abstained": false,
+          "probabilities": {
+            "pink": 0.9930680653065409,
+            "beige": 0.00039064732170878563,
+            "black": 0.005341033977484023,
+            "white": 0.0005109299997430409,
+            "blue": 0.0006893233945232663
+          }
+        }
+      },
+      "server_ms": 427.4,
+      "round_trip_ms": 428
+    },
+    {
+      "scenario": "returns",
+      "case": "a different shoe",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Hold the refund",
+        "detail": "The returned item looks different (beige)."
+      },
+      "wrong": [],
+      "answers": {
+        "same_item": {
+          "top": "0.000",
+          "unknown": 7.395230837321045e-7,
+          "abstained": false,
+          "probabilities": null
+        },
+        "returned_colour": {
+          "top": "beige",
+          "unknown": 0.23748790461999567,
+          "abstained": false,
+          "probabilities": {
+            "pink": 0.006546521855780726,
+            "beige": 0.955253139394986,
+            "black": 0.02739895574028626,
+            "white": 0.004377302768212697,
+            "blue": 0.0064240802407342324
+          }
+        }
+      },
+      "server_ms": 438.3,
+      "round_trip_ms": 439
+    },
+    {
+      "scenario": "qc",
+      "case": "chipped part",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Reject the part",
+        "detail": "Most likely: chipped or broken edge."
+      },
+      "wrong": [],
+      "answers": {
+        "has_fault": {
+          "top": "1.000",
+          "unknown": 6.098016307498973e-7,
+          "abstained": false,
+          "probabilities": null
+        },
+        "fault_type": {
+          "top": "chipped or broken edge",
+          "unknown": 0.0000033883551910410767,
+          "abstained": false,
+          "probabilities": {
+            "chipped or broken edge": 0.999984215031221,
+            "crack": 0.0000068146683107305166,
+            "discoloured or burnt": 0.000005049721159853143,
+            "nothing is wrong": 0.000003920579308322928
+          }
+        }
+      },
+      "server_ms": 2073.5,
+      "round_trip_ms": 2074
+    },
+    {
+      "scenario": "qc",
+      "case": "good part",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Pass",
+        "detail": "No fault compared with the reference."
+      },
+      "wrong": [],
+      "answers": {
+        "has_fault": {
+          "top": "0.002",
+          "unknown": 0.0000846619757017889,
+          "abstained": false,
+          "probabilities": null
+        },
+        "fault_type": {
+          "top": "nothing is wrong",
+          "unknown": 0.001044633672062521,
+          "abstained": false,
+          "probabilities": {
+            "chipped or broken edge": 0.0010593693644710342,
+            "crack": 0.0005735569238835383,
+            "discoloured or burnt": 0.0003309472645392618,
+            "nothing is wrong": 0.9980361264471062
+          }
+        }
+      },
+      "server_ms": 2073.4,
+      "round_trip_ms": 2075
+    },
+    {
+      "scenario": "retake",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Ask for a new photo",
+        "detail": "Retake: hold the phone still and a little further away."
+      },
+      "wrong": [],
+      "answers": {
+        "answerable": {
+          "top": "0.007",
+          "unknown": 0.014647613173331533,
+          "abstained": false,
+          "probabilities": null
+        },
+        "problem": {
+          "top": "blurry",
+          "unknown": 0.008891252947286694,
+          "abstained": false,
+          "probabilities": {
+            "bad framing": 0.08598683901512376,
+            "blurry": 0.9108141455792391,
+            "too dark": 0.00045157564323402026,
+            "too bright": 0.0020129332963622366,
+            "no problem": 0.0007345064660408264
+          }
+        }
+      },
+      "server_ms": 1047.1,
+      "round_trip_ms": 1048
+    },
+    {
+      "scenario": "retake",
+      "case": "user.question=What is the use-by date?",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Ask for a new photo",
+        "detail": "Retake: hold the phone still and a little further away."
+      },
+      "wrong": [],
+      "answers": {
+        "answerable": {
+          "top": "0.157",
+          "unknown": 0.3122573282573495,
+          "abstained": false,
+          "probabilities": null
+        },
+        "problem": {
+          "top": "blurry",
+          "unknown": 0.01890861652891048,
+          "abstained": false,
+          "probabilities": {
+            "bad framing": 0.014749432460859989,
+            "blurry": 0.9824111793892204,
+            "too dark": 0.00040991350658259687,
+            "too bright": 0.0016639369382518956,
+            "no problem": 0.0007655377050850117
+          }
+        }
+      },
+      "server_ms": 1006.9,
+      "round_trip_ms": 1008
+    },
+    {
+      "scenario": "retake",
+      "case": "user.question=What shape is this object?",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Answer the question",
+        "detail": "The photo shows what the question needs."
+      },
+      "wrong": [],
+      "answers": {
+        "answerable": {
+          "top": "0.988",
+          "unknown": 0.004019041881077797,
+          "abstained": false,
+          "probabilities": null
+        },
+        "problem": {
+          "top": "blurry",
+          "unknown": 0.0009078755295041493,
+          "abstained": false,
+          "probabilities": {
+            "bad framing": 0.28177186178736213,
+            "blurry": 0.7153699916989835,
+            "too dark": 0.0003427075713137286,
+            "too bright": 0.0011496439628781514,
+            "no problem": 0.0013657949794625018
+          }
+        }
+      },
+      "server_ms": 1007.1,
+      "round_trip_ms": 1008
+    },
+    {
+      "scenario": "archive",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Record verified",
+        "detail": "Every field agrees with the scan."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "none",
+          "unknown": 0.000047560472562280504,
+          "abstained": false,
+          "probabilities": {
+            "record.subject": 0.00034153529363329066,
+            "record.medium": 0.0004922704415591386,
+            "record.setting": 0.0004964562887601613,
+            "none": 0.9986697379760474
+          }
+        },
+        "subject_matches": {
+          "top": "1.000",
+          "unknown": 0.00002315027501484448,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 1061.4,
+      "round_trip_ms": 1062
+    },
+    {
+      "scenario": "archive",
+      "case": "record.subject=dog",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Correct record.subject",
+        "detail": "The scan contradicts this field."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "record.subject",
+          "unknown": 6.943864091757567e-7,
+          "abstained": false,
+          "probabilities": {
+            "record.subject": 0.999964711413622,
+            "record.medium": 0.000005837118852717432,
+            "record.setting": 0.000005388480914185454,
+            "none": 0.00002406298661110492
+          }
+        },
+        "subject_matches": {
+          "top": "0.000",
+          "unknown": 0.00006106554545753527,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 1065.5,
+      "round_trip_ms": 1066
+    },
+    {
+      "scenario": "archive",
+      "case": "record.subject=horse",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Correct record.subject",
+        "detail": "The scan contradicts this field."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "record.subject",
+          "unknown": 5.42059626618914e-7,
+          "abstained": false,
+          "probabilities": {
+            "record.subject": 0.9999695426762522,
+            "record.medium": 0.000003950993390867557,
+            "record.setting": 0.000004628774906075028,
+            "none": 0.000021877555450948217
+          }
+        },
+        "subject_matches": {
+          "top": "0.000",
+          "unknown": 0.00004080599622929482,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 1066,
+      "round_trip_ms": 1067
+    },
+    {
+      "scenario": "archive",
+      "case": "record.medium=colour photograph",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Correct record.medium",
+        "detail": "The scan contradicts this field."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "record.medium",
+          "unknown": 0.000014150575684824311,
+          "abstained": false,
+          "probabilities": {
+            "record.subject": 0.00014975989708314785,
+            "record.medium": 0.9981250047754026,
+            "record.setting": 0.0001335898229271019,
+            "none": 0.0015916455045872093
+          }
+        },
+        "subject_matches": {
+          "top": "0.999",
+          "unknown": 0.0005170397266494139,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 1067.2,
+      "round_trip_ms": 1069
+    },
+    {
+      "scenario": "audit",
+      "case": "labels missing",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Open an incident",
+        "detail": "An object was removed; update checklist.all_items_still_there."
+      },
+      "wrong": [],
+      "answers": {
+        "what_changed": {
+          "top": "an object was removed",
+          "unknown": 1.9821819682697815e-7,
+          "abstained": false,
+          "probabilities": {
+            "nothing relevant changed": 1.919237113579685e-7,
+            "an object was added": 1.6414379029840332e-7,
+            "an object was removed": 0.9999988541410803,
+            "an object changed colour": 7.806933080324952e-8,
+            "something was covered or blurred out": 7.117220872489486e-7
+          }
+        },
+        "field_to_update": {
+          "top": "checklist.all_items_still_there",
+          "unknown": 2.2438867118387532e-8,
+          "abstained": false,
+          "probabilities": {
+            "checklist.all_items_still_there": 0.9999989299466727,
+            "checklist.no_new_items": 3.5424727628685025e-7,
+            "checklist.colours_as_before": 5.171699698119098e-8,
+            "none of these": 6.640890540692665e-7
+          }
+        }
+      },
+      "server_ms": 1666,
+      "round_trip_ms": 1669
+    },
+    {
+      "scenario": "audit",
+      "case": "unchanged",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "No action",
+        "detail": "Nothing relevant changed."
+      },
+      "wrong": [],
+      "answers": {
+        "what_changed": {
+          "top": "nothing relevant changed",
+          "unknown": 0.0000059277950248389565,
+          "abstained": false,
+          "probabilities": {
+            "nothing relevant changed": 0.9998593357621346,
+            "an object was added": 0.00004384321168046153,
+            "an object was removed": 0.00003307801106135726,
+            "an object changed colour": 0.0000045527304057270005,
+            "something was covered or blurred out": 0.000059190284717893536
+          }
+        },
+        "field_to_update": {
+          "top": "none of these",
+          "unknown": 0.000005298990211831969,
+          "abstained": false,
+          "probabilities": {
+            "checklist.all_items_still_there": 0.00006897586362050598,
+            "checklist.no_new_items": 0.000029165831189903468,
+            "checklist.colours_as_before": 0.00005414415164213901,
+            "none of these": 0.9998477141535475
+          }
+        }
+      },
+      "server_ms": 1663.7,
+      "round_trip_ms": 1666
+    },
+    {
+      "scenario": "ticket",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Route to billing",
+        "detail": "Priority: reply today."
+      },
+      "wrong": [],
+      "answers": {
+        "department": {
+          "top": "billing",
+          "unknown": 0.0001075822458803457,
+          "abstained": false,
+          "probabilities": {
+            "billing": 0.9987616764669512,
+            "technical_support": 0.0004046712064433905,
+            "sales": 0.0008131102557253205,
+            "product_questions": 0.000020542070879983375
+          }
+        },
+        "urgent": {
+          "top": "1.000",
+          "unknown": 0.00000733520632538723,
+          "abstained": false,
+          "probabilities": null
+        },
+        "frustration": {
+          "top": "1.01",
+          "unknown": 0.0003517020918401569,
+          "abstained": false,
+          "probabilities": {
+            "0": 0.012708839519948707,
+            "1": 0.9669851266104659,
+            "2": 0.020306033869585394
+          }
+        }
+      },
+      "server_ms": 438.6,
+      "round_trip_ms": 440
+    },
+    {
+      "scenario": "ticket",
+      "case": "ticket.body=feature question",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Route to product questions",
+        "detail": "Priority: normal queue."
+      },
+      "wrong": [],
+      "answers": {
+        "department": {
+          "top": "product_questions",
+          "unknown": 0.00010107575441703941,
+          "abstained": false,
+          "probabilities": {
+            "billing": 0.000043528689604840456,
+            "technical_support": 0.00015587956402118584,
+            "sales": 0.0002782219715526754,
+            "product_questions": 0.9995223697748213
+          }
+        },
+        "urgent": {
+          "top": "0.001",
+          "unknown": 0.00010623346560663522,
+          "abstained": false,
+          "probabilities": null
+        },
+        "frustration": {
+          "top": "0.00",
+          "unknown": 0.0002969439843709695,
+          "abstained": false,
+          "probabilities": {
+            "0": 0.997058389102784,
+            "1": 0.002828975030737698,
+            "2": 0.0001126358664782992
+          }
+        }
+      },
+      "server_ms": 423.9,
+      "round_trip_ms": 426
+    },
+    {
+      "scenario": "ticket",
+      "case": "ticket.body=outage",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Route to technical support",
+        "detail": "Priority: reply today."
+      },
+      "wrong": [],
+      "answers": {
+        "department": {
+          "top": "technical_support",
+          "unknown": 0.0001376161514265121,
+          "abstained": false,
+          "probabilities": {
+            "billing": 0.00004175863486366495,
+            "technical_support": 0.9998009711096809,
+            "sales": 0.00006700489226615884,
+            "product_questions": 0.00009026536318920762
+          }
+        },
+        "urgent": {
+          "top": "0.999",
+          "unknown": 0.000020253611969554978,
+          "abstained": false,
+          "probabilities": null
+        },
+        "frustration": {
+          "top": "1.02",
+          "unknown": 0.015244855243714609,
+          "abstained": false,
+          "probabilities": {
+            "0": 0.21761687678374625,
+            "1": 0.5429703054142835,
+            "2": 0.23941281780197024
+          }
+        }
+      },
+      "server_ms": 420.3,
+      "round_trip_ms": 423
+    }
+  ]
+}

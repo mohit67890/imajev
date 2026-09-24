@@ -8,9 +8,10 @@ page can say truthfully which photos the model never saw in training.
     .venv/bin/python scripts/playground/build_scenario_assets.py              # scenarios page
     .venv/bin/python scripts/playground/build_scenario_assets.py --wardrobe   # wardrobe page credits
 
-The wardrobe mode does not copy anything: the catalogue images in static/wardrobe/assets/ are unchanged
-originals (see reports/wardrobe-showcase/README.md). It writes credits for the pieces the wardrobe
-scenarios use, from catalog.json provenance, with the same training-row check.
+The wardrobe mode writes 768-pixel demo copies of the catalogue pieces the wardrobe scenarios use
+(static/wardrobe/assets/demo/, smaller images keep a flip under a second and inside the model's image
+limit) and their credits from catalog.json provenance. The training-row check runs on the unchanged
+originals in static/wardrobe/assets/, and ABO pieces are also matched by product ID.
 """
 from __future__ import annotations
 
@@ -93,11 +94,26 @@ def trained_on_many(digests):
     return hits
 
 
+# Second-hand photos show the whole inspection table (tape measures, cables): crop to the garment.
+WARDROBE_CROPS = {"r13.jpg": (300, 170, 880, 600), "r04.jpg": (380, 0, 900, 660)}
+
+
 def wardrobe():
     folder = Path(__file__).resolve().parent / "static/wardrobe"
-    used = sorted(set(re.findall(r"'assets/([\w-]+\.(?:png|jpg))'", (folder / "scenarios.js").read_text())))
-    catalog = {Path(item["image"]).name: item for item in json.loads((folder / "catalog.json").read_text())["items"]}
+    demo = folder / "assets/demo"
+    demo.mkdir(exist_ok=True)
+    stems = sorted(set(re.findall(r"'assets/demo/([\w-]+)\.jpg'", (folder / "scenarios.js").read_text()))
+                   | set(re.findall(r"\{ id: '(\w\d\d)'", (folder / "stylist.js").read_text())))
+    catalog = {Path(item["image"]).stem: item for item in json.loads((folder / "catalog.json").read_text())["items"]}
+    used = [Path(catalog[stem]["image"]).name for stem in stems]
+    catalog = {Path(item["image"]).name: item for item in catalog.values()}
     digests = {name: sha256(folder / "assets" / name) for name in used}
+    for name in used:
+        image = Image.open(folder / "assets" / name).convert("RGB")
+        if name in WARDROBE_CROPS:
+            image = image.crop(WARDROBE_CROPS[name])
+        image.thumbnail((768, 768))
+        image.save(demo / f"{Path(name).stem}.jpg", quality=90)
     # Training used resized copies, so a hash can miss the same photo; ABO pieces are also matched by product ID.
     products = {name: catalog[name]["provenance"]["source_id"] for name in used
                 if catalog[name]["provenance"].get("source_name") == "abo"}
@@ -113,10 +129,10 @@ def wardrobe():
             meta = {"dataset": prov.get("source_name"), "license": prov.get("license"), "source_page": prov.get("source_page"),
                     "credit": f"{prov.get('attribution', prov.get('source_name'))}, {prov.get('license')}"}
         found = sorted(set(hits[digests[name]] + hits.get(products.get(name), [])))
-        rows.append({"file": name, "title": item["title"], **meta, "synthetic": synthetic, "edit": None,
+        rows.append({"file": f"{Path(name).stem}.jpg", "derived_from": f"assets/{name} ({'cropped to the garment and ' if name in WARDROBE_CROPS else ''}resized to 768 px)", "title": item["title"], **meta, "synthetic": synthetic, "edit": None,
                      "source_sha256": digests[name], "in_training_rows": found, "held_out": not found})
         print(f"{name:8s} {str(meta['license']):22s} synthetic={synthetic} held_out={not found}")
-    (folder / "assets/attribution.json").write_text(json.dumps(rows, indent=2) + "\n")
+    (demo / "attribution.json").write_text(json.dumps(rows, indent=2) + "\n")
 
 
 def main():

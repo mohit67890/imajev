@@ -1,0 +1,833 @@
+<title>imajev</title>
+<meta name="description" content="imajev: small open models (2B, 4B, 9B) that answer typed questions about photos and text with probabilities and an explicit unknown. Runs on your own machine; Jev-compatible API.">
+<link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<style>
+:root{
+  --paper:#FFFFFF; --wash:#F5F5F2; --ink:#111111; --ink2:#3B3B39; --muted:#6B6B67; --rule:#E2E2DD; --track:#ECECE8; --other:#8F8F8A;
+  --serif:"Source Serif 4","Iowan Old Style",Georgia,serif;
+  --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --page:74rem; --measure:38rem;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark;
+  --paper:#111213; --wash:#18191A; --ink:#EDEDEA; --ink2:#C4C4BF; --muted:#8E8E89; --rule:#2A2A28; --track:#222321; --other:#6A6A66; } }
+:root[data-theme="dark"]{ color-scheme:dark;
+  --paper:#111213; --wash:#18191A; --ink:#EDEDEA; --ink2:#C4C4BF; --muted:#8E8E89; --rule:#2A2A28; --track:#222321; --other:#6A6A66; }
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font:16.5px/1.6 var(--sans); margin:0; -webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--page); margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+a{color:var(--ink); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px; text-decoration-color:var(--muted)}
+a:hover{text-decoration-color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+p,h1,h2,h3,figure{margin:0}
+h1,h2{font-family:var(--serif); font-weight:600; letter-spacing:-0.015em; text-wrap:balance}
+h1{font-size:clamp(2.2rem,5vw,3.6rem); line-height:1.04; font-variation-settings:"opsz" 60}
+h2{font-size:clamp(1.6rem,3vw,2.1rem); line-height:1.12; font-variation-settings:"opsz" 48}
+h3{font:600 1.02rem/1.35 var(--sans)}
+code{font:.86em var(--mono); background:var(--wash); padding:.08em .32em; border-radius:3px}
+.label{font:500 .7rem/1.2 var(--mono); letter-spacing:.07em; text-transform:uppercase; color:var(--muted)}
+.muted{color:var(--muted)} .mono{font-family:var(--mono)}
+.btn{display:inline-flex; align-items:center; gap:8px; font:500 .92rem/1 var(--sans); padding:12px 16px; border:1px solid var(--ink); color:var(--ink); text-decoration:none; border-radius:4px; background:var(--paper)}
+.btn.solid{background:var(--ink); color:var(--paper)}
+.btn:hover{text-decoration:none; background:var(--wash)} .btn.solid:hover{background:var(--ink2)}
+
+/* top bar */
+header.top{border-bottom:1px solid var(--rule)}
+header.top .wrap{display:flex; align-items:center; gap:20px; padding-block:14px; flex-wrap:wrap}
+.word{display:flex; align-items:center; gap:9px; font:500 1.05rem/1 var(--mono); color:var(--ink); text-decoration:none}
+.word img{width:22px; height:22px}
+.word .d{display:none}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .word .l{display:none} :root:not([data-theme="light"]) .word .d{display:block} }
+:root[data-theme="dark"] .word .l{display:none} :root[data-theme="dark"] .word .d{display:block}
+header.top nav{margin-left:auto; display:flex; gap:18px; flex-wrap:wrap; font-size:.9rem}
+header.top nav a{text-decoration:none; color:var(--ink2)} header.top nav a:hover{color:var(--ink); text-decoration:underline}
+
+/* hero */
+.hero{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr); gap:clamp(28px,5vw,64px); padding-block:clamp(40px,6vw,72px) 24px; align-items:start}
+.hero .copy{min-width:0; display:grid; gap:22px; align-content:start}
+.hero .lead{font-size:1.1rem; line-height:1.6; color:var(--ink2); max-width:34rem}
+.cta{display:flex; gap:10px; flex-wrap:wrap}
+.facts{display:flex; flex-wrap:wrap; gap:6px 18px; font:.8rem/1.5 var(--mono); color:var(--muted)}
+.switch{display:inline-flex; border:1px solid var(--rule); border-radius:5px; padding:3px; gap:3px}
+.switch button{font:500 .82rem/1 var(--sans); padding:8px 12px; border:0; background:none; color:var(--muted); border-radius:3px; cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.hero-demo{min-width:0; display:grid; gap:12px}
+.hero-demo .top-line{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.hero-cap{font-size:.84rem; color:var(--muted); line-height:1.5}
+
+/* specimen: one checked request, its answers and the app's action */
+.spec{display:grid; grid-template-columns:minmax(0,13rem) minmax(0,1fr); gap:22px; border-top:1px solid var(--ink); padding-top:18px}
+.spec.textual{grid-template-columns:minmax(0,1fr)}
+.ev{display:grid; gap:10px; align-content:start}
+.ev .ph{display:grid; gap:8px; grid-template-columns:repeat(var(--n,1),minmax(0,1fr))}
+.ev figure{display:grid; gap:4px}
+.ev img{width:100%; height:auto; aspect-ratio:1/1; object-fit:contain; display:block; background:var(--wash); max-width:100%}
+.ev .quote{font:1rem/1.55 var(--serif); background:var(--wash); padding:14px 16px; border-left:2px solid var(--ink); color:var(--ink)}
+.foot{font:.74rem/1.5 var(--mono); color:var(--muted)}
+.io{display:grid; gap:16px; align-content:start; min-width:0}
+.kv{display:grid; grid-template-columns:auto minmax(0,1fr); gap:6px 14px; font:.84rem/1.45 var(--mono); align-items:baseline}
+.kv .k{color:var(--muted); overflow-wrap:anywhere}
+.kv .v{overflow-wrap:anywhere}
+.kv .v.changed{background:linear-gradient(transparent 62%, var(--track) 62%)}
+.opts{display:flex; gap:4px; flex-wrap:wrap}
+.opt{font:.78rem/1.2 var(--mono); padding:5px 8px; border:1px solid var(--rule); background:var(--paper); color:var(--ink2); cursor:pointer; border-radius:3px; text-align:left}
+.opt[aria-pressed="true"]{border-color:var(--ink); color:var(--ink); background:var(--wash)}
+.opt:hover{border-color:var(--ink2)}
+.q{display:grid; gap:7px}
+.q p{font:500 .95rem/1.4 var(--sans)}
+.readout{display:grid; gap:5px; font:.8rem/1.2 var(--mono)}
+.r{display:grid; grid-template-columns:minmax(0,11rem) minmax(0,1fr) 3rem; gap:10px; align-items:center; color:var(--ink2)}
+.r .name{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.r .t{display:block; height:8px; background:var(--track)}
+.r .f{display:block; height:100%; background:var(--other); transition:width .35s ease}
+.r.top{color:var(--ink); font-weight:500} .r.top .f{background:var(--ink)}
+.r.unk .f{background:repeating-linear-gradient(135deg,var(--other) 0 1.5px,transparent 1.5px 4px); box-shadow:inset 0 0 0 1px var(--other)}
+.r .v{text-align:right; font-variant-numeric:tabular-nums}
+.act{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; padding-top:12px; border-top:1px solid var(--rule)}
+.glyph{width:26px; height:26px; display:grid; place-items:center; font:600 .9rem/1 var(--mono); border:1.5px solid var(--ink); border-radius:50%}
+.glyph.ok{background:var(--ink); color:var(--paper)}
+.glyph.human{border-style:dashed}
+.act b{display:block; font-weight:600} .act span{color:var(--ink2); font-size:.92rem}
+.check{font:.74rem/1.5 var(--mono); color:var(--muted)}
+.check.miss{color:var(--ink); font-weight:500}
+@media (prefers-reduced-motion: reduce){ .r .f{transition:none} }
+
+/* sections */
+section.s{padding-block:clamp(56px,8vw,96px) 0}
+.s-head{display:grid; gap:12px; max-width:44rem; margin-bottom:32px}
+.s-head p{color:var(--ink2); font-size:1.02rem}
+
+/* how it works */
+.how{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px}
+.how .step{min-width:0; display:grid; gap:10px; align-content:start}
+.how .n{font:500 .78rem var(--mono); color:var(--muted)}
+.code{position:relative; background:var(--wash); overflow-x:auto; border-radius:4px}
+.code pre{margin:0; padding:14px 16px; font:.76rem/1.6 var(--mono); color:var(--ink)}
+.code .copy{position:absolute; top:8px; right:8px; font:.7rem/1 var(--mono); padding:5px 8px; border:1px solid var(--rule); background:var(--paper); color:var(--ink2); cursor:pointer; border-radius:3px}
+
+/* differences */
+.diff{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 36px}
+.diff div{display:grid; gap:6px; padding-block:18px; border-top:1px solid var(--rule); align-content:start}
+.diff p{color:var(--ink2); font-size:.93rem}
+
+/* gallery */
+.tabs{display:flex; gap:4px; flex-wrap:wrap; border-bottom:1px solid var(--rule); margin-bottom:28px}
+.tabs button{font:500 .92rem/1 var(--sans); padding:12px 14px; border:0; background:none; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--ink)}
+.tabs .c{font:.74rem var(--mono); color:var(--muted); margin-left:4px}
+.gal{display:grid; grid-template-columns:15rem minmax(0,1fr); gap:clamp(24px,4vw,48px)}
+.rail{display:grid; gap:2px; align-content:start; list-style:none; margin:0; padding:0}
+.rail button{width:100%; text-align:left; display:grid; gap:2px; padding:10px 12px; border:0; border-left:2px solid transparent; background:none; color:var(--ink2); cursor:pointer; font:inherit}
+.rail button:hover{background:var(--wash)}
+.rail button[aria-current="true"]{border-left-color:var(--ink); background:var(--wash); color:var(--ink)}
+.rail .t{font:500 .92rem/1.3 var(--sans)} .rail .k{font:.72rem/1.3 var(--mono); color:var(--muted)}
+.stage{display:grid; gap:18px; min-width:0}
+.stage .intro{display:grid; gap:8px; max-width:42rem}
+.stage .intro p{color:var(--ink2)}
+.stage .intro .solves{font-size:.95rem}
+
+/* checks: one row per app, a square per checked run */
+.sets{display:grid; gap:0}
+.set{display:grid; grid-template-columns:minmax(0,21rem) minmax(0,1fr); gap:clamp(20px,3vw,36px); padding-block:26px; border-top:1px solid var(--rule)}
+.set:first-child{border-top:1px solid var(--ink)}
+.set .body{display:grid; gap:10px; align-content:start; min-width:0}
+.set .body p{color:var(--ink2); font-size:.95rem; max-width:40rem}
+.score{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.score b{font:600 1.5rem/1 var(--mono); font-variant-numeric:tabular-nums}
+.score span{font-size:.84rem; color:var(--muted)}
+.dots{display:flex; flex-wrap:wrap; gap:3px; max-width:40rem}
+.dots .gap{width:7px}
+.dot{width:14px; height:14px; border:1.5px solid var(--ink); background:var(--ink); border-radius:2px; padding:0; cursor:pointer}
+.dot.miss{background:var(--paper); background-image:linear-gradient(45deg,transparent 44%,var(--ink) 44% 56%,transparent 56%),linear-gradient(-45deg,transparent 44%,var(--ink) 44% 56%,transparent 56%)}
+.dot.hedge{background:var(--paper)}
+.dot:hover{outline:2px solid var(--muted); outline-offset:1px}
+.legend{display:flex; gap:16px; flex-wrap:wrap; font:.76rem/1.4 var(--mono); color:var(--muted); align-items:center}
+.legend i{display:inline-block; width:11px; height:11px; border:1.5px solid var(--ink); border-radius:2px; vertical-align:-1px; margin-right:6px}
+.legend i.p{background:var(--ink)}
+.legend i.x{background:linear-gradient(45deg,transparent 42%,var(--ink) 42% 58%,transparent 58%),linear-gradient(-45deg,transparent 42%,var(--ink) 42% 58%,transparent 58%)}
+.family{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,15rem); gap:24px; align-items:start}
+.members{display:flex; flex-wrap:wrap; gap:4px}
+
+/* app screenshots: a browser window for desktop apps, the bare phone for phone apps */
+.appshot{display:block; border:1px solid var(--rule); border-radius:8px; overflow:hidden; background:var(--wash); text-decoration:none}
+.appshot .bar{display:flex; align-items:center; gap:6px; padding:8px 10px; border-bottom:1px solid var(--rule); background:var(--paper)}
+.appshot .bar i{width:8px; height:8px; border-radius:50%; background:var(--rule)}
+.appshot .bar span{margin-left:8px; font:.7rem/1 var(--mono); color:var(--muted); overflow:hidden; white-space:nowrap; text-overflow:ellipsis}
+.appshot .view{max-width:100%}
+.appshot .view img{display:block; width:100%; height:auto; max-width:100%}
+.appshot.phone .view{position:relative; aspect-ratio:1/1}
+.appshot.phone .view img{position:absolute; inset:16px 0; margin:auto; width:auto; height:calc(100% - 32px)}
+.appshot:hover{border-color:var(--muted)}
+
+/* how it was made */
+.made{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:clamp(28px,5vw,64px); align-items:start}
+.ledger{display:grid; gap:14px}
+.ledger .strip{display:flex; height:44px; gap:2px}
+.ledger .seg{height:100%; min-width:6px}
+.seg.h{background:var(--ink)} .seg.m{background:var(--other)}
+.seg.t{background:repeating-linear-gradient(135deg,var(--ink) 0 1.5px,transparent 1.5px 5px); box-shadow:inset 0 0 0 1.5px var(--ink)}
+.ledger .scale{display:flex; justify-content:space-between; font:.7rem/1 var(--mono); color:var(--muted)}
+.keys{display:grid; gap:0; margin-top:6px}
+.key{display:grid; grid-template-columns:16px minmax(0,1fr) auto; gap:12px; align-items:baseline; padding-block:12px; border-top:1px solid var(--rule)}
+.key .sw{width:14px; height:14px; align-self:center}
+.key b{display:block; font-weight:600; font-size:.95rem}
+.key span.d{color:var(--ink2); font-size:.88rem}
+.key .n{font:500 .95rem/1 var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+.spec-list{display:grid; gap:0; margin:0}
+.spec-list div{display:grid; gap:4px; padding-block:14px; border-top:1px solid var(--rule)}
+.spec-list div:first-child{border-top:1px solid var(--ink)}
+.spec-list dt{font:500 .7rem/1.2 var(--mono); letter-spacing:.07em; text-transform:uppercase; color:var(--muted)}
+.spec-list dd{margin:0; font-size:.95rem; color:var(--ink)}
+.spec-list dd .big{font:600 1.7rem/1.1 var(--serif); display:block; margin-bottom:2px}
+
+/* what sets it apart */
+.hl{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0 24px}
+.hl .item{display:grid; gap:10px; align-content:start; padding-top:16px; border-top:2px solid var(--ink)}
+.hl .pics{display:flex; gap:4px; height:72px; align-items:stretch}
+.hl .pics img{height:100%; width:auto; aspect-ratio:1/1; object-fit:contain; background:var(--wash); border:1px solid var(--rule); max-width:100%}
+.hl .pics .vs{align-self:center; font:.7rem var(--mono); color:var(--muted)}
+.hl .pics .rec{display:grid; align-content:center; gap:3px; padding:0 8px; border:1px solid var(--rule); font:.66rem/1.3 var(--mono); color:var(--ink2); background:var(--paper)}
+.hl .pics .bars{display:grid; align-content:center; gap:5px; width:100%; max-width:9rem}
+.hl .pics .bars span{display:block; height:9px; background:var(--other)}
+.hl .pics .bars span.top{background:var(--ink)}
+.hl .pics .bars span.unk{background:repeating-linear-gradient(135deg,var(--other) 0 1.5px,transparent 1.5px 4px); box-shadow:inset 0 0 0 1px var(--other)}
+.hl .pics .chip{align-self:center; white-space:nowrap; font:500 .74rem/1.3 var(--mono); border:1px solid var(--ink); padding:6px 8px; border-radius:3px}
+.hl h3{font-size:1rem}
+.hl p{font-size:.88rem; color:var(--ink2)}
+.hl button.see{justify-self:start; font:.8rem var(--sans); color:var(--ink); background:none; border:0; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--muted)}
+.cmp{margin-top:44px}
+.cmp table{font-size:.86rem}
+.cmp td,.cmp th{padding-right:18px}
+.cmp td:first-child{color:var(--muted); font-family:var(--mono); font-size:.76rem; white-space:nowrap}
+.cmp td.us{font-weight:600}
+.cmp th.us{color:var(--ink)}
+
+/* one request, annotated */
+.sc-card{border:1px solid var(--rule); border-radius:10px; padding:clamp(18px,3vw,28px); display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:clamp(18px,3vw,32px); align-items:center; background:var(--paper)}
+.sc-card.text{grid-template-columns:minmax(0,1fr) auto}
+.sc-card .photo{width:132px; max-width:100%; height:auto; display:block; border-radius:4px; background:var(--wash)}
+.sc-fields{display:grid; gap:14px}
+.sc-field{display:grid; grid-template-columns:minmax(0,11rem) minmax(0,1fr); gap:14px; align-items:baseline}
+.sc-field .k{font:.8rem var(--mono); color:var(--muted)}
+.sc-val{display:inline-grid; gap:4px}
+.sc-val span.v{font:500 1.15rem/1.2 var(--mono); padding:2px 6px; border-bottom:2px solid var(--ink)}
+.sc-val span.v.bad{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--track) 5px 7px)}
+.sc-val span.v.plain{border-bottom-color:transparent; font-weight:400; color:var(--ink2); padding-left:0}
+.sc-val small{font:.72rem var(--mono); color:var(--ink2)}
+.sc-quote{font:1.08rem/1.6 var(--serif); color:var(--ink); max-width:44rem}
+.sc-meta{font:.74rem var(--mono); color:var(--muted); margin-bottom:8px}
+.sc-chips{display:grid; gap:8px; justify-items:start}
+.sc-chip{font:.8rem/1.2 var(--mono); border:1px solid var(--rule); border-radius:999px; padding:7px 12px; white-space:nowrap; background:var(--wash)}
+.sc-chip b{font-weight:500}
+.sc-chip.act{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.sc-io{display:grid; grid-template-columns:minmax(0,1.25fr) 24px minmax(0,1fr); gap:12px; align-items:start; margin-top:22px}
+.sc-io .arrow{align-self:center; text-align:center; color:var(--muted); font:1.1rem var(--mono)}
+.panel{border:1px solid var(--rule); border-radius:10px; overflow:hidden; background:var(--paper); min-width:0}
+.panel .ph{display:flex; justify-content:space-between; gap:10px; padding:10px 14px; border-bottom:1px solid var(--rule); background:var(--wash); font:.74rem var(--mono); color:var(--muted)}
+.panel pre{margin:0; padding:14px 16px; overflow-x:auto; font:.76rem/1.65 var(--mono); color:var(--ink)}
+.panel pre .c{color:var(--muted)} .panel pre .s{color:var(--ink2)} .panel pre .n{font-weight:600} .panel pre .kw{font-weight:600}
+.panel .copy{font:.7rem var(--mono); border:1px solid var(--rule); background:var(--paper); color:var(--ink2); border-radius:3px; padding:3px 7px; cursor:pointer}
+
+/* use cases by business function */
+.uses{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0 28px}
+.use{display:grid; gap:10px; align-content:start; padding-top:16px; border-top:1px solid var(--ink)}
+.use p{color:var(--ink2); font-size:.9rem}
+.use ul{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+.use li button{width:100%; text-align:left; font:.88rem/1.35 var(--sans); color:var(--ink); background:none; border:0; border-bottom:1px solid var(--rule); padding:8px 0; cursor:pointer; display:flex; justify-content:space-between; gap:8px}
+.use li button::after{content:"→"; color:var(--muted)}
+.use li button:hover{color:var(--ink); background:var(--wash)}
+
+/* automation trade-off */
+.auto{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.25fr); gap:clamp(28px,5vw,64px); align-items:start}
+.auto .ctl{display:grid; gap:22px}
+.thr{display:grid; gap:8px}
+.thr label{font:500 .95rem var(--sans)}
+.thr input{width:100%; accent-color:var(--ink)}
+.thr .ticks{display:flex; justify-content:space-between; font:.7rem var(--mono); color:var(--muted)}
+.stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 20px}
+.stats div{display:grid; gap:4px; padding-top:12px; border-top:1px solid var(--rule)}
+.stats b{font:600 2rem/1 var(--serif); font-variant-numeric:tabular-nums}
+.stats span{font-size:.82rem; color:var(--ink2); line-height:1.35}
+.waffle{display:grid; grid-template-columns:repeat(31,minmax(0,1fr)); gap:3px; max-width:34rem}
+.waffle i{aspect-ratio:1/1; border:1.5px solid var(--ink); border-radius:2px; background:var(--ink); transition:background .2s}
+.waffle i.p{background:var(--paper)}
+.waffle i.x{background:var(--paper); background-image:linear-gradient(45deg,transparent 40%,var(--ink) 40% 60%,transparent 60%),linear-gradient(-45deg,transparent 40%,var(--ink) 40% 60%,transparent 60%)}
+@media (prefers-reduced-motion: reduce){ .waffle i{transition:none} }
+
+/* checks table */
+.tw{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font:.9rem/1.45 var(--sans)}
+th,td{text-align:left; padding:10px 14px 10px 0; border-bottom:1px solid var(--rule); vertical-align:top}
+thead th{font:500 .7rem/1.2 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--ink)}
+td.n,th.n{text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; padding-left:14px}
+td .sub{display:block; color:var(--muted); font-size:.82rem}
+tr.ours td{font-weight:600}
+details{margin-top:18px} summary{cursor:pointer; font:.8rem var(--mono); color:var(--ink2)}
+.misses{display:grid; gap:0; margin-top:10px; font-size:.88rem}
+.misses div{display:grid; grid-template-columns:minmax(0,12rem) minmax(0,14rem) minmax(0,1fr); gap:14px; padding-block:8px; border-top:1px solid var(--rule)}
+.misses .mono{font-size:.8rem; color:var(--ink2); overflow-wrap:anywhere}
+.note{font-size:.9rem; color:var(--ink2); max-width:46rem}
+
+/* bench */
+.bench{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:40px}
+.bench figure{min-width:0; display:grid; gap:10px; align-content:start}
+.bench svg{width:100%; height:auto; display:block}
+figcaption{font-size:.84rem; line-height:1.55; color:var(--muted)}
+.readings{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 36px; margin-top:36px}
+.readings div{display:grid; gap:6px; padding-block:16px; border-top:1px solid var(--rule); align-content:start}
+.readings p{font-size:.92rem; color:var(--ink2)}
+#tip{position:fixed; pointer-events:none; z-index:9; background:var(--ink); color:var(--paper); font:.74rem/1.4 var(--mono); padding:6px 8px; max-width:260px}
+
+/* developers */
+.dev{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:40px}
+.dev .col{min-width:0; display:grid; gap:12px; align-content:start}
+.seg{display:inline-flex; gap:4px; flex-wrap:wrap}
+.seg button{font:.78rem/1 var(--mono); padding:6px 9px; border:1px solid var(--rule); background:var(--paper); color:var(--ink2); cursor:pointer; border-radius:3px}
+.seg button[aria-pressed="true"]{border-color:var(--ink); color:var(--ink); background:var(--wash)}
+
+/* limits */
+.limits{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 36px}
+.limits div{display:grid; gap:4px; padding-block:14px; border-top:1px solid var(--rule)}
+.limits p{font-size:.92rem; color:var(--ink2)}
+
+footer{margin-top:96px; border-top:1px solid var(--rule); padding-block:28px 48px; font-size:.84rem; color:var(--muted)}
+footer .wrap{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px}
+footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
+
+@media (max-width: 960px){
+  .hero,.dev,.bench{grid-template-columns:minmax(0,1fr)}
+  .uses{grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px}
+  .hl{grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px}
+  .gal{grid-template-columns:minmax(0,1fr)}
+  .rail{display:flex; overflow-x:auto; gap:4px; padding-bottom:6px}
+  .rail li{flex:0 0 auto}
+  .rail button{border-left:0; border-bottom:2px solid transparent; white-space:nowrap}
+  .rail button[aria-current="true"]{border-bottom-color:var(--ink)}
+  .rail .k{display:none}
+}
+@media (max-width: 720px){
+  body{font-size:16px}
+  .spec{grid-template-columns:minmax(0,1fr)} .spec .ev .ph{max-width:20rem}
+  .how,.diff,.readings,.limits{grid-template-columns:minmax(0,1fr)}
+  .r{grid-template-columns:minmax(0,7.5rem) minmax(0,1fr) 2.8rem}
+  .misses div{grid-template-columns:1fr; gap:2px}
+  .set,.family,.made,.auto,.sc-io,.sc-card,.sc-card.text{grid-template-columns:minmax(0,1fr)} .sc-io .arrow{transform:rotate(90deg)} .sc-field{grid-template-columns:minmax(0,1fr); gap:4px} .uses,.hl{grid-template-columns:minmax(0,1fr)} .hl .item{gap:8px; padding-bottom:10px} .set .appshot,.family .appshot{max-width:24rem}
+  footer .wrap{grid-template-columns:1fr}
+  header.top nav{margin-left:0}
+}
+</style>
+
+<header class="top"><div class="wrap">
+  <a class="word" href="#top"><img class="l" src="assets/brand/mark-light.svg" alt=""><img class="d" src="assets/brand/mark-dark.svg" alt="">imajev</a>
+  <nav aria-label="Sections"><a href="#apart">Why imajev</a><a href="#uses">Use cases</a><a href="#examples">Examples</a><a href="#checks">Checks</a><a href="#benchmarks">Benchmarks</a><a href="#made">Training</a><a href="#developers">Developers</a><a href="report/">Report</a><a href="https://github.com/mohit67890/imajev">GitHub</a></nav>
+</div></header>
+
+<main id="top">
+<div class="wrap">
+  <div class="hero">
+    <div class="copy">
+      <span class="label">imajev 1.0 · open models for everyday business decisions</span>
+      <h1>Decisions for real-world cases.</h1>
+      <p class="lead">Your teams make the same judgements thousands of times a day: does this listing match its photo, is this the item we shipped, who owns this ticket, does this refund meet the policy. imajev reads the photos, records and text you already have and answers in the options you set, with a probability on each and an explicit <i>can't tell</i>. Your system acts when it is sure and hands the rest to a person.</p>
+      <div class="cta">
+        <a class="btn solid" href="https://huggingface.co/spaces/mohit67890/imajev">Try the demo</a>
+        <a class="btn" href="#uses">See where it fits</a>
+        <a class="btn" href="#developers">Run it yourself</a>
+      </div>
+      <p class="facts"><span>Runs on your own hardware</span><span>Your data never leaves</span><span>Open weights, Apache-2.0</span><span>2B · 4B · 9B</span></p>
+    </div>
+    <div class="hero-demo">
+      <div class="top-line">
+        <div class="switch" role="group" aria-label="Evidence" id="hero-switch"><button type="button" data-k="photo" aria-pressed="true">Photo vs listing</button><button type="button" data-k="text" aria-pressed="false">Email vs account</button></div>
+        <span class="label">Same question, same model</span>
+      </div>
+      <div id="hero-spec"></div>
+      <p class="hero-cap">Change the record and see what imajev-4b answered. Every state here was actually run through the model and checked against the right answer; nothing is typed in by hand.</p>
+    </div>
+  </div>
+</div>
+
+<section class="s" id="apart"><div class="wrap">
+  <div class="s-head"><h2>What sets it apart</h2>
+    <p>Jev reads text only. General vision models answer in prose, from a hosted API, in seconds. imajev brings Jev's typed answers to photos, and runs on your own hardware.</p></div>
+  <div class="hl">
+    <div class="item"><div class="pics"><img src="assets/demo/scenarios/assets/loafers.jpg" alt=""><span class="rec"><span>listing.color</span><b>red</b></span></div>
+      <h3>A photo read against your record</h3><p>Checks a photo against the fields in your own data and names the field that is wrong. Trained on 72k photo-vs-record and two-photo decisions.</p>
+      <button type="button" class="see" data-sid="listing" data-label="listing.color=red">See the listing check</button></div>
+    <div class="item"><div class="pics"><img src="assets/demo/scenarios/assets/fryum-reference.jpg" alt=""><span class="vs">vs</span><img src="assets/demo/scenarios/assets/fryum-chipped.jpg" alt=""></div>
+      <h3>Two photos, one decision</h3><p>A reference and a target in the same request: what was shipped against what came back, a known-good part against the one on the line.</p>
+      <button type="button" class="see" data-sid="qc" data-label="chipped part">See the QC check</button></div>
+    <div class="item"><div class="pics"><span class="bars"><span class="top" style="width:30%"></span><span style="width:18%"></span><span class="unk" style="width:88%"></span></span></div>
+      <h3>A trained <i>can't tell</i></h3><p>Every answer carries a probability for <i>unknown</i>. Asked for a white or beige bag from a closet with only a red and a black backpack, the 4B puts 0.89 on unknown instead of guessing.</p>
+      <button type="button" class="see" data-sid="style-m01" data-label="me.likes=white, cream or beige">See it decline to guess</button></div>
+    <div class="item"><div class="pics"><span class="chip">2B · 4B · 9B</span><span class="chip">MLX · CUDA</span></div>
+      <h3>Open, small and local</h3><p>Apache-2.0 weights from 2B. Runs on a Mac or one GPU, about 0.1 s per question, so photos and customer data never leave your network.</p>
+      <button type="button" class="see" onclick="document.getElementById('developers').scrollIntoView()">See how to run it</button></div>
+    <div class="item"><div class="pics"><span class="chip">POST /v1/systemone</span></div>
+      <h3>Jev's contract, now with images</h3><p>The same request and response as Jev, plus <code>images</code>, <code>unknown_probability</code> and <code>abstained</code>. Text-only Jev requests work unchanged.</p>
+      <button type="button" class="see" data-sid="crm" data-label="email=moved city">See a text request</button></div>
+  </div>
+  <div class="cmp tw"><table>
+    <thead><tr><th></th><th class="us">imajev</th><th>Jev (TypeSafe)</th><th>Jev-Omni</th><th>Frontier vision APIs</th></tr></thead>
+    <tbody>
+      <tr><td>photos in a request</td><td class="us">up to 2 (reference + target)</td><td>none, text only</td><td>yes; two-photo requests not documented</td><td>yes</td></tr>
+      <tr><td>answer format</td><td class="us">probability per option you set</td><td>probability per option you set</td><td>probability per option you set</td><td>generated text or JSON</td></tr>
+      <tr><td>says it can't tell</td><td class="us">trained <i>unknown</i>, 15 / 21 on ImajevBench</td><td>not documented</td><td>no abstain output, so 0 / 21</td><td>only if prompted</td></tr>
+      <tr><td>record per request</td><td class="us">32 KB (about 8k tokens)</td><td>32k tokens</td><td>not documented</td><td>large</td></tr>
+      <tr><td>where it runs</td><td class="us">your hardware, open weights</td><td>hosted API</td><td>your hardware, open weights (12B)</td><td>hosted API</td></tr>
+      <tr><td>time per decision</td><td class="us">about 0.1 s (one H100)</td><td>not documented</td><td>about 0.1 s (one H100)</td><td>5 to 8 s</td></tr>
+      <tr><td>ImajevBench accuracy</td><td class="us">82.4% (4B)</td><td>cannot take photos</td><td>78.5%</td><td>91.4% to 99.6%</td></tr>
+    </tbody></table>
+    <p class="foot" style="margin-top:10px">Jev from docs.typesafe.ai (models page, Jev 1.13.0). Jev-Omni from its model card and our run of its own predict() API. Frontier rows and all ImajevBench numbers from our runs, 24 Sept 2026; frontier models answer by structured generation, a different interface. Jev's record limit is larger than imajev's.</p>
+  </div>
+</div></section>
+
+<section class="s" id="request"><div class="wrap">
+  <div class="s-head"><h2>One request, every answer typed</h2>
+    <p>Send the evidence and the questions you care about. Each comes back as a probability over the answers you allowed, ready for an <code>if</code>. The code below is the exact script we ran against imajev-4b; the result is its output, with numbers rounded to three places.</p></div>
+  <div class="switch" role="group" aria-label="Example" id="sc-switch" style="margin-bottom:16px"><button type="button" data-k="listing" aria-pressed="true">Photo vs listing</button><button type="button" data-k="ticket" aria-pressed="false">Support ticket, text only</button></div>
+  <div id="sc-card"></div>
+  <div class="sc-io">
+    <div class="panel"><div class="ph"><span id="sc-file"></span><button type="button" class="copy" id="sc-copy">Copy</button></div><pre id="sc-code"></pre></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="panel"><div class="ph"><span>result · rounded, usage abridged</span><span id="sc-ms"></span></div><pre id="sc-res"></pre></div>
+  </div>
+</div></section>
+
+<section class="s" id="uses"><div class="wrap">
+  <div class="s-head"><h2>Where it fits</h2>
+    <p>The decisions it handles well are the high-volume, well-defined ones with a clear set of answers. Each item below opens a checked example.</p></div>
+  <div class="uses" id="uses-grid"></div>
+</div></section>
+
+<section class="s" id="automation"><div class="wrap">
+  <div class="s-head"><h2>Automate what is clear, route the rest</h2>
+    <p>You choose how sure the model must be before it acts. A higher bar automates less but makes fewer mistakes; everything below it goes to a person. Pick the bar from what a mistake costs you.</p></div>
+  <div class="auto">
+    <div class="ctl">
+      <div class="thr"><label for="thr">Act automatically when imajev is at least <output id="thr-out">90%</output> sure</label>
+        <input type="range" id="thr" min="50" max="99" step="1" value="90"><div class="ticks"><span>50%</span><span>75%</span><span>99%</span></div></div>
+      <div class="stats">
+        <div><b id="st-auto">—</b><span>of decisions made automatically</span></div>
+        <div><b id="st-acc">—</b><span>of those automatic decisions right</span></div>
+        <div><b id="st-hum">—</b><span>sent to a person, including when it says it <i>can't tell</i></span></div>
+      </div>
+      <p class="note" style="font-size:.86rem">imajev-4b on the 279 ImajevBench test questions: photos, records and text, including 21 whose honest answer is <i>can't tell</i>. The benchmark is built to be hard, with near-identical pairs that differ in one detail, so treat these numbers as a starting point and measure on a few hundred of your own cases before you choose.</p>
+    </div>
+    <div style="display:grid; gap:12px; align-content:start">
+      <p class="legend"><span><i class="p"></i>automatic, right</span><span><i></i>sent to a person</span><span><i class="x"></i>automatic, wrong</span></p>
+      <div class="waffle" id="waffle" role="img" aria-label="Each square is one benchmark question"></div>
+      <p class="foot">Each square is one benchmark question.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="s" id="examples"><div class="wrap">
+  <div class="s-head"><h2>Examples, every one of them checked</h2>
+    <p>Real requests from the playground, answered by imajev-4b. Click a record value or a photo to switch to another checked run. Misses are shown too.</p></div>
+  <div class="tabs" role="tablist" aria-label="Example groups" id="tabs"></div>
+  <div class="gal"><ul class="rail" id="rail" aria-label="Examples"></ul><div class="stage" id="stage"></div></div>
+</div></section>
+
+<section class="s" id="checks"><div class="wrap">
+  <div class="s-head"><h2>Checked, not cherry-picked</h2>
+    <p>Each example comes from one of five small apps built on imajev. Every combination a visitor can click in those apps is sent to the model and compared with the right answer. Each square below is one of those runs; click it to open that exact run in the examples above.</p></div>
+  <p class="legend" style="margin-bottom:14px"><span><i class="p"></i>right answer, expected action</span><span><i></i>right answer, but under 80% sure, so sent to a person</span><span><i class="x"></i>wrong answer</span></p>
+  <div class="sets" id="sets"></div>
+  <p class="note" style="margin-top:22px">The apps run imajev-4b without its calibration file. With the file the top answer never changes, but confidence is lower, so more cases go to a person at the 80% threshold; the second count on each row shows that. The text checks were written for this page and run once. The others were written while building the apps on an earlier model and rerun unchanged.</p>
+</div></section>
+
+<section class="s" id="why"><div class="wrap">
+  <div class="s-head"><h2>Why a business would run it</h2></div>
+  <div class="diff">
+    <div><h3>Your data stays with you</h3><p>Runs on your own servers, or on a Mac for small volumes. No photo, record or customer message leaves your network.</p></div>
+    <div><h3>Decisions, not paragraphs</h3><p>It answers only in the options you define, so it plugs into existing rules and workflows like any other system. Nothing to parse.</p></div>
+    <div><h3>It says when it can't tell</h3><p>A trained <i>unknown</i> for missing or contradictory evidence, plus a probability you threshold. People review what is unclear.</p></div>
+    <div><h3>Every decision is on the record</h3><p>Each answer is a set of probabilities over your options. Log them, audit them, and see exactly why a case was automated or escalated.</p></div>
+    <div><h3>Photos, records and text together</h3><p>Compare a photo with a record, a returned item with what was shipped, or an email with the account, in one request.</p></div>
+    <div><h3>Cheap at volume</h3><p>About 0.1 s per question on one GPU, around 40,000 decisions an hour, with no per-call fees. Sizes from 2B for tight budgets to 9B.</p></div>
+  </div>
+</div></section>
+
+<section class="s" id="benchmarks"><div class="wrap">
+  <div class="s-head"><h2>Where it stands</h2>
+    <p>Same protocol for every system on each chart. imajev is not the most accurate option. It is the small one that runs on your own hardware, answers a question in about 0.1 s on one GPU, and can abstain.</p></div>
+  <div class="bench">
+    <figure><div id="c-ib"></div><figcaption><b>ImajevBench v2.0-lite</b>, 279 test items: photos, records and text, including 21 items whose right answer is unknown. Dot is accuracy, line the 95% cluster interval. Frontier APIs answer by structured generation, a different interface taking 5 to 8 s per item; starred ones also screened the benchmark's images.</figcaption></figure>
+    <figure><div id="c-jb"></div><figcaption><b>JevBench public hard split</b>, 111 text-only items, our runs with the jevbench harness on one H100. Not the official leaderboard, which adds sealed items; an entry will be requested.</figcaption></figure>
+  </div>
+  <div class="readings">
+    <div><span class="label">Uplift</span><p>The imajev adapter lifts Qwen3.5-4B from 70.6% to 82.4% on ImajevBench (+11.8 points, p = 0.0008). The 4B matches the 9B there.</p></div>
+    <div><span class="label">Abstention</span><p>imajev-4b answers <i>unknown</i> correctly on 15 of 21 items. Jev-Omni, another open Jev-class model, has no abstain output: 78.5% overall, 0 of 21 unknown, and it is slightly ahead on answerable items.</p></div>
+    <div><span class="label">Not first</span><p>JevK5 (73.9%) leads every imajev size on JevBench hard; the 4B ties Hopper at 67.6%. A reasoning model scores 97.3%, at seconds and thousands of tokens per decision.</p></div>
+  </div>
+</div></section>
+
+<section class="s" id="made"><div class="wrap">
+  <div class="s-head"><h2>How it was made</h2>
+    <p>About a million training decisions in three stages, on open base models, for about $570 of rented GPU time for the whole project.</p></div>
+  <div class="made">
+    <div class="ledger" role="img" aria-label="Training data: 504 thousand human-labelled decisions, 488 thousand labelled by our 9B, 23 thousand hard questions kept on teacher agreement">
+      <span class="label">Training decisions, to scale</span>
+      <div class="strip"><span class="seg h" style="flex:504"></span><span class="seg m" style="flex:488"></span><span class="seg t" style="flex:23"></span></div>
+      <div class="keys">
+        <div class="key"><span class="sw seg h"></span><span><b>1 · Human-labelled, public datasets</b><span class="d">300k on images from 21 sources, 200k text-only from 15 sources, 4k photo-vs-listing contradictions. Every source licence-checked for commercial use.</span></span><span class="n">504k</span></div>
+        <div class="key"><span class="sw seg m"></span><span><b>2 · New sources, labelled by our 9B</b><span class="d">416k on six photo and text sources the models had never seen, kept only when two option orders agreed; 72k photo-vs-record and two-photo decisions. The 9B made these labels, so it skipped this stage.</span></span><span class="n">488k</span></div>
+        <div class="key"><span class="sw seg t"></span><span><b>3 · Hard questions</b><span class="d">Written and answered by open-weight teachers, kept only when they agreed, plus licensed human reasoning sets. This took the 9B's JevBench hard score from 42.3% to 68.5%.</span></span><span class="n">23k</span></div>
+      </div>
+    </div>
+    <dl class="spec-list">
+      <div><dt>Model</dt><dd>A rank-16 LoRA on the language layers of Qwen3.5 (2B, 4B, 9B), plus a small readout over your option codes. The vision encoder is frozen.</dd></div>
+      <div><dt>Never trained on</dt><dd>Jev outputs, paid-API outputs or JevBench items. Every teacher is an open-weight model.</dd></div>
+      <div><dt>Compute</dt><dd><span class="big">≈ $570</span>Rented GPU time for the whole project, every experiment included.</dd></div>
+      <div><dt>Licence</dt><dd>Adapters, readouts and code Apache-2.0, on Apache-2.0 base models.</dd></div>
+    </dl>
+  </div>
+  <p class="note" style="margin-top:22px">Per-stage results, the costs of the last stage and how to rebuild every dataset are in the <a href="report/#s6">report</a>.</p>
+</div></section>
+
+<section class="s" id="developers"><div class="wrap">
+  <div class="s-head"><h2>Run it on your machine</h2>
+    <p>One server per model on <code>POST /v1/systemone</code>. No network calls at inference.</p></div>
+  <div class="dev">
+    <div class="col"><h3>Start a server</h3>
+      <div class="seg" role="group" aria-label="Platform" id="seg-os"></div>
+      <div class="code"><button type="button" class="copy" data-copy="run">Copy</button><pre id="code-run"></pre></div></div>
+    <div class="col"><h3>Call it like Jev</h3>
+      <p class="muted" style="font-size:.9rem">TypeSafe's own example request, sent to your server instead of <code>api.typesafe.ai</code>. Photos go as multipart files.</p>
+      <div class="code"><button type="button" class="copy" data-copy="jev">Copy</button><pre id="code-jev"></pre></div></div>
+  </div>
+  <div class="tw" style="margin-top:36px"><table>
+    <thead><tr><th>Model</th><th>Use it when</th><th class="n">ImajevBench</th><th class="n">JevBench hard</th><th class="n">Unknown right</th><th class="n">Base download</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://huggingface.co/mohit67890/imajev-2b">imajev-2b</a></td><td>memory or latency is the constraint</td><td class="n">70.3%</td><td class="n">56.8%</td><td class="n">5 / 21</td><td class="n">4.6 GB</td></tr>
+      <tr class="ours"><td><a href="https://huggingface.co/mohit67890/imajev-4b">imajev-4b</a></td><td>the default for almost everything</td><td class="n">82.4%</td><td class="n">67.6%</td><td class="n">15 / 21</td><td class="n">9.3 GB</td></tr>
+      <tr><td><a href="https://huggingface.co/mohit67890/imajev-9b">imajev-9b</a></td><td>knowledge-heavy text, when memory is not tight</td><td class="n">82.8%</td><td class="n">68.5%</td><td class="n">15 / 21</td><td class="n">19.3 GB</td></tr>
+    </tbody></table></div>
+  <p class="note" style="margin-top:14px">The full contract, the act-or-escalate pattern, fitting your own calibration and how to reproduce every number are in the <a href="report/#s5">report's developer section</a>.</p>
+</div></section>
+
+<section class="s" id="limits"><div class="wrap">
+  <div class="s-head"><h2>Limits</h2></div>
+  <div class="limits">
+    <div><h3>No reasoning at inference</h3><p>One forward pass by design. Multi-step arithmetic and judging answer quality trail reasoning models.</p></div>
+    <div><h3>An empty field can read as "no"</h3><p>With a blank payment note, the 4B answered "not paid" instead of unknown. Unknown is trained for missing evidence, not guaranteed.</p></div>
+    <div><h3>Scribbles read as letters</h3><p>On the tracing pad it reads 20 of 20 traced letters and numbers correctly but calls 8 of 10 scribbles a letter. In 6 of those the confidence is low and the app asks for another try; in 2 it tells the child they drew an A.</p></div>
+    <div><h3>Over-confident without calibration</h3><p>Raw ECE on hard text items is 0.19 to 0.24. Use the calibration file there, or fit one on your own data.</p></div>
+    <div><h3>The 2B rarely abstains</h3><p>5 of 21 unknown items on ImajevBench, against 15 for the 4B and 9B.</p></div>
+    <div><h3>Real photo pairs are the hardest task</h3><p>Two photos with a known edit are near-perfect (98% on our pairs probe), but natural pairs of real photos scored 41.8% on an earlier 4B checkpoint; not yet re-run on the release.</p></div>
+    <div><h3>English, two photos, a preview benchmark</h3><p>ImajevBench images are AI-generated and model-audited, with no human audit yet.</p></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><h3>Licences</h3><p>Code, adapters and readouts: Apache-2.0. Qwen3.5 base models: Apache-2.0. ImajevBench records: CC BY 4.0.</p></div>
+  <div><h3>More</h3><p><a href="report/">Technical report</a> · <a href="https://github.com/mohit67890/imajev">GitHub</a> · <a href="https://huggingface.co/datasets/mohit67890/imajev-bench">ImajevBench</a><br>Mohit Garg, September 2026.</p></div>
+  <div><h3>Photo credits</h3><p id="credits"></p></div>
+</div></footer>
+<div id="tip" hidden></div>
+
+<script id="data" type="application/json">/*__DATA__*/{}</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LONG = 70;
+const getPath = (o, p) => p.split('.').reduce((n, k) => (n == null ? n : n[k]), o);
+const flat = (o, p = '') => Object.entries(o).flatMap(([k, v]) => v && typeof v === 'object' && !Array.isArray(v) ? flat(v, p + k + '.') : [[p + k, v]]);
+const shortCase = c => c.label === 'as shipped' ? 'original' : c.label.split(', ').map(x => x.includes('=') ? x.split('=').slice(1).join('=') : x).join(' · ');
+
+/* ---- readout: bars for one answer ---- */
+function rowsOf(q, a){
+  const unk = Number(a.unknown || 0);
+  let rows;
+  if (q.type === 'noul'){ const yes = Math.max(0, Number(a.top) - unk / 2); rows = [['yes', yes], ['no', Math.max(0, 1 - yes - unk)]]; }
+  else if (q.type === 'score') rows = Object.entries(a.probabilities || {}).map(([k, v]) => [(q.options && q.options[+k]) || k, v]);
+  else rows = Object.entries(a.probabilities || {}).sort((x, y) => y[1] - x[1]).slice(0, 4);
+  const top = a.abstained ? 'unknown' : rows.reduce((m, r) => r[1] > m[1] ? r : m)[0];
+  rows.push(['unknown', unk]);
+  return rows.map(([k, v]) => `<div class="r ${k === top ? 'top' : ''} ${k === 'unknown' ? 'unk' : ''}"><span class="name" title="${esc(k)}">${esc(k)}</span><span class="t"><span class="f" style="width:${Math.max(0.5, v * 100).toFixed(1)}%"></span></span><span class="v">${v.toFixed(3)}</span></div>`).join('');
+}
+const GLYPH = {ok:'✓', flag:'!', human:'?'};
+
+/* ---- specimen: a scenario with its checked cases; clicks move between cases ---- */
+function specimen(root, s, start){
+  let cur = s.cases.find(c => c.label === start) || s.cases[0];
+  const base = s.cases[0];
+  for (const c of s.cases) c.eff = Object.fromEntries(s.flips.map(f => { const i = f.raw.findIndex(v => JSON.stringify(v) === JSON.stringify(getPath(c.state, f.path))); return [f.path, i >= 0 ? f.values[i] : null]; }));
+  const longPaths = new Set(s.flips.filter(f => typeof getPath(base.state, f.path) === 'string' && getPath(base.state, f.path).length > LONG).map(f => f.path));
+  const valuesFor = f => f.values.filter(v => s.cases.some(c => c.eff[f.path] === v));
+  const variants = s.variant_slot == null ? [] : [...new Set(s.cases.map(c => c.variant))];
+  function pick(change){
+    const want = {flips:{...cur.eff, ...(change.flips || {})}, variant: change.variant ?? cur.variant};
+    const score = c => (c.variant === want.variant ? 2 : 0) + Object.entries(want.flips).filter(([k, v]) => c.eff[k] === v).length;
+    const ok = s.cases.filter(c => change.variant != null ? c.variant === change.variant : Object.entries(change.flips).every(([k, v]) => c.eff[k] === v));
+    cur = ok.sort((a, b) => score(b) - score(a))[0] || cur; render();
+  }
+  function render(){
+    const c = cur, photos = c.images;
+    const flipBtns = f => `<span class="opts">${valuesFor(f).map(v => `<button type="button" class="opt" data-path="${esc(f.path)}" data-v="${esc(v)}" aria-pressed="${c.eff[f.path] === v}">${esc(v)}</button>`).join('')}</span>`;
+    const byPath = Object.fromEntries(s.flips.map(f => [f.path, f]));
+    const longText = flat(c.state).filter(([k, v]) => typeof v === 'string' && v.length > LONG);
+    let ev = '';
+    if (photos.length){
+      ev = `<div class="ph" style="--n:${photos.length}">${photos.map((src, i) => `<figure><img src="${esc(src)}" alt="${esc(s.slots[i] || 'photo')}" loading="lazy" width="512" height="512"><span class="foot">${esc(s.slots[i] || '')}</span></figure>`).join('')}</div>`;
+      if (variants.length > 1) ev += `<span class="opts">${variants.map(v => `<button type="button" class="opt" data-variant="${esc(v)}" aria-pressed="${c.variant === v}">${esc(v)}</button>`).join('')}</span>`;
+      const p = photos.map(src => D.photos[src]).filter(Boolean);
+      const seen = p.some(x => x.held_out === false), comp = p.some(x => x.edit);
+      ev += `<span class="foot">${esc([...new Set(p.map(x => x.credit))].join(' · '))}${seen ? ' · a photo from a source used in training' : ' · photos not used in training'}${comp ? ' · one photo is a composite' : ''}</span>`;
+    }
+    if (longText.length) ev += longText.map(([k, v]) => `<div style="display:grid; gap:6px"><span class="label">${esc(k)}</span><p class="quote">${esc(v)}</p>${byPath[k] ? flipBtns(byPath[k]) : ''}</div>`).join('');
+    const kv = flat(c.state).filter(([k, v]) => !(typeof v === 'string' && v.length > LONG)).map(([k, v]) => {
+      const f = byPath[k]; const changed = JSON.stringify(v) !== JSON.stringify(getPath(base.state, k));
+      const val = Array.isArray(v) ? v.join('; ') : String(v === '' ? '(empty)' : v);
+      return `<span class="k">${esc(k).replace(/([._])/g, '$1<wbr>')}</span><span class="v">${f ? flipBtns(f) : `<span class="${changed ? 'changed' : ''}">${esc(val)}</span>`}</span>`;
+    }).join('');
+    const qs = Object.entries(c.questions).filter(([k]) => c.answers && c.answers[k]).map(([k, q]) => {
+      const instr = typeof q.instructions === 'string' ? q.instructions : JSON.stringify(q.instructions);
+      return `<div class="q"><span class="label">${esc(q.type)}</span><p>${esc(instr)}</p><div class="readout">${rowsOf(q, c.answers[k])}</div></div>`;
+    }).join('');
+    const r = c.route || {kind:'human', title:'', detail:''};
+    const status = c.pass ? `Checked: right answer, expected action` : `Miss: ${esc((c.wrong || []).join('; ') || `expected “${[].concat(c.expect).join(' or ')}”, got “${r.kind}”`)}`;
+    root.innerHTML = `<div class="spec ${photos.length || longText.length ? '' : 'textual'}">
+      ${photos.length || longText.length ? `<div class="ev">${ev}</div>` : ''}
+      <div class="io">
+        ${kv ? `<div style="display:grid; gap:8px"><span class="label">Record</span><div class="kv">${kv}</div></div>` : ''}
+        ${qs}
+        <div class="act"><span class="glyph ${r.kind}" aria-hidden="true">${GLYPH[r.kind] || '?'}</span><div><b>${esc(r.title)}</b><span>${esc(r.detail || '')}</span></div></div>
+        <p class="check ${c.pass ? '' : 'miss'}">${c.pass ? '' : '✕ '}${status} · ${Math.round(c.ms)} ms on a Mac Studio</p>
+      </div></div>`;
+    root.querySelectorAll('[data-path]').forEach(b => b.addEventListener('click', () => pick({flips:{[b.dataset.path]: b.dataset.v}})));
+    root.querySelectorAll('[data-variant]').forEach(b => b.addEventListener('click', () => pick({variant: b.dataset.variant})));
+  }
+  render();
+  return () => cur;
+}
+
+/* ---- hero ---- */
+const find = (group, id) => D.groups[group].find(s => s.id === id);
+const HERO = {photo:[find('photos', 'listing'), 'listing.color=red'], text:[find('text', 'crm'), 'email=moved city']};
+function hero(k){ document.querySelectorAll('#hero-switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k))); specimen($('#hero-spec'), ...HERO[k]); }
+document.querySelectorAll('#hero-switch button').forEach(b => b.addEventListener('click', () => hero(b.dataset.k)));
+hero('photo');
+
+/* ---- app screenshot, framed ---- */
+const APP_URL = {'scenarios.jpg':'playground / scenarios', 'text.jpg':'playground / text', 'wardrobe.jpg':'playground / wardrobe'};
+function appshot(src, alt){
+  const file = src.split('/').pop(), phone = file.endsWith('.png');
+  return `<a class="appshot ${phone ? 'phone' : 'window'}" href="${esc(src)}">${phone ? '' : `<div class="bar"><i></i><i></i><i></i><span>${esc(APP_URL[file] || '')}</span></div>`}<div class="view"><img src="${esc(src)}" alt="${esc(alt)}" loading="lazy"></div></a>`;
+}
+
+/* ---- one request, annotated: the exact script and its output ---- */
+(function(){
+  const SC = D.showcase, r3 = v => (+v).toFixed(3);
+  const tok = (re, cls) => t => { let out = '', last = 0; t.replace(re, (m, ...g) => { const i = g[g.length - 2]; out += esc(t.slice(last, i)) + cls(m, g); last = i + m.length; return m; }); return out + esc(t.slice(last)); };
+  const hlPy = tok(/(#[^\n]*)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|\b(import|from|with|as|open|print|None|True|False)\b|\b(\d+(?:\.\d+)?)\b/g,
+    (m, [c, str, kw, n]) => c ? `<span class="c">${esc(c)}</span>` : str ? `<span class="s">${esc(str)}</span>` : kw ? `<span class="kw">${kw}</span>` : `<span class="n">${n}</span>`);
+  const round = o => JSON.parse(JSON.stringify(o, (k, v) => typeof v === 'number' && !Number.isInteger(v) ? +v.toFixed(3) : v));
+  const hlJson = tok(/("(?:[^"\\]|\\.)*")(\s*:)?|(-?\d+(?:\.\d+)?(?:e-?\d+)?)|\b(true|false|null)\b/g,
+    (m, [str, colon, n, lit]) => str ? (colon ? esc(str) + colon : `<span class="s">${esc(str)}</span>`) : n ? `<span class="n">${n}</span>` : `<span class="kw">${lit}</span>`);
+  const noNo = a => Math.max(0, 1 - a.noul - a.unknown_probability / 2), noYes = a => Math.max(0, a.noul - a.unknown_probability / 2);
+  function card(k){
+    const a = SC[k].result.answers;
+    if (k === 'listing'){
+      const c = a.contradicted_field, col = a.color_matches, typ = a.type_matches;
+      return `<div class="sc-card"><img class="photo" src="assets/showcase/listing.jpg" alt="Listing photo: beige suede boat shoes" width="197" height="256">
+        <div class="sc-fields">
+          <div class="sc-field"><span class="k">listing.title</span><span class="sc-val"><span class="v plain">Men's suede boat shoes</span></span></div>
+          <div class="sc-field"><span class="k">listing.color</span><span class="sc-val"><span class="v bad">red</span><small>contradicted · matches: no ${r3(noNo(col))}</small></span></div>
+          <div class="sc-field"><span class="k">listing.product_type</span><span class="sc-val"><span class="v">shoe</span><small>consistent · matches: yes ${r3(noYes(typ))}</small></span></div>
+        </div>
+        <div class="sc-chips"><span class="sc-chip">contradicted field: <b>${esc(c.choice)}</b> ${r3(c.probabilities[c.choice])}</span><span class="sc-chip">unknown ${r3(c.unknown_probability)}</span><span class="sc-chip act">→ hold the listing</span></div></div>`;
+    }
+    const d = a.department, u = a.urgent, f = a.frustration, lvl = String(Math.round(f.score));
+    return `<div class="sc-card text"><div><p class="sc-meta">ticket.id TKT-48812 · ticket.plan Team (12 seats)</p><p class="sc-quote">“We were billed 480 USD twice on 3 September for the same 12 seats. I have now written three times and the only reply was an automated one. Our finance close is on Wednesday and I need the duplicate reversed before then.”</p></div>
+      <div class="sc-chips"><span class="sc-chip">department: <b>${esc(d.choice)}</b> ${r3(d.probabilities[d.choice])}</span><span class="sc-chip">urgent: <b>yes</b> ${r3(noYes(u))}</span><span class="sc-chip">frustration: <b>${esc(f.legend[lvl].split(':')[0])}</b> ${r3(f.probabilities[lvl])}</span><span class="sc-chip act">→ billing, reply today</span></div></div>`;
+  }
+  let cur = 'listing';
+  function render(){
+    document.querySelectorAll('#sc-switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === cur)));
+    $('#sc-card').innerHTML = card(cur);
+    $('#sc-file').textContent = cur + '.py';
+    $('#sc-code').innerHTML = hlPy(SC[cur].code.trim());
+    const res = round(SC[cur].result); res.usage = {total_ms: res.usage.total_ms, input_tokens: res.usage.input_tokens};
+    $('#sc-res').innerHTML = hlJson(JSON.stringify(res, null, 2));
+    $('#sc-ms').textContent = `${Math.round(SC[cur].result.usage.total_ms)} ms · Mac Studio`;
+  }
+  document.querySelectorAll('#sc-switch button').forEach(b => b.addEventListener('click', () => { cur = b.dataset.k; render(); }));
+  $('#sc-copy').addEventListener('click', async () => { const b = $('#sc-copy');
+    try { await navigator.clipboard.writeText(SC[cur].code); b.textContent = 'Copied'; }
+    catch { const rg = document.createRange(); rg.selectNodeContents($('#sc-code')); const sl = getSelection(); sl.removeAllRanges(); sl.addRange(rg); b.textContent = 'Selected'; }
+    setTimeout(() => b.textContent = 'Copy', 1500); });
+  render();
+})();
+
+/* ---- gallery ---- */
+const GROUPS = [['photos', 'Photos and records'], ['text', 'Text only'], ['apps', 'Everyday apps']];
+let group = 'photos', sel = null, member = null, startCase = null;
+const casesOf = it => it.family ? it.members.flatMap(m => m.cases) : it.cases;
+function tabs(){ $('#tabs').innerHTML = GROUPS.map(([k, t]) => `<button type="button" role="tab" data-g="${k}" aria-selected="${k === group}">${t}<span class="c">${D.groups[k].length}</span></button>`).join('');
+  $('#tabs').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { group = b.dataset.g; sel = member = startCase = null; tabs(); gallery(); })); }
+function gallery(){
+  const list = D.groups[group]; sel = sel || list[0].id;
+  $('#rail').innerHTML = list.map(s => { const cs = casesOf(s), ok = cs.filter(c => c.pass).length;
+    return `<li><button type="button" data-id="${esc(s.id)}" aria-current="${s.id === sel}"><span class="t">${esc(s.title)}</span><span class="k">${esc(s.kicker)} · ${ok}/${cs.length} checks</span></button></li>`; }).join('');
+  $('#rail').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { sel = b.dataset.id; member = startCase = null; gallery(); }));
+  const it = list.find(x => x.id === sel);
+  const intro = `<span class="label">${esc(it.kicker)}</span><h3 style="font:600 1.3rem/1.3 var(--serif)">${esc(it.title)}</h3>${it.problem ? `<p>${esc(it.problem)}</p>` : ''}${it.solves ? `<p class="solves muted">${esc(it.solves)}</p>` : ''}`;
+  if (it.family){
+    const m = it.members.find(x => x.id === member) || it.members[0]; member = m.id;
+    $('#stage').innerHTML = `<div class="family"><div class="intro">${intro}<div class="members" role="group" aria-label="Choose">${it.members.map(x => { const ok = x.cases.every(c => c.pass);
+      return `<button type="button" class="opt" data-m="${esc(x.id)}" aria-pressed="${x.id === m.id}">${esc(x.member)}${ok ? '' : ' ✕'}</button>`; }).join('')}</div></div>
+      ${appshot(it.shot, `The ${it.title} running on imajev-4b`)}</div><div id="stage-spec"></div>`;
+    $('#stage').querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', () => { member = b.dataset.m; startCase = null; gallery(); }));
+    specimen($('#stage-spec'), m, startCase);
+  } else {
+    $('#stage').innerHTML = `<div class="intro">${intro}</div><div id="stage-spec"></div>`;
+    specimen($('#stage-spec'), it, startCase);
+  }
+}
+function openCase(sid, label){
+  for (const [g] of GROUPS) for (const it of D.groups[g]){
+    const hit = it.family ? it.members.find(m => m.id === sid) : it.id === sid && it;
+    if (hit){ group = g; sel = it.id; member = it.family ? sid : null; startCase = label; tabs(); gallery(); $('#examples').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return; }
+  }
+}
+tabs(); gallery();
+
+/* ---- where it fits ---- */
+const USES = [
+  ['Marketplaces and retail', 'Listings, returns and catalogues checked against their photos.', [['listing', 'Listing matches its photo'], ['returns', 'Return is the item we shipped'], ['tag', 'Tag a product from a photo']]],
+  ['Manufacturing and field work', 'Parts and sites compared with a known-good reference.', [['qc', 'Reject a chipped part'], ['audit', 'Spot what changed on site']]],
+  ['Customer support', 'Tickets, refunds and reviews routed before anyone reads them.', [['ticket', 'Route a ticket, flag urgency'], ['refund', 'Refund against the policy'], ['review', 'Send a review to the right team']]],
+  ['Trust and safety', 'User content held against your rules.', [['moderation', 'Remove spam, harassment, doxxing'], ['retake', 'Ask for a better photo']]],
+  ['Back office and records', 'Records kept in step with what customers and scans say.', [['crm', 'Email contradicts the CRM'], ['invoice', 'Is the invoice paid?'], ['archive', 'Catalogue record is wrong']]],
+];
+$('#uses-grid').innerHTML = USES.map(([t, d, items]) => `<div class="use"><h3>${esc(t)}</h3><p>${esc(d)}</p><ul>${items.map(([id, l]) => `<li><button type="button" data-sid="${id}">${esc(l)}</button></li>`).join('')}</ul></div>`).join('');
+$('#uses-grid').querySelectorAll('button').forEach(b => b.addEventListener('click', () => openCase(b.dataset.sid, null)));
+document.querySelectorAll('#apart .see[data-sid]').forEach(b => b.addEventListener('click', () => openCase(b.dataset.sid, b.dataset.label)));
+
+/* ---- automation trade-off, from imajev-4b's ImajevBench predictions ---- */
+(function(){
+  const A = D.automation, n = A.n, pct = v => (v * 100).toFixed(v >= .995 || v < .1 ? 1 : 0) + '%';
+  const order = A.items.map((x, i) => i).sort((i, j) => A.items[j][1] - A.items[i][1]);   // most confident first
+  $('#waffle').innerHTML = order.map(() => '<i></i>').join('');
+  const cells = [...$('#waffle').children];
+  function render(){
+    const t = +$('#thr').value / 100; $('#thr-out').textContent = Math.round(t * 100) + '%';
+    let auto = 0, right = 0;
+    order.forEach((i, k) => { const [abst, top, ok] = A.items[i]; const isAuto = !abst && top >= t;
+      if (isAuto){ auto++; right += ok; } cells[k].className = isAuto ? (ok ? '' : 'x') : 'p'; });
+    $('#st-auto').textContent = pct(auto / n); $('#st-acc').textContent = auto ? (right / auto * 100).toFixed(1) + '%' : '—'; $('#st-hum').textContent = pct((n - auto) / n);
+  }
+  $('#thr').addEventListener('input', render); render();
+})();
+
+/* ---- checks ---- */
+$('#sets').innerHTML = D.sets.map(x => {
+  let last = null;
+  const dots = x.checks.map(c => { const gap = last && last !== c.sid ? '<span class="gap"></span>' : ''; last = c.sid;
+    const hedge = !c.pass && !c.wrong.length && c.route === 'human';
+    const kind = c.pass ? '' : hedge ? 'hedge' : 'miss';
+    const what = c.pass ? 'right' : hedge ? 'right answer, sent to a person' : c.wrong.length ? 'wrong: ' + c.wrong.join('; ') : `wrong action: the app chose “${c.route}”`;
+    return `${gap}<button type="button" class="dot ${kind}" data-sid="${esc(c.sid)}" data-label="${esc(c.label)}" title="${esc(c.scenario)} · ${esc(c.label)} · ${esc(what)}" aria-label="${esc(c.scenario)}, ${esc(c.label)}: ${esc(what)}"></button>`; }).join('');
+  return `<div class="set">${appshot(x.shot, `The ${x.name} app running on imajev-4b`)}
+    <div class="body"><h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p>
+      <div class="score"><b>${x.passed} / ${x.total}</b><span>checks pass · ${x.cal_passed} / ${x.total} with the calibration file</span></div>
+      <div class="dots">${dots}</div></div></div>`; }).join('');
+$('#sets').querySelectorAll('.dot').forEach(b => b.addEventListener('click', () => openCase(b.dataset.sid, b.dataset.label)));
+$('#credits').textContent = D.credits.join(' · ') + '.';
+
+/* ---- charts ---- */
+const tip = $('#tip');
+const showTip = (e, h) => { tip.innerHTML = h; tip.hidden = false; tip.style.left = Math.min(e.clientX + 14, innerWidth - 270) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; };
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, a, p, text){ const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (text != null) e.textContent = text; p.appendChild(e); return e; }
+const T = (s, x, y, t, o = {}) => el('text', Object.assign({x, y, fill:css('--ink2'), 'font-family':'IBM Plex Sans, sans-serif', 'font-size':13}, o), s, t);
+const M = (s, x, y, t, o = {}) => el('text', Object.assign({x, y, fill:css('--muted'), 'font-family':'IBM Plex Mono, monospace', 'font-size':11}, o), s, t);
+function hover(n, h){ n.addEventListener('mousemove', e => showTip(e, h)); n.addEventListener('mouseleave', () => tip.hidden = true); }
+const IB = [['imajev-9b', 82.8, 77, 88, 1, 'A'], ['imajev-4b', 82.4, 77, 88, 1, 'A'], ['Qwen3.5-9B base', 76.7, 70, 82, 0, 'A'],
+  ['Qwen3.5-4B base', 70.6, 64, 78, 0, 'A'], ['imajev-2b', 70.3, 64, 77, 1, 'A'], ['Gemma 4 E4B-it', 63.1, 55, 72, 0, 'A'], ['Qwen3.5-2B base', 60.2, 53, 67, 0, 'A'],
+  ['Jev-Omni (12B)', 78.5, 73, 84, 0, 'B'],
+  ['Gemini 3.1 Pro*', 99.6, 99, 100, 0, 'C'], ['GPT-5.6 Luna*', 99.3, 98, 100, 0, 'C'], ['GPT-5.4', 98.9, 98, 100, 0, 'C'], ['Gemini 3.8 Flash', 98.2, 96, 100, 0, 'C'], ['Grok 4.3', 91.4, 87, 95, 0, 'C']];
+const GROUPLAB = {B:'other Jev-class model, own interface', C:'frontier APIs, structured generation'};
+const JB = [['JevK5 v0.2.0', 73.9, 0], ['imajev-9b', 68.5, 1], ['imajev-4b', 67.6, 1], ['Hopper', 67.6, 0], ['imajev-2b', 56.8, 1], ['cua-s1-4b', 52.3, 0], ['Qwen3.5-4B, generation', 48.6, 0], ['mojev 0.85B', 33.3, 0]];
+function axis(s, x, ticks, y0, y1){ ticks.forEach(v => { el('line', {x1:x(v), x2:x(v), y1:y0, y2:y1, stroke:css('--rule')}, s); M(s, x(v), y1 + 15, v + '%', {'text-anchor':'middle'}); }); }
+function drawIB(){
+  const box = $('#c-ib'); box.innerHTML = ''; const W = 560, rh = 24, left = 150, right = 48;
+  let y = 14; const ys = IB.map((r, i) => { if (i && r[5] !== IB[i - 1][5]) y += 26; const v = y; y += rh; return v; });
+  const H = y + 22; const s = el('svg', {viewBox:`0 0 ${W} ${H}`, role:'img', 'aria-label':'ImajevBench accuracy by system'}, box);
+  const x = v => left + (v - 50) / 50 * (W - left - right);
+  axis(s, x, [50, 60, 70, 80, 90, 100], 4, H - 20);
+  IB.forEach((r, i) => { const yy = ys[i];
+    if (i && r[5] !== IB[i - 1][5]) M(s, left, yy - 15, GROUPLAB[r[5]], {'font-size':10});
+    const col = r[4] ? css('--ink') : css('--other');
+    T(s, left - 10, yy + 4, r[0], {'text-anchor':'end', fill:r[4] ? css('--ink') : css('--ink2'), 'font-weight':r[4] ? 600 : 400});
+    el('line', {x1:x(r[2]), x2:x(r[3]), y1:yy, y2:yy, stroke:col, 'stroke-width':2}, s);
+    el('circle', {cx:x(r[1]), cy:yy, r:4, fill:col}, s);
+    M(s, x(r[3]) + 6, yy + 4, r[1].toFixed(1), {fill:r[4] ? css('--ink') : css('--muted')});
+    hover(el('rect', {x:0, y:yy - rh / 2, width:W, height:rh, fill:'transparent'}, s), `<b>${esc(r[0])}</b><br>${r[1]}% · 95% CI ${r[2]}–${r[3]}%`); });
+}
+function drawJB(){
+  const box = $('#c-jb'); box.innerHTML = ''; const W = 560, rh = 26, left = 170, right = 40, H = JB.length * rh + 36;
+  const s = el('svg', {viewBox:`0 0 ${W} ${H}`, role:'img', 'aria-label':'JevBench hard accuracy by system'}, box);
+  const x = v => left + v / 100 * (W - left - right);
+  axis(s, x, [0, 25, 50, 75, 100], 4, H - 20);
+  JB.forEach((r, i) => { const yy = 16 + i * rh; const col = r[2] ? css('--ink') : css('--other');
+    T(s, left - 10, yy + 4, r[0], {'text-anchor':'end', fill:r[2] ? css('--ink') : css('--ink2'), 'font-weight':r[2] ? 600 : 400});
+    el('rect', {x:x(0), y:yy - 6, width:x(r[1]) - x(0), height:12, fill:col}, s);
+    M(s, x(r[1]) + 6, yy + 4, r[1].toFixed(1), {fill:r[2] ? css('--ink') : css('--muted')});
+    hover(el('rect', {x:0, y:yy - rh / 2, width:W, height:rh, fill:'transparent'}, s), `<b>${esc(r[0])}</b><br>${r[1]}% of 111 hard items`); });
+}
+function draw(){ drawIB(); drawJB(); }
+draw();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+new MutationObserver(draw).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+/* ---- developer code ---- */
+const CODE = {
+  run: {'Mac (MLX)': `git clone https://github.com/mohit67890/imajev && cd imajev
+python3.11 -m venv .venv && source .venv/bin/activate
+pip install -e ".[serve,mlx]"
+python scripts/download_model.py --model 4b
+hf download mohit67890/imajev-4b --local-dir adapters/imajev-4b
+PYTHONPATH=src:scripts python scripts/playground/server.py \\
+  --model-bundle artifacts/model-qwen4b.json --adapter adapters/imajev-4b/mlx \\
+  --calibration adapters/imajev-4b/calibration.json --model-name imajev-4b --port 8765`,
+  'Linux (CUDA)': `git clone https://github.com/mohit67890/imajev && cd imajev
+python3.11 -m venv .venv && source .venv/bin/activate
+pip install -e ".[serve,torch]"
+python scripts/download_model.py --model 4b
+hf download mohit67890/imajev-4b --local-dir adapters/imajev-4b
+PYTHONPATH=src:scripts python scripts/playground/server.py --backend torch \\
+  --model-bundle artifacts/model-qwen4b.json --adapter adapters/imajev-4b \\
+  --calibration adapters/imajev-4b/calibration.json --model-name imajev-4b --port 8765`},
+  jev: `import requests
+
+BASE = "http://127.0.0.1:8765"      # was https://api.typesafe.ai
+
+r = requests.post(f"{BASE}/v1/systemone", json={
+    "model": "jev-latest",
+    "state": "Help! My payouts have been failing for 3 days.",
+    "questions": {
+        "is_urgent": {"type": "noul",
+                      "instructions": "Does this convey urgency?"}}})
+
+a = r.json()["answers"]["is_urgent"]
+print(a["noul"], a["unknown_probability"], a["abstained"])
+# 0.911 0.009 False   (imajev-4b, calibrated, 171 ms on a Mac Studio)`};
+let os = 'Mac (MLX)';
+(function(){ const g = $('#seg-os'); g.innerHTML = Object.keys(CODE.run).map(k => `<button type="button" data-k="${k}">${k}</button>`).join('');
+  const set = () => { g.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === os))); $('#code-run').textContent = CODE.run[os]; };
+  g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { os = b.dataset.k; set(); })); set(); })();
+$('#code-jev').textContent = CODE.jev;
+document.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', async () => {
+  const k = btn.dataset.copy; const text = k === 'run' ? CODE.run[os] : CODE[k];
+  try { await navigator.clipboard.writeText(text); btn.textContent = 'Copied'; }
+  catch { const r = document.createRange(); r.selectNodeContents($('#code-' + k)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected'; }
+  setTimeout(() => btn.textContent = 'Copy', 1500); }));
+</script>

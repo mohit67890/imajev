@@ -1,0 +1,33 @@
+{
+ "schema_version": "1.1",
+ "calibration_version": "p2b-4b-best-jevstyle-dev",
+ "temperatures": {
+  "boolean:2": 2.32,
+  "choice:2": 2.32,
+  "choice:3-5": 2.32,
+  "choice:6-10": 2.32,
+  "choice:11-25": 2.32,
+  "choice:26-254": 2.32,
+  "ordinal:2": 2.32,
+  "ordinal:3-5": 2.32,
+  "ordinal:6-10": 2.32
+ },
+ "unknown_offsets": {},
+ "fit": {
+  "set": "data/manifests/decision-p2b-jevstyle-dev.jsonl (150 authored JevBench-style items, no JevBench items)",
+  "method": "single temperature by NLL, applied to every (type, option-count) bucket",
+  "note": "the pod's held-out-domain fold (accuracy ~85%) under-corrects on JevBench hard (accuracy ~68%); offsets left at 0 pending the off-distribution (MMLU/irrelevance) check; 2026-09-24: written out for every (type, option-count) bucket, because the server serves any bucket missing from the file uncalibrated (T=1)",
+  "counts_note": "one temperature fitted on all 150 dev items and applied to every bucket, so every bucket's count is the size of that fit set"
+ },
+ "counts": {
+  "boolean:2": 150,
+  "choice:2": 150,
+  "choice:3-5": 150,
+  "choice:6-10": 150,
+  "choice:11-25": 150,
+  "choice:26-254": 150,
+  "ordinal:2": 150,
+  "ordinal:3-5": 150,
+  "ordinal:6-10": 150
+ }
+}

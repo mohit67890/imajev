@@ -18,20 +18,24 @@ const arg = (name, fallback) => {
 };
 const API = arg('api', 'http://127.0.0.1:8765');
 const PACK = arg('pack', 'scenarios');
+const DATA = arg('data', 'scenarios.js');                       // e.g. --pack wardrobe --data stylist.js
+const TAG = DATA === 'scenarios.js' ? PACK : `${PACK}-${DATA.replace(/\.js$/, '')}`;
 const STATIC = join(HERE, 'static', PACK);
-const OUT = resolve(ROOT, arg('out', `reports/scenarios/verification-${PACK}.json`));
+const model = await (await fetch(`${API}/v1/models`)).json();
+// Results are per served model: the pages load the file for the model they are talking to.
+const OUT = resolve(ROOT, arg('out', `reports/scenarios/${model.model}/verification-${TAG}.json`));
+const PAGE_COPY = `${DATA === 'scenarios.js' ? 'verification' : `${DATA.replace(/\.js$/, '')}-verification`}-${model.model}.json`;
 
 // Classic browser scripts: `window` is the global object, so data files can call YES_NO(...) directly.
 const sandbox = {};
 sandbox.window = sandbox;
 vm.createContext(sandbox);
 vm.runInContext(readFileSync(join(HERE, 'static/scenarios/engine.js'), 'utf8'), sandbox);
-vm.runInContext(readFileSync(join(STATIC, 'scenarios.js'), 'utf8'), sandbox);
+vm.runInContext(readFileSync(join(STATIC, DATA), 'utf8'), sandbox);
 const { SCENARIOS, buildCase, sureAt, checksOf, DEFAULT_THRESHOLD } = sandbox;
 const threshold = Number(arg('threshold', DEFAULT_THRESHOLD));
 const sure = sureAt(threshold);
 
-const model = await (await fetch(`${API}/v1/models`)).json();
 const topOf = a => (a.type === 'noul' ? a.noul.toFixed(3) : a.type === 'score' ? a.score.toFixed(2) : a.choice);
 const rows = [];
 for (const scenario of SCENARIOS) {
@@ -48,10 +52,12 @@ for (const scenario of SCENARIOS) {
     const body = await response.json();
     if (!response.ok) throw new Error(`${scenario.id}: ${JSON.stringify(body)}`);
     const route = scenario.route(body.answers, sure);
+    // A noul answer is compared as 'yes' / 'no' (P(yes) ≥ 0.5); choice answers by their top option.
+    const gotOf = a => (a.type === 'noul' ? (a.noul >= 0.5 ? 'yes' : 'no') : a.choice);
     const wrong = Object.entries(check.answer || {})
-      .filter(([key, value]) => ![].concat(value).includes(body.answers[key].choice))
-      .map(([key, value]) => `${key}=${body.answers[key].choice} (want ${[].concat(value).join(' or ')})`);
-    const pass = route.kind === check.expect && wrong.length === 0;
+      .filter(([key, value]) => ![].concat(value).includes(gotOf(body.answers[key])))
+      .map(([key, value]) => `${key}=${gotOf(body.answers[key])} (want ${[].concat(value).join(' or ')})`);
+    const pass = [].concat(check.expect).includes(route.kind) && wrong.length === 0;   // expect: a kind or a list of acceptable kinds
     const label = [check.variant, ...Object.entries(check.flips || {}).map(([k, v]) => `${k}=${v}`)].filter(Boolean).join(', ') || 'as shipped';
     rows.push({
       scenario: scenario.id, case: label, pass, expect: check.expect, got: route.kind, route, wrong,
@@ -69,5 +75,5 @@ console.log(`\n${passed}/${rows.length} checks pass at threshold ${threshold} on
 mkdirSync(dirname(OUT), { recursive: true });
 const report = JSON.stringify({ model, threshold, api: API, run_at: new Date().toISOString(), passed, total: rows.length, rows }, null, 2) + '\n';
 writeFileSync(OUT, report);
-writeFileSync(join(STATIC, 'verification.json'), report);   // shown by the page's "See the check run"
-console.log(`wrote ${OUT} and static/${PACK}/verification.json`);
+writeFileSync(join(STATIC, PAGE_COPY), report);   // shown by the page's "See the check run"
+console.log(`wrote ${OUT} and static/${PACK}/${PAGE_COPY}`);

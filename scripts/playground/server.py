@@ -35,7 +35,7 @@ from starlette.requests import Request as HttpRequest  # noqa: E402
 
 from vision_decision.images import MAX_BYTES, load_image_bytes  # noqa: E402
 from vision_decision.jev_api import to_request, to_response  # noqa: E402
-from vision_decision.scoring import compile_question, result_from_logits  # noqa: E402
+from vision_decision.scoring import combine_rotations, compile_question, cyclic_offsets, result_from_logits, rotate  # noqa: E402
 
 try:  # package import (PYTHONPATH=scripts) or plain script run
     from .examples import load_examples
@@ -101,10 +101,11 @@ class TorchBackend:
 
     name = "torch"
 
-    def __init__(self, bundle=BUNDLE, adapter=None, device=None):
+    def __init__(self, bundle=BUNDLE, adapter=None, device=None, rotations=1):
         import torch
         from torch_decision import TorchDecision
         self.torch = torch
+        self.rotations = max(1, int(rotations))
         if device is None:  # CUDA on a pod or Space, Metal on a Mac, CPU otherwise
             device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
         self.bundle = json.loads(Path(bundle).read_text())
@@ -121,20 +122,30 @@ class TorchBackend:
         self.load_seconds = perf_counter() - start
 
     def score(self, images, request):
+        """One forward per question and per presentation order; with rotations > 1 the per-candidate log-probabilities
+        are averaged over cyclic option orders exactly as the MLX path does (combine_rotations), which drops the engine's
+        vocabulary tie break; with rotations == 1 the single pass keeps it."""
         results, seconds, tokens = [], 0.0, 0
         for field in request.fields:
             header, choices, texts = compile_question(field, request.state)
             labels = self.engine.labels(len(choices), len(images))
-            prompt = header + "\n".join(f"{label}: {text}" for label, text in zip(labels, texts))
             start = perf_counter()
-            with self.torch.no_grad():
-                _, inputs, token_ids = self.engine.prepare(images, prompt, labels)
-                logits = [float(x) for x in self.engine.candidate_logits(inputs, token_ids).cpu().tolist()]
+            passes = []
+            for offset in cyclic_offsets(len(choices), self.rotations):
+                prompt = header + "\n".join(f"{label}: {text}" for label, text in zip(labels, rotate(texts, offset)))
+                with self.torch.no_grad():
+                    _, inputs, token_ids = self.engine.prepare(images, prompt, labels)
+                    logits = [float(x) for x in self.engine.candidate_logits(inputs, token_ids).cpu().tolist()]
+                tokens = max(tokens, int(inputs["input_ids"].shape[-1]))
+                passes.append((offset, logits, token_ids))
             seconds += perf_counter() - start
-            tokens = max(tokens, int(inputs["input_ids"].shape[-1]))
-            results.append(result_from_logits(choices, logits, token_ids=token_ids))
+            if len(passes) == 1:
+                results.append(result_from_logits(choices, passes[0][1], token_ids=passes[0][2]))
+            else:
+                results.append(combine_rotations(choices, [(offset, logits) for offset, logits, _ in passes]))
         # No shared prefill on this path: the whole cost is reported per question.
-        return results, {"prefill_ms": 0.0, "questions_ms": round(seconds * 1000, 1), "input_tokens": tokens}
+        return results, {"prefill_ms": 0.0, "questions_ms": round(seconds * 1000, 1), "input_tokens": tokens,
+                         "rotations": self.rotations}
 
 
 def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations=1):
@@ -155,7 +166,7 @@ def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations
     if kind == "mlx":
         return MLXBackend(bundle, chosen, rotations=rotations)
     if kind == "torch":
-        return TorchBackend(bundle, chosen)
+        return TorchBackend(bundle, chosen, rotations=rotations)
     raise ValueError(f"Unknown backend {kind!r}")
 
 
@@ -337,7 +348,7 @@ def main(argv=None):
     parser.add_argument("--adapter", help="override the adapter directory")
     parser.add_argument("--no-adapter", action="store_true", help="serve the base model")
     parser.add_argument("--model-bundle", default=str(BUNDLE))
-    parser.add_argument("--rotations", type=int, default=1, help="candidate orders averaged per question (MLX)")
+    parser.add_argument("--rotations", type=int, default=1, help="candidate orders averaged per question (MLX and torch)")
     parser.add_argument("--calibration", help="held-out temperature calibration artifact")
     parser.add_argument("--model-name", help="public model name reported by the API and the UI (e.g. imajev-2b)")
     parser.add_argument("--host", default="127.0.0.1")

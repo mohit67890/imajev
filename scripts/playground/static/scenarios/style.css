@@ -70,6 +70,11 @@ code, .mono { font-family: var(--mono); }
 /* ----------------------------------------------------------- layout */
 .layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: calc(100vh - 52px); }
 .rail { border-right: 1px solid var(--line); padding: 22px 14px; position: sticky; top: 52px; height: calc(100vh - 52px); overflow: auto; }
+.rail-callout { display: block; margin: 0 4px 18px; padding: 12px 12px 13px; border-radius: 10px; text-decoration: none; font-size: 12px; color: var(--text-2); line-height: 1.45;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, var(--bg-2)), var(--bg-2)); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.rail-callout span { display: inline-block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 3px; }
+.rail-callout b { display: block; color: var(--text); font-size: 14px; margin-bottom: 2px; }
+.rail-callout:hover { border-color: var(--accent); }
 .rail-title { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-3); margin: 0 8px 12px; }
 .rail ol { list-style: none; margin: 0; padding: 0; }
 .rail ol a { display: grid; grid-template-columns: 26px 1fr; column-gap: 6px; padding: 9px 8px; border-radius: 8px; text-decoration: none; }
@@ -115,8 +120,11 @@ figcaption { display: flex; gap: 8px; align-items: center; margin-top: 7px; font
 
 .variants { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
 .variants .label { font-size: 12px; color: var(--text-3); margin-right: 2px; }
+.seg.upload { cursor: pointer; border-style: dashed; color: var(--accent); }
+.seg.upload.on { border-style: solid; }
 
 .fields { display: flex; flex-direction: column; gap: 10px; }
+.empty-record { margin: 0; font-size: 13px; color: var(--text-3); }
 .field { display: grid; grid-template-columns: minmax(110px, 38%) minmax(0, 1fr); gap: 10px; align-items: start; }
 .field .path { font-size: 12px; color: var(--text-3); padding-top: 6px; overflow-wrap: anywhere; }
 .field.flippable .path { color: var(--accent); }
@@ -212,7 +220,7 @@ dialog td:last-child { font-family: var(--mono); text-align: right; color: var(-
 @media (max-width: 1000px) {
   .layout { grid-template-columns: 1fr; }
   .rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 10px 16px; }
-  .rail-title, .rail-note { display: none; }
+  .rail-title, .rail-note, .rail-callout { display: none; }
   .rail ol { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
   .rail ol a { display: block; white-space: nowrap; padding: 6px 10px; border: 1px solid var(--line-2); border-radius: 999px; }
   .rail ol a[aria-current="page"] { box-shadow: none; background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
@@ -223,7 +231,7 @@ dialog td:last-child { font-family: var(--mono); text-align: right; color: var(-
 @media (max-width: 560px) {
   .topbar { padding: 0 16px; gap: 10px; }
   .toplinks { gap: 10px; }
-  .toplinks .toplink:last-child { display: none; }
+  .toplinks .toplink:first-child, .toplinks .toplink:nth-child(3), .toplinks .toplink:last-child { display: none; }
   .topbar .chip { display: none; }
   .brand { white-space: nowrap; }
   h1 { font-size: 25px; }

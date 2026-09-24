@@ -1,45 +1,217 @@
-# imajev
+<p align="center">
+  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-dark.svg"><img alt="imajev" src="docs/assets/brand/logo-light.svg" width="260"></picture>
+</p>
 
-**An open Jev-style decision model that also takes images.** Photo + app state + typed questions in, calibrated probabilities out,
-locally, about 80 ms per request on a Mac.
+<h3 align="center">Decisions for real-world cases.</h3>
 
-imajev answers the kind of question application code needs answered, not prose: *is this listing consistent with the photo*, *which
-field of this form does the image contradict*, *does the target still match the reference*, *route this ticket*, *how severe is this
-report on a 1–5 scale*. Every answer is a probability distribution over the options you supplied plus an explicit `unknown`, so the
-calling code can act, abstain or escalate on a number.
+<p align="center">Small open models (2B · 4B · 9B) that read the photos, records and text a business already has and answer in the options you set,<br>
+with a probability on each and an explicit <i>can't tell</i>. Your system acts when it is sure and hands the rest to a person.</p>
 
-- **API:** the same request and response shapes as TypeSafe's Jev (`POST /v1/systemone`; question types `noul`, `choice`, `score`),
-  so anything that speaks the Jev shape can point at a local imajev server by changing the base URL. imajev adds
-  `unknown_probability` and `abstained` to every answer.
-- **Inputs:** zero, one or two images (reference and target), a string or JSON state up to 32 KB, one to eight questions per request.
-- **Output:** one forward pass per question after a shared prefill of state and images; probabilities read from a trained
-  decision readout, temperature-calibrated per question type and option count.
-- **Runs locally:** MLX on Apple silicon, PyTorch elsewhere. No network calls at inference.
+<p align="center">
+  <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/licence-Apache--2.0-111111?style=flat-square"></a>
+  <a href="https://huggingface.co/mohit67890/imajev-4b"><img alt="weights" src="https://img.shields.io/badge/weights-2B%20·%204B%20·%209B-555555?style=flat-square"></a>
+  <a href="https://huggingface.co/spaces/mohit67890/imajev"><img alt="demo" src="https://img.shields.io/badge/demo-Hugging%20Face%20Space-555555?style=flat-square"></a>
+  <a href="https://huggingface.co/datasets/mohit67890/imajev-bench"><img alt="ImajevBench" src="https://img.shields.io/badge/benchmark-ImajevBench-555555?style=flat-square"></a>
+</p>
 
-## Two models
+<p align="center"><a href="https://mohit67890.github.io/imajev/"><b>Website</b></a> · <a href="https://huggingface.co/spaces/mohit67890/imajev">Live demo</a> · <a href="#quickstart">Quickstart</a> · <a href="#checked-not-cherry-picked">Checked examples</a> · <a href="#results">Results</a> · <a href="https://mohit67890.github.io/imajev/report/">Technical report</a></p>
 
-| | **imajev-2b** (latency tier) | **imajev-9b** (quality tier, and the teacher) |
-|---|---|---|
-| Base | Qwen3.5-2B (Apache-2.0) | Qwen3.5-9B (Apache-2.0) |
-| Adapter | LoRA r16/α32 on the language layers + 255-code decision readout | same |
-| Trained on | 504k human-labelled image and text decisions, ~416k decisions on new photo and text sources labelled by the 9B, 72k image+state and two-image decisions | the 504k human-labelled decisions |
-| Latency (Mac Studio, MLX, 3-question text request) | ~80 ms | ~300 ms |
-| Strengths | state-versus-photo and reference-versus-target questions; unseen photo sources; abstention | knowledge and text judgement (MMLU 73.8%), typed workflows, generalisation to unseen photo sources |
-| Weights | [`mohit67890/imajev-2b`](https://huggingface.co/mohit67890/imajev-2b) | [`mohit67890/imajev-9b`](https://huggingface.co/mohit67890/imajev-9b) |
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/request-listing-dark.png"><img alt="imajev-4b checks a listing against its photo: listing.color says red, the photo shows beige shoes; the model names listing.color as contradicted at 0.999 and the app holds the listing" src="docs/assets/readme/request-listing-light.png"></picture></p>
 
-Use the 2B when the request has an image and latency matters. Use the 9B alone when the questions lean on world knowledge or text
-judgement and 300 ms is fine, or as the labeller when you build your own decision data (see *How the 9B teaches the 2B*).
+## One request, every answer typed
 
-## Quickstart (five minutes)
+Send the evidence and the questions you care about. Each answer comes back as a probability over the answers you allowed, ready
+for an `if`. This is the exact script we ran against imajev-4b (`site/showcase/listing.py`) and its output, with numbers rounded to
+three places and `usage` shortened; 528 ms on a Mac Studio.
+
+```python
+import json, requests
+
+URL = "http://127.0.0.1:8765/v1/systemone"
+
+listing = {
+    "title": "Men's suede boat shoes",
+    "color": "red",
+    "product_type": "shoe",
+}
+
+questions = {
+    "contradicted_field": {
+        "type": "choice",
+        "instructions":
+            "Which field of `listing` does this photo contradict?",
+        "criteria": {
+            "listing.color": None,
+            "listing.product_type": None,
+            "none of these": "the photo agrees with every field",
+        },
+    },
+    "color_matches": {
+        "type": "noul",
+        "instructions":
+            "The product in the photo matches `listing.color`.",
+    },
+    "type_matches": {
+        "type": "noul",
+        "instructions": "The photo shows the kind of product "
+                        "given in `listing.product_type`.",
+    },
+}
+
+request = {"state": {"listing": listing}, "questions": questions}
+with open("listing.jpg", "rb") as photo:
+    r = requests.post(URL, files={"image": photo},
+                      data={"request": json.dumps(request)})
+print(json.dumps(r.json(), indent=2))
+```
+
+<details><summary>Result</summary>
+
+```json
+{
+  "model": "imajev-4b",
+  "answers": {
+    "contradicted_field": {
+      "type": "choice",
+      "choice": "listing.color",
+      "probabilities": {
+        "listing.color": 0.999,
+        "listing.product_type": 0.0,
+        "none of these": 0.001
+      },
+      "confidence": 0.999,
+      "unknown_probability": 0.0,
+      "abstained": false
+    },
+    "color_matches": {
+      "type": "noul",
+      "noul": 0.002,
+      "unknown_probability": 0.0,
+      "abstained": false
+    },
+    "type_matches": {
+      "type": "noul",
+      "noul": 1.0,
+      "unknown_probability": 0.0,
+      "abstained": false
+    }
+  },
+  "usage": {
+    "total_ms": 527.7,
+    "input_tokens": 224
+  }
+}
+```
+</details>
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/request-ticket-dark.png"><img alt="A text-only support ticket answered in one request: department billing 0.999, urgent yes 0.990, frustration impatient 0.969" src="docs/assets/readme/request-ticket-light.png"></picture></p>
+<p align="center"><sub>The same endpoint with no photo: one request routes the ticket (choice), flags urgency (yes/no) and scores frustration (score). Script: <code>site/showcase/ticket.py</code>.</sub></p>
+
+## What sets it apart
+
+Jev reads text only. General vision models answer in prose, from a hosted API, in seconds. imajev brings Jev's typed answers to
+photos, and runs on your own hardware.
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/highlights-dark.png"><img alt="Five highlights: a photo read against your record; two photos, one decision; a trained can't tell; open, small and local; Jev's contract, now with images" src="docs/assets/readme/highlights-light.png"></picture>
+
+- **A photo read against your record.** Checks a photo against the fields in your own data and names the field that is wrong.
+  Trained on 72k photo-vs-record and two-photo decisions.
+- **Two photos, one decision.** A reference and a target in one request: what was shipped against what came back, a known-good
+  part against the one on the line.
+- **A trained *can't tell*.** Every answer carries a probability for `unknown`. Asked for a white or beige bag from a closet with only
+  a red and a black backpack, the 4B puts 0.89 on unknown instead of guessing.
+- **Open, small and local.** Apache-2.0 weights from 2B. A Mac or one GPU, about 0.1 s per question; photos and customer data never
+  leave your network.
+- **Jev's contract, now with images.** The same request and response as TypeSafe's Jev, plus `images`, `unknown_probability` and
+  `abstained`. Text-only Jev requests work unchanged.
+
+| | **imajev** | Jev (TypeSafe) | Jev-Omni | Frontier vision APIs |
+|---|---|---|---|---|
+| photos in a request | **up to 2 (reference + target)** | none, text only | yes; two-photo requests not documented | yes |
+| answer format | **probability per option you set** | probability per option you set | probability per option you set | generated text or JSON |
+| says it can't tell | **trained `unknown`, 15 / 21 on ImajevBench** | not documented | no abstain output, so 0 / 21 | only if prompted |
+| record per request | **32 KB (about 8k tokens)** | 32k tokens | not documented | large |
+| where it runs | **your hardware, open weights** | hosted API | your hardware, open weights (12B) | hosted API |
+| time per decision | **about 0.1 s (one H100)** | not documented | about 0.1 s (one H100) | 5 to 8 s |
+| ImajevBench accuracy | **82.4% (4B)** | cannot take photos | 78.5% | 91.4% to 99.6% |
+
+<sub>Jev from docs.typesafe.ai (models page, Jev 1.13.0). Jev-Omni from its model card and our run of its own `predict()` API.
+Frontier rows and all ImajevBench numbers from our runs, 24 Sept 2026; frontier models answer by structured generation, a different
+interface. Jev's record limit is larger than imajev's.</sub>
+
+## Where it fits
+
+The decisions it handles well are the high-volume, well-defined ones with a clear set of answers.
+
+| Area | Decisions (each a checked example on the [website](https://mohit67890.github.io/imajev/#uses)) |
+|---|---|
+| Marketplaces and retail | listing matches its photo · return is the item we shipped · tag a product from a photo |
+| Manufacturing and field work | reject a chipped part against a known-good reference · spot what changed on site |
+| Customer support | route a ticket and flag urgency · refund against the policy · send a review to the right team |
+| Trust and safety | remove spam, harassment and doxxing · ask for a better photo |
+| Back office and records | email contradicts the CRM · is the invoice paid? · catalogue record is wrong |
+
+## Automate what is clear, route the rest
+
+You choose how sure the model must be before it acts. A higher bar automates less and makes fewer mistakes; everything below it goes
+to a person, including when it says it can't tell.
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/automation-dark.png"><img alt="At a 90% threshold imajev-4b decides 63% of ImajevBench questions automatically, 91.5% of them correctly, and sends 37% to a person" src="docs/assets/readme/automation-light.png"></picture>
+
+| Act when at least… | imajev-2b | imajev-4b | imajev-9b |
+|---|---|---|---|
+| 80% sure | 51% automated, 90.2% right | 71% automated, 88.8% right | 82% automated, 85.5% right |
+| 90% sure | 38% automated, 95.3% right | 63% automated, 91.5% right | 75% automated, 89.0% right |
+| 99% sure | 21% automated, 100% right | 49% automated, 98.6% right | 61% automated, 97.0% right |
+
+<sub>The 279 ImajevBench test questions (photos, records and text; 21 whose honest answer is *can't tell*), raw probabilities,
+scored with the benchmark's own rule. The benchmark is built to be hard, so treat these as a starting point and measure on a few
+hundred of your own cases before choosing.</sub>
+
+## Checked, not cherry-picked
+
+Every example comes from one of five small apps in `scripts/playground/`. Every combination a visitor can click in them is sent to
+the model and compared with the right answer (`node scripts/playground/verify_scenarios.mjs`); a check passes when the answer is
+right and the app takes the expected action at an 80% threshold. imajev-4b, served without its calibration file:
+
+| App | | What it asks | Passed | With the calibration file |
+|---|---|---|---:|---:|
+| <img src="docs/assets/apps/scenarios.jpg" width="220" alt="Business checks app"> | **Business checks** | Does the photo match the listing? Is the return the item we shipped? Is this part chipped? | 21 / 21 | 20 / 21 |
+| <img src="docs/assets/apps/text.jpg" width="220" alt="Text-only app"> | **Text only** | An email against a CRM record, a refund against the policy, a post against forum rules, a review, an inbox. Written for the launch and run once. | 20 / 21 | 16 / 21 |
+| <img src="docs/assets/apps/wardrobe.jpg" width="220" alt="Wardrobe app"> | **Wardrobe** | Is this what I ordered, does it meet the dress code, do I already own it, which shoes match? | 47 / 49 | 38 / 49 |
+| <img src="docs/assets/apps/stylist.png" width="150" alt="Stylist phone app"> | **Stylist app** | Reads a piece of clothing, then picks bottoms, shoes and a bag from your closet in your colours. | 19 / 24 | 19 / 24 |
+| <img src="docs/assets/apps/tracing.png" width="150" alt="Tracing pad phone app"> | **Tracing pad** | Reads which letter or number a child traced; the app checks the strokes covered every line. | 22 / 30 | 20 / 30 |
+| | **All** | | **129 / 145** | **113 / 145** |
+
+With the calibration file the top answer never changes, but confidence is lower, so more cases go to a person at 80%. The misses
+worth knowing: with a blank payment note the 4B answered "not paid" instead of unknown, and it reads 8 of 10 scribbles on the tracing
+pad as letters. Every run, pass or miss, is in `results/scenarios/`.
+
+## Three sizes
+
+| | **imajev-2b** (latency) | **imajev-4b** (recommended default) | **imajev-9b** (quality) |
+|---|---|---|---|
+| Base | Qwen3.5-2B (Apache-2.0) | Qwen3.5-4B (Apache-2.0) | Qwen3.5-9B (Apache-2.0) |
+| Adapter | LoRA r16/α32 on the language layers + 255-code decision readout; vision tower frozen | same | same |
+| ImajevBench v2.0-lite test | 70.3% | 82.4% | 82.8% |
+| JevBench public hard (111) | 56.8% | 67.6% | 68.5% (69.4% with 4 rotations) |
+| p50 per decision, JevBench hard item, 1×H100, serial | 68 ms | 85 ms | 80 ms (262 ms with 4 rotations) |
+| Use it when | latency or memory is the constraint | almost always: statistically tied with the 9B on ImajevBench | knowledge-heavy text questions, and memory is not a constraint (~19 GB resident) |
+| Weights | [`mohit67890/imajev-2b`](https://huggingface.co/mohit67890/imajev-2b) | [`mohit67890/imajev-4b`](https://huggingface.co/mohit67890/imajev-4b) | [`mohit67890/imajev-9b`](https://huggingface.co/mohit67890/imajev-9b) |
+
+Start with the 4B. On ImajevBench it is within noise of the 9B (82.4% vs 82.8%, paired test p = 1.0) and one point behind it on
+JevBench hard. The 2B is 12 points lower on ImajevBench and 11 lower on JevBench hard; pick it when its footprint is the point.
+
+## Quickstart
 
 ```sh
 git clone https://github.com/mohit67890/imajev && cd imajev
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -e ".[serve,mlx]"          # Apple silicon;  elsewhere: pip install -e ".[serve,torch]"
-python scripts/download_model.py       # pinned Qwen3.5-2B into .cache/ (4.3 GB)
-huggingface-cli download mohit67890/imajev-2b --local-dir adapters/imajev-2b
-PYTHONPATH=src:scripts python scripts/playground/server.py \
-  --adapter adapters/imajev-2b/mlx --calibration adapters/imajev-2b/calibration.json --port 8765
+python scripts/download_model.py --model 4b          # pinned Qwen3.5-4B into .cache/
+hf download mohit67890/imajev-4b --local-dir adapters/imajev-4b
+PYTHONPATH=src:scripts python scripts/playground/server.py --model-bundle artifacts/model-qwen4b.json \
+  --adapter adapters/imajev-4b/mlx --calibration adapters/imajev-4b/calibration.json --model-name imajev-4b --port 8765
 ```
 
 Open http://127.0.0.1:8765/ for the playground, or call the API:
@@ -49,7 +221,7 @@ curl -s http://127.0.0.1:8765/v1/systemone \
   -F 'request={"state":{"listing":{"title":"Blue ceramic mug, 350 ml","colour":"blue"}},
                "questions":{"matches":{"type":"noul","instructions":"Does the photo show the listed item?"},
                             "wrong_field":{"type":"choice","instructions":"Which listing field does the photo contradict?",
-                                           "options":["title","colour","none"]}}}' \
+                                           "criteria":{"title":null,"colour":null,"none":null}}}}' \
   -F image=@photo.jpg
 ```
 
@@ -58,87 +230,163 @@ import requests
 r = requests.post("http://127.0.0.1:8765/v1/systemone", json={
     "state": "Ticket: 'Charged twice for one order, need the duplicate refunded.'",
     "questions": {"queue": {"type": "choice", "instructions": "Route the ticket.",
-                            "options": ["billing", "shipping", "account", "other"]},
-                  "urgency": {"type": "score", "instructions": "How urgent, 1 low to 5 high?", "min": 1, "max": 5}}})
+                            "criteria": {"billing": None, "shipping": None, "account": None, "other": None}},
+                  "urgency": {"type": "score", "instructions": "How urgent is this ticket?",
+                              "criteria": ["can wait a week", "this week", "today", "within the hour", "right now"]}}})
 print(r.json()["answers"]["queue"])   # {"type": "choice", "choice": "billing", "probabilities": {...}, "confidence": ..., "unknown_probability": ..., "abstained": false}
 ```
 
-On PyTorch, pass `--backend torch --adapter adapters/imajev-2b`. For the 9B: `python scripts/download_model.py --model 9b`,
-download `mohit67890/imajev-9b`, and start the server with `--model-bundle artifacts/model-qwen9b.json`.
+On Linux / CUDA, add `--backend torch` and pass `--adapter adapters/imajev-4b` (the PEFT adapter at the repo root). For the other
+sizes, swap `4b` for `2b` or `9b` in the download commands, the bundle (`artifacts/model-qwen9b.json` for the 9B; the 2B is the
+default bundle) and the adapter paths. `--rotations 4` averages four option orders (on the 9B: +0.9 on JevBench hard at about 3×
+the latency). The 9B needs ~19 GB resident; do not keep it and another model loaded on the same Mac.
+
+## For developers
+
+**What comes back.** For each question: `choice` / `score` return `probabilities` over your options (summing to 1, given that the
+model answers); `noul` returns P(yes) with half of the unknown mass added, as in Jev. Every answer also has `unknown_probability`
+(mass on the trained *unknown*: missing, contradictory or out-of-scope evidence), `abstained` (unknown was the most likely outcome)
+and `confidence`. Limits per request: up to 2 images, a state up to 32 KB, 1 to 8 questions, 2 to 254 options, 2 to 10 score levels.
+
+**Acting on it.** Act above a threshold you choose from your own error costs; send abstentions and low-confidence answers to a person.
+
+```python
+a = response["answers"]["contradicted_field"]
+p = a["probabilities"][a["choice"]] * (1 - a["unknown_probability"])
+if a["abstained"] or p < 0.85:
+    route_to_person(a)            # the model cannot tell, or is not sure enough
+elif a["choice"] == "none of these":
+    publish()
+else:
+    hold(field=a["choice"])
+```
+
+**Choosing a size.** Start with imajev-4b. Use the 2B when latency or memory is tight (it abstains less often than it should on
+unknown items); use the 9B for knowledge-heavy text questions when ~19 GB of weights is fine.
+
+**Checking it on your data.** Score a few hundred of your own labelled requests (include "cannot tell" cases) before trusting a
+threshold. To fit your own temperature, the evaluators in `scripts/` write one JSONL row per question with its logits, and
+`scripts/v1_text/fit_temperature_calibration.py rows.jsonl calibration.json` fits one temperature per question type and option count;
+serve it with `--calibration`. The full guide is section 5 of the [technical report](https://mohit67890.github.io/imajev/report/#s5).
 
 ## Results
 
-All numbers are single-pass, one option order, on held-out data; details, per-source tables and the base-model baselines are in
-`results/`. JevBench numbers are on the public splits of a **text-only** benchmark (111 hard / 72 original / 48 easy items) and are
-raw (uncalibrated) unless stated.
+All numbers are from our runs on 2026-09-24 with the released adapters; the raw outputs and per-panel reports are in `results/`.
+JevBench is a **text-only** benchmark; these are its public splits (111 hard / 72 original / 48 easy) run with the jevbench harness
+and the typesafe adapter on one H100, raw (uncalibrated) unless stated. **No official JevBench leaderboard number exists for imajev
+yet**; a measurement will be requested at launch, and nothing below is one.
 
-| Panel | imajev-2b | imajev-9b | Notes |
-|---|---:|---:|---|
-| v1 image exam, 5 held-out photo sources (4,989) | 53.6% | 55.9% | base Qwen3.5-2B 39.4%; earlier 2B releases 50.7% |
-| · real two-image comparisons (177) | 51.4% | 26.6% | |
-| State-grounding probe (200, authored) | 73.0% | 72.5% | templated: measures the trained relation, not generalisation |
-| Two-image pairs probe (60, authored) | 100% | 81.7% | templated, see above |
-| In-distribution test, 35,528 image+text decisions | 86.3%* | 89.0% | *step-50 sibling of the released checkpoint; ECE after calibration 0.03 / 0.007 |
-| MMLU-1000, text-only | 45.2% | 73.8% | the 2B abstains on ~25% of knowledge questions |
-| typed-decisions test (2,000) | 59.7%* | 66.2% | |
-| JevBench hard (111) / original (72) / easy (48) | 43.2 / 84.7 / 100 | 42.3 / 98.6 / 100 | 9B calibrated; kev 4B 42.3 hard, kev 8B 47.3 |
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/charts/imajevbench-dark.svg"><img alt="ImajevBench v2.0-lite accuracy with 95% intervals: imajev-9b 82.8%, imajev-4b 82.4%, Jev-Omni 78.5%, Qwen3.5-9B base 76.7%, Qwen3.5-4B base 70.6%, imajev-2b 70.3%, Gemma 4 E4B 63.1%, Qwen3.5-2B base 60.2%, SmolVLM2 28.7%" src="docs/assets/charts/imajevbench-light.svg"></picture>
 
-Reading: the 2B is the first open decision model that reads a state against a photo and a target against a reference; on those
-questions it matches or exceeds its 9B teacher. Multi-step reasoning (JevBench hard) does not improve with this recipe at either
-size, and the 2B abstains more than we would like on pure knowledge questions. See *Limitations*.
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/charts/jevbench-dark.svg"><img alt="JevBench public hard split: JevK5 73.9, imajev-9b 69.4 with rotations and 68.5 raw, imajev-4b 67.6, Hopper 67.6, imajev-2b 56.8, cua-s1 52.3, Qwen3.5-4B base 48.6, mojev 33.3" src="docs/assets/charts/jevbench-light.svg"></picture>
+
+| Panel | imajev-2b | imajev-4b | imajev-9b | Same-protocol references |
+|---|---:|---:|---:|---|
+| ImajevBench v2.0-lite test (279), 95% cluster CI | 70.3% [0.64, 0.77] | 82.4% [0.77, 0.88] | 82.8% [0.77, 0.88] | untuned bases 60.2 / 70.6 / 76.7%; Jev-Omni 78.5% (its own API); other small VLMs in `bench/LEADERBOARD.md` |
+| · correct Unknown (21) / false abstention (258) | 5 / 5 | 15 / 3 | 15 / 2 | |
+| JevBench hard (111) | 56.8% | 67.6% | 68.5% (69.4% rot4) | JevK5 v0.2.0 73.9%, Hopper 67.6%, Qwen3.5-4B base (structured generation) 48.6%, mojev 0.85B 33.3% |
+| JevBench original (72) / easy (48) | 91.7 / 100 | 98.6 / 100 | 100 / 100 | JevK5 97.2 / 100, Hopper 95.8 / 100 |
+| JevBench hard ECE, raw → with `calibration.json` (served) | 0.187 → 0.138 | 0.215 → 0.112 | 0.236 → 0.106 | JevK5 0.073, Hopper 0.050 |
+| MMLU-1000, text-only / with an unrelated photo | 59.8 / 54.9 | 74.5 / 72.9 | 79.2 / 78.8 | |
+| Irrelevance panel (2,823) | 67.7% | 79.4% | 83.6% | |
+| typed-decisions test (2,000) | 59.2% | 67.0% | 67.0% | |
+| Reasoning dev (6,240 authored) | 58.9% | 66.6% | 67.4% | before the last part of the hard-question stage: 64.5 / 67.8 / 69.2% |
+
+Reading:
+
+- **Competitive on JevBench's public splits, not #1.** JevK5 is ahead of every imajev size on hard; the 4B ties Hopper. The gap to
+  JevK5 is concentrated in judge-style items (4B 10/17 vs JevK5 13/17 on judge_hard). A frozen Qwen3.6-35B-A3B *with thinking*
+  scores 97.3% on hard, through a different interface: seconds and thousands of tokens per decision.
+- **The image gain is on ImajevBench.** The 4B beats its untuned base by +11.8 points [+5.1, +18.5], p = 0.0008 (exploratory,
+  paired cluster sign-flip over 89 evidence clusters). The 2B beats its base by +10.0 [+1.8, +17.8], p = 0.019 (our pre-registered test
+  against the untuned base model). The shipped 9B's gain over its base, +6.1 [+0.0, +12.7], p = 0.074, is **not significant** at
+  0.05 (same pre-registered test; the earlier version of imajev-9b the test was registered with gave +4.3, p = 0.031). Frontier APIs score 91.4–99.6% by structured generation, a different interface ranked
+  separately.
+- **Other open image-capable Jev-class models.** Jev-Omni (akhilaaa3/Jev-Omni, Gemma 4 12B) scores 78.5% on the same test through its
+  own `predict()` API. The 4B/9B lead of about 4 points is not significant (p ≈ 0.25) and comes from abstaining on Unknown items,
+  which Jev-Omni has no output for; on answerable items Jev-Omni is slightly ahead (219 vs 215 / 216) and better calibrated
+  (ECE 0.069). Details in `bench/LEADERBOARD.md`.
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/charts/calibration-dark.svg"><img alt="Reliability of imajev-4b on JevBench hard: raw confidence is well above accuracy; with the shipped calibration it tracks the diagonal. Hard ECE 0.187→0.138 (2B), 0.215→0.112 (4B), 0.236→0.106 (9B)" src="docs/assets/charts/calibration-light.svg"></picture>
 
 ## Architecture
 
 - **Readout, not generation.** Each option is bound to one of 255 single-token codes. The prompt renders the state, the images and
   the question with its option list, then a decision position; the logits of the option codes (plus the `unknown` code) at that
-  position are the decision. One prefill per request, one forward pass per question, no decoding.
+  position are the decision, read through a float32 head. One prefill per request, one forward pass per question, no decoding.
 - **Adapter.** LoRA r16/α32 on all language-model projections (attention, MLP, and the DeltaNet projections in Qwen3.5); the vision
-  tower is frozen. The readout head is a small float32 matrix over the code tokens, trained jointly.
-- **Calibration.** One temperature per (question type, option-count bucket), fitted on a held-out calibration fold; the server
-  applies it when started with `--calibration`. Optional option-order averaging (`--rotations N`) trades latency for calibration on
-  hard items.
+  tower is frozen.
+- **Calibration.** Each size ships one temperature (2B 1.61, 4B 2.32, 9B 2.19) applied to every question type × option-count
+  bucket; the server applies it when started with `--calibration`. Temperature never changes an answer, only its probability.
 - **Abstention.** `unknown` is a first-class option in training and inference. Insufficient evidence, a false premise, a mismatched
   reference or an answer outside the listed options all train toward `unknown`.
 
-## How the 9B teaches the 2B
+## How it was made
 
-1. Train the 9B on the human-labelled mixture (`results/imajev-9b/`).
-2. Collect new photos and passages under commercial-use licences and render typed questions from templates
-   (`scripts/v2/`, `docs/decision-v2-pseudolabel-spec.md`).
-3. Label each candidate with the calibrated 9B twice, in two option orders; keep it when the argmax agrees and the top probability is
-   at least 0.6 (or `unknown` at least 0.5). About 74–84% of candidates survive. The kept distribution becomes a soft target.
-4. Blend the human-labelled rows with the base 2B's own distribution (0.5 / 0.5) as a regulariser against forgetting, and fine-tune the
-   2B briefly from its previous adapter.
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/training-dark.png"><img alt="Training decisions to scale: 504k human-labelled, 488k labelled by our 9B, 23k hard questions kept on teacher agreement" src="docs/assets/readme/training-light.png"></picture></p>
 
-The same pipeline works with your own data: point `scripts/v2/pseudo_label.py` at records with `target: null` and the 9B adapter.
+About a million training decisions in three stages, on open base models, for about $570 of rented GPU time for the whole project.
+The 2B and 4B went through all three stages (the 4B in one combined run of stages 1 and 2); the 9B, which produced the stage-2
+labels, went from stage 1 to stage 3.
+
+### Training recipe
+
+1. **Licence-checked decisions (the 9B's first stage).** Human-labelled image and text decisions from licence-verified sources,
+   including roughly 300k image decisions converted from 21 public vision datasets.
+2. **New photo sources and pairs (the 2B and 4B).** An earlier version of imajev-9b, trained on stage 1, labelled roughly 416k
+   decisions on new photo and text sources; a label was kept only when two option orders agreed and the top probability was at
+   least 0.6 (or `unknown` at least 0.5). Roughly 72k state-grounded (photo vs record) and two-image (reference vs target) decisions
+   whose labels are known by construction were added on top.
+3. **Hard typed questions (all sizes).** 17,900 hard typed questions: synthetic documents and questions written by Qwen3.6-27B,
+   answered independently by Qwen3.6-27B (thinking) and gpt-oss-20b, kept only on agreement (9,368 of 13,386), plus
+   licence-verified human reasoning sets. 2 epochs, lr 3e-5. This is what restored reasoning: the stage-1 recipe had taken the 9B
+   from 64.9% (untuned base) to 42.3% on JevBench hard; after these questions it scored 67.6%. The last part of the hard-question
+   stage: 2,699 documents → 8,097 questions → 4,852 kept by unanimous agreement of three open-weight answerers (adding
+   Qwen3.6-35B-A3B thinking), plus 30% replay of the earlier hard questions (9,066 rows). 2 epochs, lr 2e-5, continuing from the
+   adapters trained on the earlier hard questions.
+
+Every teacher is open-weight. No JevBench items (8-gram contamination lint), no Jev outputs and no paid-API outputs were used in
+training. Total rented GPU across the project: about $570 on RunPod.
+
+The pseudo-labelling pipeline (`scripts/v2/pseudo_label.py`) and the hard-question pipeline (`scripts/p2/`) work on your own data.
 
 ## ImajevBench
 
-A benchmark for typed decisions over text **and photos**, with text-only, visual and joint items and an explicit Unknown reference.
-The v2.0-lite preview (533 items) and its datasheet are in `bench/`; the harness is `src/imajev_bench`. Frontier API models score
-about 99% on the preview, which is disclosed as a sanity check for them; the intended subjects are small local models.
+JevBench is text-only, so imajev ships a benchmark that is not. ImajevBench v2.0-lite has text-only, visual and joint (photo +
+state) items with an explicit Unknown reference; the test split is 279 items in 89 evidence clusters, 21 with an Unknown reference.
+It reports cluster-bootstrap CIs and pre-registered paired tests, and ranks direct option scoring and structured generation
+separately. It is a **preview**: all images are AI-generated and there has been no human audit yet. Data and datasheet in `bench/`,
+harness in `src/imajev_bench`, leaderboard in `bench/LEADERBOARD.md`. Run your model and send the row.
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/charts/uplift-dark.svg"><img alt="ImajevBench accuracy, untuned base vs imajev adapter: 2B 60.2→70.3, 4B 70.6→82.4, 9B 76.7→82.8" src="docs/assets/charts/uplift-light.svg"></picture>
 
 ## Data and licences
 
-- Code and adapters: Apache-2.0. Base models: Qwen3.5-2B and Qwen3.5-9B, Apache-2.0.
-- Training data is admitted per source under a verified licence receipt (`scripts/v1_text/common.py`). Text sources are
-  Apache-2.0, MIT, CC0 or CC-BY / CC-BY-SA datasets. New photo sources: PD12M (CC0), Wikimedia Commons (CC0 / CC-BY, checked
-  per file), Open Images (CC-BY-2.0). The 21 image sources inherited from v1 are admitted under their annotation licences with the
-  photos remaining under their upstream terms ("policy A"); the receipts and the per-source table are in the results directory.
-- No Jev outputs, no paid APIs and no benchmark test items were used in training. JevBench and typed-decisions test items were only
-  ever evaluated on.
+- Code and adapters: Apache-2.0. Base models: Qwen3.5-2B, -4B and -9B, Apache-2.0.
+- Training data is admitted per source under a verified licence receipt (`scripts/v1_text/common.py`). New photo sources: PD12M
+  (CC0), Wikimedia Commons (CC0 / CC-BY, checked per file), Open Images (CC-BY-2.0). The 21 image sources from stage 1 are
+  admitted under their annotation licences with the photos remaining under their upstream terms (not redistributed); the receipts
+  and the per-source table are in `results/`.
+- No Jev outputs, no paid-API outputs and no benchmark test items were used in training. JevBench and typed-decisions test items
+  were only ever evaluated on.
 - The models output probabilities over options you supply. They are not a safety, medical, legal or hiring certificate.
 
 ## Limitations
 
-- JevBench hard sits at ~43% for both sizes: the single-pass readout does not acquire multi-step rule application from scale or
-  from this data. A reasoning pass before the readout is future work.
-- imajev-2b abstains on about a quarter of pure knowledge questions (MMLU 45% vs 54% for its predecessor); the mitigation is a
-  per-type offset on the unknown logit, which is being added to the calibration artefact.
-- Two-image comparison generalises less than the templated probe suggests: 51% on 177 real held-out pairs.
-- Counting is weak at both sizes (~32–40% on the held-out counting panel).
-- Calibration temperatures are fitted in distribution; on off-distribution items the raw probabilities are better calibrated than the
-  fitted ones.
+- **Single pass, no reasoning at inference.** JevBench hard trails reasoning models; JevK5 is ahead of every size.
+- **Over-confident without calibration.** Raw hard-item ECE is 0.19–0.24; serve with `--calibration`.
+- **Photo-only caveat.** On photo-only verification (ABO + VizWiz) the raw probabilities are already calibrated and the shipped
+  temperature over-softens them (4B 0.038 → 0.062, 9B 0.027 → 0.053). For mostly photo-against-record traffic, serve without
+  `--calibration` or fit your own temperature.
+- **The last part of the hard-question stage cost some reasoning-dev accuracy** on our authored set: 2B −5.6, 4B −1.2, 9B −1.8 points.
+- **Our pre-registered test against the untuned base model is not significant for the shipped 9B**, and the 4B and 9B are statistically indistinguishable on ImajevBench.
+- **The 2B abstains too rarely on ImajevBench's Unknown items** (5/21, vs 15/21 for the 4B and 9B). The ImajevBench test split was
+  also one input to choosing the 2B checkpoint, so its number there is not a pure held-out estimate.
+- **An empty field can read as "no".** In the checked text app, a blank payment note was answered "not paid" (P = 0.06) instead of
+  unknown. Unknown is trained for missing evidence, not guaranteed.
+- **Scribbles read as letters.** The tracing pad reads 20 of 20 traced characters but calls 8 of 10 scribbles a letter.
+- **Two-image comparison is the weakest visual task** (an earlier imajev-4b, before the hard-question stage: 41.8% on real pairs; not re-run on the released adapters).
+- English only; at most two images, 32 KB state, 254 options, 8 questions per request. ImajevBench images are AI-generated.
 
 ## Repository map
 
@@ -146,8 +394,10 @@ about 99% on the preview, which is disclosed as a sanity check for them; the int
 - `scripts/playground/` the local server and the playground UI.
 - `scripts/train_decision_lora_torch.py`, `scripts/torch_decision.py` training and the PyTorch path.
 - `scripts/v2/` data collection, templates and the 9B pseudo-labelling pipeline.
+- `scripts/p2/` hard typed-question generation, answering, assembly and temperature fitting.
 - `src/imajev_bench/`, `bench/` the benchmark.
-- `results/` every evaluation we report, with calibration artefacts and JevBench summaries.
+- `results/` every evaluation we report: `results/imajev-1.0/` (the released models and their calibration files), `results/benchmarks/`
+  (JevBench and ImajevBench runs), plus reports on earlier checkpoints (`results/earlier-checkpoints/`).
 - `docs/` specs and the run book.
 
 ## Citation
@@ -156,6 +406,6 @@ See `CITATION.cff`.
 
 ## Acknowledgements
 
-Qwen3.5 (Alibaba) for the base models; TypeSafe's Jev documentation for the request contract this project mirrors; JevBench
-(fstandhartinger/jevbench) for the public text splits; kev (jaredpalmer/kev) as the sibling text-only project whose recipe notes
-were useful; PD12M (Spawning), Wikimedia Commons and Open Images for photos.
+Qwen3.5 (Alibaba) for the base models; Qwen3.6 and gpt-oss (OpenAI) as open-weight teachers; TypeSafe's Jev documentation for the
+request contract this project mirrors; JevBench (fstandhartinger/jevbench) for the public text splits; kev (jaredpalmer/kev) as the
+sibling text-only project whose recipe notes were useful; PD12M (Spawning), Wikimedia Commons and Open Images for photos.

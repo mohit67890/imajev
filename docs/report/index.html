@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:image" content="https://mohit67890.github.io/imajev/report/assets/social-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>imajev 1.0</title>
+<meta name="description" content="imajev: open Jev-class typed-decision models trained for images and text. Results, examples, calibration, a developer guide and limits.">
+<link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root{
+  --paper:#FFFFFF; --wash:#F6F6F4; --ink:#111111; --ink2:#3D3D3D; --muted:#6E6E6B; --rule:#E3E3DF; --track:#EFEFEC;
+  --ours:#111111; --other:#8F8F8A; --unknown:#8F8F8A; --link:#111111;
+  --serif:"Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --sans:"IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --measure:40rem; --wide:62rem;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark;
+  --paper:#111213; --wash:#18191A; --ink:#EDEDEA; --ink2:#C4C4BF; --muted:#8E8E89; --rule:#2A2A28; --track:#1E1E1D;
+  --ours:#EDEDEA; --other:#6A6A66; --unknown:#6A6A66; --link:#EDEDEA; } }
+:root[data-theme="dark"]{ color-scheme:dark;
+  --paper:#111213; --wash:#18191A; --ink:#EDEDEA; --ink2:#C4C4BF; --muted:#8E8E89; --rule:#2A2A28; --track:#1E1E1D;
+  --ours:#EDEDEA; --other:#6A6A66; --unknown:#6A6A66; --link:#EDEDEA; }
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font:18px/1.62 var(--serif); margin:0; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility}
+a{color:var(--link); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px; text-decoration-color:var(--muted)}
+a:hover{text-decoration-color:var(--ink)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+p{margin:0}
+h1,h2,h3{font-family:var(--serif); font-weight:600; text-wrap:balance; margin:0; letter-spacing:-0.01em}
+h1{font-size:clamp(2rem,4.4vw,2.9rem); line-height:1.1; font-variation-settings:"opsz" 60}
+h2{font-size:1.55rem; line-height:1.2; font-variation-settings:"opsz" 40}
+h3{font-size:1.1rem; line-height:1.3; font-variation-settings:"opsz" 20}
+code{font:.84em var(--mono); background:var(--wash); padding:.08em .32em; border-radius:3px}
+.mono{font-family:var(--mono)} .muted{color:var(--muted)}
+.label{font:500 .72rem/1.2 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+
+.bar-top{border-bottom:1px solid var(--rule)}
+.bar-top .in{max-width:76rem; margin:0 auto; padding:14px clamp(16px,4vw,40px); display:flex; gap:20px; align-items:center; flex-wrap:wrap; font:.86rem var(--sans)}
+.word{display:flex; align-items:center; gap:9px; font:500 1.02rem/1 var(--mono); color:var(--ink); text-decoration:none; letter-spacing:-0.01em}
+.word img{width:22px; height:22px}
+.word .d{display:none}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .word .l{display:none} :root:not([data-theme="light"]) .word .d{display:block} }
+:root[data-theme="dark"] .word .l{display:none} :root[data-theme="dark"] .word .d{display:block}
+.bar-top nav{margin-left:auto; display:flex; gap:18px; flex-wrap:wrap}
+.bar-top nav a{text-decoration:none; color:var(--ink2)} .bar-top nav a:hover{color:var(--ink); text-decoration:underline}
+.frame{max-width:76rem; margin:0 auto; padding-inline:clamp(16px,4vw,40px); display:grid; grid-template-columns:12rem minmax(0,1fr); gap:clamp(24px,4vw,56px)}
+.toc{position:sticky; top:calc(env(safe-area-inset-top,0px) + 24px); align-self:start; padding-top:56px; font:.84rem/1.5 var(--sans)}
+.toc ol{list-style:none; padding:0; margin:12px 0 0; display:grid; gap:6px}
+.toc a{text-decoration:none; color:var(--muted); display:grid; grid-template-columns:1.6rem 1fr}
+.toc a:hover,.toc a[aria-current="true"]{color:var(--ink)}
+.toc .n{font-family:var(--mono); font-size:.76rem; padding-top:2px}
+main{min-width:0; padding-block:56px 0}
+.col{max-width:var(--measure)} .wide{max-width:var(--wide)}
+.col > * + *{margin-top:1em}
+section{padding-top:64px} section h2{display:flex; gap:14px; align-items:baseline; margin-bottom:18px}
+section h2 .n{font:500 .95rem var(--mono); color:var(--muted)}
+.lead{font-size:1.2rem; line-height:1.55; color:var(--ink2)}
+.meta{font:.85rem/1.6 var(--sans); color:var(--muted); display:flex; gap:6px 18px; flex-wrap:wrap}
+
+.tw{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font:.9rem/1.4 var(--sans)}
+th,td{text-align:left; padding:8px 12px 8px 0; border-bottom:1px solid var(--rule); vertical-align:baseline}
+thead th{font:500 .72rem/1.2 var(--mono); letter-spacing:.05em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--ink)}
+td.n,th.n{text-align:right; font-family:var(--mono); font-size:.86rem; font-variant-numeric:tabular-nums; padding-right:0; padding-left:12px; white-space:nowrap}
+tr.ours td{font-weight:600}
+
+figure{margin:0} figcaption{font:.85rem/1.55 var(--sans); color:var(--muted); margin-top:12px; max-width:var(--measure)}
+figcaption b{color:var(--ink2); font-weight:600}
+.spec{display:grid; grid-template-columns:minmax(0,11rem) minmax(0,1fr); gap:28px; padding-block:20px; border-block:1px solid var(--ink)}
+.spec img{width:100%; height:auto; display:block}
+.kv{display:grid; grid-template-columns:auto minmax(0,1fr); gap:6px 16px; font:.86rem/1.4 var(--mono)}
+.kv .k{color:var(--muted)}
+.opts{display:flex; gap:4px; flex-wrap:wrap}
+.opt{font:.82rem/1 var(--mono); padding:5px 8px; border:1px solid var(--rule); background:var(--paper); color:var(--ink2); cursor:pointer; border-radius:3px}
+.opt[aria-pressed="true"]{border-color:var(--ink); color:var(--ink); background:var(--wash)}
+.opt:hover{border-color:var(--ink2)}
+.q{font:500 1rem/1.4 var(--sans)}
+.readout{display:grid; gap:6px; font:.84rem/1.2 var(--mono)}
+.r{display:grid; grid-template-columns:minmax(0,12rem) minmax(0,1fr) 3.2rem; gap:12px; align-items:center; color:var(--ink2)}
+.r .name{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.r .t{display:block; height:8px; background:var(--track)}
+.r .f{display:block; height:100%; background:var(--other); transition:width .4s ease}
+.r.top{color:var(--ink); font-weight:500} .r.top .f{background:var(--ours)}
+.r.unk .f{background:repeating-linear-gradient(135deg, var(--unknown) 0 1.5px, transparent 1.5px 4px); box-shadow:inset 0 0 0 1px var(--unknown)}
+.r .v{text-align:right; font-variant-numeric:tabular-nums}
+.act{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:baseline; padding-top:10px; border-top:1px solid var(--rule); font:.95rem/1.45 var(--sans)}
+.act b{font-weight:600} .act .d{color:var(--ink2)}
+@media (prefers-reduced-motion: reduce){ .r .f{transition:none} }
+
+.ex{display:grid; grid-template-columns:minmax(0,15rem) minmax(0,1fr); gap:28px; padding-block:28px; border-top:1px solid var(--rule)}
+.ex:first-child{border-top:1px solid var(--ink)}
+.ex .ph{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; align-content:start}
+.ex .ph.one{grid-template-columns:1fr}
+.ex .ph figure{display:grid; gap:4px}
+.ex .ph img{width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--track)}
+.ex .ticket{font:.92rem/1.55 var(--sans); background:var(--wash); padding:12px 14px}
+.ex .body{display:grid; gap:14px; align-content:start}
+.ex .problem{font-size:.98rem; color:var(--ink2)}
+.foot{font:.76rem/1.5 var(--mono); color:var(--muted)}
+
+.chart svg{width:100%; height:auto; display:block}
+.fig-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:40px 36px}
+.figs{display:grid; gap:48px; max-width:44rem}
+details{font:.85rem var(--sans); margin-top:8px} summary{cursor:pointer; color:var(--muted); font-family:var(--mono); font-size:.76rem}
+.seg{display:inline-flex; gap:4px; flex-wrap:wrap}
+.seg button{font:.8rem/1 var(--mono); padding:6px 9px; border:1px solid var(--rule); background:var(--paper); color:var(--ink2); cursor:pointer; border-radius:3px}
+.seg button[aria-pressed="true"]{border-color:var(--ink); color:var(--ink); background:var(--wash)}
+#tip{position:fixed; pointer-events:none; z-index:9; background:var(--ink); color:var(--paper); font:.76rem/1.4 var(--mono); padding:6px 8px; max-width:260px}
+
+.code{position:relative; background:var(--wash); border-left:2px solid var(--ink); overflow-x:auto}
+.code pre{margin:0; padding:14px 16px; font:.8rem/1.6 var(--mono); color:var(--ink)}
+.code button{position:absolute; top:8px; right:8px; font:.72rem/1 var(--mono); padding:5px 8px; border:1px solid var(--rule); background:var(--paper); color:var(--ink2); cursor:pointer; border-radius:3px}
+dl.api{display:grid; grid-template-columns:minmax(0,12rem) minmax(0,1fr); gap:10px 20px; font:.9rem/1.5 var(--sans); margin:0}
+dl.api dt{font:.84rem/1.5 var(--mono)} dl.api dd{margin:0; color:var(--ink2)}
+ul.plain{margin:0; padding-left:1.1em; display:grid; gap:10px; font-size:.98rem}
+ul.plain li::marker{color:var(--muted)}
+.limits div{display:grid; grid-template-columns:minmax(0,14rem) minmax(0,1fr); gap:20px; padding-block:12px; border-top:1px solid var(--rule); font-family:var(--sans); font-size:.93rem}
+.limits b{font-weight:600} .limits span{color:var(--ink2)}
+footer{margin-top:96px; border-top:1px solid var(--rule); padding-block:28px 48px; font:.84rem/1.6 var(--sans); color:var(--muted)}
+footer .in{max-width:76rem; margin:0 auto; padding-inline:clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px}
+footer h3{font:600 .9rem var(--sans); color:var(--ink); margin-bottom:6px}
+
+@media (max-width: 1060px){ .frame{grid-template-columns:1fr} .toc{display:none} }
+@media (max-width: 760px){
+  body{font-size:17px} .fig-grid{grid-template-columns:1fr} .spec,.ex{grid-template-columns:1fr} .spec img{max-width:12rem}
+  .ex .ph.one{max-width:12rem} dl.api,.limits div{grid-template-columns:1fr; gap:4px} footer .in{grid-template-columns:1fr}
+  .r{grid-template-columns:minmax(0,8rem) minmax(0,1fr) 2.8rem} .bar-top nav{margin-left:0}
+}
+</style>
+
+</head>
+<body>
+<div class="bar-top"><div class="in">
+  <a class="word" href="#top"><img class="l" src="assets/brand/mark-light.svg" alt=""><img class="d" src="assets/brand/mark-dark.svg" alt="">imajev</a>
+  <nav aria-label="Links"><a href="https://github.com/mohit67890/imajev">GitHub</a><a href="https://huggingface.co/mohit67890/imajev-4b">Weights</a><a href="https://huggingface.co/spaces/mohit67890/imajev">Demo</a><a href="https://huggingface.co/datasets/mohit67890/imajev-bench">Benchmark</a></nav>
+</div></div>
+
+<div class="frame">
+  <aside class="toc" aria-label="Contents"><span class="label">Contents</span>
+    <ol>
+      <li><a href="#s1"><span class="n">1</span>What it does</a></li>
+      <li><a href="#s2"><span class="n">2</span>Examples</a></li>
+      <li><a href="#s3"><span class="n">3</span>Results</a></li>
+      <li><a href="#s4"><span class="n">4</span>Calibration</a></li>
+      <li><a href="#s5"><span class="n">5</span>For developers</a></li>
+      <li><a href="#s6"><span class="n">6</span>Training</a></li>
+      <li><a href="#s7"><span class="n">7</span>Limits</a></li>
+    </ol>
+  </aside>
+
+<main id="top">
+  <div class="col">
+    <span class="label">imajev 1.0 · technical report</span>
+    <h1 style="margin-top:14px">Typed decisions from photos and app state</h1>
+    <p class="lead" style="margin-top:18px">imajev is a family of open models (2B, 4B and 9B parameters) that answer typed questions about photos and application records. You send up to two photos, a record, and questions with the options you allow; each answer is a probability over those options plus an explicit <i>unknown</i>. There is no text generation: one forward pass per question, on your own machine. The request shape is the one TypeSafe's Jev uses, so an existing Jev client works by changing its base URL.</p>
+    <p class="meta" style="margin-top:18px"><span>Mohit Garg</span><span>September 2026</span><span>Apache-2.0</span><span>Base models: Qwen3.5</span></p>
+  </div>
+
+  <div class="wide" style="margin-top:36px">
+    <div class="tw"><table>
+      <thead><tr><th>Model</th><th class="n">ImajevBench</th><th class="n">JevBench hard</th><th class="n">Hard ECE, calibrated</th><th class="n">Latency p50</th><th class="n">Base download</th></tr></thead>
+      <tbody>
+        <tr><td>imajev-2b</td><td class="n">70.3%</td><td class="n">56.8%</td><td class="n">0.138</td><td class="n">68 ms</td><td class="n">4.6 GB</td></tr>
+        <tr class="ours"><td>imajev-4b <span class="muted" style="font-weight:400">recommended</span></td><td class="n">82.4%</td><td class="n">67.6%</td><td class="n">0.112</td><td class="n">85 ms</td><td class="n">9.3 GB</td></tr>
+        <tr><td>imajev-9b</td><td class="n">82.8%</td><td class="n">68.5%</td><td class="n">0.106</td><td class="n">80 ms</td><td class="n">19.3 GB</td></tr>
+      </tbody></table></div>
+    <p class="foot" style="margin-top:8px">ImajevBench v2.0-lite test split, 279 items. JevBench public hard split, 111 text-only items, our same-protocol run. Latency: one JevBench hard item on one H100, serial. Base download: the pinned Qwen3.5 weights.</p>
+  </div>
+
+  <figure class="wide" style="margin-top:40px" aria-label="Figure 1">
+    <div class="spec">
+      <img id="spec-img" alt="Photo of beige suede boat shoes" width="197" height="256">
+      <div style="display:grid; gap:16px; align-content:start">
+        <div style="display:grid; gap:8px"><span class="label">State · listing</span>
+          <div class="kv"><span class="k">title</span><span>Men's suede boat shoes</span>
+            <span class="k">color</span><span class="opts" id="o-color"></span>
+            <span class="k">product_type</span><span class="opts" id="o-type"></span></div></div>
+        <div style="display:grid; gap:6px"><span class="label">Question · choice</span><p class="q" id="spec-q"></p></div>
+        <div class="readout" id="spec-readout" aria-live="polite"></div>
+        <div class="act" id="spec-act"></div>
+      </div>
+    </div>
+    <figcaption><b>Figure 1.</b> A listing check answered by imajev-4b with its shipped calibration. Change the listing's colour or product type: every state shown was run through the model (<span id="spec-ms"></span>). Option probabilities are given that the model answers; the unknown probability is reported beside them.</figcaption>
+  </figure>
+
+  <section id="s1" class="col">
+    <h2><span class="n">1</span>What it does</h2>
+    <p>Application code often needs a small, typed judgement about a photo: does it match the record, which field does it contradict, is the part damaged, did anything change between two photos. A general chat model can answer, but its answer is free text that has to be parsed, and it rarely says when it cannot tell.</p>
+    <p>imajev answers only in the options you supply, returns a probability for each, and has a trained <i>unknown</i> for missing or contradictory evidence. That lets your code act on a threshold, abstain, or send the case to a person. Three question types cover most uses: <code>noul</code> (yes or no), <code>choice</code> (one of 2 to 254 options) and <code>score</code> (2 to 10 ordered levels).</p>
+  </section>
+
+  <section id="s2">
+    <div class="col"><h2><span class="n">2</span>Examples</h2>
+      <p>Six requests from the demo playground, answered by imajev-4b. The action line is ordinary application code applied to the probabilities; the model never writes text. The playground's own checks pass <span id="ver"></span> on this model.</p></div>
+    <div class="wide" style="margin-top:28px" id="gallery"></div>
+  </section>
+
+  <section id="s3">
+    <div class="col"><h2><span class="n">3</span>Results</h2>
+      <p>Both benchmarks were run with the same protocol for every system. JevBench is text-only; ImajevBench adds photos, written records, and items whose correct answer is <i>unknown</i>.</p></div>
+    <div class="figs" style="margin-top:28px">
+      <figure class="chart"><div id="c-ib"></div>
+        <figcaption><b>Figure 2.</b> ImajevBench v2.0-lite, 279 test items: accuracy with 95% cluster-bootstrap intervals. Direct option scoring with all option orders. Jev-Omni is run through its own <code>predict()</code> API and shown apart because its interface differs.</figcaption>
+        <details><summary>Table</summary><div class="tw" id="t-ib"></div></details></figure>
+      <figure class="chart"><div id="c-jb"></div>
+        <figcaption><b>Figure 3.</b> JevBench public hard split, 111 text-only items. Our runs with the jevbench harness, one H100, serial. The official leaderboard adds sealed items and a four-axis score; an entry will be requested.</figcaption>
+        <details><summary>Table</summary><div class="tw" id="t-jb"></div></details></figure>
+      <figure class="chart"><div id="c-up"></div>
+        <figcaption><b>Figure 4.</b> ImajevBench accuracy of each untuned Qwen3.5 base and the same base with the imajev adapter. Paired tests: 2B +10.0 points (p = 0.019), 4B +11.8 (p = 0.0008), 9B +6.1 (p = 0.074, not significant).</figcaption></figure>
+      <div style="display:grid; gap:14px; font-size:.97rem; align-content:start">
+        <p><b>Not first on JevBench.</b> JevK5 (73.9%) leads every imajev size on the hard split; the 4B ties Hopper. The gap is mostly in items that judge the quality of an answer.</p>
+        <p><b>Jev-Omni on ImajevBench.</b> 78.5% through its own API. imajev-4b and 9B lead by about 4 points, which is not significant (p ≈ 0.25). The difference comes from the 21 items whose answer is unknown, which Jev-Omni cannot abstain on; on answerable items it is slightly ahead and better calibrated.</p>
+        <p><b>Reasoning is a different interface.</b> A frozen Qwen3.6-35B-A3B with its reasoning turned on scores 97.3% on JevBench hard, at seconds and thousands of tokens per decision.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="col"><h2><span class="n">4</span>Calibration</h2>
+      <p>Each model ships a <code>calibration.json</code> with one temperature, fitted on 150 hand-written JevBench-style items (none from JevBench). Temperature scaling never changes an answer, only how confident the model says it is.</p></div>
+    <div class="figs" style="margin-top:28px">
+      <figure class="chart">
+        <div class="seg" role="group" aria-label="Model size" id="seg-size" style="margin-bottom:10px"></div>
+        <div id="c-cal"></div>
+        <figcaption id="cap-cal"></figcaption></figure>
+      <div>
+        <div class="tw"><table>
+          <thead><tr><th>ECE, raw → calibrated</th><th class="n">2B</th><th class="n">4B</th><th class="n">9B</th></tr></thead>
+          <tbody>
+            <tr><td>JevBench hard, served</td><td class="n">.187 → .138</td><td class="n">.215 → .112</td><td class="n">.236 → .106</td></tr>
+            <tr><td>MMLU, text only</td><td class="n">.141 → .038</td><td class="n">.150 → .035</td><td class="n">.123 → .031</td></tr>
+            <tr><td>Typed decisions, 2,000</td><td class="n">.128 → .039</td><td class="n">.149 → .047</td><td class="n">.159 → .026</td></tr>
+            <tr><td>SST-5, 2,210</td><td class="n">.221 → .105</td><td class="n">.220 → .020</td><td class="n">.211 → .029</td></tr>
+            <tr><td>Photo-only checks, 823</td><td class="n">.023 → .120</td><td class="n">.038 → .062</td><td class="n">.027 → .053</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:14px; font-size:.95rem; color:var(--ink2)">The last row is the exception. On photo-only verification the raw probabilities are already well calibrated and the temperature softens them too much. If most of your traffic is photo-against-record checks, serve without <code>--calibration</code> or fit a temperature on your own sample (section 5.5).</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="col"><h2><span class="n">5</span>For developers</h2>
+      <p>How to run it, call it, act on its answers, pick a size, check it on your own data, and reproduce every number on this page.</p></div>
+
+    <div class="col" style="margin-top:32px"><h3>5.1 Run a server</h3>
+      <p style="margin-top:8px">One command serves one model on <code>POST /v1/systemone</code>. MLX on Apple silicon, PyTorch elsewhere; no network calls at inference.</p></div>
+    <div class="wide" style="margin-top:14px"><div class="seg" role="group" aria-label="Platform" id="seg-os" style="margin-bottom:8px"></div>
+      <div class="code"><button type="button" data-copy="run">Copy</button><pre id="code-run"></pre></div></div>
+
+    <div class="col" style="margin-top:36px"><h3>5.2 Request and response</h3>
+      <p style="margin-top:8px">Questions are keyed by your own names. A <code>choice</code> lists its options as keys of <code>criteria</code>, each with an optional description; a <code>score</code> lists its levels in order. Images go as multipart files, or as data URLs in an <code>images</code> array when you send JSON.</p></div>
+    <div class="fig-grid wide" style="margin-top:14px">
+      <div class="code"><button type="button" data-copy="req">Copy</button><pre id="code-req"></pre></div>
+      <div class="code"><pre id="code-res"></pre></div>
+    </div>
+    <div class="wide" style="margin-top:18px"><dl class="api">
+      <dt>probabilities</dt><dd>For <code>choice</code> and <code>score</code>: a distribution over your options that sums to 1, given that the model answers.</dd>
+      <dt>noul</dt><dd>P(yes) with half of the unknown mass added, as in Jev. For the plain yes-probability subtract <code>unknown_probability / 2</code>.</dd>
+      <dt>unknown_probability</dt><dd>The mass on imajev's trained <i>unknown</i> option: missing, contradictory or out-of-scope evidence.</dd>
+      <dt>abstained</dt><dd><code>true</code> when unknown was the single most likely outcome.</dd>
+      <dt>confidence</dt><dd>How concentrated the option distribution is, scaled down by the unknown mass.</dd>
+      <dt>request limits</dt><dd>Up to 2 images, a state string or JSON object up to 32 KB, 1 to 8 questions, 2 to 254 options, 2 to 10 score levels, English.</dd>
+    </dl></div>
+
+    <div class="col" style="margin-top:36px"><h3>5.3 Act, abstain or escalate</h3>
+      <p style="margin-top:8px">The probabilities are the product. A common pattern: act automatically above a threshold, send the case to a person when the model says unknown or is unsure, and log everything. Choose the threshold from your own error costs.</p></div>
+    <div class="wide" style="margin-top:14px"><div class="code"><button type="button" data-copy="act">Copy</button><pre id="code-act"></pre></div></div>
+
+    <div class="col" style="margin-top:36px"><h3>5.4 Choosing a size</h3></div>
+    <div class="wide" style="margin-top:12px"><div class="tw"><table>
+      <thead><tr><th>Model</th><th>Use it when</th><th class="n">ImajevBench</th><th class="n">MMLU</th><th class="n">Unknown items right</th></tr></thead>
+      <tbody>
+        <tr><td>imajev-2b</td><td>latency or memory is the constraint</td><td class="n">70.3%</td><td class="n">59.8%</td><td class="n">5 / 21</td></tr>
+        <tr class="ours"><td>imajev-4b</td><td>the default for almost everything</td><td class="n">82.4%</td><td class="n">74.5%</td><td class="n">15 / 21</td></tr>
+        <tr><td>imajev-9b</td><td>knowledge-heavy text questions, when memory is not tight</td><td class="n">82.8%</td><td class="n">79.2%</td><td class="n">15 / 21</td></tr>
+      </tbody></table></div></div>
+
+    <div class="col" style="margin-top:36px"><h3>5.5 Check it on your own data</h3>
+      <ul class="plain" style="margin-top:10px">
+        <li><b>Measure first.</b> Collect a few hundred of your own requests with the right answers, including cases where the right answer is "cannot tell". Send them through the server and compare accuracy at your threshold. The harness in <code>src/imajev_bench</code> does this for records in ImajevBench's format and reports cluster confidence intervals.</li>
+        <li><b>Fit your own temperature.</b> The evaluators in <code>scripts/</code> write one JSONL row per question with its logits. <code>scripts/v1_text/fit_temperature_calibration.py rows.jsonl calibration.json</code> fits one temperature per question type and option count, and the server loads the result with <code>--calibration</code>.</li>
+        <li><b>Compare on ImajevBench.</b> The benchmark's public records, images and scorer are on Hugging Face. Run your own model and send the row.</li>
+      </ul></div>
+
+    <div class="col" style="margin-top:36px"><h3>5.6 Reproduce the numbers</h3>
+      <p style="margin-top:8px">Every figure on this page is rebuilt from files in the repository by <code>python site/build_site.py</code>. Benchmark predictions, per-run manifests and scores are under <code>results/</code> and <code>bench/</code>. ImajevBench rows are rescored with <code>python -m imajev_bench score</code> and the paired tests with <code>imajev_bench.stats.paired_cluster_test</code>. JevBench runs keep every raw response.</p></div>
+  </section>
+
+  <section id="s6" class="col">
+    <h2><span class="n">6</span>Training</h2>
+    <p>Each model is a LoRA (rank 16) on the language layers of Qwen3.5 plus a small readout over option codes; the vision encoder stays frozen. Teachers are open-weight models only. No JevBench items, no Jev outputs and no paid-API outputs were used in training.</p>
+    <div class="tw" style="margin-top:18px"><table>
+      <thead><tr><th>Stage</th><th>Data</th></tr></thead>
+      <tbody>
+        <tr><td style="white-space:nowrap">1 · Image and text</td><td>About half a million human-labelled decisions from licence-checked public datasets: 300k on images (21 sources) and 200k text-only (15 sources).</td></tr>
+        <tr><td style="white-space:nowrap">2 · New sources</td><td>About 416k decisions on six photo and text sources the models had not seen, labelled by the 9B and kept only when two option orders agreed; then 72k photo-vs-record and two-photo decisions. The 2B and 4B were trained on this stage; the 9B, which produced its labels, went from stage 1 to stage 3.</td></tr>
+        <tr><td style="white-space:nowrap">3 · Hard questions</td><td>About 23k hard questions: documents and questions written and answered by open-weight teachers, kept only when the teachers agreed, plus licensed human reasoning sets. Stage 1 had cut the 9B's JevBench hard score from 64.9% to 42.3%; this stage took it to 68.5%.</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section id="s7">
+    <div class="col"><h2><span class="n">7</span>Limits</h2></div>
+    <div class="limits wide" style="margin-top:6px">
+      <div><b>No reasoning at inference</b><span>Multi-step arithmetic and answer-quality judging trail reasoning models. It is one forward pass by design.</span></div>
+      <div><b>Over-confident without calibration</b><span>Raw hard-item ECE is 0.19 to 0.24. Use the calibration file, or fit your own.</span></div>
+      <div><b>9B gain not significant</b><span>+6.1 points over its untuned base on ImajevBench, p = 0.074. The 4B and 9B are statistically tied there.</span></div>
+      <div><b>The 2B rarely abstains</b><span>5 of 21 unknown items on ImajevBench, against 15 for the 4B and 9B.</span></div>
+      <div><b>Hard-question training has a cost</b><span>Its last round lowered our own reasoning set by 5.6 points (2B), 1.2 (4B) and 1.8 (9B). MMLU did not move.</span></div>
+      <div><b>The benchmark is a preview</b><span>ImajevBench images are AI-generated and model-audited, with no human audit yet. English only; at most two images per request.</span></div>
+    </div>
+  </section>
+</main>
+</div>
+
+<footer><div class="in">
+  <div><h3>Licences</h3><p>Code, adapters and readouts: Apache-2.0. Qwen3.5 base models: Apache-2.0. ImajevBench records: CC BY 4.0.</p></div>
+  <div><h3>Cite</h3><p class="mono" style="font-size:.76rem">Garg, M. (2026). imajev: open Jev-class typed-decision models for images and text. github.com/mohit67890/imajev</p></div>
+  <div><h3>Photo credits</h3><p id="credits"></p></div>
+</div></footer>
+<div id="tip" hidden></div>
+
+<script id="data" type="application/json">{"listing": {"image": "assets/photos/loafers.jpg", "base_state": {"listing": {"title": "Men's suede boat shoes", "color": "red", "product_type": "shoe"}}, "question": "Which field of listing does this photo contradict?", "variants": [{"case": "as shipped", "answers": {"contradicted_field": {"top": "none of these", "unknown": 0.012185435402024736, "probabilities": {"listing.color": 0.07375682838772986, "listing.product_type": 0.021623003087091107, "none of these": 0.9046201685251791}}, "color_matches": {"top": "0.901", "unknown": 0.01554564071937396, "probabilities": null}, "type_matches": {"top": "0.987", "unknown": 0.004162560236234341, "probabilities": null}}, "route": {"kind": "ok", "title": "Publish the listing", "detail": "Photo and listing agree."}, "ms": 570}, {"case": "listing.color=black", "answers": {"contradicted_field": {"top": "listing.color", "unknown": 0.01514894050726488, "probabilities": {"listing.color": 0.8073765263589918, "listing.product_type": 0.027159614607717562, "none of these": 0.16546385903329058}}, "color_matches": {"top": "0.267", "unknown": 0.023777055329786738, "probabilities": null}, "type_matches": {"top": "0.989", "unknown": 0.002894388428757971, "probabilities": null}}, "route": {"kind": "flag", "title": "Hold: listing.color is wrong", "detail": "Ask the seller to fix this field before the listing goes live."}, "ms": 474.1}, {"case": "listing.color=red", "answers": {"contradicted_field": {"top": "listing.color", "unknown": 0.005181618925227881, "probabilities": {"listing.color": 0.9561451364034396, "listing.product_type": 0.009330370062088266, "none of these": 0.0345244935344722}}, "color_matches": {"top": "0.072", "unknown": 0.021856657075475246, "probabilities": null}, "type_matches": {"top": "0.986", "unknown": 0.0037618933197582126, "probabilities": null}}, "route": {"kind": "flag", "title": "Hold: listing.color is wrong", "detail": "Ask the seller to fix this field before the listing goes live."}, "ms": 478.6}, {"case": "listing.product_type=handbag", "answers": {"contradicted_field": {"top": "listing.product_type", "unknown": 0.004349467072560618, "probabilities": {"listing.color": 0.010707325468589156, "listing.product_type": 0.9681631936749074, "none of these": 0.021129480856503336}}, "color_matches": {"top": "0.898", "unknown": 0.025082989149936154, "probabilities": null}, "type_matches": {"top": "0.017", "unknown": 0.0069303534791869265, "probabilities": null}}, "route": {"kind": "flag", "title": "Hold: listing.product_type is wrong", "detail": "Ask the seller to fix this field before the listing goes live."}, "ms": 470.8}, {"case": "listing.product_type=watch", "answers": {"contradicted_field": {"top": "listing.product_type", "unknown": 0.0018189072674300948, "probabilities": {"listing.color": 0.0030354405213563335, "listing.product_type": 0.9880171175680507, "none of these": 0.008947441910592935}}, "color_matches": {"top": "0.950", "unknown": 0.01955444653520955, "probabilities": null}, "type_matches": {"top": "0.009", "unknown": 0.004300900835965253, "probabilities": null}}, "route": {"kind": "flag", "title": "Hold: listing.product_type is wrong", "detail": "Ask the seller to fix this field before the listing goes live."}, "ms": 482.4}]}, "gallery": [{"id": "listing", "title": "Marketplace listing check", "kicker": "Photo vs listing", "problem": "A seller uploads a photo and fills in the listing. When the two disagree, buyers return the item. Nobody can check every listing by hand.", "case": "listing.color=red", "state": {"listing": {"title": "Men's suede boat shoes", "color": "red", "product_type": "shoe"}}, "photos": [{"src": "assets/photos/loafers.jpg", "slot": "listing photo", "credit": "Amazon Berkeley Objects, CC BY 4.0", "license": "CC-BY-4.0", "held_out": true, "edit": null}], "questions": {"contradicted_field": {"type": "choice", "instructions": "Which field of listing does this photo contradict?"}, "color_matches": {"type": "noul", "instructions": "The product in the photo matches listing.color."}, "type_matches": {"type": "noul", "instructions": "The photo shows the kind of product given in listing.product_type."}}, "focus": "contradicted_field", "answers": {"contradicted_field": {"top": "listing.color", "unknown": 0.005181618925227881, "probabilities": {"listing.color": 0.9561451364034396, "listing.product_type": 0.009330370062088266, "none of these": 0.0345244935344722}}, "color_matches": {"top": "0.072", "unknown": 0.021856657075475246, "probabilities": null}, "type_matches": {"top": "0.986", "unknown": 0.0037618933197582126, "probabilities": null}}, "route": {"kind": "flag", "title": "Hold: listing.color is wrong", "detail": "Ask the seller to fix this field before the listing goes live."}, "ms": 478.6}, {"id": "qc", "title": "Production-line QC", "kicker": "Reference vs part", "problem": "A camera photographs every part on the line. Rules-based vision breaks when parts vary, and a person cannot look at every photo.", "case": "chipped part", "state": {"line": {"station": "QC-3", "product": "pipe-shaped snack", "reference": "image 1 is a known-good part"}}, "photos": [{"src": "assets/photos/fryum-reference.jpg", "slot": "known-good reference", "credit": "VisA dataset (Amazon), CC BY 4.0", "license": "CC-BY-4.0", "held_out": true, "edit": null}, {"src": "assets/photos/fryum-chipped.jpg", "slot": "part under inspection", "credit": "VisA dataset (Amazon), CC BY 4.0", "license": "CC-BY-4.0", "held_out": true, "edit": null}], "questions": {"has_fault": {"type": "noul", "instructions": "Given the reference part in the first image, does the part in the second image have a fault?"}, "fault_type": {"type": "choice", "instructions": "What is wrong with the part in the second image?"}}, "focus": "fault_type", "answers": {"has_fault": {"top": "0.996", "unknown": 0.002084038722626669, "probabilities": null}, "fault_type": {"top": "chipped or broken edge", "unknown": 0.004300851006970801, "probabilities": {"chipped or broken edge": 0.9844327761501813, "crack": 0.005837481779598004, "discoloured or burnt": 0.005129967599491221, "nothing is wrong": 0.00459977447072943}}}, "route": {"kind": "flag", "title": "Reject the part", "detail": "Most likely: chipped or broken edge."}, "ms": 2103}, {"id": "returns", "title": "Return check", "kicker": "Two photos", "problem": "A customer sends back an item for a refund. Is it the product you shipped, or something else in the box?", "case": "a different shoe", "state": {"order": {"id": "ORD-20931", "item": "Women's knit slip-on sneakers", "colour": "pink and black"}, "return": {"reason": "doesn't fit"}}, "photos": [{"src": "assets/photos/slipon-listing.jpg", "slot": "what we shipped", "credit": "Amazon Berkeley Objects, CC BY 4.0", "license": "CC-BY-4.0", "held_out": true, "edit": null}, {"src": "assets/photos/loafers.jpg", "slot": "what came back", "credit": "Amazon Berkeley Objects, CC BY 4.0", "license": "CC-BY-4.0", "held_out": true, "edit": null}], "questions": {"same_item": {"type": "noul", "instructions": "The second photo shows the same product as the first photo."}, "returned_colour": {"type": "choice", "instructions": "What is the main colour of the product in the second photo?"}}, "focus": "same_item", "answers": {"same_item": {"top": "0.009", "unknown": 0.002252949852350492, "probabilities": null}, "returned_colour": {"top": "beige", "unknown": 0.2850797513792644, "probabilities": {"pink": 0.07545679764801858, "beige": 0.6464031712449622, "black": 0.13985647865705322, "white": 0.0634383389549893, "blue": 0.07484521349497678}}}, "route": {"kind": "flag", "title": "Hold the refund", "detail": "The returned item looks different (beige)."}, "ms": 442.8}, {"id": "audit", "title": "Before / after audit", "kicker": "What changed?", "problem": "Collections, rentals and stockrooms are photographed before and after. Spotting what moved between two photos is slow, tedious work.", "case": "labels missing", "state": {"checklist": {"subject": "a museum specimen tray", "all_items_still_there": "yes, everything in the reference is still in the frame", "no_new_items": "yes, nothing has been added", "colours_as_before": "yes, every object keeps its colour"}, "task": {"what_counts": "treat the two photos as matching unless an item was added, removed, recoloured or hidden"}}, "photos": [{"src": "assets/photos/tray-before.jpg", "slot": "before", "credit": "PD12M / Wikimedia Commons, CC0", "license": "CC0-1.0", "held_out": true, "edit": "composite: small CC0 cut-outs pasted into the original photo (imajev pairs_grounded); the 'after' photo is the unedited original"}, {"src": "assets/photos/tray-after.jpg", "slot": "after", "credit": "PD12M / Wikimedia Commons, CC0", "license": "CC0-1.0", "held_out": true, "edit": null}], "questions": {"what_changed": {"type": "choice", "instructions": "Image 1 is the reference, image 2 the target. Following task.what_counts, what changed?"}, "field_to_update": {"type": "choice", "instructions": "Somebody must update checklist after image 2 was taken. Which field needs changing? Changes that task.what_counts says to ignore do not count."}}, "focus": "what_changed", "answers": {"what_changed": {"top": "an object was removed", "unknown": 0.0012819475754466921, "probabilities": {"nothing relevant changed": 0.001265862190236781, "an object was added": 0.001183361367411884, "an object was removed": 0.9944647394119248, "an object changed colour": 0.0008590206292426556, "something was covered or blurred out": 0.002227016401183796}}, "field_to_update": {"top": "checklist.all_items_still_there", "unknown": 0.0005021415421363505, "probabilities": {"checklist.all_items_still_there": 0.9954660169692664, "checklist.no_new_items": 0.0016502711650561606, "checklist.colours_as_before": 0.0007200312355971262, "none of these": 0.0021636806300803}}}, "route": {"kind": "flag", "title": "Open an incident", "detail": "An object was removed; update checklist.all_items_still_there."}, "ms": 1684.6}, {"id": "archive", "title": "Archive record audit", "kicker": "Photo vs catalogue", "problem": "Museums and photo archives hold millions of records typed by hand decades ago. Some are wrong and nobody knows which.", "case": "record.subject=dog", "state": {"record": {"accession": "PH-1904-117", "subject": "dog", "medium": "black-and-white photograph", "setting": "indoors"}}, "photos": [{"src": "assets/photos/cat-on-chair.jpg", "slot": "archive scan", "credit": "PD12M / Wikimedia Commons, CC0", "license": "CC0-1.0", "held_out": false, "edit": null}], "questions": {"wrong_field": {"type": "choice", "instructions": "Which field of record does this photograph contradict?"}, "subject_matches": {"type": "noul", "instructions": "The photograph shows the animal recorded in record.subject."}}, "focus": "wrong_field", "answers": {"wrong_field": {"top": "record.subject", "unknown": 0.002165240790794051, "probabilities": {"record.subject": 0.9793165004668624, "record.medium": 0.0054322627911218245, "record.setting": 0.005248195454856592, "none": 0.010003041287159219}}, "subject_matches": {"top": "0.041", "unknown": 0.014518882194411636, "probabilities": null}}, "route": {"kind": "flag", "title": "Correct record.subject", "detail": "The scan contradicts this field."}, "ms": 1048.8}, {"id": "ticket", "title": "Support ticket triage", "kicker": "Text only, same API", "problem": "Every ticket needs an owner and a priority before anyone reads it properly. Keyword rules misroute; a chat model needs parsing.", "case": "as shipped", "state": {"ticket": {"id": "TKT-48812", "body": "We were billed 480 USD twice on 3 September for the same 12 seats. I have now written three times and the only reply was an automated one. Our finance close is on Wednesday and I need the duplicate reversed before then.", "plan": "Team (12 seats)"}}, "photos": [], "questions": {"department": {"type": "choice", "instructions": "Which department should own this ticket?"}, "urgent": {"type": "noul", "instructions": "This ticket needs a reply today."}, "frustration": {"type": "score", "instructions": "How frustrated does the customer sound?"}}, "focus": "department", "answers": {"department": {"top": "billing", "unknown": 0.017555787910683886, "probabilities": {"billing": 0.916889437159722, "technical_support": 0.031629550417995506, "sales": 0.04272841507726804, "product_questions": 0.008752597345014337}}, "urgent": {"top": "0.968", "unknown": 0.00590568871694252, "probabilities": null}, "frustration": {"top": "1.03", "unknown": 0.023922767884499437, "probabilities": {"0": 0.11502264597544969, "1": 0.7442083131704179, "2": 0.14076904085413244}}}, "route": {"kind": "flag", "title": "Route to billing", "detail": "Priority: reply today."}, "ms": 456.1}], "calibration": {"2b": {"raw": [[0.4643, 0.2727, 22], [0.613, 0.5, 22], [0.7667, 0.4545, 22], [0.9287, 0.8182, 22], [0.9912, 0.7826, 23]], "served": [[0.3953, 0.1818, 22], [0.5343, 0.5455, 22], [0.6373, 0.5455, 22], [0.8068, 0.7273, 22], [0.9447, 0.8261, 23]], "ece_raw": 0.18737710923164883, "ece_served": 0.13827686296576677}, "4b": {"raw": [[0.5782, 0.4545, 22], [0.8429, 0.5455, 22], [0.964, 0.7273, 22], [0.9941, 0.6818, 22], [0.9995, 0.9565, 23]], "served": [[0.4287, 0.4091, 22], [0.6177, 0.5909, 22], [0.7493, 0.6818, 22], [0.8835, 0.7727, 22], [0.9583, 0.913, 23]], "ece_raw": 0.21468649240584825, "ece_served": 0.11215952146949196}, "9b": {"raw": [[0.6396, 0.4091, 22], [0.9108, 0.5, 22], [0.9795, 0.7273, 22], [0.9956, 0.8636, 22], [0.9997, 0.913, 23]], "served": [[0.4706, 0.3636, 22], [0.7082, 0.5455, 22], [0.8286, 0.7727, 22], [0.908, 0.8182, 22], [0.9706, 0.913, 23]], "ece_raw": 0.2360488363431354, "ece_served": 0.10608228336839648}}, "verification": {"passed": 20, "total": 21, "threshold": 0.8, "model": "imajev-4b"}}</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tip = $('#tip');
+function showTip(e, html){ tip.innerHTML = html; tip.hidden = false; tip.style.left = Math.min(e.clientX + 14, innerWidth - 270) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; }
+function hideTip(){ tip.hidden = true; }
+
+function readout(q, a){
+  const unk = Number(a.unknown || 0); let rows;
+  if (q.type === 'noul'){ const yes = Math.max(0, Number(a.top) - unk / 2); rows = [['yes', yes], ['no', Math.max(0, 1 - yes - unk)]]; }
+  else rows = Object.entries(a.probabilities || {}).sort((x, y) => y[1] - x[1]).slice(0, 4);
+  const top = rows.reduce((m, r) => r[1] > m[1] ? r : m)[0];
+  rows.push(['unknown', unk]);
+  return rows.map(([k, v]) => `<div class="r ${k === top ? 'top' : ''} ${k === 'unknown' ? 'unk' : ''}"><span class="name" title="${esc(k)}">${esc(k)}</span><span class="t"><span class="f" style="width:${Math.max(0.5, v * 100).toFixed(1)}%"></span></span><span class="v">${v.toFixed(3)}</span></div>`).join('');
+}
+const act = r => `<span class="label">Action</span><span><b>${esc(r.title)}</b> <span class="d">${esc(r.detail || '')}</span></span>`;
+
+(function fig1(){
+  const L = D.listing; $('#spec-img').src = L.image; $('#spec-q').textContent = L.question;
+  const by = Object.fromEntries(L.variants.map(v => [v.case, v]));
+  let color = 'red', type = 'shoe';
+  const key = () => color !== 'beige' ? `listing.color=${color}` : type !== 'shoe' ? `listing.product_type=${type}` : 'as shipped';
+  function opts(el, values, get, set){
+    el.innerHTML = values.map(v => `<button type="button" class="opt" data-v="${v}">${v}</button>`).join('');
+    el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { set(b.dataset.v); render(); }));
+    return () => el.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === get())));
+  }
+  const sc = opts($('#o-color'), ['beige', 'black', 'red'], () => color, v => { color = v; type = 'shoe'; });
+  const st = opts($('#o-type'), ['shoe', 'handbag', 'watch'], () => type, v => { type = v; color = 'beige'; });
+  function render(){ sc(); st(); const v = by[key()];
+    $('#spec-readout').innerHTML = readout({type:'choice'}, v.answers.contradicted_field); $('#spec-act').innerHTML = act(v.route);
+    $('#spec-ms').textContent = `${Math.round(v.ms)} ms on a Mac Studio with MLX`; }
+  render();
+})();
+$('#ver').textContent = `${D.verification.passed} of ${D.verification.total}`;
+
+$('#gallery').innerHTML = D.gallery.map(g => {
+  const q = g.questions[g.focus];
+  const flat = (o, p = '') => Object.entries(o).flatMap(([k, v]) => v && typeof v === 'object' ? flat(v, p + k + '.') : [[p + k, v]]);
+  const kv = flat(g.state).filter(([k]) => k !== 'ticket.body').slice(0, 4)
+    .map(([k, v]) => `<span class="k">${esc(k).replace(/([._])/g, '$1<wbr>')}</span><span>${esc(String(v).length > 40 ? String(v).slice(0, 38) + '…' : v)}</span>`).join('');
+  const ev = g.photos.length
+    ? `<div class="ph ${g.photos.length === 1 ? 'one' : ''}">${g.photos.map(p => `<figure><img src="${esc(p.src)}" alt="${esc(p.slot)}" loading="lazy"><span class="foot">${esc(p.slot)}</span></figure>`).join('')}</div>`
+    : `<div><p class="ticket">“${esc(g.state.ticket.body)}”</p><span class="foot">text-only request</span></div>`;
+  const notes = [`${Math.round(g.ms)} ms, Mac Studio`];
+  if (g.photos.length) notes.push(g.photos.every(p => p.held_out) ? 'photos from sources not used in training' : 'photo from a source used in training');
+  if (g.photos.some(p => p.edit)) notes.push('the "before" photo is a composite');
+  return `<article class="ex">${ev}<div class="body">
+      <div style="display:grid; gap:6px"><span class="label">${esc(g.kicker)}</span><h3>${esc(g.title)}</h3><p class="problem">${esc(g.problem)}</p></div>
+      <div class="kv">${kv}</div>
+      <div style="display:grid; gap:6px"><span class="label">Question · ${esc(q.type)}</span><p class="q">${esc(q.instructions)}</p></div>
+      <div class="readout">${readout(q, g.answers[g.focus])}</div>
+      <div class="act">${act(g.route)}</div>
+      <p class="foot">${notes.join(' · ')}</p></div></article>`;
+}).join('');
+$('#credits').textContent = [...new Set(D.gallery.flatMap(g => g.photos.map(p => p.credit)))].join(' · ') + '.';
+
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const NS = 'http://www.w3.org/2000/svg';
+const svg = (w, h) => { const s = document.createElementNS(NS, 'svg'); s.setAttribute('viewBox', `0 0 ${w} ${h}`); s.setAttribute('role', 'img'); return s; };
+function el(tag, a, p, text){ const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (text != null) e.textContent = text; p.appendChild(e); return e; }
+const T = (s, x, y, txt, o = {}) => el('text', Object.assign({x, y, fill:css('--ink2'), 'font-family':'IBM Plex Sans, sans-serif', 'font-size':14}, o), s, txt);
+const M = (s, x, y, txt, o = {}) => el('text', Object.assign({x, y, fill:css('--muted'), 'font-family':'IBM Plex Mono, monospace', 'font-size':12}, o), s, txt);
+function tbl(rows, head){ return `<table><thead><tr>${head.map((h, i) => `<th class="${i ? 'n' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${r.ours ? 'ours' : ''}">${r.cells.map((c, i) => `<td class="${i ? 'n' : ''}">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`; }
+function hover(node, html){ node.addEventListener('mousemove', e => showTip(e, html)); node.addEventListener('mouseleave', hideTip); }
+
+const IB = [['imajev-9b', 231, .77, .88, 1, 'A'], ['imajev-4b', 230, .77, .88, 1, 'A'], ['Qwen3.5-9B base', 214, .70, .82, 0, 'A'],
+  ['Qwen3.5-4B base', 197, .64, .78, 0, 'A'], ['imajev-2b', 196, .64, .77, 1, 'A'], ['Gemma 4 E4B-it', 176, .55, .72, 0, 'A'],
+  ['Qwen3.5-2B base', 168, .53, .67, 0, 'A'], ['SmolVLM2-2.2B', 80, .22, .36, 0, 'A'], ['Jev-Omni (12B)', 219, .73, .84, 0, 'B']];
+const JB = [['JevK5 v0.2.0', 73.9, 0], ['imajev-9b, 4 option orders', 69.4, 1], ['imajev-9b', 68.5, 1], ['imajev-4b', 67.6, 1], ['Hopper', 67.6, 0],
+  ['imajev-2b', 56.8, 1], ['cua-s1-4b', 52.3, 0], ['Qwen3.5-4B, generation', 48.6, 0], ['mojev 0.85B', 33.3, 0]];
+
+function axisX(s, x, ticks, y0, y1, fmt){ ticks.forEach(v => { el('line', {x1:x(v), x2:x(v), y1:y0, y2:y1, stroke:css('--rule')}, s); M(s, x(v), y1 + 16, fmt(v), {'text-anchor':'middle'}); }); }
+function drawIB(){
+  const box = $('#c-ib'); box.innerHTML = ''; const W = 640, rh = 30, left = 150, right = 62;
+  const H = IB.length * rh + 22 + 30; const s = svg(W, H); box.appendChild(s);
+  const x = v => left + (v - 20) / 80 * (W - left - right);
+  axisX(s, x, [20, 40, 60, 80, 100], 4, H - 26, v => v + '%');
+  let y = 18;
+  IB.forEach(r => {
+    if (r[5] === 'B'){ y += 18; M(s, left - 10, y - 20, 'own interface', {'text-anchor':'end', 'font-size':10}); }
+    const col = r[4] ? css('--ours') : css('--other'); const acc = r[1] / 279 * 100;
+    T(s, left - 10, y + 4, r[0], {'text-anchor':'end', fill:r[4] ? css('--ink') : css('--ink2'), 'font-weight':r[4] ? 600 : 400});
+    el('line', {x1:x(r[2] * 100), x2:x(r[3] * 100), y1:y, y2:y, stroke:col, 'stroke-width':2}, s);
+    el('circle', {cx:x(acc), cy:y, r:4.5, fill:col}, s);
+    M(s, x(r[3] * 100) + 7, y + 4, acc.toFixed(1), {fill:r[4] ? css('--ink') : css('--muted')});
+    hover(el('rect', {x:0, y:y - rh / 2, width:W, height:rh, fill:'transparent'}, s), `<b>${esc(r[0])}</b><br>${r[1]}/279 correct · ${acc.toFixed(1)}%<br>95% CI ${(r[2] * 100).toFixed(0)}–${(r[3] * 100).toFixed(0)}%`);
+    y += rh;
+  });
+  $('#t-ib').innerHTML = tbl(IB.map(r => ({ours:r[4], cells:[r[0], r[1] + '/279', (r[1] / 279 * 100).toFixed(1) + '%', `${(r[2] * 100).toFixed(0)}–${(r[3] * 100).toFixed(0)}%`]})), ['System', 'Correct', 'Accuracy', '95% CI']);
+}
+function drawJB(){
+  const box = $('#c-jb'); box.innerHTML = ''; const W = 640, rh = 30, left = 196, right = 44;
+  const H = JB.length * rh + 12 + 30; const s = svg(W, H); box.appendChild(s);
+  const x = v => left + v / 100 * (W - left - right);
+  axisX(s, x, [0, 25, 50, 75, 100], 4, H - 26, v => v + (v === 100 ? '%' : ''));
+  JB.forEach((r, i) => { const y = 18 + i * rh; const col = r[2] ? css('--ours') : css('--other');
+    T(s, left - 10, y + 4, r[0], {'text-anchor':'end', fill:r[2] ? css('--ink') : css('--ink2'), 'font-weight':r[2] ? 600 : 400});
+    el('rect', {x:x(0), y:y - 6, width:x(r[1]) - x(0), height:12, fill:col}, s);
+    M(s, x(r[1]) + 6, y + 4, r[1].toFixed(1), {fill:r[2] ? css('--ink') : css('--muted')});
+    hover(el('rect', {x:0, y:y - rh / 2, width:W, height:rh, fill:'transparent'}, s), `<b>${esc(r[0])}</b><br>${r[1].toFixed(1)}% of 111 hard items`); });
+  $('#t-jb').innerHTML = tbl(JB.map(r => ({ours:r[2], cells:[r[0], r[1].toFixed(1) + '%']})), ['System', 'Hard accuracy']);
+}
+function drawUp(){
+  const box = $('#c-up'); box.innerHTML = ''; const rows = [['2B', 60.2, 70.3], ['4B', 70.6, 82.4], ['9B', 76.7, 82.8]];
+  const W = 640, left = 116, right = 96, rh = 44, H = rows.length * rh + 46; const s = svg(W, H); box.appendChild(s);
+  const x = v => left + (v - 55) / 35 * (W - left - right);
+  axisX(s, x, [60, 70, 80, 90], 4, H - 30, v => v + '%');
+  rows.forEach((r, i) => { const y = 24 + i * rh;
+    T(s, left - 12, y + 4, 'Qwen3.5-' + r[0], {'text-anchor':'end', fill:css('--ink'), 'font-weight':600});
+    el('line', {x1:x(r[1]), x2:x(r[2]), y1:y, y2:y, stroke:css('--ink'), 'stroke-width':1.5}, s);
+    el('circle', {cx:x(r[1]), cy:y, r:4.5, fill:css('--paper'), stroke:css('--ink'), 'stroke-width':1.5}, s);
+    el('circle', {cx:x(r[2]), cy:y, r:4.5, fill:css('--ours')}, s);
+    M(s, x(r[1]) - 8, y + 4, r[1].toFixed(1), {'text-anchor':'end'});
+    M(s, x(r[2]) + 8, y + 4, `${r[2]}  +${(r[2] - r[1]).toFixed(1)}`, {fill:css('--ink')});
+    hover(el('rect', {x:0, y:y - rh / 2, width:W, height:rh, fill:'transparent'}, s), `<b>Qwen3.5-${r[0]}</b><br>untuned ${r[1]}% · with imajev ${r[2]}%`); });
+  M(s, left, H - 2, '○ untuned base    ● with the imajev adapter', {'font-size':10.5});
+}
+let size = '4b';
+function drawCal(){
+  const box = $('#c-cal'); box.innerHTML = ''; const c = D.calibration[size];
+  const W = 640, H = 400, m = {l:50, r:20, t:10, b:46}; const s = svg(W, H); box.appendChild(s);
+  const x = v => m.l + (v - .3) / .72 * (W - m.l - m.r), y = v => H - m.b - (v - .3) / .72 * (H - m.t - m.b);
+  [.4, .6, .8, 1].forEach(v => { el('line', {x1:x(v), x2:x(v), y1:m.t, y2:H - m.b, stroke:css('--rule')}, s); el('line', {x1:m.l, x2:W - m.r, y1:y(v), y2:y(v), stroke:css('--rule')}, s);
+    M(s, x(v), H - m.b + 16, v.toFixed(1), {'text-anchor':'middle'}); M(s, m.l - 8, y(v) + 4, v.toFixed(1), {'text-anchor':'end'}); });
+  el('line', {x1:x(.3), y1:y(.3), x2:x(1.02), y2:y(1.02), stroke:css('--muted'), 'stroke-dasharray':'3 4'}, s);
+  T(s, (W + m.l) / 2, H - 8, 'stated confidence', {'text-anchor':'middle', 'font-size':11.5});
+  T(s, 12, (H - m.b + m.t) / 2, 'observed accuracy', {'text-anchor':'middle', 'font-size':11.5, transform:`rotate(-90 12 ${(H - m.b + m.t) / 2})`});
+  [['raw', c.raw, css('--other')], ['calibrated', c.served, css('--ours')]].forEach(([lab, pts, col]) => {
+    el('polyline', {points:pts.map(p => `${x(p[0])},${y(p[1])}`).join(' '), fill:'none', stroke:col, 'stroke-width':1.8}, s);
+    pts.forEach(p => { el('circle', {cx:x(p[0]), cy:y(p[1]), r:4, fill:col}, s);
+      hover(el('circle', {cx:x(p[0]), cy:y(p[1]), r:13, fill:'transparent'}, s), `<b>${lab}</b><br>${p[2]} items · stated ${(p[0] * 100).toFixed(0)}% · right ${(p[1] * 100).toFixed(0)}%`); });
+    const f = pts[0]; T(s, x(f[0]) - 8, y(f[1]) + 4, lab, {'text-anchor':'end', fill:lab === 'raw' ? css('--muted') : css('--ink'), 'font-weight':600, 'font-size':12});
+  });
+  $('#cap-cal').innerHTML = `<b>Figure 5.</b> imajev-${size} on JevBench hard, served with and without its calibration file: stated confidence against observed accuracy, five bins of about 22 items. ECE ${c.ece_raw.toFixed(3)} raw, ${c.ece_served.toFixed(3)} calibrated.`;
+}
+(function(){ const g = $('#seg-size'); g.innerHTML = ['2b', '4b', '9b'].map(s => `<button type="button" data-s="${s}">imajev-${s}</button>`).join('');
+  const set = () => g.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.s === size)));
+  g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { size = b.dataset.s; set(); drawCal(); })); set(); })();
+
+const CODE = {
+  run: {'Mac (MLX)': `git clone https://github.com/mohit67890/imajev && cd imajev
+python3.11 -m venv .venv && source .venv/bin/activate
+pip install -e ".[serve,mlx]"
+python scripts/download_model.py --model 4b
+hf download mohit67890/imajev-4b --local-dir adapters/imajev-4b
+PYTHONPATH=src:scripts python scripts/playground/server.py \\
+  --model-bundle artifacts/model-qwen4b.json --adapter adapters/imajev-4b/mlx \\
+  --calibration adapters/imajev-4b/calibration.json --model-name imajev-4b --port 8765`,
+  'Linux (CUDA)': `git clone https://github.com/mohit67890/imajev && cd imajev
+python3.11 -m venv .venv && source .venv/bin/activate
+pip install -e ".[serve,torch]"
+python scripts/download_model.py --model 4b
+hf download mohit67890/imajev-4b --local-dir adapters/imajev-4b
+PYTHONPATH=src:scripts python scripts/playground/server.py --backend torch \\
+  --model-bundle artifacts/model-qwen4b.json --adapter adapters/imajev-4b \\
+  --calibration adapters/imajev-4b/calibration.json --model-name imajev-4b --port 8765`},
+  req: `curl -s http://127.0.0.1:8765/v1/systemone \\
+  -F image=@listing.jpg \\
+  -F 'request={
+    "state": {"listing": {"title": "Suede boat shoes",
+                          "color": "red", "product_type": "shoe"}},
+    "questions": {
+      "contradicted_field": {
+        "type": "choice",
+        "instructions": "Which field of listing does this photo contradict?",
+        "criteria": {"listing.color": null,
+                     "listing.product_type": null,
+                     "none of these": null}},
+      "color_matches": {
+        "type": "noul",
+        "instructions": "The product in the photo matches listing.color."}}}'`,
+  act: `import json, requests
+
+SERVER = "http://127.0.0.1:8765/v1/systemone"
+THRESHOLD = 0.85   # choose from your own error costs
+QUESTIONS = {"contradicted_field": {
+    "type": "choice",
+    "instructions": "Which field of listing does this photo contradict?",
+    "criteria": {"listing.color": None, "listing.product_type": None, "none of these": None}}}
+
+def check_listing(photo_path, listing):
+    with open(photo_path, "rb") as f:
+        r = requests.post(SERVER, files={"image": f},
+                          data={"request": json.dumps({"state": {"listing": listing}, "questions": QUESTIONS})})
+    a = r.json()["answers"]["contradicted_field"]
+    if a["abstained"]:
+        return "ask a person", a          # the model says it cannot tell
+    p = a["probabilities"][a["choice"]] * (1 - a["unknown_probability"])
+    if p < THRESHOLD:
+        return "ask a person", a          # possible, but not sure enough
+    if a["choice"] == "none of these":
+        return "publish", a
+    return "hold: fix " + a["choice"], a`};
+function resBody(){ const v = D.listing.variants.find(v => v.case === 'listing.color=red'); const a = v.answers.contradicted_field;
+  const probs = Object.entries(a.probabilities).map(([k, p]) => `        "${k}": ${(+p).toFixed(3)}`).join(',\n');
+  return `// response (abridged): imajev-4b, calibrated
+{
+  "model": "imajev-4b",
+  "answers": {
+    "contradicted_field": {
+      "type": "choice",
+      "choice": "${a.top}",
+      "probabilities": {
+${probs}
+      },
+      "unknown_probability": ${(+a.unknown).toFixed(3)},
+      "abstained": false
+    },
+    "color_matches": {"type": "noul", "noul": ${(+v.answers.color_matches.top).toFixed(3)}, ...}
+  },
+  "usage": {"total_ms": ${Math.round(v.ms)}, ...}
+}`; }
+let os = 'Mac (MLX)';
+(function(){ const g = $('#seg-os'); g.innerHTML = Object.keys(CODE.run).map(k => `<button type="button" data-k="${k}">${k}</button>`).join('');
+  const set = () => { g.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === os))); $('#code-run').textContent = CODE.run[os]; };
+  g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { os = b.dataset.k; set(); })); set(); })();
+$('#code-req').textContent = CODE.req; $('#code-act').textContent = CODE.act; $('#code-res').textContent = resBody();
+document.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', async () => {
+  const k = btn.dataset.copy; const text = k === 'run' ? CODE.run[os] : CODE[k];
+  try { await navigator.clipboard.writeText(text); btn.textContent = 'Copied'; }
+  catch { const r = document.createRange(); r.selectNodeContents($('#code-' + k)); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); btn.textContent = 'Selected'; }
+  setTimeout(() => btn.textContent = 'Copy', 1500); }));
+
+const links = [...document.querySelectorAll('.toc a')];
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + e.target.id))); }), {rootMargin:'-30% 0px -60% 0px'});
+document.querySelectorAll('main section[id]').forEach(s => obs.observe(s));
+
+function drawAll(){ drawIB(); drawJB(); drawUp(); drawCal(); }
+drawAll();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll);
+new MutationObserver(drawAll).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+</script>
+
+</body>
+</html>

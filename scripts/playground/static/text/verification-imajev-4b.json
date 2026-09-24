@@ -1,0 +1,640 @@
+{
+  "model": {
+    "model": "imajev-4b",
+    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "backend": "mlx",
+    "loaded": true,
+    "load_seconds": 3.562
+  },
+  "threshold": 0.8,
+  "api": "http://127.0.0.1:8765",
+  "run_at": "2026-09-24T02:33:13.393Z",
+  "passed": 16,
+  "total": 21,
+  "rows": [
+    {
+      "scenario": "crm",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Record is current",
+        "detail": "Nothing in the email contradicts the account."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "none of these",
+          "unknown": 0.016308175235400468,
+          "abstained": false,
+          "probabilities": {
+            "account.city": 0.04429872935089671,
+            "account.seats": 0.0391997848689544,
+            "account.plan": 0.05543439099991619,
+            "none of these": 0.8610670947802327
+          }
+        }
+      },
+      "server_ms": 247.8,
+      "round_trip_ms": 251
+    },
+    {
+      "scenario": "crm",
+      "case": "email=moved city",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Update account.city",
+        "detail": "The email says otherwise; confirm with the customer."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "account.city",
+          "unknown": 0.007730535329763111,
+          "abstained": false,
+          "probabilities": {
+            "account.city": 0.9043801578872979,
+            "account.seats": 0.011435692106700158,
+            "account.plan": 0.011229578389415578,
+            "none of these": 0.07295457161658643
+          }
+        }
+      },
+      "server_ms": 175.6,
+      "round_trip_ms": 177
+    },
+    {
+      "scenario": "crm",
+      "case": "email=bigger team",
+      "pass": false,
+      "expect": "flag",
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Send to account manager",
+        "detail": "Not sure whether the record is out of date."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "account.seats",
+          "unknown": 0.008886101439541045,
+          "abstained": false,
+          "probabilities": {
+            "account.city": 0.01614235825456919,
+            "account.seats": 0.7936348184823167,
+            "account.plan": 0.09390536932832214,
+            "none of these": 0.09631745393479202
+          }
+        }
+      },
+      "server_ms": 176.1,
+      "round_trip_ms": 177
+    },
+    {
+      "scenario": "crm",
+      "case": "email=different plan",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Update account.plan",
+        "detail": "The email says otherwise; confirm with the customer."
+      },
+      "wrong": [],
+      "answers": {
+        "contradicted_field": {
+          "top": "account.plan",
+          "unknown": 0.007110620510524729,
+          "abstained": false,
+          "probabilities": {
+            "account.city": 0.01107581971472706,
+            "account.seats": 0.016246996465252864,
+            "account.plan": 0.9132065845239364,
+            "none of these": 0.05947059929608366
+          }
+        }
+      },
+      "server_ms": 174,
+      "round_trip_ms": 175
+    },
+    {
+      "scenario": "refund",
+      "case": "as shipped",
+      "pass": false,
+      "expect": "ok",
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Ask a team lead",
+        "detail": "Not sure how the policy applies."
+      },
+      "wrong": [],
+      "answers": {
+        "blocking_rule": {
+          "top": "none: the refund is allowed",
+          "unknown": 0.016191807460571455,
+          "abstained": false,
+          "probabilities": {
+            "policy.window": 0.016646909703481493,
+            "policy.opened": 0.2540264610560569,
+            "policy.final_sale": 0.029487722980137267,
+            "none: the refund is allowed": 0.6998389062603243
+          }
+        }
+      },
+      "server_ms": 205.2,
+      "round_trip_ms": 207
+    },
+    {
+      "scenario": "refund",
+      "case": "order.days_since_delivery=41",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Decline politely",
+        "detail": "Blocked by policy.window."
+      },
+      "wrong": [],
+      "answers": {
+        "blocking_rule": {
+          "top": "policy.window",
+          "unknown": 0.01830861698480782,
+          "abstained": false,
+          "probabilities": {
+            "policy.window": 0.860094903690028,
+            "policy.opened": 0.06270852101196726,
+            "policy.final_sale": 0.01665219596956785,
+            "none: the refund is allowed": 0.06054437932843697
+          }
+        }
+      },
+      "server_ms": 206.4,
+      "round_trip_ms": 208
+    },
+    {
+      "scenario": "refund",
+      "case": "order.opened=yes",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Decline politely",
+        "detail": "Blocked by policy.opened."
+      },
+      "wrong": [],
+      "answers": {
+        "blocking_rule": {
+          "top": "policy.opened",
+          "unknown": 0.0037412839800848264,
+          "abstained": false,
+          "probabilities": {
+            "policy.window": 0.003945712185279519,
+            "policy.opened": 0.961714545558104,
+            "policy.final_sale": 0.007205106715301365,
+            "none: the refund is allowed": 0.027134635541315108
+          }
+        }
+      },
+      "server_ms": 202.9,
+      "round_trip_ms": 204
+    },
+    {
+      "scenario": "refund",
+      "case": "order.final_sale=yes",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Decline politely",
+        "detail": "Blocked by policy.final_sale."
+      },
+      "wrong": [],
+      "answers": {
+        "blocking_rule": {
+          "top": "policy.final_sale",
+          "unknown": 0.007264250978666606,
+          "abstained": false,
+          "probabilities": {
+            "policy.window": 0.010470722098537494,
+            "policy.opened": 0.03290427150340028,
+            "policy.final_sale": 0.9115824951115964,
+            "none: the refund is allowed": 0.04504251128646581
+          }
+        }
+      },
+      "server_ms": 205.2,
+      "round_trip_ms": 207
+    },
+    {
+      "scenario": "invoice",
+      "case": "as shipped",
+      "pass": false,
+      "expect": "human",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Send a second reminder",
+        "detail": "No payment yet."
+      },
+      "wrong": [],
+      "answers": {
+        "paid": {
+          "top": "0.184",
+          "unknown": 0.2879811950143463,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 173.4,
+      "round_trip_ms": 175
+    },
+    {
+      "scenario": "invoice",
+      "case": "invoice.payment_note=paid",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Close the invoice",
+        "detail": "Payment recorded."
+      },
+      "wrong": [],
+      "answers": {
+        "paid": {
+          "top": "0.938",
+          "unknown": 0.018485436420054718,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 172.5,
+      "round_trip_ms": 174
+    },
+    {
+      "scenario": "invoice",
+      "case": "invoice.payment_note=not paid",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Send a second reminder",
+        "detail": "No payment yet."
+      },
+      "wrong": [],
+      "answers": {
+        "paid": {
+          "top": "0.019",
+          "unknown": 0.019148642573584427,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 171.5,
+      "round_trip_ms": 173
+    },
+    {
+      "scenario": "moderation",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Publish",
+        "detail": "No rule applies."
+      },
+      "wrong": [],
+      "answers": {
+        "verdict": {
+          "top": "publish",
+          "unknown": 0.02354891910218767,
+          "abstained": false,
+          "probabilities": {
+            "publish": 0.9758870377684639,
+            "remove: spam or advertising": 0.010750853056630108,
+            "remove: harassment of a person": 0.006867814895256561,
+            "remove: shares someone's private details": 0.006494294279649534
+          }
+        }
+      },
+      "server_ms": 173.1,
+      "round_trip_ms": 174
+    },
+    {
+      "scenario": "moderation",
+      "case": "post=spam",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Take it down",
+        "detail": "spam or advertising"
+      },
+      "wrong": [],
+      "answers": {
+        "verdict": {
+          "top": "remove: spam or advertising",
+          "unknown": 0.007530435861005358,
+          "abstained": false,
+          "probabilities": {
+            "publish": 0.04097874595259139,
+            "remove: spam or advertising": 0.9480160598039575,
+            "remove: harassment of a person": 0.005056966782305489,
+            "remove: shares someone's private details": 0.005948227461145574
+          }
+        }
+      },
+      "server_ms": 173.1,
+      "round_trip_ms": 174
+    },
+    {
+      "scenario": "moderation",
+      "case": "post=harassment",
+      "pass": false,
+      "expect": "flag",
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Send to a moderator",
+        "detail": "Not sure enough to act."
+      },
+      "wrong": [],
+      "answers": {
+        "verdict": {
+          "top": "remove: harassment of a person",
+          "unknown": 0.04168961532741968,
+          "abstained": false,
+          "probabilities": {
+            "publish": 0.14848283056449116,
+            "remove: spam or advertising": 0.021706787119461803,
+            "remove: harassment of a person": 0.7915094959876222,
+            "remove: shares someone's private details": 0.03830088632842474
+          }
+        }
+      },
+      "server_ms": 172.4,
+      "round_trip_ms": 174
+    },
+    {
+      "scenario": "moderation",
+      "case": "post=private details",
+      "pass": false,
+      "expect": "flag",
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Send to a moderator",
+        "detail": "Not sure enough to act."
+      },
+      "wrong": [],
+      "answers": {
+        "verdict": {
+          "top": "remove: shares someone's private details",
+          "unknown": 0.0225386319019272,
+          "abstained": false,
+          "probabilities": {
+            "publish": 0.028390422313648373,
+            "remove: spam or advertising": 0.014241824336538715,
+            "remove: harassment of a person": 0.16004734365731949,
+            "remove: shares someone's private details": 0.7973204096924934
+          }
+        }
+      },
+      "server_ms": 179.7,
+      "round_trip_ms": 181
+    },
+    {
+      "scenario": "review",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Thank the customer",
+        "detail": "Satisfaction 3.6 of 4."
+      },
+      "wrong": [],
+      "answers": {
+        "satisfaction": {
+          "top": "3.62",
+          "unknown": 0.01185240191722763,
+          "abstained": false,
+          "probabilities": {
+            "0": 0.01170536184955865,
+            "1": 0.010834377695345579,
+            "2": 0.03202578588242477,
+            "3": 0.23956567440782645,
+            "4": 0.7058688001648445
+          }
+        },
+        "problem_area": {
+          "top": "no complaint",
+          "unknown": 0.016019636212714388,
+          "abstained": false,
+          "probabilities": {
+            "delivery": 0.05507284613050004,
+            "product quality": 0.022015279761268103,
+            "price": 0.011910028695987085,
+            "no complaint": 0.9110018454122448
+          }
+        }
+      },
+      "server_ms": 307.8,
+      "round_trip_ms": 309
+    },
+    {
+      "scenario": "review",
+      "case": "review=late delivery",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Send to the delivery team",
+        "detail": "Satisfaction 1.8 of 4."
+      },
+      "wrong": [],
+      "answers": {
+        "satisfaction": {
+          "top": "1.80",
+          "unknown": 0.013198227367541313,
+          "abstained": false,
+          "probabilities": {
+            "0": 0.030529522980460782,
+            "1": 0.25780065712242095,
+            "2": 0.6108699725764456,
+            "3": 0.08051692450851537,
+            "4": 0.020282922812157284
+          }
+        },
+        "problem_area": {
+          "top": "delivery",
+          "unknown": 0.0038759304663528154,
+          "abstained": false,
+          "probabilities": {
+            "delivery": 0.9825630467479592,
+            "product quality": 0.006820731827137423,
+            "price": 0.003411760684490171,
+            "no complaint": 0.007204460740413193
+          }
+        }
+      },
+      "server_ms": 325.5,
+      "round_trip_ms": 327
+    },
+    {
+      "scenario": "review",
+      "case": "review=broke",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Send to the product quality team",
+        "detail": "Satisfaction 0.8 of 4."
+      },
+      "wrong": [],
+      "answers": {
+        "satisfaction": {
+          "top": "0.82",
+          "unknown": 0.009504348903794537,
+          "abstained": false,
+          "probabilities": {
+            "0": 0.26978262330129466,
+            "1": 0.6667092208827518,
+            "2": 0.04265878021020657,
+            "3": 0.013083166458454455,
+            "4": 0.007766209147292519
+          }
+        },
+        "problem_area": {
+          "top": "product quality",
+          "unknown": 0.005082161898314906,
+          "abstained": false,
+          "probabilities": {
+            "delivery": 0.0034292661695045894,
+            "product quality": 0.9841533982705156,
+            "price": 0.004216970653921036,
+            "no complaint": 0.008200364906058749
+          }
+        }
+      },
+      "server_ms": 318.2,
+      "round_trip_ms": 320
+    },
+    {
+      "scenario": "inbox",
+      "case": "as shipped",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Archive",
+        "detail": "Nothing to do."
+      },
+      "wrong": [],
+      "answers": {
+        "needs_action": {
+          "top": "0.058",
+          "unknown": 0.010656931642926248,
+          "abstained": false,
+          "probabilities": null
+        },
+        "deadline": {
+          "top": "no deadline or later",
+          "unknown": 0.07407947183241745,
+          "abstained": false,
+          "probabilities": {
+            "today or tomorrow": 0.07235421963035768,
+            "within a week": 0.08917740618651133,
+            "no deadline or later": 0.8384683741831309
+          }
+        }
+      },
+      "server_ms": 267.7,
+      "round_trip_ms": 269
+    },
+    {
+      "scenario": "inbox",
+      "case": "email=sign by tomorrow",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Add to tasks",
+        "detail": "Due date unclear."
+      },
+      "wrong": [],
+      "answers": {
+        "needs_action": {
+          "top": "0.925",
+          "unknown": 0.015586147611020744,
+          "abstained": false,
+          "probabilities": null
+        },
+        "deadline": {
+          "top": "today or tomorrow",
+          "unknown": 0.025516731660587755,
+          "abstained": false,
+          "probabilities": {
+            "today or tomorrow": 0.7295153283576623,
+            "within a week": 0.05137670454388016,
+            "no deadline or later": 0.21910796709845756
+          }
+        }
+      },
+      "server_ms": 258.5,
+      "round_trip_ms": 260
+    },
+    {
+      "scenario": "inbox",
+      "case": "email=review in weeks",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Add to tasks",
+        "detail": "Due: no deadline or later."
+      },
+      "wrong": [],
+      "answers": {
+        "needs_action": {
+          "top": "0.917",
+          "unknown": 0.016579875051354092,
+          "abstained": false,
+          "probabilities": null
+        },
+        "deadline": {
+          "top": "no deadline or later",
+          "unknown": 0.04370942065118237,
+          "abstained": false,
+          "probabilities": {
+            "today or tomorrow": 0.03280888930509265,
+            "within a week": 0.12364945501239186,
+            "no deadline or later": 0.8435416556825155
+          }
+        }
+      },
+      "server_ms": 262.4,
+      "round_trip_ms": 264
+    }
+  ]
+}

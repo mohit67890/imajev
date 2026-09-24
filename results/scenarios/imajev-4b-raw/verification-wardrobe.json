@@ -1,0 +1,1778 @@
+{
+  "model": {
+    "model": "imajev-4b-raw",
+    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "backend": "mlx",
+    "loaded": true,
+    "load_seconds": 2.546
+  },
+  "threshold": 0.8,
+  "api": "http://127.0.0.1:8765",
+  "run_at": "2026-09-24T02:30:50.749Z",
+  "passed": 47,
+  "total": 49,
+  "rows": [
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=red and black, order.pattern=checked",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Keep it",
+        "detail": "It's what you ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "none of these",
+          "unknown": 0.000005069408565248408,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.000059935401610313874,
+            "order.colour": 0.0003535981093445314,
+            "order.pattern": 0.00015662687857335436,
+            "none of these": 0.9994298396104718
+          }
+        },
+        "matches_order": {
+          "top": "1.000",
+          "unknown": 0.000010803281320981167,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 847.8,
+      "round_trip_ms": 851
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=red and black, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong pattern",
+        "detail": "Return reason, filled in for you: the pattern is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.pattern",
+          "unknown": 0.000011198912515313632,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.00022481895355293467,
+            "order.colour": 0.00038400981105681854,
+            "order.pattern": 0.9959841344528362,
+            "none of these": 0.003407036782554102
+          }
+        },
+        "matches_order": {
+          "top": "0.094",
+          "unknown": 0.0007102076005195834,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 846,
+      "round_trip_ms": 847
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=red and black, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong pattern",
+        "detail": "Return reason, filled in for you: the pattern is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.pattern",
+          "unknown": 0.0000486221482060977,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.0008797539997523402,
+            "order.colour": 0.0011989210299552118,
+            "order.pattern": 0.9798726136087182,
+            "none of these": 0.018048711361574234
+          }
+        },
+        "matches_order": {
+          "top": "0.279",
+          "unknown": 0.0007495576583670704,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 865.9,
+      "round_trip_ms": 867
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=navy blue, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong colour",
+        "detail": "Return reason, filled in for you: the colour is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.colour",
+          "unknown": 0.0000023015458407071977,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.00004649015173059703,
+            "order.colour": 0.9989440270700284,
+            "order.pattern": 0.00009815838727208792,
+            "none of these": 0.0009113243909689034
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.00020486800640301484,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 848,
+      "round_trip_ms": 849
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=navy blue, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong colour",
+        "detail": "Return reason, filled in for you: the colour is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.colour",
+          "unknown": 0.00010262594897461639,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.0006399916271298795,
+            "order.colour": 0.8296401494991178,
+            "order.pattern": 0.16775245590324667,
+            "none of these": 0.0019674029705056273
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.0009469660537130287,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 845.3,
+      "round_trip_ms": 846
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=navy blue, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong colour",
+        "detail": "Return reason, filled in for you: the colour is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.colour",
+          "unknown": 0.00008291255146342924,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.0006676111553421247,
+            "order.colour": 0.928514609850187,
+            "order.pattern": 0.06759240542441779,
+            "none of these": 0.0032253735700530756
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.0017447803501499403,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 849.8,
+      "round_trip_ms": 851
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=green, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong colour",
+        "detail": "Return reason, filled in for you: the colour is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.colour",
+          "unknown": 0.000005733377653752006,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.0001462067618205186,
+            "order.colour": 0.9971268206478976,
+            "order.pattern": 0.0002960643291397972,
+            "none of these": 0.002430908261142129
+          }
+        },
+        "matches_order": {
+          "top": "0.008",
+          "unknown": 0.0003553450334756704,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 861.5,
+      "round_trip_ms": 865
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=green, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: doesn't match your order",
+        "detail": "More than one thing looks off; most clearly the pattern."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.pattern",
+          "unknown": 0.0001369320400624551,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.000917370091826794,
+            "order.colour": 0.44122485659785116,
+            "order.pattern": 0.5521981692861642,
+            "none of these": 0.005659604024157882
+          }
+        },
+        "matches_order": {
+          "top": "0.005",
+          "unknown": 0.0009160654770255533,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 861.2,
+      "round_trip_ms": 864
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=flannel shirt, order.colour=green, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: doesn't match your order",
+        "detail": "More than one thing looks off; most clearly the colour."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.colour",
+          "unknown": 0.00013276552798384056,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.001192947089014738,
+            "order.colour": 0.7613960181249746,
+            "order.pattern": 0.2291957301250902,
+            "none of these": 0.008215304660920459
+          }
+        },
+        "matches_order": {
+          "top": "0.004",
+          "unknown": 0.0014162291291057111,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 854.9,
+      "round_trip_ms": 856
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=red and black, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.000002094143287457384,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9996766325760003,
+            "order.colour": 0.00007126015370637294,
+            "order.pattern": 0.00010691574562232915,
+            "none of these": 0.00014519152467104617
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.0006374348168138055,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 848.3,
+      "round_trip_ms": 850
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=red and black, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00001185415212972138,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9966844752636282,
+            "order.colour": 0.00020172684173736793,
+            "order.pattern": 0.0029007341473396495,
+            "none of these": 0.00021306374729477068
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.002065737374464493,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 855.9,
+      "round_trip_ms": 857
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=red and black, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.000014940504480171829,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9971122859357916,
+            "order.colour": 0.00023010212370794687,
+            "order.pattern": 0.0023791246531444997,
+            "none of these": 0.0002784872873559384
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.0020050878174478846,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 854,
+      "round_trip_ms": 855
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=navy blue, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00002949050316450649,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.995291538650574,
+            "order.colour": 0.003671637615170534,
+            "order.pattern": 0.0005216816358615558,
+            "none of these": 0.0005151420983938899
+          }
+        },
+        "matches_order": {
+          "top": "0.003",
+          "unknown": 0.0042102316826444115,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 848.1,
+      "round_trip_ms": 849
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=navy blue, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.000038655133813899585,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9953009211329988,
+            "order.colour": 0.0015307095220184986,
+            "order.pattern": 0.0029177433836477446,
+            "none of these": 0.00025062596133491833
+          }
+        },
+        "matches_order": {
+          "top": "0.004",
+          "unknown": 0.006539356343902423,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 846.3,
+      "round_trip_ms": 847
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=navy blue, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00003882126464621115,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.996074866487457,
+            "order.colour": 0.0017119342681014287,
+            "order.pattern": 0.0018725751468893577,
+            "none of these": 0.00034062409755229256
+          }
+        },
+        "matches_order": {
+          "top": "0.003",
+          "unknown": 0.00483463081251513,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 846.4,
+      "round_trip_ms": 847
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=green, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.000024600002689110522,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9959602304383118,
+            "order.colour": 0.0029583212670317945,
+            "order.pattern": 0.0005762080321733652,
+            "none of these": 0.0005052402624830112
+          }
+        },
+        "matches_order": {
+          "top": "0.004",
+          "unknown": 0.004376728878985159,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 854.8,
+      "round_trip_ms": 856
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=green, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00003174462861845552,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9957664715546856,
+            "order.colour": 0.0012625489431576228,
+            "order.pattern": 0.002737088148970764,
+            "none of these": 0.00023389135318605786
+          }
+        },
+        "matches_order": {
+          "top": "0.004",
+          "unknown": 0.006948116155056936,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 860.3,
+      "round_trip_ms": 862
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=jeans, order.colour=green, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00004351808617773397,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9942063849984437,
+            "order.colour": 0.0021691317665100134,
+            "order.pattern": 0.0031895417053225683,
+            "none of these": 0.00043494152972367134
+          }
+        },
+        "matches_order": {
+          "top": "0.003",
+          "unknown": 0.00507712637348154,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 842.9,
+      "round_trip_ms": 844
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=red and black, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00000907649459473993,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9988293658124249,
+            "order.colour": 0.00019410350876532907,
+            "order.pattern": 0.0001667832796117464,
+            "none of these": 0.0008097473991980221
+          }
+        },
+        "matches_order": {
+          "top": "0.006",
+          "unknown": 0.00053698778622599,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 844.4,
+      "round_trip_ms": 845
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=red and black, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00009767925497815579,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9323426146004286,
+            "order.colour": 0.0006875878959507172,
+            "order.pattern": 0.06588476369247331,
+            "none of these": 0.0010850338111474153
+          }
+        },
+        "matches_order": {
+          "top": "0.005",
+          "unknown": 0.0016477313674691085,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 856.2,
+      "round_trip_ms": 857
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=red and black, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00006186885704179028,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9801851010681434,
+            "order.colour": 0.0006160169789089267,
+            "order.pattern": 0.018122334685030717,
+            "none of these": 0.0010765472679169507
+          }
+        },
+        "matches_order": {
+          "top": "0.007",
+          "unknown": 0.0025296108505645223,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 859.9,
+      "round_trip_ms": 861
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=navy blue, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00006125613697582237,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9840081721071781,
+            "order.colour": 0.01444473206839187,
+            "order.pattern": 0.00045190718339832987,
+            "none of these": 0.0010951886410317433
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.0021312530340149684,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 855.8,
+      "round_trip_ms": 857
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=navy blue, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00011214764413687253,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.980262121311502,
+            "order.colour": 0.006285937598592306,
+            "order.pattern": 0.012718346050640757,
+            "none of these": 0.0007335950392649474
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.003130769723654126,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 854.6,
+      "round_trip_ms": 856
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=navy blue, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00009234720600574441,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9862761793850695,
+            "order.colour": 0.007234626661532252,
+            "order.pattern": 0.005607175991811413,
+            "none of these": 0.000882017961586808
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.0030245521113936844,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 860,
+      "round_trip_ms": 861
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=green, order.pattern=checked",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.000038596230476024334,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.9919067193933883,
+            "order.colour": 0.006958049286244481,
+            "order.pattern": 0.00031732017374436005,
+            "none of these": 0.0008179111466229086
+          }
+        },
+        "matches_order": {
+          "top": "0.003",
+          "unknown": 0.0025921645257502993,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 860.8,
+      "round_trip_ms": 862
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=green, order.pattern=plain",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00008319178190590651,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.98650885726258,
+            "order.colour": 0.0032728758315035953,
+            "order.pattern": 0.00960275718587134,
+            "none of these": 0.0006155097200450611
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.003946296209439225,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 854.6,
+      "round_trip_ms": 856
+    },
+    {
+      "scenario": "ordered",
+      "case": "order.item=summer dress, order.colour=green, order.pattern=striped",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Return it: wrong item",
+        "detail": "Return reason, filled in for you: the item is not what I ordered."
+      },
+      "wrong": [],
+      "answers": {
+        "wrong_field": {
+          "top": "order.item",
+          "unknown": 0.00007261305507780314,
+          "abstained": false,
+          "probabilities": {
+            "order.item": 0.990987638351868,
+            "order.colour": 0.0033233709870317523,
+            "order.pattern": 0.004909347984577331,
+            "none of these": 0.0007796426765229182
+          }
+        },
+        "matches_order": {
+          "top": "0.002",
+          "unknown": 0.0033618464021006036,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 859.9,
+      "round_trip_ms": 861
+    },
+    {
+      "scenario": "dresscode",
+      "case": "black dress, dress_code.rule=plain, dark colours only",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Wear it",
+        "detail": "It follows the dress code."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.997",
+          "unknown": 0.00009837902372144145,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "nothing, it follows the rule",
+          "unknown": 0.00013205653497469884,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.0020667363884936713,
+            "it has a pattern or print": 0.007448202375377592,
+            "nothing, it follows the rule": 0.9904850612361288
+          }
+        }
+      },
+      "server_ms": 858.1,
+      "round_trip_ms": 860
+    },
+    {
+      "scenario": "dresscode",
+      "case": "navy polo, dress_code.rule=plain, dark colours only",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Wear it",
+        "detail": "It follows the dress code."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.997",
+          "unknown": 0.0000759047157490442,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "nothing, it follows the rule",
+          "unknown": 0.00008143611177309973,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.0019929316638112437,
+            "it has a pattern or print": 0.004569426972024409,
+            "nothing, it follows the rule": 0.9934376413641643
+          }
+        }
+      },
+      "server_ms": 862.7,
+      "round_trip_ms": 865
+    },
+    {
+      "scenario": "dresscode",
+      "case": "striped tee, dress_code.rule=plain, dark colours only",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Pick something else",
+        "detail": "Why: it has a pattern or print."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.069",
+          "unknown": 0.00031648599762867637,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "it has a pattern or print",
+          "unknown": 0.00010185780118587571,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.0024146236911747948,
+            "it has a pattern or print": 0.9949083778055682,
+            "nothing, it follows the rule": 0.0026769985032570344
+          }
+        }
+      },
+      "server_ms": 855,
+      "round_trip_ms": 856
+    },
+    {
+      "scenario": "dresscode",
+      "case": "floral dress, dress_code.rule=plain, dark colours only",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Pick something else",
+        "detail": "Why: it has a pattern or print."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.022",
+          "unknown": 0.00031032212104294637,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "it has a pattern or print",
+          "unknown": 0.0000916984099415712,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.003260257036334043,
+            "it has a pattern or print": 0.9955691072487319,
+            "nothing, it follows the rule": 0.0011706357149340837
+          }
+        }
+      },
+      "server_ms": 846.6,
+      "round_trip_ms": 848
+    },
+    {
+      "scenario": "dresscode",
+      "case": "check flannel, dress_code.rule=plain, dark colours only",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Pick something else",
+        "detail": "Why: it has a pattern or print."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.012",
+          "unknown": 0.0002074578832380846,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "it has a pattern or print",
+          "unknown": 0.00016543956044472955,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.0066186015068975795,
+            "it has a pattern or print": 0.9913777428569626,
+            "nothing, it follows the rule": 0.0020036556361399103
+          }
+        }
+      },
+      "server_ms": 859.3,
+      "round_trip_ms": 861
+    },
+    {
+      "scenario": "dresscode",
+      "case": "black dress, dress_code.rule=no stripes, checks or prints",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Wear it",
+        "detail": "It follows the dress code."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.998",
+          "unknown": 0.000041424584885616544,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "nothing, it follows the rule",
+          "unknown": 0.00008923666936880325,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.000723102634277462,
+            "it has a pattern or print": 0.0015947817439268903,
+            "nothing, it follows the rule": 0.9976821156217957
+          }
+        }
+      },
+      "server_ms": 854.4,
+      "round_trip_ms": 855
+    },
+    {
+      "scenario": "dresscode",
+      "case": "navy polo, dress_code.rule=no stripes, checks or prints",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Wear it",
+        "detail": "It follows the dress code."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.999",
+          "unknown": 0.000028476788182896475,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "nothing, it follows the rule",
+          "unknown": 0.00010811430802819518,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.0006685499653478654,
+            "it has a pattern or print": 0.0013510867862385582,
+            "nothing, it follows the rule": 0.9979803632484135
+          }
+        }
+      },
+      "server_ms": 842.3,
+      "round_trip_ms": 843
+    },
+    {
+      "scenario": "dresscode",
+      "case": "striped tee, dress_code.rule=no stripes, checks or prints",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Pick something else",
+        "detail": "Why: it has a pattern or print."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.000",
+          "unknown": 0.00007099638245124955,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "it has a pattern or print",
+          "unknown": 0.005247875199827897,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.0024831636728770007,
+            "it has a pattern or print": 0.982876502755595,
+            "nothing, it follows the rule": 0.014640333571527926
+          }
+        }
+      },
+      "server_ms": 849.2,
+      "round_trip_ms": 850
+    },
+    {
+      "scenario": "dresscode",
+      "case": "floral dress, dress_code.rule=no stripes, checks or prints",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Pick something else",
+        "detail": "Why: it has a pattern or print."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.000",
+          "unknown": 0.00003515891501578333,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "it has a pattern or print",
+          "unknown": 0.000044763269873633326,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.00003604970068052608,
+            "it has a pattern or print": 0.9998160001872023,
+            "nothing, it follows the rule": 0.00014795011211709728
+          }
+        }
+      },
+      "server_ms": 852.6,
+      "round_trip_ms": 854
+    },
+    {
+      "scenario": "dresscode",
+      "case": "check flannel, dress_code.rule=no stripes, checks or prints",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "Pick something else",
+        "detail": "Why: it has a pattern or print."
+      },
+      "wrong": [],
+      "answers": {
+        "follows_rule": {
+          "top": "0.000",
+          "unknown": 0.00012410645035535082,
+          "abstained": false,
+          "probabilities": null
+        },
+        "broken_part": {
+          "top": "it has a pattern or print",
+          "unknown": 0.00129202842272207,
+          "abstained": false,
+          "probabilities": {
+            "the colour is not dark": 0.0005443688152441904,
+            "it has a pattern or print": 0.9971931042030605,
+            "nothing, it follows the rule": 0.0022625269816952637
+          }
+        }
+      },
+      "server_ms": 841,
+      "round_trip_ms": 842
+    },
+    {
+      "scenario": "tag",
+      "case": "flannel",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Tagged: red · checked · top",
+        "detail": "Added to your wardrobe, ready to filter."
+      },
+      "wrong": [],
+      "answers": {
+        "category": {
+          "top": "top",
+          "unknown": 0.0018328958481333534,
+          "abstained": false,
+          "probabilities": {
+            "top": 0.974683812581695,
+            "bottoms": 0.0003191769616218414,
+            "dress": 0.02388459410051205,
+            "knitwear or outerwear": 0.00038903865381217153,
+            "shoes": 0.00030694944764947266,
+            "bag": 0.00041642825470947627
+          }
+        },
+        "colour": {
+          "top": "red",
+          "unknown": 0.0012573762153944479,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.12285537607147233,
+            "white": 0.0013694715682915188,
+            "grey": 0.0027337479132236112,
+            "blue or navy": 0.009108567048525069,
+            "red": 0.8153783711944496,
+            "green": 0.0037389659677858496,
+            "beige or brown": 0.0018875951632316454,
+            "multicolour": 0.04292790507302038
+          }
+        },
+        "pattern": {
+          "top": "checked",
+          "unknown": 0.000050290891055247506,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.00003525530569586215,
+            "striped": 0.0002448115964864186,
+            "checked": 0.999415684553963,
+            "floral": 0.00007676054533188524,
+            "graphic print": 0.00022748799852284022
+          }
+        }
+      },
+      "server_ms": 936.8,
+      "round_trip_ms": 938
+    },
+    {
+      "scenario": "tag",
+      "case": "floral dress",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Tagged: blue or navy · floral · dress",
+        "detail": "Added to your wardrobe, ready to filter."
+      },
+      "wrong": [],
+      "answers": {
+        "category": {
+          "top": "dress",
+          "unknown": 0.000010232515572709469,
+          "abstained": false,
+          "probabilities": {
+            "top": 0.000005707586997827154,
+            "bottoms": 0.0000020235630029814954,
+            "dress": 0.9999840664306149,
+            "knitwear or outerwear": 0.0000012865360713781513,
+            "shoes": 0.000001821746519106275,
+            "bag": 0.000005094136793875932
+          }
+        },
+        "colour": {
+          "top": "blue or navy",
+          "unknown": 0.0010756571159145514,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.0018117467626014275,
+            "white": 0.001209290959784665,
+            "grey": 0.0007958678258909808,
+            "blue or navy": 0.9348854929387138,
+            "red": 0.001584286679151215,
+            "green": 0.0011833238082971922,
+            "beige or brown": 0.0007669701218549119,
+            "multicolour": 0.057763020903705754
+          }
+        },
+        "pattern": {
+          "top": "floral",
+          "unknown": 0.00006031866810466256,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.00010914776581625765,
+            "striped": 0.00010051212136552663,
+            "checked": 0.00016532210042290995,
+            "floral": 0.9970940096777196,
+            "graphic print": 0.0025310083346756656
+          }
+        }
+      },
+      "server_ms": 927.7,
+      "round_trip_ms": 929
+    },
+    {
+      "scenario": "tag",
+      "case": "jeans",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Tagged: blue or navy · plain · bottoms",
+        "detail": "Added to your wardrobe, ready to filter."
+      },
+      "wrong": [],
+      "answers": {
+        "category": {
+          "top": "bottoms",
+          "unknown": 0.00004376449321535943,
+          "abstained": false,
+          "probabilities": {
+            "top": 0.000007788239780615064,
+            "bottoms": 0.9999332658835048,
+            "dress": 0.000013787760407920294,
+            "knitwear or outerwear": 0.000005107963494705323,
+            "shoes": 0.0000288174141639677,
+            "bag": 0.000011232738647945948
+          }
+        },
+        "colour": {
+          "top": "blue or navy",
+          "unknown": 0.0007420633488431964,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.004398701152195766,
+            "white": 0.00016962861239701765,
+            "grey": 0.001808403101348664,
+            "blue or navy": 0.989636835187886,
+            "red": 0.00026481878873844435,
+            "green": 0.0001483899005805231,
+            "beige or brown": 0.0006677088079322219,
+            "multicolour": 0.0029055144489213884
+          }
+        },
+        "pattern": {
+          "top": "plain",
+          "unknown": 0.009038252397787178,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.8899346796423279,
+            "striped": 0.07962459529780043,
+            "checked": 0.0035343376617482714,
+            "floral": 0.0013583339563763694,
+            "graphic print": 0.025548053441747008
+          }
+        }
+      },
+      "server_ms": 953.5,
+      "round_trip_ms": 955
+    },
+    {
+      "scenario": "tag",
+      "case": "cardigan",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Tagged: green · plain · knitwear or outerwear",
+        "detail": "Added to your wardrobe, ready to filter."
+      },
+      "wrong": [],
+      "answers": {
+        "category": {
+          "top": "knitwear or outerwear",
+          "unknown": 0.00005114322183946244,
+          "abstained": false,
+          "probabilities": {
+            "top": 0.0005268407545143007,
+            "bottoms": 0.00001318007395933508,
+            "dress": 0.00009876629920784957,
+            "knitwear or outerwear": 0.9993149088694576,
+            "shoes": 0.000019885193072615408,
+            "bag": 0.000026418809788261664
+          }
+        },
+        "colour": {
+          "top": "green",
+          "unknown": 0.00033326218538807075,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.0017115192332869996,
+            "white": 0.000262080483589534,
+            "grey": 0.000692478060999582,
+            "blue or navy": 0.005601907168346652,
+            "red": 0.001579655980873241,
+            "green": 0.9882076665826268,
+            "beige or brown": 0.0005076506218286291,
+            "multicolour": 0.0014370418684485037
+          }
+        },
+        "pattern": {
+          "top": "plain",
+          "unknown": 0.0003147510406264964,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.9772707734386826,
+            "striped": 0.018223238258161856,
+            "checked": 0.0005221225506613453,
+            "floral": 0.00256874719738908,
+            "graphic print": 0.0014151185551051144
+          }
+        }
+      },
+      "server_ms": 953.9,
+      "round_trip_ms": 955
+    },
+    {
+      "scenario": "tag",
+      "case": "boat shoes",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Tagged: beige or brown · plain · shoes",
+        "detail": "Added to your wardrobe, ready to filter."
+      },
+      "wrong": [],
+      "answers": {
+        "category": {
+          "top": "shoes",
+          "unknown": 0.000019643958925172318,
+          "abstained": false,
+          "probabilities": {
+            "top": 0.0000028916413211127907,
+            "bottoms": 0.0000021942330200003825,
+            "dress": 0.0002788335076424821,
+            "knitwear or outerwear": 0.0000025172863703627774,
+            "shoes": 0.9996880115506638,
+            "bag": 0.00002555178098220747
+          }
+        },
+        "colour": {
+          "top": "beige or brown",
+          "unknown": 0.00016357531551691355,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.004172977509240407,
+            "white": 0.00020197383348440529,
+            "grey": 0.0008744719407944267,
+            "blue or navy": 0.0011875080732480562,
+            "red": 0.0004510666634349701,
+            "green": 0.00018110213882882657,
+            "beige or brown": 0.9922430467692993,
+            "multicolour": 0.0006878530716695524
+          }
+        },
+        "pattern": {
+          "top": "plain",
+          "unknown": 0.0008094786234172079,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.992335345635056,
+            "striped": 0.005338722179601865,
+            "checked": 0.0003091583027388323,
+            "floral": 0.00017228381634777507,
+            "graphic print": 0.001844490066255494
+          }
+        }
+      },
+      "server_ms": 842.1,
+      "round_trip_ms": 843
+    },
+    {
+      "scenario": "tag",
+      "case": "backpack",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Tagged: red · plain · bag",
+        "detail": "Added to your wardrobe, ready to filter."
+      },
+      "wrong": [],
+      "answers": {
+        "category": {
+          "top": "bag",
+          "unknown": 0.00002239155080922179,
+          "abstained": false,
+          "probabilities": {
+            "top": 0.0000011931521340772465,
+            "bottoms": 8.931398852938479e-7,
+            "dress": 0.000004362828288152374,
+            "knitwear or outerwear": 0.000001829063810714368,
+            "shoes": 0.000010994078774103202,
+            "bag": 0.9999807277371077
+          }
+        },
+        "colour": {
+          "top": "red",
+          "unknown": 0.0003662502825787481,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.004537021319012664,
+            "white": 0.00027088226401584864,
+            "grey": 0.0005247908524281925,
+            "blue or navy": 0.0013358956057038286,
+            "red": 0.9836645684440377,
+            "green": 0.0007165803208266495,
+            "beige or brown": 0.003780090404390383,
+            "multicolour": 0.005170170789584769
+          }
+        },
+        "pattern": {
+          "top": "plain",
+          "unknown": 0.001123892623643776,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.9832998997615042,
+            "striped": 0.010501342350347921,
+            "checked": 0.0005816675516277117,
+            "floral": 0.002114222696185225,
+            "graphic print": 0.0035028676403348873
+          }
+        }
+      },
+      "server_ms": 1631.6,
+      "round_trip_ms": 1633
+    },
+    {
+      "scenario": "owned",
+      "case": "the same sneakers",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "You already own these",
+        "detail": "Same product as the pair in your closet. Save the 39 USD."
+      },
+      "wrong": [],
+      "answers": {
+        "same_item": {
+          "top": "0.998",
+          "unknown": 0.000030082695858670996,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 465.4,
+      "round_trip_ms": 467
+    },
+    {
+      "scenario": "owned",
+      "case": "your boat shoes",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Not in your closet",
+        "detail": "Different product from the one you own."
+      },
+      "wrong": [],
+      "answers": {
+        "same_item": {
+          "top": "0.000",
+          "unknown": 0.000004343105294958821,
+          "abstained": false,
+          "probabilities": null
+        }
+      },
+      "server_ms": 651.8,
+      "round_trip_ms": 653
+    },
+    {
+      "scenario": "match",
+      "case": "white blazer",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Wear the white trainers",
+        "detail": "Same colour as the piece in the photo."
+      },
+      "wrong": [],
+      "answers": {
+        "same_colour": {
+          "top": "white trainers",
+          "unknown": 0.000003225141805770624,
+          "abstained": false,
+          "probabilities": {
+            "white trainers": 0.9998843168566456,
+            "tan boat shoes": 0.000016656430266062055,
+            "brown chelsea boots": 0.000010790441204946384,
+            "red ankle boots": 0.0000035910367246220523,
+            "grey ballet flats": 0.00002080327577259982,
+            "beige sandals": 0.000009924586920589498,
+            "none of these": 0.00005391737246559857
+          }
+        }
+      },
+      "server_ms": 731.3,
+      "round_trip_ms": 732
+    },
+    {
+      "scenario": "match",
+      "case": "grey trousers",
+      "pass": false,
+      "expect": "ok",
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Your call",
+        "detail": "imajev is not sure which pair matches."
+      },
+      "wrong": [
+        "same_colour=none of these (want grey ballet flats)"
+      ],
+      "answers": {
+        "same_colour": {
+          "top": "none of these",
+          "unknown": 0.0011875058583547256,
+          "abstained": false,
+          "probabilities": {
+            "white trainers": 0.04830378219479882,
+            "tan boat shoes": 0.004409135115306874,
+            "brown chelsea boots": 0.044105738223604814,
+            "red ankle boots": 0.0012623374775830132,
+            "grey ballet flats": 0.1585368254000995,
+            "beige sandals": 0.0018400223814939891,
+            "none of these": 0.741542159207113
+          }
+        }
+      },
+      "server_ms": 797.1,
+      "round_trip_ms": 798
+    },
+    {
+      "scenario": "match",
+      "case": "blue jeans",
+      "pass": false,
+      "expect": "flag",
+      "got": "human",
+      "route": {
+        "kind": "human",
+        "title": "Your call",
+        "detail": "imajev is not sure which pair matches."
+      },
+      "wrong": [],
+      "answers": {
+        "same_colour": {
+          "top": "none of these",
+          "unknown": 0.00181884052652848,
+          "abstained": false,
+          "probabilities": {
+            "white trainers": 0.20153854446365582,
+            "tan boat shoes": 0.006735832870397504,
+            "brown chelsea boots": 0.018525787349936314,
+            "red ankle boots": 0.0022383575300209337,
+            "grey ballet flats": 0.015637701775510236,
+            "beige sandals": 0.003970305001207048,
+            "none of these": 0.7513534710092722
+          }
+        }
+      },
+      "server_ms": 712.7,
+      "round_trip_ms": 715
+    },
+    {
+      "scenario": "match",
+      "case": "black dress",
+      "pass": true,
+      "expect": "flag",
+      "got": "flag",
+      "route": {
+        "kind": "flag",
+        "title": "No match in your closet",
+        "detail": "None of your shoes are that colour."
+      },
+      "wrong": [],
+      "answers": {
+        "same_colour": {
+          "top": "none of these",
+          "unknown": 0.0010094186913260504,
+          "abstained": false,
+          "probabilities": {
+            "white trainers": 0.005719281801382892,
+            "tan boat shoes": 0.0015814731852881571,
+            "brown chelsea boots": 0.04205984408817088,
+            "red ankle boots": 0.02207876604919877,
+            "grey ballet flats": 0.0382811262247075,
+            "beige sandals": 0.003602098929979081,
+            "none of these": 0.8866774097212727
+          }
+        }
+      },
+      "server_ms": 704.3,
+      "round_trip_ms": 705
+    }
+  ]
+}

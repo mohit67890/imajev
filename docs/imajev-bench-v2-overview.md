@@ -150,16 +150,20 @@ test items unless `--allow-test-exposure` is passed.
 
 ## 7. Results (test split, 279 items)
 
-Interfaces are ranked separately (pre-registration). Local rows: one H100, 23 Sept 2026.
+Interfaces are ranked separately (pre-registration). Local rows: one H100, 23–24 Sept 2026.
+Chance-corrected accuracy (chance 26.5%) and ECE / Brier are in `LEADERBOARD.md`.
 
 Direct option scoring (single pass, full option rotations):
 
 | Model | Accuracy (95% CI) | Notes |
 | --- | --- | --- |
-| imajev-9b (v1.1) | 81.0% (75–86) | beats its base, paired cluster test p = 0.03 (H1) |
+| imajev-9b (phase-2b, released) | 82.8% (77–88) | |
+| imajev-4b (phase-2b, released) | 82.4% (77–88) | indistinguishable from the 9B (paired test p = 1.0) |
+| imajev-9b (earlier v1.1 adapter) | 81.0% (75–86) | pre-registered H1 vs its base: p = 0.03, confirmed |
 | Qwen3.5-9B base | 76.7% (70–82) | |
 | Qwen3.5-4B base | 70.6% (64–78) | |
-| imajev-2b (v2.1) | 63.1% (56–70) | 63.4% on a Mac with MLX; 98.2% answer agreement between backends; +2.9 over its base, p = 0.57 (H2, n.s.) |
+| imajev-2b (phase-2b) | 70.3% (64–77) | phase-2 adapter 68.5%; the 2B release choice is still open |
+| imajev-2b (earlier v2.1 adapter) | 63.1% (56–70) | 63.4% on a Mac with MLX (98.2% answer agreement); pre-registered H2 vs its base: p = 0.57, not significant |
 | Qwen3.5-2B base | 60.2% (53–67) | |
 | imajev-2b, no image | abstains on 258/279 | image-necessity control, not ranked |
 | imajev-2b, no state | 51.6% (45–58) | state-necessity control, not ranked; joint track 46/122 vs 76/122 with the state |
@@ -196,10 +200,14 @@ Full tables: `reports/imajev-bench-v2-lite-v1/RESULTS.md` and
 
 ## 8. Hidden test for submitted models
 
-- **Status: planned, not yet built.** The hidden set does not exist on disk yet
-  (`data/imajev-bench/private-1/` is not present); until it is built and its hash published, no
-  hidden-test result can be claimed. The plan: 36 new scenes plus 30 text items (24 of them hard),
-  built with a different seed and split salt, never published.
+- **Status: built and audited (24 Sept 2026).** `data/imajev-bench/private-1/records-audited.jsonl`,
+  sha256 `b5b3fa93da5ecb7289b73ef7e24b1ef6059140869b65bf1c62d6458817d115cf`.
+  - 202 items, all in test, in 66 evidence clusters: 30 text, 84 visual, 88 joint; 15 Unknown.
+  - Built from 36 new scenes (all Flare images) and 30 text items (24 of them hard), with its own seed
+    and split salt. Never published.
+  - The same blind AI audit as the public set: 41 items (15% cluster sample plus every cover
+    variant), Claude Opus 5.5 and Kimi K2.5. **0 label errors in 41** (upper 95% bound about 8.6%).
+    One boundary case (a stay ending exactly when no-parking starts) is noted.
 - **Tier A (weights):** the team runs the model offline, so hidden items never leave team machines.
 - **Tier B (API endpoint):** the items are sent to the endpoint, and exposure rules apply.
 - **Reports:** `scripts/imajev_bench/evaluate_submission.py` publishes **aggregate metrics only**:

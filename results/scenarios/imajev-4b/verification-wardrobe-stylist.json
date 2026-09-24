@@ -1,0 +1,1824 @@
+{
+  "model": {
+    "model": "imajev-4b",
+    "adapter": "../imajev-release/hf/imajev-4b/mlx",
+    "backend": "mlx",
+    "loaded": true,
+    "load_seconds": 1.446
+  },
+  "threshold": 0.8,
+  "api": "http://127.0.0.1:8765",
+  "run_at": "2026-09-24T02:29:08.163Z",
+  "passed": 19,
+  "total": 24,
+  "rows": [
+    {
+      "scenario": "style-m03",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "red",
+          "unknown": 0.015753540424989373,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.14895951932452736,
+            "white": 0.020401879573995037,
+            "grey": 0.017876161328487756,
+            "navy or blue": 0.018562553589484658,
+            "beige or brown": 0.01810517756909941,
+            "red": 0.6623342927159298,
+            "green": 0.019770490575971435,
+            "multicolour": 0.09398992532250458
+          }
+        },
+        "piece_pattern": {
+          "top": "checked",
+          "unknown": 0.02178488604240216,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.019219030660433355,
+            "striped": 0.02530544699382193,
+            "checked": 0.9308685017086996,
+            "floral": 0.024607020637045115
+          }
+        },
+        "pick_bottoms": {
+          "top": "Black jeans",
+          "unknown": 0.046104130261078693,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.028909740367240668,
+            "Blue jeans": 0.09078571632928613,
+            "Black jeans": 0.6800041895183266,
+            "Grey trousers": 0.18450117463206706,
+            "Beige shorts": 0.01579917915307945
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.05586376565977976,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.01464097159103362,
+            "Tan chelsea boots": 0.013164683721718652,
+            "Grey ballet flats": 0.9610408419459969,
+            "Cream sandals": 0.01115350274125073
+          }
+        }
+      },
+      "server_ms": 1099.5,
+      "round_trip_ms": 1104
+    },
+    {
+      "scenario": "style-m03",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "red",
+          "unknown": 0.018327178498098867,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.11549273249951518,
+            "white": 0.028346760419924743,
+            "grey": 0.02069350392689189,
+            "navy or blue": 0.021905497710450708,
+            "beige or brown": 0.020521806496395158,
+            "red": 0.6779308151735783,
+            "green": 0.02433082762083749,
+            "multicolour": 0.09077805615240651
+          }
+        },
+        "piece_pattern": {
+          "top": "checked",
+          "unknown": 0.02120821517364146,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.019582280602918837,
+            "striped": 0.0262428282496438,
+            "checked": 0.9273702733756268,
+            "floral": 0.026804617771810466
+          }
+        },
+        "pick_bottoms": {
+          "top": "Beige chinos",
+          "unknown": 0.02808995259559254,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.8319404974793436,
+            "Blue jeans": 0.031658157413951935,
+            "Black jeans": 0.047737442389473576,
+            "Grey trousers": 0.021123854935250826,
+            "Beige shorts": 0.06754004778198001
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.05086578563258256,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.03310346972923258,
+            "Tan chelsea boots": 0.02261406990028816,
+            "Grey ballet flats": 0.04168830670815332,
+            "Cream sandals": 0.902594153662326
+          }
+        }
+      },
+      "server_ms": 1103.6,
+      "round_trip_ms": 1106
+    },
+    {
+      "scenario": "style-m03",
+      "case": "me.likes=denim, tan or brown",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "red",
+          "unknown": 0.016691447895322363,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.11152164655816392,
+            "white": 0.021671008732462405,
+            "grey": 0.018731518157765137,
+            "navy or blue": 0.02014737024587638,
+            "beige or brown": 0.020973563049823327,
+            "red": 0.6859482677740432,
+            "green": 0.024227931515538703,
+            "multicolour": 0.09677869396632705
+          }
+        },
+        "piece_pattern": {
+          "top": "checked",
+          "unknown": 0.019182154694961193,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.016079500481746636,
+            "striped": 0.024875284794747567,
+            "checked": 0.9366564125829727,
+            "floral": 0.022388802140533005
+          }
+        },
+        "pick_bottoms": {
+          "top": "Blue jeans",
+          "unknown": 0.041753770685951985,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.03936176566351282,
+            "Blue jeans": 0.8625253046036215,
+            "Black jeans": 0.0516838102284852,
+            "Grey trousers": 0.021439991515024404,
+            "Beige shorts": 0.024989127989356114
+          }
+        },
+        "pick_shoes": {
+          "top": "Tan chelsea boots",
+          "unknown": 0.05423287891170379,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.4632171943995437,
+            "Tan chelsea boots": 0.4670904001819088,
+            "Grey ballet flats": 0.041826237363633695,
+            "Cream sandals": 0.027866168054913848
+          }
+        }
+      },
+      "server_ms": 1084.7,
+      "round_trip_ms": 1086
+    },
+    {
+      "scenario": "style-w03",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "black",
+          "unknown": 0.02515370771778279,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.5873316400087645,
+            "white": 0.11974268051096741,
+            "grey": 0.045791782483470475,
+            "navy or blue": 0.03672475245821467,
+            "beige or brown": 0.020528136306452078,
+            "red": 0.024233627744932502,
+            "green": 0.016599924727094414,
+            "multicolour": 0.14904745576010395
+          }
+        },
+        "piece_pattern": {
+          "top": "striped",
+          "unknown": 0.013171152609679956,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.018405051576642798,
+            "striped": 0.9363369118723287,
+            "checked": 0.0184796659279461,
+            "floral": 0.02677837062308237
+          }
+        },
+        "pick_bottoms": {
+          "top": "Black jeans",
+          "unknown": 0.05266076422140929,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.04042659962919702,
+            "Blue jeans": 0.12356923453549232,
+            "Black jeans": 0.542345691692795,
+            "Grey trousers": 0.2700233123785182,
+            "Beige shorts": 0.023635161763997523
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.018162274465173177,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.006788323485942137,
+            "Tan chelsea boots": 0.004665126388067628,
+            "Grey ballet flats": 0.9465862102267271,
+            "Burgundy ankle boots": 0.035221741253534666,
+            "Cream sandals": 0.006738598645728529
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.05718761025978739,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.029136162468640196,
+            "Black backpack": 0.9708638375313597
+          }
+        }
+      },
+      "server_ms": 1222,
+      "round_trip_ms": 1223
+    },
+    {
+      "scenario": "style-w03",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "white",
+          "unknown": 0.032239983890625,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.2830882069406323,
+            "white": 0.37783272681293395,
+            "grey": 0.051350980251212125,
+            "navy or blue": 0.0374928544455407,
+            "beige or brown": 0.02824126503792915,
+            "red": 0.02800731656890246,
+            "green": 0.021813718662062418,
+            "multicolour": 0.1721729312807869
+          }
+        },
+        "piece_pattern": {
+          "top": "striped",
+          "unknown": 0.014281256831072791,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.02061828744427993,
+            "striped": 0.9314899214294242,
+            "checked": 0.02039889482688607,
+            "floral": 0.02749289629940982
+          }
+        },
+        "pick_bottoms": {
+          "top": "Beige chinos",
+          "unknown": 0.03707991713186619,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.7362616284924006,
+            "Blue jeans": 0.03041098451920476,
+            "Black jeans": 0.040230382969313624,
+            "Grey trousers": 0.021159639272280616,
+            "Beige shorts": 0.17193736474680038
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.027163836598142532,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.016893151892691544,
+            "Tan chelsea boots": 0.010668729800403192,
+            "Grey ballet flats": 0.02640081556286293,
+            "Burgundy ankle boots": 0.02806098321722858,
+            "Cream sandals": 0.9179763195268138
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.5096559565959288,
+          "abstained": true,
+          "probabilities": {
+            "Red backpack": 0.39573597049640385,
+            "Black backpack": 0.6042640295035961
+          }
+        }
+      },
+      "server_ms": 1202.3,
+      "round_trip_ms": 1204
+    },
+    {
+      "scenario": "style-w03",
+      "case": "me.likes=denim, tan or brown",
+      "pass": false,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [
+        "pick_shoes=Burgundy ankle boots (want Caramel boat shoes or Tan chelsea boots)"
+      ],
+      "answers": {
+        "piece_colour": {
+          "top": "black",
+          "unknown": 0.03485321174119876,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.473228561731594,
+            "white": 0.15603686403623615,
+            "grey": 0.051135106525693474,
+            "navy or blue": 0.039675149319956644,
+            "beige or brown": 0.0297295373486978,
+            "red": 0.038424209368938124,
+            "green": 0.02697582209657921,
+            "multicolour": 0.18479474957230457
+          }
+        },
+        "piece_pattern": {
+          "top": "striped",
+          "unknown": 0.015762459469384555,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.020493754919720858,
+            "striped": 0.9269071228233686,
+            "checked": 0.022693477386388314,
+            "floral": 0.029905644870522195
+          }
+        },
+        "pick_bottoms": {
+          "top": "Blue jeans",
+          "unknown": 0.048336305006090534,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.04473207082280959,
+            "Blue jeans": 0.83412336404198,
+            "Black jeans": 0.04857647455970588,
+            "Grey trousers": 0.026888269600274975,
+            "Beige shorts": 0.04567982097522967
+          }
+        },
+        "pick_shoes": {
+          "top": "Burgundy ankle boots",
+          "unknown": 0.02923636017511822,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.3640615732726252,
+            "Tan chelsea boots": 0.19903217690724606,
+            "Grey ballet flats": 0.03273851471574792,
+            "Burgundy ankle boots": 0.3785998218499836,
+            "Cream sandals": 0.025567913254397157
+          }
+        },
+        "pick_bags": {
+          "top": "Red backpack",
+          "unknown": 0.15557983406782805,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.8184482178396304,
+            "Black backpack": 0.18155178216036963
+          }
+        }
+      },
+      "server_ms": 1230.6,
+      "round_trip_ms": 1233
+    },
+    {
+      "scenario": "style-m01",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.012986104705695863,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.044784223337188116,
+            "white": 0.012090448375214833,
+            "grey": 0.026284993992490742,
+            "navy or blue": 0.8658681107060576,
+            "beige or brown": 0.011347471793208792,
+            "red": 0.01139650507719747,
+            "green": 0.010374171524977117,
+            "multicolour": 0.017854075193665376
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.026283878640548052,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.8013160324614332,
+            "striped": 0.10709044478906826,
+            "checked": 0.05285189379372786,
+            "floral": 0.038741628955770685
+          }
+        },
+        "pick_bottoms": {
+          "top": "Black jeans",
+          "unknown": 0.04548403551536419,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.05955354587477478,
+            "Blue jeans": 0.06530146333515448,
+            "Black jeans": 0.4570630429943764,
+            "Grey trousers": 0.327253277365539,
+            "Beige shorts": 0.026448427138801574,
+            "Gingham midi skirt": 0.0643802432913538
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.07198385339868414,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.015404816431076305,
+            "Tan chelsea boots": 0.011127112602198471,
+            "Grey ballet flats": 0.8875939488069039,
+            "Burgundy ankle boots": 0.07285159090858993,
+            "Cream sandals": 0.013022531251231347
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.04311417258060065,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.015076425428444324,
+            "Black backpack": 0.9849235745715557
+          }
+        }
+      },
+      "server_ms": 1235.5,
+      "round_trip_ms": 1238
+    },
+    {
+      "scenario": "style-m01",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.030127431308300204,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.061927805536397734,
+            "white": 0.030982186311557428,
+            "grey": 0.042694877343167896,
+            "navy or blue": 0.7347863792897753,
+            "beige or brown": 0.027690071286407596,
+            "red": 0.03266801410857203,
+            "green": 0.03069109963631444,
+            "multicolour": 0.03855956648780756
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.03754308121607368,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7310050762668481,
+            "striped": 0.14002517508709533,
+            "checked": 0.06945099314165395,
+            "floral": 0.059518755504402714
+          }
+        },
+        "pick_bottoms": {
+          "top": "Beige chinos",
+          "unknown": 0.015668747043571487,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.7823663870738972,
+            "Blue jeans": 0.017672672197159137,
+            "Black jeans": 0.021209072451190615,
+            "Grey trousers": 0.016623979948992368,
+            "Beige shorts": 0.13726147333324137,
+            "Gingham midi skirt": 0.024866414995519327
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.034087376574564225,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.021997893809386562,
+            "Tan chelsea boots": 0.01169035526578246,
+            "Grey ballet flats": 0.023230845776186688,
+            "Burgundy ankle boots": 0.026891447587346785,
+            "Cream sandals": 0.9161894575612974
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.6348239058932871,
+          "abstained": true,
+          "probabilities": {
+            "Red backpack": 0.401894591578909,
+            "Black backpack": 0.5981054084210911
+          }
+        }
+      },
+      "server_ms": 1237.3,
+      "round_trip_ms": 1240
+    },
+    {
+      "scenario": "style-m01",
+      "case": "me.likes=denim, tan or brown",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.03131303148602911,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.06491070695012834,
+            "white": 0.025773869482352822,
+            "grey": 0.04243900414071856,
+            "navy or blue": 0.7084847436291798,
+            "beige or brown": 0.034531615344422645,
+            "red": 0.039000547918580375,
+            "green": 0.03979645208294585,
+            "multicolour": 0.0450630604516717
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.04072382050689134,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7463444065780199,
+            "striped": 0.1308760365638307,
+            "checked": 0.06809256077418345,
+            "floral": 0.05468699608396588
+          }
+        },
+        "pick_bottoms": {
+          "top": "Blue jeans",
+          "unknown": 0.04928929027406167,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.0874428939556848,
+            "Blue jeans": 0.6572670205985536,
+            "Black jeans": 0.05148819613475482,
+            "Grey trousers": 0.03442397569903034,
+            "Beige shorts": 0.08783733203641099,
+            "Gingham midi skirt": 0.0815405815755654
+          }
+        },
+        "pick_shoes": {
+          "top": "Caramel boat shoes",
+          "unknown": 0.03794243447542832,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.5907404595129748,
+            "Tan chelsea boots": 0.16833288098253796,
+            "Grey ballet flats": 0.031596246600412756,
+            "Burgundy ankle boots": 0.18438851797652075,
+            "Cream sandals": 0.02494189492755373
+          }
+        },
+        "pick_bags": {
+          "top": "Red backpack",
+          "unknown": 0.32313255183768463,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.6793386274702278,
+            "Black backpack": 0.32066137252977217
+          }
+        }
+      },
+      "server_ms": 1219.5,
+      "round_trip_ms": 1221
+    },
+    {
+      "scenario": "style-w01",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.027411454943207885,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.04516283405690996,
+            "white": 0.02819668211784378,
+            "grey": 0.025606534235613775,
+            "navy or blue": 0.639734048130205,
+            "beige or brown": 0.024412432388002548,
+            "red": 0.030176563831809698,
+            "green": 0.027165844893356907,
+            "multicolour": 0.17954506034625836
+          }
+        },
+        "piece_pattern": {
+          "top": "floral",
+          "unknown": 0.024873867076860602,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.0250151195571593,
+            "striped": 0.015539454006254658,
+            "checked": 0.017265756494193842,
+            "floral": 0.9421796699423922
+          }
+        },
+        "pick_layers": {
+          "top": "Navy blazer",
+          "unknown": 0.06731508707188122,
+          "abstained": false,
+          "probabilities": {
+            "Denim jacket": 0.09743569475913709,
+            "Navy blazer": 0.7423595284772965,
+            "White blazer": 0.04227232101981357,
+            "Green cardigan": 0.11793245574375287
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.018113577503073353,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.006287429210073948,
+            "Tan chelsea boots": 0.004629275454078436,
+            "Grey ballet flats": 0.9470576388929381,
+            "Burgundy ankle boots": 0.03331980585280742,
+            "Cream sandals": 0.00870585059010201
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.08853102707756509,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.02156293727813387,
+            "Black backpack": 0.978437062721866
+          }
+        }
+      },
+      "server_ms": 1188.7,
+      "round_trip_ms": 1190
+    },
+    {
+      "scenario": "style-w01",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.031031429346991518,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.04095922936667827,
+            "white": 0.051052250358425984,
+            "grey": 0.02726236852614865,
+            "navy or blue": 0.6010665739620478,
+            "beige or brown": 0.027112551338015115,
+            "red": 0.029993123618141312,
+            "green": 0.026985783770562467,
+            "multicolour": 0.19556811905998048
+          }
+        },
+        "piece_pattern": {
+          "top": "floral",
+          "unknown": 0.022097183618964764,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.020545515681800422,
+            "striped": 0.013270288240528906,
+            "checked": 0.014277287250702817,
+            "floral": 0.9519069088269679
+          }
+        },
+        "pick_layers": {
+          "top": "White blazer",
+          "unknown": 0.04941951583624908,
+          "abstained": false,
+          "probabilities": {
+            "Denim jacket": 0.04102251950625861,
+            "Navy blazer": 0.03549650485663451,
+            "White blazer": 0.868219810491078,
+            "Green cardigan": 0.055261165146028884
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.024081161118671854,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.010799547553040502,
+            "Tan chelsea boots": 0.007488099291125542,
+            "Grey ballet flats": 0.026802782246485624,
+            "Burgundy ankle boots": 0.018945962320020337,
+            "Cream sandals": 0.935963608589328
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.6317952724055631,
+          "abstained": true,
+          "probabilities": {
+            "Red backpack": 0.281413529255025,
+            "Black backpack": 0.718586470744975
+          }
+        }
+      },
+      "server_ms": 1191,
+      "round_trip_ms": 1192
+    },
+    {
+      "scenario": "style-w01",
+      "case": "me.likes=denim, tan or brown",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.031015131853419434,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.038904054708522984,
+            "white": 0.03335914192496118,
+            "grey": 0.027881144156897523,
+            "navy or blue": 0.5730034709601053,
+            "beige or brown": 0.03417878580128345,
+            "red": 0.03575131888092032,
+            "green": 0.035023887909475505,
+            "multicolour": 0.22189819565783384
+          }
+        },
+        "piece_pattern": {
+          "top": "floral",
+          "unknown": 0.025260191219342885,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.02351484679687521,
+            "striped": 0.01648385778820648,
+            "checked": 0.019747310718373108,
+            "floral": 0.9402539846965452
+          }
+        },
+        "pick_layers": {
+          "top": "Denim jacket",
+          "unknown": 0.0869243316118722,
+          "abstained": false,
+          "probabilities": {
+            "Denim jacket": 0.6500373670882841,
+            "Navy blazer": 0.06536786338838457,
+            "White blazer": 0.04651722862537886,
+            "Green cardigan": 0.23807754089795252
+          }
+        },
+        "pick_shoes": {
+          "top": "Caramel boat shoes",
+          "unknown": 0.04422283839244101,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.41256672076314926,
+            "Tan chelsea boots": 0.21858182086447367,
+            "Grey ballet flats": 0.0580740353368284,
+            "Burgundy ankle boots": 0.2708779304318418,
+            "Cream sandals": 0.03989949260370695
+          }
+        },
+        "pick_bags": {
+          "top": "Red backpack",
+          "unknown": 0.28641144494335496,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.5131433924095149,
+            "Black backpack": 0.48685660759048516
+          }
+        }
+      },
+      "server_ms": 1190.6,
+      "round_trip_ms": 1191
+    },
+    {
+      "scenario": "style-w08",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "black",
+          "unknown": 0.012571193927846055,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.8786889209983557,
+            "white": 0.01959001732204057,
+            "grey": 0.02221241562959562,
+            "navy or blue": 0.016790657713193435,
+            "beige or brown": 0.011621153729694158,
+            "red": 0.019009244676180075,
+            "green": 0.010226382198551709,
+            "multicolour": 0.021861207732388678
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.038187457930453333,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7618375110499758,
+            "striped": 0.04853618359481944,
+            "checked": 0.03101860792675991,
+            "floral": 0.15860769742844488
+          }
+        },
+        "pick_layers": {
+          "top": "Navy blazer",
+          "unknown": 0.06951304757471222,
+          "abstained": false,
+          "probabilities": {
+            "Denim jacket": 0.06710288151202841,
+            "Navy blazer": 0.7904573432251344,
+            "White blazer": 0.03649983290417861,
+            "Green cardigan": 0.10593994235865864
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.013101054406900351,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.005752751459584582,
+            "Tan chelsea boots": 0.004109715504618134,
+            "Grey ballet flats": 0.950774318057074,
+            "Burgundy ankle boots": 0.03292791573252589,
+            "Cream sandals": 0.006435299246197334
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.03646168559576367,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.027319122713554522,
+            "Black backpack": 0.9726808772864455
+          }
+        }
+      },
+      "server_ms": 1189.1,
+      "round_trip_ms": 1190
+    },
+    {
+      "scenario": "style-w08",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "black",
+          "unknown": 0.025783562262196826,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.7790182679902138,
+            "white": 0.0419736042385027,
+            "grey": 0.03584065398293036,
+            "navy or blue": 0.023420091897725374,
+            "beige or brown": 0.022958975270158617,
+            "red": 0.036009147428275316,
+            "green": 0.02264936108982201,
+            "multicolour": 0.03812989810237187
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.052100373496667365,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7285324562149339,
+            "striped": 0.05811206835274111,
+            "checked": 0.039756280129028286,
+            "floral": 0.17359919530329668
+          }
+        },
+        "pick_layers": {
+          "top": "White blazer",
+          "unknown": 0.027238885862551084,
+          "abstained": false,
+          "probabilities": {
+            "Denim jacket": 0.016949916511063628,
+            "Navy blazer": 0.014877191871789014,
+            "White blazer": 0.9301549929642408,
+            "Green cardigan": 0.0380178986529066
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.01961151756521496,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.013939357634884086,
+            "Tan chelsea boots": 0.010379671366812315,
+            "Grey ballet flats": 0.01973543100513465,
+            "Burgundy ankle boots": 0.026124744847461794,
+            "Cream sandals": 0.9298207951457071
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.46922951397844753,
+          "abstained": true,
+          "probabilities": {
+            "Red backpack": 0.4743870464338072,
+            "Black backpack": 0.5256129535661928
+          }
+        }
+      },
+      "server_ms": 1186.3,
+      "round_trip_ms": 1187
+    },
+    {
+      "scenario": "style-w08",
+      "case": "me.likes=denim, tan or brown",
+      "pass": false,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [
+        "pick_layers=Green cardigan (want Denim jacket)",
+        "pick_shoes=Burgundy ankle boots (want Caramel boat shoes or Tan chelsea boots)"
+      ],
+      "answers": {
+        "piece_colour": {
+          "top": "black",
+          "unknown": 0.026732131722395806,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.7532748379827486,
+            "white": 0.03218703384625326,
+            "grey": 0.03782503259321026,
+            "navy or blue": 0.023802458494723244,
+            "beige or brown": 0.02834007403152479,
+            "red": 0.049312901438046335,
+            "green": 0.03455967906631813,
+            "multicolour": 0.04069798254717528
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.056491769226396885,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.702020783249483,
+            "striped": 0.05886154777791316,
+            "checked": 0.0415298559853275,
+            "floral": 0.19758781298727635
+          }
+        },
+        "pick_layers": {
+          "top": "Green cardigan",
+          "unknown": 0.0633215669795393,
+          "abstained": false,
+          "probabilities": {
+            "Denim jacket": 0.3499348421912732,
+            "Navy blazer": 0.03538743181306047,
+            "White blazer": 0.0509385250299791,
+            "Green cardigan": 0.5637392009656873
+          }
+        },
+        "pick_shoes": {
+          "top": "Burgundy ankle boots",
+          "unknown": 0.025567628850092367,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.33123558856956054,
+            "Tan chelsea boots": 0.2233672484665768,
+            "Grey ballet flats": 0.030690668641609943,
+            "Burgundy ankle boots": 0.39108647335608254,
+            "Cream sandals": 0.02362002096617018
+          }
+        },
+        "pick_bags": {
+          "top": "Red backpack",
+          "unknown": 0.11248238262347461,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.8648104572039451,
+            "Black backpack": 0.1351895427960549
+          }
+        }
+      },
+      "server_ms": 1196.2,
+      "round_trip_ms": 1198
+    },
+    {
+      "scenario": "style-m04",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.05167284252697184,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.0656604270544411,
+            "white": 0.02285949618072667,
+            "grey": 0.04481845473211267,
+            "navy or blue": 0.6796661565637522,
+            "beige or brown": 0.04411016880268993,
+            "red": 0.03375506952804324,
+            "green": 0.028595186931843635,
+            "multicolour": 0.08053504020639059
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.07197876133751066,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.6778553343065551,
+            "striped": 0.17980927382460818,
+            "checked": 0.06900760702062797,
+            "floral": 0.07332778484820872
+          }
+        },
+        "pick_tops": {
+          "top": "Navy polo",
+          "unknown": 0.04556277098380121,
+          "abstained": false,
+          "probabilities": {
+            "Navy polo": 0.5095692099310132,
+            "Red check flannel": 0.09563136130014724,
+            "Black-and-white stripe tee": 0.12907670300795118,
+            "Black tank top": 0.26572272576088846
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.026985761551774762,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.007354217323779133,
+            "Tan chelsea boots": 0.005565356720467885,
+            "Grey ballet flats": 0.9360817312728904,
+            "Burgundy ankle boots": 0.04518923121605381,
+            "Cream sandals": 0.005809463466808762
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.03195524618242545,
+          "abstained": false,
+          "probabilities": {
+            "Red backpack": 0.020719774404419463,
+            "Black backpack": 0.9792802255955805
+          }
+        }
+      },
+      "server_ms": 1220.1,
+      "round_trip_ms": 1222
+    },
+    {
+      "scenario": "style-m04",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.04226638772902856,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.049255093346373784,
+            "white": 0.028887225547043042,
+            "grey": 0.046848749911088686,
+            "navy or blue": 0.714695085032054,
+            "beige or brown": 0.04245329487586824,
+            "red": 0.029504156315860147,
+            "green": 0.026089178080270156,
+            "multicolour": 0.06226721689144197
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.07931209173900894,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.6613660242356248,
+            "striped": 0.18114329652025296,
+            "checked": 0.07778388162531816,
+            "floral": 0.07970679761880399
+          }
+        },
+        "pick_tops": {
+          "top": "Red check flannel",
+          "unknown": 0.3165474489421887,
+          "abstained": false,
+          "probabilities": {
+            "Navy polo": 0.18372969922348356,
+            "Red check flannel": 0.5451297943468988,
+            "Black-and-white stripe tee": 0.20874665305961734,
+            "Black tank top": 0.062393853370000314
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.02564624377378204,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.014923439691585844,
+            "Tan chelsea boots": 0.010009450323835347,
+            "Grey ballet flats": 0.028027502293061078,
+            "Burgundy ankle boots": 0.028808467028131078,
+            "Cream sandals": 0.9182311406633866
+          }
+        },
+        "pick_bags": {
+          "top": "Black backpack",
+          "unknown": 0.5478955295757224,
+          "abstained": true,
+          "probabilities": {
+            "Red backpack": 0.43683535245739097,
+            "Black backpack": 0.5631646475426091
+          }
+        }
+      },
+      "server_ms": 1196.2,
+      "round_trip_ms": 1197
+    },
+    {
+      "scenario": "style-m04",
+      "case": "me.likes=denim, tan or brown",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "navy or blue",
+          "unknown": 0.04008289901550271,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.03875922027986972,
+            "white": 0.017264900056719237,
+            "grey": 0.03483965168385567,
+            "navy or blue": 0.7571110095509174,
+            "beige or brown": 0.049050969034853856,
+            "red": 0.021067608487594515,
+            "green": 0.019890820307463964,
+            "multicolour": 0.06201582059872562
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.06282285087470624,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7311331017454258,
+            "striped": 0.15154441539272456,
+            "checked": 0.0637421328531085,
+            "floral": 0.053580350008741166
+          }
+        },
+        "pick_tops": {
+          "top": "Red check flannel",
+          "unknown": 0.10527194023285094,
+          "abstained": false,
+          "probabilities": {
+            "Navy polo": 0.11533922792163703,
+            "Red check flannel": 0.7719878949418705,
+            "Black-and-white stripe tee": 0.06118342042024049,
+            "Black tank top": 0.05148945671625201
+          }
+        },
+        "pick_shoes": {
+          "top": "Caramel boat shoes",
+          "unknown": 0.04738529427610195,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.566358915063701,
+            "Tan chelsea boots": 0.17403414200056155,
+            "Grey ballet flats": 0.04337097712923431,
+            "Burgundy ankle boots": 0.18563701923018336,
+            "Cream sandals": 0.030598946576319806
+          }
+        },
+        "pick_bags": {
+          "top": "Red backpack",
+          "unknown": 0.43096640768250993,
+          "abstained": true,
+          "probabilities": {
+            "Red backpack": 0.6734483071782588,
+            "Black backpack": 0.32655169282174135
+          }
+        }
+      },
+      "server_ms": 1205,
+      "round_trip_ms": 1206
+    },
+    {
+      "scenario": "style-w02",
+      "case": "me.likes=black, grey or navy",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "green",
+          "unknown": 0.017235558846367433,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.035501908915505295,
+            "white": 0.0148155886937456,
+            "grey": 0.017605421543193243,
+            "navy or blue": 0.02085740613599181,
+            "beige or brown": 0.014708336914326315,
+            "red": 0.02448470462548906,
+            "green": 0.8499329927600763,
+            "multicolour": 0.022093640411672378
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.03153813725687813,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7901219906073716,
+            "striped": 0.09804563706814577,
+            "checked": 0.03527514506878429,
+            "floral": 0.0765572272556983
+          }
+        },
+        "pick_tops": {
+          "top": "Navy polo",
+          "unknown": 0.26022735964632737,
+          "abstained": false,
+          "probabilities": {
+            "Navy polo": 0.5721207148138442,
+            "Black-and-white stripe tee": 0.138011345544462,
+            "Black tank top": 0.2898679396416937
+          }
+        },
+        "pick_bottoms": {
+          "top": "Black jeans",
+          "unknown": 0.050971286964964564,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.04533862550946018,
+            "Blue jeans": 0.08281299683487617,
+            "Black jeans": 0.6648147155984913,
+            "Grey trousers": 0.186054630816014,
+            "Beige shorts": 0.020979031241158345
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.015560250244992083,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.005732977976673557,
+            "Tan chelsea boots": 0.0045694177145148345,
+            "Grey ballet flats": 0.9840066835060608,
+            "Cream sandals": 0.005690920802750787
+          }
+        }
+      },
+      "server_ms": 1207,
+      "round_trip_ms": 1208
+    },
+    {
+      "scenario": "style-w02",
+      "case": "me.likes=white, cream or beige",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "green",
+          "unknown": 0.020268646815255874,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.03754518670627391,
+            "white": 0.022309092736860915,
+            "grey": 0.021559365301023158,
+            "navy or blue": 0.01957983273039346,
+            "beige or brown": 0.014600817594238159,
+            "red": 0.026283777421583786,
+            "green": 0.8340190058544686,
+            "multicolour": 0.024102921655157955
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.029707887130458785,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7842547099177816,
+            "striped": 0.10646666303806002,
+            "checked": 0.03510621879194953,
+            "floral": 0.07417240825220893
+          }
+        },
+        "pick_tops": {
+          "top": "Black-and-white stripe tee",
+          "unknown": 0.76293082966111,
+          "abstained": true,
+          "probabilities": {
+            "Navy polo": 0.2531706103410833,
+            "Black-and-white stripe tee": 0.49903545016500706,
+            "Black tank top": 0.2477939394939097
+          }
+        },
+        "pick_bottoms": {
+          "top": "Beige chinos",
+          "unknown": 0.028624913539992813,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.813217146482003,
+            "Blue jeans": 0.028512000380376882,
+            "Black jeans": 0.0347141991024499,
+            "Grey trousers": 0.018920358875819304,
+            "Beige shorts": 0.10463629515935081
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.020936686422654192,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.012463987823070294,
+            "Tan chelsea boots": 0.008628527141616703,
+            "Grey ballet flats": 0.01888191418524291,
+            "Cream sandals": 0.9600255708500701
+          }
+        }
+      },
+      "server_ms": 1218.9,
+      "round_trip_ms": 1220
+    },
+    {
+      "scenario": "style-w02",
+      "case": "me.likes=denim, tan or brown",
+      "pass": true,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [],
+      "answers": {
+        "piece_colour": {
+          "top": "green",
+          "unknown": 0.020624924018790017,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.04120683043324854,
+            "white": 0.01799929598041626,
+            "grey": 0.02208057852745995,
+            "navy or blue": 0.019784785710637735,
+            "beige or brown": 0.019690660976411718,
+            "red": 0.02794799143495796,
+            "green": 0.8256303906862649,
+            "multicolour": 0.02565946625060289
+          }
+        },
+        "piece_pattern": {
+          "top": "plain",
+          "unknown": 0.03293926185023604,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.7720442309941462,
+            "striped": 0.10955066129727134,
+            "checked": 0.040256302037322333,
+            "floral": 0.07814880567126012
+          }
+        },
+        "pick_tops": {
+          "top": "Navy polo",
+          "unknown": 0.6542563378311189,
+          "abstained": true,
+          "probabilities": {
+            "Navy polo": 0.566139135223996,
+            "Black-and-white stripe tee": 0.18591673901930308,
+            "Black tank top": 0.2479441257567009
+          }
+        },
+        "pick_bottoms": {
+          "top": "Blue jeans",
+          "unknown": 0.029138199323413997,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.023127299509715572,
+            "Blue jeans": 0.9246915534184406,
+            "Black jeans": 0.02372162074882479,
+            "Grey trousers": 0.01315005421073915,
+            "Beige shorts": 0.015309472112280037
+          }
+        },
+        "pick_shoes": {
+          "top": "Caramel boat shoes",
+          "unknown": 0.05064794302287741,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.6044157577102164,
+            "Tan chelsea boots": 0.2946918836017797,
+            "Grey ballet flats": 0.062312459697116906,
+            "Cream sandals": 0.038579898990886985
+          }
+        }
+      },
+      "server_ms": 1225.1,
+      "round_trip_ms": 1226
+    },
+    {
+      "scenario": "style-r04",
+      "case": "me.likes=black, grey or navy",
+      "pass": false,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [
+        "piece_pattern=striped (want plain)"
+      ],
+      "answers": {
+        "piece_colour": {
+          "top": "white",
+          "unknown": 0.024314244376276977,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.055267461217449215,
+            "white": 0.6871657091792863,
+            "grey": 0.07681354480335761,
+            "navy or blue": 0.028823488328106207,
+            "beige or brown": 0.02868179208729639,
+            "red": 0.040169789996502316,
+            "green": 0.025696841354426316,
+            "multicolour": 0.05738137303357569
+          }
+        },
+        "piece_pattern": {
+          "top": "striped",
+          "unknown": 0.04307916300040399,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.2517638454433883,
+            "striped": 0.6106164026365537,
+            "checked": 0.054542276726220924,
+            "floral": 0.08307747519383717
+          }
+        },
+        "pick_tops": {
+          "top": "Navy polo",
+          "unknown": 0.23532137124446514,
+          "abstained": false,
+          "probabilities": {
+            "Navy polo": 0.390107813959561,
+            "Red check flannel": 0.10349400529882682,
+            "Black-and-white stripe tee": 0.2372421559030347,
+            "Black tank top": 0.26915602483857737
+          }
+        },
+        "pick_bottoms": {
+          "top": "Black jeans",
+          "unknown": 0.0718724480712791,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.038126973131474215,
+            "Blue jeans": 0.07534028045545277,
+            "Black jeans": 0.44062760207276674,
+            "Grey trousers": 0.3310406727591522,
+            "Beige shorts": 0.02866117042730952,
+            "Gingham midi skirt": 0.08620330115384456
+          }
+        },
+        "pick_shoes": {
+          "top": "Grey ballet flats",
+          "unknown": 0.021007665898838183,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.006589781056517855,
+            "Tan chelsea boots": 0.004952744537877741,
+            "Grey ballet flats": 0.9461860284334543,
+            "Burgundy ankle boots": 0.03694760099937559,
+            "Cream sandals": 0.005323844972774493
+          }
+        }
+      },
+      "server_ms": 980.1,
+      "round_trip_ms": 982
+    },
+    {
+      "scenario": "style-r04",
+      "case": "me.likes=white, cream or beige",
+      "pass": false,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [
+        "piece_pattern=striped (want plain)"
+      ],
+      "answers": {
+        "piece_colour": {
+          "top": "white",
+          "unknown": 0.021404596900420635,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.048942782229982974,
+            "white": 0.7528648921208937,
+            "grey": 0.052863977413504605,
+            "navy or blue": 0.02210490683127517,
+            "beige or brown": 0.026255396321936627,
+            "red": 0.03151951397928256,
+            "green": 0.02041840176917134,
+            "multicolour": 0.04503012933395299
+          }
+        },
+        "piece_pattern": {
+          "top": "striped",
+          "unknown": 0.03684520130992529,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.19200383676801777,
+            "striped": 0.6908766117898455,
+            "checked": 0.04856301183083915,
+            "floral": 0.06855653961129751
+          }
+        },
+        "pick_tops": {
+          "top": "Black-and-white stripe tee",
+          "unknown": 0.7146448635245378,
+          "abstained": true,
+          "probabilities": {
+            "Navy polo": 0.13373510443365688,
+            "Red check flannel": 0.3309066289534002,
+            "Black-and-white stripe tee": 0.41005908607553576,
+            "Black tank top": 0.12529918053740707
+          }
+        },
+        "pick_bottoms": {
+          "top": "Beige chinos",
+          "unknown": 0.03861013559695916,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.6863600304655715,
+            "Blue jeans": 0.033230475804011055,
+            "Black jeans": 0.05362721758705841,
+            "Grey trousers": 0.0330773891591309,
+            "Beige shorts": 0.14274913136006803,
+            "Gingham midi skirt": 0.05095575562416014
+          }
+        },
+        "pick_shoes": {
+          "top": "Cream sandals",
+          "unknown": 0.03773130858386229,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.021775750444912922,
+            "Tan chelsea boots": 0.014115843587413388,
+            "Grey ballet flats": 0.039624778044216685,
+            "Burgundy ankle boots": 0.045420514315987384,
+            "Cream sandals": 0.8790631136074697
+          }
+        }
+      },
+      "server_ms": 979.9,
+      "round_trip_ms": 982
+    },
+    {
+      "scenario": "style-r04",
+      "case": "me.likes=denim, tan or brown",
+      "pass": false,
+      "expect": "ok",
+      "got": "ok",
+      "route": {
+        "kind": "ok",
+        "title": "Outfit suggested",
+        "detail": ""
+      },
+      "wrong": [
+        "piece_pattern=striped (want plain)"
+      ],
+      "answers": {
+        "piece_colour": {
+          "top": "white",
+          "unknown": 0.02917067456237279,
+          "abstained": false,
+          "probabilities": {
+            "black": 0.06702263360835754,
+            "white": 0.6541716157154732,
+            "grey": 0.06685226309450495,
+            "navy or blue": 0.030051582115842756,
+            "beige or brown": 0.03183696612957703,
+            "red": 0.05268433432135057,
+            "green": 0.03645473313061586,
+            "multicolour": 0.06092587188427806
+          }
+        },
+        "piece_pattern": {
+          "top": "striped",
+          "unknown": 0.0421234240026583,
+          "abstained": false,
+          "probabilities": {
+            "plain": 0.21283729651586974,
+            "striped": 0.661884123154145,
+            "checked": 0.05527348655001921,
+            "floral": 0.07000509377996604
+          }
+        },
+        "pick_tops": {
+          "top": "Red check flannel",
+          "unknown": 0.39070216598701296,
+          "abstained": true,
+          "probabilities": {
+            "Navy polo": 0.15269773159112998,
+            "Red check flannel": 0.5376325679869606,
+            "Black-and-white stripe tee": 0.20518759129943473,
+            "Black tank top": 0.10448210912247467
+          }
+        },
+        "pick_bottoms": {
+          "top": "Blue jeans",
+          "unknown": 0.03255873872425348,
+          "abstained": false,
+          "probabilities": {
+            "Beige chinos": 0.028779461232172905,
+            "Blue jeans": 0.857030038327039,
+            "Black jeans": 0.03415424586469281,
+            "Grey trousers": 0.02209750716432573,
+            "Beige shorts": 0.02198385418034366,
+            "Gingham midi skirt": 0.035954893231425936
+          }
+        },
+        "pick_shoes": {
+          "top": "Caramel boat shoes",
+          "unknown": 0.044985656479630286,
+          "abstained": false,
+          "probabilities": {
+            "Caramel boat shoes": 0.407790560106925,
+            "Tan chelsea boots": 0.30106308353561195,
+            "Grey ballet flats": 0.040952940097551925,
+            "Burgundy ankle boots": 0.21702983419201038,
+            "Cream sandals": 0.03316358206790076
+          }
+        }
+      },
+      "server_ms": 982.9,
+      "round_trip_ms": 985
+    }
+  ]
+}

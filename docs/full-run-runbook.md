@@ -123,3 +123,39 @@ Held-out sources 39.5% -> 46.8%; held-out unanswerable yes/no (TUBench): 1/225 c
   independent checks are the v1 exam held-out sources (incl. heldout_pairs) and MMLU.
 - Lesson: the pod's evaluation stage must cover every checkpoint that might be released (selector's best AND the final one), on every
   panel. Scoring an afterthought checkpoint on the Mac takes ~45 min for what the pod does in 3 min for under $1.
+
+## Phase-2 / benchmark pods (23 Sept 2026): lessons
+- vLLM 0.30 workers call `ninja` from the shell PATH; a venv-installed ninja is not enough. Launch with
+  `env PATH=<vllm-venv>/bin:$PATH`, or the engine dies with `No such file or directory: 'ninja'` after loading.
+- `snapshot_download(..., revision=<prefix>)` and offline resolution of a partial snapshot both fail on a pod; pass the
+  full 40-char revision and resolve `$HF_HOME/hub/models--<org>--<name>/snapshots/<rev>` directly.
+- Never put a process name you are about to `pkill -f` on the same ssh command line: the kill matches the ssh session
+  itself. Always ship a script file and run `bash that.sh`.
+- The PyTorch server backend defaulted to `mps`; it now auto-selects CUDA / MPS / CPU. Test the CUDA path on a pod
+  before a release, not on the Mac.
+- `tar --exclude` must precede the paths on macOS bsdtar, or the whole `&&` chain silently stops at that step.
+- The 4B from-scratch run on the corrected mixture (no base blend, unknown capped, grounded dev selection) removed the
+  abstention prior and preserved reasoning (authored reasoning dev 62.9% vs the 2B's 42.5%): data shape, not a
+  regulariser, is what protects reasoning.
+- Phase-2 (24 Sept): run every assembled record through `decision_data.render` before writing a manifest; two teacher rows with
+  JSON states nested > 8 levels crash-looped the trainer's DataLoader ("State nesting exceeds 8"). Pass `--batch-size 40
+  --accumulate 2 --workers 16` to the trainer: without them micro-batches are single examples and the GPUs sit at ~50%.
+
+### Lessons 2026-09-24 (phase-2b staging)
+- **Upload speed differs per pod.** The Mac pushed 1.3 MB/s to the Montreal H200 pod but 180 KB/s to the 7×H100 pod, so an 825 MB
+  bundle would have taken over four hours. Ship pod-to-pod instead: `ssh-keygen` on the source pod, append its public key to the
+  target's `authorized_keys`, `scp -P <port>` between pods (1.8 GB in under two minutes). From the Mac send only the code delta,
+  and rebuild data/adapters on the source pod with `rsync --copy-dest=<existing tree>` so unchanged files never cross the link.
+  GCS works too when no pod already holds the files.
+- **`ssh host 'pgrep -f <script>'` always matches.** The remote `bash -c` command line contains the pattern, so a waiter built on it
+  never fires (the H200 follow-up sat unlaunched for ~90 min). Check for a DONE marker or `ALL_DONE` in the log instead, or
+  filter with `grep -v pgrep`.
+- ImajevBench needs `artifacts/model-<name>.json` for every base model; `model-qwen4b.json` was missing (4B panel failed once).
+- **Third-party LoRA on Qwen3.5: check the key layout before believing a number.** Adapters trained on the text-only class use
+  `model.layers.N`; the multimodal class (what PEFT's `AutoModelForImageTextToText` and vLLM load) names them
+  `model.language_model.layers.N`. Both PEFT and vLLM then attach zero adapters *silently* (cua-s1-4b: identical to base on
+  111/111 items, vLLM even JIT-compiled its LoRA kernels). Always run a control on the untouched base and an item-level
+  identity check; remap keys with a safetensors rewrite when they differ (`cua_fix.py` pattern) and verify max |Δlogit| > 0.
+- RunPod pods reserve ports 8001 and 8081 (a proxy answers 405 there); pick 8010/8020/8030/8090 for extra vLLM servers.
+- jevbench `openai_compat` sends `max_tokens 4096`; thinking models exhaust it and the runner stops after 10 consecutive
+  empty replies. The pod copy reads `OPENAI_COMPAT_MAX_TOKENS` / `OPENAI_COMPAT_TIMEOUT_S`; port that patch upstream.

@@ -1,0 +1,42 @@
+{
+  "model": "imajev-4b",
+  "answers": {
+    "contradicted_field": {
+      "type": "choice",
+      "choice": "listing.color",
+      "probabilities": {
+        "listing.color": 0.9991828502197303,
+        "listing.product_type": 2.629308364386878e-05,
+        "none of these": 0.0007908566966258726
+      },
+      "confidence": 0.9987694729923368,
+      "unknown_probability": 4.8082308257828646e-06,
+      "abstained": false
+    },
+    "color_matches": {
+      "type": "noul",
+      "noul": 0.0020939939770542146,
+      "unknown_probability": 0.0002204073168954017,
+      "abstained": false
+    },
+    "type_matches": {
+      "type": "noul",
+      "noul": 0.9999777306651111,
+      "unknown_probability": 9.412216668075309e-07,
+      "abstained": false
+    }
+  },
+  "usage": {
+    "prefill_ms": 193.1,
+    "questions_ms": 268.7,
+    "input_tokens": 224,
+    "total_ms": 527.7,
+    "images": [
+      {
+        "sha256": "2c4a50ed988d9f740196605c76f9551dace9f98bf2ba78c26f9878e6f3dcf95a",
+        "width": 197,
+        "height": 256
+      }
+    ]
+  }
+}
