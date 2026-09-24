@@ -379,7 +379,7 @@ The pseudo-labelling pipeline (`scripts/v2/pseudo_label.py`) and the hard-questi
 | Base (pinned revision) | Qwen/Qwen3.5-2B @15852e8c | Qwen/Qwen3.5-4B @851bf6e8 | Qwen/Qwen3.5-9B @c2022362 |
 | Trainable parameters (LoRA + readout) | 16,152,576 | 31,127,040 | 41,152,512 |
 | Adapter file (`adapter_model.safetensors`, F32) | 62.6 MB | 122.0 MB | 160.5 MB |
-| Shipped adapter | weight-space average (½ + ½) of the stage-3 adapter and the stage-4 best checkpoint; sha256 4c8981a9… | same; d8d328f8… | same; 1a841bdc… |
+| Shipped adapter | weight-space average (½ + ½) of two adapters: the hard-question adapter and its soft-target continuation | same | same |
 | Readout (bias-free linear, float32) | 255 × 2048, 2.1 MB | 255 × 2560, 2.6 MB | 255 × 4096, 4.2 MB |
 | Calibration temperature | 1.646 | 1.717 | 1.748 |
 | Base weights to download | 4.6 GB | 9.3 GB | 19.3 GB |
