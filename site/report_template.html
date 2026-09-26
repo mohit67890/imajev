@@ -157,7 +157,7 @@ footer h3{font:600 .9rem var(--sans); color:var(--ink); margin-bottom:6px}
       <thead><tr><th>Model</th><th class="n">ImajevBench</th><th class="n">JevBench hard</th><th class="n">Hard ECE, calibrated</th><th class="n">Latency p50</th><th class="n">Base download</th></tr></thead>
       <tbody>
         <tr><td>imajev-2b</td><td class="n">71.7%</td><td class="n">60.4%</td><td class="n">0.123</td><td class="n">238 ms (83 raw)</td><td class="n">4.6 GB</td></tr>
-        <tr class="ours"><td>imajev-4b <span class="muted" style="font-weight:400">recommended</span></td><td class="n">82.4%</td><td class="n">70.3%</td><td class="n">0.116</td><td class="n">350 ms (96 raw)</td><td class="n">9.3 GB</td></tr>
+        <tr class="ours"><td>imajev-4b <span class="muted" style="font-weight:400">recommended</span></td><td class="n">83.9%</td><td class="n">72.1%</td><td class="n">0.082</td><td class="n">about 500 ms (4 rotations)</td><td class="n">9.3 GB</td></tr>
         <tr><td>imajev-9b</td><td class="n">82.1%</td><td class="n">69.4%</td><td class="n">0.092</td><td class="n">316 ms (96 raw)</td><td class="n">19.3 GB</td></tr>
       </tbody></table></div>
     <p class="foot" style="margin-top:8px">ImajevBench v2.0-lite test split, 279 items. JevBench public hard split, 111 text-only items, our same-protocol run, as served (4 option rotations, calibration file). Latency: one JevBench hard item as served, raw single pass in brackets, on one H100 under load, serial. Base download: the pinned Qwen3.5 weights.</p>
@@ -202,9 +202,9 @@ footer h3{font:600 .9rem var(--sans); color:var(--ink); margin-bottom:6px}
         <figcaption><b>Figure 3.</b> JevBench public hard split, 111 text-only items. Our runs with the jevbench harness, one H100, serial; imajev as served, with 4 option rotations and its calibration file. The official leaderboard adds sealed items and a four-axis score; an entry will be requested.</figcaption>
         <details><summary>Table</summary><div class="tw" id="t-jb"></div></details></figure>
       <figure class="chart"><div id="c-up"></div>
-        <figcaption><b>Figure 4.</b> ImajevBench accuracy of each untuned Qwen3.5 base and the same base with the imajev adapter. Paired cluster tests on the shipped adapters: 2B +11.5 points (p = 0.005), 4B +11.8 (p = 0.0006), 9B +5.4 (p = 0.131, not significant).</figcaption></figure>
+        <figcaption><b>Figure 4.</b> ImajevBench accuracy of each untuned Qwen3.5 base and the same base with the imajev adapter. Paired cluster tests on the shipped adapters: 2B +11.5 points (p = 0.005), 4B +13.3 (p = 0.0001), 9B +5.4 (p = 0.131, not significant).</figcaption></figure>
       <div style="display:grid; gap:14px; font-size:.97rem; align-content:start">
-        <p><b>Not #1 on JevBench.</b> JevK5 and Eikos-4B (73.9%) lead every imajev size on the hard split, by 3 to 4 items of 111; the 4B (70.3%) is above Hopper (67.6%). On the previous adapter the gap was mostly in items that judge the quality of an answer.</p>
+        <p><b>Not #1 on JevBench.</b> JevK5 and Eikos-4B (73.9%) lead every imajev size on the hard split, by 3 to 4 items of 111; the 4B (72.1%) is above Hopper (67.6%). On the previous adapter the gap was mostly in items that judge the quality of an answer.</p>
         <p><b>Jev-Omni on ImajevBench.</b> 78.5% through its own API. imajev-4b and 9B lead by about 4 points, which is not significant (p ≈ 0.25 on the previous adapters; not re-run). The difference comes from the 21 items whose answer is unknown, which Jev-Omni cannot abstain on; on answerable items it is slightly ahead and better calibrated.</p>
         <p><b>Reasoning is a different interface.</b> A frozen Qwen3.6-35B-A3B with its reasoning turned on scores 97.3% on JevBench hard, at seconds and thousands of tokens per decision.</p>
       </div>
@@ -267,7 +267,7 @@ footer h3{font:600 .9rem var(--sans); color:var(--ink); margin-bottom:6px}
       <thead><tr><th>Model</th><th>Use it when</th><th class="n">ImajevBench</th><th class="n">MMLU (previous version)</th><th class="n">Unknown items right</th></tr></thead>
       <tbody>
         <tr><td>imajev-2b</td><td>latency or memory is the constraint</td><td class="n">71.7%</td><td class="n">59.8%</td><td class="n">5 / 21</td></tr>
-        <tr class="ours"><td>imajev-4b</td><td>the default for almost everything</td><td class="n">82.4%</td><td class="n">74.5%</td><td class="n">14 / 21</td></tr>
+        <tr class="ours"><td>imajev-4b</td><td>the default for almost everything</td><td class="n">83.9%</td><td class="n">74.5%</td><td class="n">18 / 21</td></tr>
         <tr><td>imajev-9b</td><td>knowledge-heavy text questions, when memory is not tight</td><td class="n">82.1%</td><td class="n">79.2%</td><td class="n">15 / 21</td></tr>
       </tbody></table></div></div>
 
@@ -490,10 +490,10 @@ const M = (s, x, y, txt, o = {}) => el('text', Object.assign({x, y, fill:css('--
 function tbl(rows, head){ return `<table><thead><tr>${head.map((h, i) => `<th class="${i ? 'n' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${r.ours ? 'ours' : ''}">${r.cells.map((c, i) => `<td class="${i ? 'n' : ''}">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`; }
 function hover(node, html){ node.addEventListener('mousemove', e => showTip(e, html)); node.addEventListener('mouseleave', hideTip); }
 
-const IB = [['imajev-9b', 231, .77, .88, 1, 'A'], ['imajev-4b', 230, .77, .88, 1, 'A'], ['Qwen3.5-9B base', 214, .70, .82, 0, 'A'],
+const IB = [['imajev-4b', 234, .79, .89, 1, 'A'], ['imajev-9b', 231, .77, .88, 1, 'A'], ['Qwen3.5-9B base', 214, .70, .82, 0, 'A'],
   ['Qwen3.5-4B base', 197, .64, .78, 0, 'A'], ['imajev-2b', 196, .64, .77, 1, 'A'], ['Gemma 4 E4B-it', 176, .55, .72, 0, 'A'],
   ['Qwen3.5-2B base', 168, .53, .67, 0, 'A'], ['SmolVLM2-2.2B', 80, .22, .36, 0, 'A'], ['Jev-Omni (12B)', 219, .73, .84, 0, 'B']];
-const JB = [['JevK5 v0.2.0', 73.9, 0], ['Eikos-4B', 73.9, 0], ['imajev-4b', 70.3, 1], ['imajev-9b', 69.4, 1], ['Hopper', 67.6, 0],
+const JB = [['JevK5 v0.2.0', 73.9, 0], ['Eikos-4B', 73.9, 0], ['imajev-4b', 72.1, 1], ['imajev-9b', 69.4, 1], ['Hopper', 67.6, 0],
   ['imajev-2b', 60.4, 1], ['cua-s1-4b', 52.3, 0], ['Qwen3.5-4B, generation', 48.6, 0], ['mojev 0.85B', 33.3, 0]];
 
 function axisX(s, x, ticks, y0, y1, fmt){ ticks.forEach(v => { el('line', {x1:x(v), x2:x(v), y1:y0, y2:y1, stroke:css('--rule')}, s); M(s, x(v), y1 + 16, fmt(v), {'text-anchor':'middle'}); }); }
@@ -528,7 +528,7 @@ function drawJB(){
   $('#t-jb').innerHTML = tbl(JB.map(r => ({ours:r[2], cells:[r[0], r[1].toFixed(1) + '%']})), ['System', 'Hard accuracy']);
 }
 function drawUp(){
-  const box = $('#c-up'); box.innerHTML = ''; const rows = [['2B', 60.2, 71.7], ['4B', 70.6, 82.4], ['9B', 76.7, 82.1]];
+  const box = $('#c-up'); box.innerHTML = ''; const rows = [['2B', 60.2, 71.7], ['4B', 70.6, 83.9], ['9B', 76.7, 82.1]];
   const W = 640, left = 116, right = 96, rh = 44, H = rows.length * rh + 46; const s = svg(W, H); box.appendChild(s);
   const x = v => left + (v - 55) / 35 * (W - left - right);
   axisX(s, x, [60, 70, 80, 90], 4, H - 30, v => v + '%');

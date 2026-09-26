@@ -185,7 +185,7 @@ def chart_imajevbench(t, name):
 
 
 def chart_jevbench(t, name):
-    rows = [("JevK5 v0.2.0", 73.9, False), ("Eikos-4B", 73.9, False), ("imajev-4b", 70.3, True),
+    rows = [("JevK5 v0.2.0", 73.9, False), ("Eikos-4B", 73.9, False), ("imajev-4b", 72.1, True),
             ("imajev-9b", 69.4, True), ("Hopper", 67.6, False), ("imajev-2b", 60.4, True),
             ("cua-s1-4b (GUI-action LoRA)", 52.3, False), ("Qwen3.5-4B base, generation", 48.6, False), ("mojev 0.85B", 33.3, False)]
     fig = base_fig(t, 8.8, 5.0, "JevBench public hard split (111 items, text-only)",
@@ -254,7 +254,7 @@ def chart_calibration(t, name):
 
 
 def chart_uplift(t, name):
-    rows = [("2B", 60.2, 71.7), ("4B", 70.6, 82.4), ("9B", 76.7, 82.1)]
+    rows = [("2B", 60.2, 71.7), ("4B", 70.6, 83.9), ("9B", 76.7, 82.1)]
     fig = base_fig(t, 8.8, 4.2, "What the adapter adds on photos and state",
                    "ImajevBench accuracy of each untuned Qwen3.5 base (grey) and the same base with the imajev adapter (colour).",
                    "Paired cluster tests vs base on the shipped adapters: 2B +11.5 pts p=0.005 · 4B +11.8 p=0.0006 · 9B +5.4 p=0.131 (n.s.). Source: bench/LEADERBOARD.md")
@@ -520,14 +520,14 @@ def automation_curve():
     import sys
     sys.path.insert(0, str(ROOT / "src"))
     from imajev_bench.scoring import _correct
-    preds = jl("reports/decision-p2c/pod/4b-delta/imajevbench-soup50/predictions.jsonl")
+    preds = jl("reports/phase3/train-results/p3/run/eval/r2-s000291/imajevbench/predictions.jsonl")   # phase-3 4B (2026-09-26)
     ids = {p["id"] for p in preds}
     recs = {r["id"]: r for r in jl("data/imajev-bench/v2-lite-v1/records-final-v2.jsonl") if r["id"] in ids}
     items = []
     for p in preds:
         opts = [v for k, v in (p.get("probabilities") or {}).items() if k != "__unknown__"]
         items.append([int(p["status"] == "abstained"), round(max(opts) if opts else 0.0, 4), int(_correct(recs[p["id"]], p))])
-    assert sum(i[2] for i in items) == 230, "ImajevBench 4B score no longer reproduces 230/279"
+    assert sum(i[2] for i in items) == 234, "ImajevBench 4B score no longer reproduces 234/279"
     return {"model": "imajev-4b", "n": len(items), "items": items}
 
 

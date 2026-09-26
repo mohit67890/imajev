@@ -374,11 +374,11 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
     <tbody>
       <tr><td>photos in a request</td><td class="us">up to 2 (reference + target)</td><td>none, text only</td><td>yes; two-photo requests not documented</td><td>yes</td></tr>
       <tr><td>answer format</td><td class="us">probability per option you set</td><td>probability per option you set</td><td>probability per option you set</td><td>generated text or JSON</td></tr>
-      <tr><td>says it can't tell</td><td class="us">trained <i>unknown</i>, 14 / 21 on ImajevBench</td><td>not documented</td><td>no abstain output, so 0 / 21</td><td>only if prompted</td></tr>
+      <tr><td>says it can't tell</td><td class="us">trained <i>unknown</i>, 18 / 21 on ImajevBench</td><td>not documented</td><td>no abstain output, so 0 / 21</td><td>only if prompted</td></tr>
       <tr><td>record per request</td><td class="us">32 KB (about 8k tokens)</td><td>32k tokens</td><td>not documented</td><td>large</td></tr>
       <tr><td>where it runs</td><td class="us">your hardware, open weights</td><td>hosted API</td><td>your hardware, open weights (12B)</td><td>hosted API</td></tr>
       <tr><td>time per decision</td><td class="us">about 0.1 s raw, 0.3 s with 4 rotations (one H100, under load)</td><td>not documented</td><td>about 0.1 s (one H100)</td><td>5 to 8 s</td></tr>
-      <tr><td>ImajevBench accuracy</td><td class="us">82.4% (4B)</td><td>cannot take photos</td><td>78.5%</td><td>91.4% to 99.6%</td></tr>
+      <tr><td>ImajevBench accuracy</td><td class="us">83.9% (4B)</td><td>cannot take photos</td><td>78.5%</td><td>91.4% to 99.6%</td></tr>
     </tbody></table>
     <p class="foot" style="margin-top:10px">Jev from docs.typesafe.ai (models page, Jev 1.13.0). Jev-Omni from its model card and our run of its own predict() API. Frontier rows and all ImajevBench numbers from our runs, 24 Sept 2026; frontier models answer by structured generation, a different interface. Jev's record limit is larger than imajev's.</p>
   </div>
@@ -459,9 +459,9 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
     <figure><div id="c-jb"></div><figcaption><b>JevBench public hard split</b>, 111 text-only items, our runs with the jevbench harness on one H100; imajev as served, with 4 option rotations and its calibration file. Not the official leaderboard, which adds sealed items; an entry will be requested.</figcaption></figure>
   </div>
   <div class="readings">
-    <div><span class="label">Uplift</span><p>The imajev adapter lifts Qwen3.5-4B from 70.6% to 82.4% on ImajevBench (+11.8 points; the paired test gives p = 0.0006). The 4B is level with the 9B there. On a 202-item hidden split that is never published item by item, the sizes score 74.3%, 84.2% and 84.7%.</p></div>
-    <div><span class="label">Abstention</span><p>imajev-4b answers <i>unknown</i> correctly on 14 of 21 items. Jev-Omni, another open Jev-class model, has no abstain output: 78.5% overall, 0 of 21 unknown, and it is slightly ahead on answerable items.</p></div>
-    <div><span class="label">Not #1</span><p>JevK5 and Eikos-4B (73.9%) lead every imajev size on JevBench hard, by 3 to 4 items of 111; the 4B (70.3%) is above Hopper (67.6%). A reasoning model scores 97.3%, at seconds and thousands of tokens per decision.</p></div>
+    <div><span class="label">Uplift</span><p>The imajev adapter lifts Qwen3.5-4B from 70.6% to 83.9% on ImajevBench (+13.3 points; the paired test gives p = 0.0001). The 4B is now ahead of the 9B there, though not significantly. On a 202-item hidden split that is never published item by item, the sizes score 74.3%, 84.2% and 84.7%.</p></div>
+    <div><span class="label">Abstention</span><p>imajev-4b answers <i>unknown</i> correctly on 18 of 21 items, and wrongly abstains on 9 of 258 answerable ones. Jev-Omni, another open Jev-class model, has no abstain output: 78.5% overall, 0 of 21 unknown, and it is slightly ahead on answerable items.</p></div>
+    <div><span class="label">Not #1</span><p>JevK5 and Eikos-4B (73.9%) lead every imajev size on JevBench hard, by 3 to 4 items of 111; the 4B (72.1%) is above Hopper (67.6%). A reasoning model scores 97.3%, at seconds and thousands of tokens per decision.</p></div>
   </div>
 </div></section>
 
@@ -528,7 +528,7 @@ footer h3{font:600 .88rem var(--sans); color:var(--ink); margin-bottom:6px}
     <thead><tr><th>Model</th><th>Use it when</th><th class="n">ImajevBench</th><th class="n">JevBench hard</th><th class="n">Unknown right</th><th class="n">Base download</th></tr></thead>
     <tbody>
       <tr><td><a href="https://huggingface.co/mohit67890/imajev-2b">imajev-2b</a></td><td>memory or latency is the constraint</td><td class="n">71.7%</td><td class="n">60.4%</td><td class="n">5 / 21</td><td class="n">4.6 GB</td></tr>
-      <tr class="ours"><td><a href="https://huggingface.co/mohit67890/imajev-4b">imajev-4b</a></td><td>the default for almost everything</td><td class="n">82.4%</td><td class="n">70.3%</td><td class="n">14 / 21</td><td class="n">9.3 GB</td></tr>
+      <tr class="ours"><td><a href="https://huggingface.co/mohit67890/imajev-4b">imajev-4b</a></td><td>the default for almost everything</td><td class="n">83.9%</td><td class="n">72.1%</td><td class="n">18 / 21</td><td class="n">9.3 GB</td></tr>
       <tr><td><a href="https://huggingface.co/mohit67890/imajev-9b">imajev-9b</a></td><td>knowledge-heavy text, when memory is not tight</td><td class="n">82.1%</td><td class="n">69.4%</td><td class="n">15 / 21</td><td class="n">19.3 GB</td></tr>
     </tbody></table></div>
   <p class="note" style="margin-top:14px">The full contract, the act-or-escalate pattern, fitting your own calibration and how to reproduce every number are in the <a href="report/#s5">report's developer section</a>.</p>
@@ -775,12 +775,12 @@ function el(tag, a, p, text){ const e = document.createElementNS(NS, tag); for (
 const T = (s, x, y, t, o = {}) => el('text', Object.assign({x, y, fill:css('--ink2'), 'font-family':'IBM Plex Sans, sans-serif', 'font-size':13}, o), s, t);
 const M = (s, x, y, t, o = {}) => el('text', Object.assign({x, y, fill:css('--muted'), 'font-family':'IBM Plex Mono, monospace', 'font-size':11}, o), s, t);
 function hover(n, h){ n.addEventListener('mousemove', e => showTip(e, h)); n.addEventListener('mouseleave', () => tip.hidden = true); }
-const IB = [['imajev-4b', 82.4, 77, 89, 1, 'A'], ['imajev-9b', 82.1, 76, 88, 1, 'A'], ['Qwen3.5-9B base', 76.7, 70, 82, 0, 'A'],
+const IB = [['imajev-4b', 83.9, 79, 89, 1, 'A'], ['imajev-9b', 82.1, 76, 88, 1, 'A'], ['Qwen3.5-9B base', 76.7, 70, 82, 0, 'A'],
   ['imajev-2b', 71.7, 65, 78, 1, 'A'], ['Qwen3.5-4B base', 70.6, 64, 78, 0, 'A'], ['Gemma 4 E4B-it', 63.1, 55, 72, 0, 'A'], ['Qwen3.5-2B base', 60.2, 53, 67, 0, 'A'],
   ['Jev-Omni (12B)', 78.5, 73, 84, 0, 'B'],
   ['Gemini 3.1 Pro*', 99.6, 99, 100, 0, 'C'], ['GPT-5.6 Luna*', 99.3, 98, 100, 0, 'C'], ['GPT-5.4', 98.9, 98, 100, 0, 'C'], ['Gemini 3.8 Flash', 98.2, 96, 100, 0, 'C'], ['Grok 4.3', 91.4, 87, 95, 0, 'C']];
 const GROUPLAB = {B:'other Jev-class model, own interface', C:'frontier APIs, structured generation'};
-const JB = [['JevK5 v0.2.0', 73.9, 0], ['Eikos-4B', 73.9, 0], ['imajev-4b', 70.3, 1], ['imajev-9b', 69.4, 1], ['Hopper', 67.6, 0], ['imajev-2b', 60.4, 1], ['cua-s1-4b', 52.3, 0], ['Qwen3.5-4B, generation', 48.6, 0], ['mojev 0.85B', 33.3, 0]];
+const JB = [['JevK5 v0.2.0', 73.9, 0], ['Eikos-4B', 73.9, 0], ['imajev-4b', 72.1, 1], ['imajev-9b', 69.4, 1], ['Hopper', 67.6, 0], ['imajev-2b', 60.4, 1], ['cua-s1-4b', 52.3, 0], ['Qwen3.5-4B, generation', 48.6, 0], ['mojev 0.85B', 33.3, 0]];
 function axis(s, x, ticks, y0, y1){ ticks.forEach(v => { el('line', {x1:x(v), x2:x(v), y1:y0, y2:y1, stroke:css('--rule')}, s); M(s, x(v), y1 + 15, v + '%', {'text-anchor':'middle'}); }); }
 function drawIB(){
   const box = $('#c-ib'); box.innerHTML = ''; const W = 560, rh = 24, left = 150, right = 48;

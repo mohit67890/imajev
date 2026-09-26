@@ -143,7 +143,7 @@ photos, and runs on your own hardware.
 | record per request | **32 KB (about 8k tokens)** | 32k tokens | not documented | large |
 | where it runs | **your hardware, open weights** | hosted API | your hardware, open weights (12B) | hosted API |
 | time per decision | **about 0.1 s raw, about 0.35 s as shipped (one H100)** | not documented | about 0.1 s (one H100) | 5 to 8 s |
-| ImajevBench accuracy | **82.4% (4B)** | cannot take photos | 78.5% | 91.4% to 99.6% |
+| ImajevBench accuracy | **83.9% (4B)** | cannot take photos | 78.5% | 91.4% to 99.6% |
 
 <sub>Jev from docs.typesafe.ai (models page, Jev 1.13.0). Jev-Omni from its model card and our run of its own `predict()` API.
 Frontier rows and all ImajevBench numbers from our runs, 24 Sept 2026; frontier models answer by structured generation, a different
@@ -199,17 +199,19 @@ pad as letters. Every run, pass or miss, is in `results/scenarios/`.
 
 ## Three sizes
 
+> **2026-09-26: the 4B moved to its phase-3 adapter** (rank-64 LoRA, 256-code readout, trained on the decisions the previous release got wrong): ImajevBench 82.4 → 83.9%, hidden split 84.2 → 85.6%, JevBench hard as shipped 70.3 → 72.1%, DecisionBench full suite 77.5 → 79.7%; it abstains on 18 of 21 ImajevBench Unknown items (was 14) and on 9 of 258 answerable ones (was 3). Its calibration on DecisionBench is worse than before (ECE 0.024 → 0.069). The 2B and 9B are unchanged. Details: `results/phase3/benchmarks.md`.
+
 | | **imajev-2b** (latency) | **imajev-4b** (recommended default) | **imajev-9b** (quality) |
 |---|---|---|---|
 | Base | Qwen3.5-2B (Apache-2.0) | Qwen3.5-4B (Apache-2.0) | Qwen3.5-9B (Apache-2.0) |
 | Adapter | LoRA r16/α32 on the language layers + 255-code decision readout; vision tower frozen; shipped as a weight-space average of two adapters (the hard-question adapter and a soft-target continuation of it) | same | same |
-| ImajevBench v2.0-lite test | 71.7% | 82.4% | 82.1% |
-| JevBench public hard (111), as shipped (4 rotations + calibration) | 60.4% | 70.3% | 69.4% |
+| ImajevBench v2.0-lite test | 71.7% | 83.9% | 82.1% |
+| JevBench public hard (111), as shipped (4 rotations + calibration) | 60.4% | 72.1% | 69.4% |
 | p50 per decision, JevBench hard item, 1×H100, serial, under load | 238 ms as shipped (83 ms raw) | 350 ms (96 ms raw) | 316 ms (96 ms raw) |
 | Use it when | latency or memory is the constraint | almost always: within noise of the 9B on ImajevBench | knowledge-heavy text questions, and memory is not a constraint (~19 GB resident) |
 | Weights | [`mohit67890/imajev-2b`](https://huggingface.co/mohit67890/imajev-2b) | [`mohit67890/imajev-4b`](https://huggingface.co/mohit67890/imajev-4b) | [`mohit67890/imajev-9b`](https://huggingface.co/mohit67890/imajev-9b) |
 
-Start with the 4B. On ImajevBench it is within noise of the 9B (82.4% vs 82.1%; the paired test gives p = 1.0) and one point ahead of it on
+Start with the 4B. On ImajevBench it is ahead of the 9B (83.9% vs 82.1%; not significant, paired test p = 0.57) and one point ahead of it on
 JevBench hard. The 2B is 11 points lower on ImajevBench and 10 lower on JevBench hard; pick it when its footprint is the point.
 The Mac (MLX) weights agree with the GPU run on 97 to 99% of ImajevBench answers (2B 97.1%, 4B 98.2%, 9B 99.3%).
 
@@ -293,12 +295,13 @@ yet**; a measurement will be requested at launch, and nothing below is one.
 
 | Panel | imajev-2b | imajev-4b | imajev-9b | Same-protocol references |
 |---|---:|---:|---:|---|
-| ImajevBench v2.0-lite test (279), 95% cluster CI | 71.7% [0.65, 0.78] | 82.4% [0.77, 0.89] | 82.1% [0.76, 0.88] | untuned bases 60.2 / 70.6 / 76.7%; Jev-Omni 78.5% (its own API); other small VLMs in `bench/LEADERBOARD.md` |
+| ImajevBench v2.0-lite test (279), 95% cluster CI | 71.7% [0.65, 0.78] | 83.9% [0.79, 0.89] | 82.1% [0.76, 0.88] | untuned bases 60.2 / 70.6 / 76.7%; Jev-Omni 78.5% (its own API); other small VLMs in `bench/LEADERBOARD.md` |
 | · correct Unknown (21) / false abstention (258) | 5 / 4 | 14 / 3 | 15 / 2 | |
-| · hidden split (202 items, aggregates only) | 74.3% | 84.2% | 84.7% | |
-| JevBench hard (111) | 60.4% | 70.3% | 69.4% | JevK5 v0.2.0 73.9%, Eikos-4B 73.9%, Hopper 67.6%, Qwen3.5-4B base (structured generation) 48.6%, mojev 0.85B 33.3% |
+| · hidden split (202 items, aggregates only) | 74.3% | 85.6% | 84.7% | |
+| JevBench hard (111) | 60.4% | 72.1% | 69.4% | JevK5 v0.2.0 73.9%, Eikos-4B 73.9%, Hopper 67.6%, Qwen3.5-4B base (structured generation) 48.6%, mojev 0.85B 33.3% |
+| DecisionBench 1.0 full suite (23,900 rows, the benchmark's own harness, 4 rotations + calibration) | | 79.7% (every row scored; previous version 77.5%, 3rd of 55 on the public board) | | Bosun v3.1 1.7B 84.9%, 0.6B 81.2%, Winnow-12B 76.7%, Jev 1.13 72.0%; record submitted, see `results/benchmarks/decisionbench/` |
 | JevBench original (72) / easy (48) | 93.1 / 100 | 98.6 / 100 | 100 / 100 | JevK5 97.2 / 100, Eikos-4B 93.1 / 100, Hopper 95.8 / 100 |
-| JevBench hard ECE, raw → as shipped (rotations + `calibration.json`) | 0.176 → 0.123 | 0.164 → 0.116 | 0.187 → 0.092 | JevK5 0.073, Eikos-4B 0.054, Hopper 0.050 |
+| JevBench hard ECE, raw → as shipped (rotations + `calibration.json`) | 0.176 → 0.123 | 0.113 → 0.082 | 0.187 → 0.092 | JevK5 0.073, Eikos-4B 0.054, Hopper 0.050 |
 | MMLU-1000, text-only / with an unrelated photo | 59.8 / 54.9 | 74.5 / 72.9 | 79.2 / 78.8 | previous adapters; not re-run on the shipped versions |
 | Irrelevance panel (2,823) | 68.9% | 80.2% | 84.0% | |
 | typed-decisions test (2,000) | 59.2% | 67.0% | 67.0% | previous adapters; not re-run on the shipped versions |
@@ -306,11 +309,11 @@ yet**; a measurement will be requested at launch, and nothing below is one.
 
 Reading:
 
-- **Competitive on JevBench's public splits, not #1.** JevK5 and Eikos-4B are ahead of every imajev size on hard, by 3 to 4 items of 111; the 4B is above Hopper (70.3 vs 67.6). The gap to
+- **Competitive on JevBench's public splits, not #1.** JevK5 and Eikos-4B are ahead of every imajev size on hard, by 2 to 4 items of 111; the 4B is above Hopper (72.1 vs 67.6). The gap to
   JevK5 is concentrated in judge-style items (previous 4B adapter: 10/17 vs JevK5 13/17 on judge_hard). A frozen Qwen3.6-35B-A3B *with thinking*
   scores 97.3% on hard, through a different interface: seconds and thousands of tokens per decision.
 - **The image gain is on ImajevBench.** The paired tests were re-run on the shipped adapters (paired cluster sign-flip over 89 evidence
-  clusters). The 4B beats its untuned base by +11.8 points [+5.8, +18.0], p = 0.0006 (exploratory). The 2B beats its base by +11.5 [+3.5, +18.9],
+  clusters). The 4B beats its untuned base by +13.3 points [+7.5, +19.1], p = 0.0001 (exploratory). The 2B beats its base by +11.5 [+3.5, +18.9],
   p = 0.005 (our pre-registered test against the untuned base model). The 9B's gain over its base, +5.4 [−1.2, +12.4], p = 0.131, is **not significant** at
   0.05 (same pre-registered test; the previous 9B gave +6.1, p = 0.074, and the earlier version of imajev-9b the test was registered with gave +4.3, p = 0.031). Frontier APIs score 91.4–99.6% by structured generation, a different interface ranked
   separately. 51 contrast sets pair a scene with an edited copy whose right answer must change, become unknown, or stay; the 4B gets all of a set
@@ -329,7 +332,7 @@ Reading:
   position are the decision, read through a float32 head. One prefill per request, one forward pass per question, no decoding.
 - **Adapter.** LoRA r16/α32 on all language-model projections (attention, MLP, and the DeltaNet projections in Qwen3.5); the vision
   tower is frozen.
-- **Calibration.** Each size ships one temperature (2B 1.646, 4B 1.717, 9B 1.748; fitted by likelihood on 150 authored JevBench-style items, none from JevBench) applied to every question type × option-count
+- **Calibration.** Each size ships one temperature (2B 1.646, 4B 1.305, 9B 1.748; fitted by likelihood on 150 authored JevBench-style items, none from JevBench) applied to every question type × option-count
   bucket; the server applies it when started with `--calibration`. Temperature never changes an answer, only its probability.
 - **Abstention.** `unknown` is a first-class option in training and inference. Insufficient evidence, a false premise, a mismatched
   reference or an answer outside the listed options all train toward `unknown`.
@@ -381,7 +384,7 @@ The pseudo-labelling pipeline (`scripts/v2/pseudo_label.py`) and the hard-questi
 | Adapter file (`adapter_model.safetensors`, F32) | 62.6 MB | 122.0 MB | 160.5 MB |
 | Shipped adapter | weight-space average (½ + ½) of two adapters: the hard-question adapter and its soft-target continuation | same | same |
 | Readout (bias-free linear, float32) | 255 × 2048, 2.1 MB | 255 × 2560, 2.6 MB | 255 × 4096, 4.2 MB |
-| Calibration temperature | 1.646 | 1.717 | 1.748 |
+| Calibration temperature | 1.646 | 1.305 | 1.748 |
 | Base weights to download | 4.6 GB | 9.3 GB | 19.3 GB |
 
 **Data by stage.**
@@ -436,9 +439,9 @@ harness in `src/imajev_bench`, leaderboard in `bench/LEADERBOARD.md`. Run your m
   `--calibration` or fit your own temperature.
 - **The last part of the hard-question stage cost some reasoning-dev accuracy** on our reasoning dev set (also used for checkpoint selection): 2B −5.6, 4B −1.2, 9B −1.8 points; the stage-4 checkpoints recovered most of it (62.7 / 67.2 / 68.9%), and the shipped averages were not measured on it.
 - **Our pre-registered test against the untuned base model is not significant for the 9B** (+5.4 points over its untuned base, p = 0.131, on the shipped adapter; +6.1, p = 0.074 on the previous one), and the 4B and 9B are statistically indistinguishable on ImajevBench.
-- **The 2B abstains too rarely on ImajevBench's Unknown items** (5/21, vs 14/21 and 15/21 for the 4B and 9B). The ImajevBench test split was
+- **The 2B abstains too rarely on ImajevBench's Unknown items** (5/21, vs 18/21 and 15/21 for the 4B and 9B). The ImajevBench test split was
   also an input to choosing the shipped checkpoints (the release gates), so its numbers are not pure held-out estimates; on the hidden
-  split (202 items, never published item by item) the shipped models score 74.3 / 84.2 / 84.7%.
+  split (202 items, never published item by item) the shipped models score 74.3 / 85.6 / 84.7%.
 - **An empty field can read as "no".** In the checked text app, a blank payment note was answered "not paid" (P = 0.06) instead of
   unknown. Unknown is trained for missing evidence, not guaranteed.
 - **Scribbles read as letters.** The tracing pad reads 20 of 20 traced characters but calls 8 of 10 scribbles a letter.
