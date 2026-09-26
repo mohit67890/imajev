@@ -5,8 +5,9 @@ type: software
 authors:
   - family-names: Garg
     given-names: Mohit
-version: 1.0.0
-date-released: 2026-09-24
+    alias: mohit67890
+version: 1.1.0
+date-released: 2026-09-26
 license: Apache-2.0
 repository-code: https://github.com/mohit67890/imajev
 keywords:

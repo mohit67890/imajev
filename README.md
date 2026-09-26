@@ -460,9 +460,10 @@ harness in `src/imajev_bench`, leaderboard in `bench/LEADERBOARD.md`. Run your m
   (JevBench and ImajevBench runs), plus reports on earlier checkpoints (`results/earlier-checkpoints/`).
 - `docs/` specs and the run book.
 
-## Citation
+## Author and citation
 
-See `CITATION.cff`.
+imajev is built and maintained by Mohit Garg ([mohit67890](https://github.com/mohit67890) on GitHub and Hugging Face),
+with Claude (Anthropic) as a co-author on the code. To cite it, see `CITATION.cff`.
 
 ## Acknowledgements
 
