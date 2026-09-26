@@ -1,0 +1,80 @@
+{
+ "model": {
+  "model": "imajev-4b",
+  "adapter": "/Volumes/SSD 9100/Development/imajev-release/hf/imajev-4b/mlx",
+  "backend": "mlx",
+  "loaded": true,
+  "load_seconds": 3.577
+ },
+ "passed": 19,
+ "total": 21,
+ "threshold": 0.8,
+ "cases": [
+  {
+   "id": "listing",
+   "case": "listing.color=red",
+   "question": "contradicted_field",
+   "route": {
+    "kind": "flag",
+    "title": "Hold: listing.color is wrong",
+    "detail": "Ask the seller to fix this field before the listing goes live."
+   },
+   "title": "Marketplace listing check"
+  },
+  {
+   "id": "qc",
+   "case": "chipped part",
+   "question": "fault_type",
+   "route": {
+    "kind": "flag",
+    "title": "Reject the part",
+    "detail": "Most likely: chipped or broken edge."
+   },
+   "title": "Production-line QC"
+  },
+  {
+   "id": "returns",
+   "case": "a different shoe",
+   "question": "same_item",
+   "route": {
+    "kind": "flag",
+    "title": "Hold the refund",
+    "detail": "The returned item looks different (beige)."
+   },
+   "title": "Return check"
+  },
+  {
+   "id": "audit",
+   "case": "labels missing",
+   "question": "what_changed",
+   "route": {
+    "kind": "flag",
+    "title": "Open an incident",
+    "detail": "An object was removed; update checklist.all_items_still_there."
+   },
+   "title": "Before / after audit"
+  },
+  {
+   "id": "archive",
+   "case": "record.subject=dog",
+   "question": "wrong_field",
+   "route": {
+    "kind": "flag",
+    "title": "Correct record.subject",
+    "detail": "The scan contradicts this field."
+   },
+   "title": "Archive record audit"
+  },
+  {
+   "id": "ticket",
+   "case": "as shipped",
+   "question": "department",
+   "route": {
+    "kind": "flag",
+    "title": "Route to billing",
+    "detail": "Priority: reply today."
+   },
+   "title": "Support ticket triage"
+  }
+ ]
+}
