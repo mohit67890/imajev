@@ -2,7 +2,7 @@
 from pathlib import Path
 import json
 import torch
-from vision_decision.scoring import readout_codes, verified_label_ids
+from vision_decision.scoring import MAX_READOUT_CODES, DEFAULT_PROMPT_LAYOUT, check_prompt_layout, check_readout_codes, readout_codes, verified_label_ids
 
 TARGETS=['q_proj','k_proj','v_proj','o_proj','gate_proj','up_proj','down_proj','in_proj_qkv','in_proj_z','out_proj']
 
@@ -12,42 +12,65 @@ class TorchDecision:
   self.processor=AutoProcessor.from_pretrained(path,local_files_only=True);self.device=device;self.max_length=max_length;self.pad_multiple=pad_multiple  # pad batches to a multiple (fewer distinct kernel shapes)
   self.model=Qwen3_5ForConditionalGeneration.from_pretrained(path,local_files_only=True,dtype=dtype).to(device).eval()
   self.readout=None;self._codebook=None
+  self.codes=MAX_READOUT_CODES  # readout size: 255 shipped; 256 with the extended readout (enable_readout(codes=256))
+  self.prompt_layout=DEFAULT_PROMPT_LAYOUT  # set from the adapter's decision_readout.json, or by the trainer
  def add_lora(self,rank=16,alpha=32,targets=None):
   from peft import LoraConfig,get_peft_model
   # Language layers only, as in the MLX run; the vision tower stays frozen. `targets` narrows the module list (e.g. attention only).
   self.model=get_peft_model(self.model,LoraConfig(r=rank,lora_alpha=alpha,lora_dropout=0.0,target_modules=r'.*language_model.*\.('+'|'.join(targets or TARGETS)+')'))
   return self.model
+ def _ensure_codebook(self,n_images=0):
+  if self._codebook is None or len(self._codebook)!=self.codes:self._codebook=readout_codes(self.processor.tokenizer,self.render('',n_images),self.codes,limit=self.codes)
+  return self._codebook
  def labels(self,count,n_images=0):
-  if self._codebook is None:self._codebook=readout_codes(self.processor.tokenizer,self.render('',n_images),255)
-  return [x[0] for x in self._codebook[:count]]
- def enable_readout(self,adapter=None,trainable=True):
-  """Install the v1.1 255-row head, initialized from the matching LM-head rows.
+  codebook=self._ensure_codebook(n_images)
+  if count>len(codebook):raise ValueError(f'{count} candidates exceed the {len(codebook)}-code readout (at most {len(codebook)-1} options + unknown)')
+  return [x[0] for x in codebook[:count]]
+ @property
+ def max_options(self):return self.codes-1
+ def enable_readout(self,adapter=None,trainable=True,codes=None):
+  """Install the decision readout Linear[codes, hidden], initialized from the matching LM-head rows.
 
+  codes: 255 (shipped) or 256 (extended); None = the adapter's own row count (255 without an adapter).
+  A 255-row trained readout loaded with codes=256 gets row 256 appended from its LM-head row, exactly as
+  the original rows were initialized, so questions with <= 254 options use unchanged rows.
+  The adapter's prompt layout (decision_readout.json "prompt_layout", absent = standard) is adopted.
   Older adapters omit decision_readout.safetensors and continue through vocabulary rows.
   """
   from safetensors.torch import load_file
   base=self.model.get_base_model() if hasattr(self.model,'get_base_model') else self.model
-  if self._codebook is None:self._codebook=readout_codes(self.processor.tokenizer,self.render('',0),255)
-  ids=[x[1] for x in self._codebook]
-  weight=base.lm_head.weight[torch.tensor(ids,device=self.device)].detach().float().clone()
+  trained=manifest=None
   if adapter is not None:
    path=Path(adapter)/'decision_readout.safetensors'
-   if path.exists():weight=load_file(str(path),device=str(self.device))['weight'].float()
-   else:return False
+   if not path.exists():return False
+   trained=load_file(str(path),device=str(self.device))['weight'].float()
    manifest_path=Path(adapter)/'decision_readout.json'
    if not manifest_path.exists():raise ValueError('Trained readout is missing decision_readout.json tokenizer binding')
    manifest=json.loads(manifest_path.read_text())
-   actual=[{'code':c,'token_id':i} for c,i in self._codebook]
-   if manifest.get('version')!=1 or manifest.get('codes')!=actual:raise ValueError('Decision readout code/token binding does not match this tokenizer')
-  if tuple(weight.shape)!=(255,base.lm_head.weight.shape[1]) or not bool(torch.isfinite(weight).all()):raise ValueError('Decision readout must be finite with shape [255, hidden_size]')
-  self.readout=torch.nn.Linear(weight.shape[1],255,bias=False,device=self.device,dtype=torch.float32)
+  rows=trained.shape[0] if trained is not None and trained.ndim==2 else None
+  wanted=check_readout_codes(codes if codes is not None else rows if rows in (255,256) else MAX_READOUT_CODES)
+  if trained is not None and rows not in (255,256):raise ValueError('Decision readout must be finite with shape [255 or 256, hidden_size]')
+  if rows is not None and rows>wanted:raise ValueError(f'This adapter has a {rows}-code readout; load it with codes={rows}')
+  self.codes=wanted;self._codebook=None;codebook=self._ensure_codebook(0)
+  ids=[x[1] for x in codebook]
+  weight=base.lm_head.weight[torch.tensor(ids,device=self.device)].detach().float().clone()
+  if trained is not None:
+   actual=[{'code':c,'token_id':i} for c,i in codebook]
+   bound=manifest.get('codes')
+   if manifest.get('version')!=1 or not isinstance(bound,list) or len(bound)!=rows or bound!=actual[:rows]:raise ValueError('Decision readout code/token binding does not match this tokenizer')
+   weight=torch.cat([trained,weight[rows:]]) if rows<wanted else trained  # appended rows: LM-head rows, as at initialization
+   self.prompt_layout=check_prompt_layout(manifest.get('prompt_layout',DEFAULT_PROMPT_LAYOUT))
+  if tuple(weight.shape)!=(self.codes,base.lm_head.weight.shape[1]) or not bool(torch.isfinite(weight).all()):raise ValueError(f'Decision readout must be finite with shape [{self.codes}, hidden_size]')
+  self.readout=torch.nn.Linear(weight.shape[1],self.codes,bias=False,device=self.device,dtype=torch.float32)
   self.readout.weight.data.copy_(weight);self.readout.weight.requires_grad_(trainable)
   return True
  def save_readout(self,directory):
   if self.readout is None:raise ValueError('Decision readout is not enabled')
   from safetensors.torch import save_file
   save_file({'weight':self.readout.weight.detach().cpu().contiguous()},str(Path(directory)/'decision_readout.safetensors'))
-  (Path(directory)/'decision_readout.json').write_text(json.dumps({'version':1,'codes':[{'code':c,'token_id':i} for c,i in self._codebook]},indent=2)+'\n')
+  manifest={'version':1,'codes':[{'code':c,'token_id':i} for c,i in self._codebook]}
+  if self.prompt_layout!=DEFAULT_PROMPT_LAYOUT:manifest['prompt_layout']=check_prompt_layout(self.prompt_layout)  # absent = standard, so shipped adapters stay byte-identical
+  (Path(directory)/'decision_readout.json').write_text(json.dumps(manifest,indent=2)+'\n')
  def render(self,prompt,n_images):
   messages=[dict(role='user',content=[dict(type='image')]*n_images+[dict(type='text',text=prompt)])]
   rendered=self.processor.apply_chat_template(messages,add_generation_prompt=True,tokenize=False,enable_thinking=False)

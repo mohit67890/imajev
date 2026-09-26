@@ -1,0 +1,47 @@
+{
+ "new_vs_prev4b_pod": {
+  "difference": 0.014336917562724014,
+  "records": 279,
+  "clusters": 89,
+  "discordant_clusters": 19,
+  "a_only_correct": 16,
+  "b_only_correct": 12,
+  "p_value": 0.6587341265873413,
+  "test": "Monte Carlo cluster sign-flip",
+  "low": -0.034132614895507035,
+  "high": 0.06169155844155845
+ },
+ "new_vs_prev4b_release": {
+  "difference": 0.014336917562724014,
+  "records": 279,
+  "clusters": 89,
+  "discordant_clusters": 19,
+  "a_only_correct": 16,
+  "b_only_correct": 12,
+  "p_value": 0.6587341265873413,
+  "test": "Monte Carlo cluster sign-flip",
+  "low": -0.034132614895507035,
+  "high": 0.06169155844155845
+ },
+ "new_vs_9b": {
+  "difference": 0.017921146953405017,
+  "records": 279,
+  "clusters": 89,
+  "discordant_clusters": 20,
+  "a_only_correct": 21,
+  "b_only_correct": 16,
+  "p_value": 0.567043295670433,
+  "test": "Monte Carlo cluster sign-flip",
+  "low": -0.02963238331268071,
+  "high": 0.06593587930221595
+ },
+ "new_cluster_bootstrap": {
+  "method": "percentile bootstrap over evidence clusters",
+  "estimate": 0.8387096774193549,
+  "records": 279,
+  "clusters": 89,
+  "samples": 4000,
+  "low": 0.7886104682214705,
+  "high": 0.886927307710925
+ }
+}

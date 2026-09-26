@@ -140,3 +140,18 @@ single uninterrupted invocation.
 
 The full row-level `raw.jsonl` (23,900 rows, 377 MB; sha256 in `manifest.json` and `result-record/DecisionBench.json`)
 is kept off git and is available on request.
+
+## Phase-3 version: rerun on any pod size (`pod_decisionbench_p3.sh`)
+Same harness, same protocol, one script for 1–8 GPUs: it counts the GPUs, starts `SERVERS_PER_GPU` (3) torch servers per GPU behind one
+nginx round-robin and runs the harness with `--concurrency` = total servers (1×H100 ≈ 3.5 h, 4×H100 ≈ 1 h, 8×H100 ≈ 30 min; ≈ $15 in all
+cases). Differences from the 1.0 run: `--max-candidates 255` (the 256-code readout scores the 537 rows with 255 candidates that counted as
+misses before), `--calibration calibration-rot4.json`, adapter sha256 computed on the pod and passed as `--serving-bundle-sha256`,
+`run-meta.json` (GPUs, servers, setup / run seconds) in the tarball. Pins are passed as environment variables:
+```bash
+scp reports/benchmarks/decisionbench/pod_decisionbench_p3.sh <pod>:
+ssh <pod> 'cd /workspace && IMAJEV_COMMIT=<public commit> ADAPTER_REV=<HF revision> setsid nohup bash pod_decisionbench_p3.sh > launch.log 2>&1 < /dev/null &'
+# dry run before the HF upload: scp the staged adapter dir and add ADAPTER_LOCAL=adapters/imajev-4b (revision recorded as local-unpublished)
+ssh <pod> 'grep -E "SERVERS_READY|SMOKE_DONE|ALL_DONE|FAILED" db/run.log'; scp <pod>:decisionbench-imajev-4b-p3.tgz reports/benchmarks/decisionbench-run/
+```
+The official submission (a second PR to `Hanno-Labs/decision-bench-results`, or an update of #68) needs the public HF revision, so the upload
+comes first; the result record is built from `db/full/` exactly as for the 1.0 run.

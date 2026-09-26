@@ -1,0 +1,539 @@
+{
+ "name": "shipped",
+ "selection": {
+  "name": "shipped",
+  "ckpt": "adapters/4b-shipped",
+  "round": 0,
+  "step": 0,
+  "order": 0.0,
+  "fresh": {
+   "acc": 68.35001163602513,
+   "correct": 2937,
+   "n": 4297
+  },
+  "flagged": {
+   "acc": 23.88908638464273,
+   "correct": 672,
+   "n": 2813
+  },
+  "human": {
+   "acc": 48.152866242038215,
+   "correct": 378,
+   "n": 785
+  }
+ },
+ "calibration": {
+  "single": {
+   "choice": "fixed",
+   "why": "fixed calibration adapters/4b-shipped/calibration.json",
+   "guard_per_type": {
+    "pooled_ece": 0.24403900730729683,
+    "rows": 231,
+    "per_tier": {
+     "easy": 0.21790932590726517,
+     "original": 0.3773366915637002,
+     "hard": 0.16887496623288678
+    },
+    "pass": false
+   },
+   "guard_authored": {
+    "pooled_ece": 0.03554710245139104,
+    "rows": 231,
+    "per_tier": {
+     "easy": 0.008920094388118804,
+     "original": 0.09147761019121306,
+     "hard": 0.10921951470541803
+    },
+    "pass": false
+   }
+  },
+  "rot4": {
+   "choice": "fixed",
+   "why": "fixed calibration adapters/4b-shipped/calibration.json",
+   "guard_per_type": {
+    "pooled_ece": 0.17938386712905668,
+    "rows": 231,
+    "per_tier": {
+     "easy": 0.12239345119090403,
+     "original": 0.2965013734194526,
+     "hard": 0.12806025913016322
+    },
+    "pass": false
+   }
+  }
+ },
+ "jevbench": {
+  "single_raw": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.0004958439406260728,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.02738648349150452,
+    "n": 72
+   },
+   "hard": {
+    "acc": 69.36936936936937,
+    "ece": 0.1638676831424309,
+    "n": 111
+   },
+   "pooled_ece": 0.07144066519713782
+  },
+  "single_cal": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.009300050521122816,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.0931598883907267,
+    "n": 72
+   },
+   "hard": {
+    "acc": 69.36936936936937,
+    "ece": 0.10884262914751744,
+    "n": 111
+   },
+   "pooled_ece": 0.03767755987689661
+  },
+  "rot4_raw": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.0004179196332528834,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.023844089948047213,
+    "n": 72
+   },
+   "hard": {
+    "acc": 70.27027027027027,
+    "ece": 0.17097898857186522,
+    "n": 111
+   },
+   "pooled_ece": 0.07802548029018237
+  },
+  "rot4_cal": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.009217874010167715,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.09619083471074247,
+    "n": 72
+   },
+   "hard": {
+    "acc": 70.27027027027027,
+    "ece": 0.10844630928498483,
+    "n": 111
+   },
+   "pooled_ece": 0.023013902079657696
+  }
+ },
+ "fastdec": {
+  "rows": 1700,
+  "macro": 59.044117647058826,
+  "pooled_heads": 58.41379310344828,
+  "heads": 2900,
+  "by_domain": {
+   "agent_handoff": 70.0,
+   "banking_intent": 60.0,
+   "benefits_request": 70.5,
+   "clinic_request": 62.0,
+   "document_type": 79.0,
+   "email_triage": 51.25,
+   "news_topic": 60.0,
+   "paper_field": 41.0,
+   "product_feedback": 34.0,
+   "restaurant_review": 59.0,
+   "review_sentiment": 78.0,
+   "screen_tags": 55.0,
+   "sports_recap": 76.33333333333333,
+   "support_intent": 65.0,
+   "support_topic": 38.0,
+   "ticket_route": 51.666666666666664,
+   "travel_request": 53.0
+  },
+  "errors": 0
+ },
+ "gates": {
+  "shippable": true,
+  "image_gate": true,
+  "joint": {
+   "value": 97,
+   "target": 99,
+   "met": false
+  }
+ },
+ "imajevbench": {
+  "joint": [
+   97,
+   122
+  ],
+  "text": [
+   26,
+   37
+  ],
+  "visual": [
+   107,
+   120
+  ]
+ },
+ "panels": {
+  "p2b_test": {
+   "acc": 85.74712643678161,
+   "correct": 373,
+   "n": 435
+  },
+  "state_probe": {
+   "acc": 71.5,
+   "correct": 143,
+   "n": 200
+  },
+  "pairs_probe": {
+   "acc": 98.33333333333333,
+   "correct": 59,
+   "n": 60
+  },
+  "irrelevance": {
+   "acc": 80.16294721927028,
+   "correct": 2263,
+   "n": 2823
+  }
+ },
+ "direct_panels": {
+  "charts": {
+   "acc": 84.0,
+   "correct": 252,
+   "n": 300,
+   "by_family": {
+    "chart_claim": {
+     "acc": 94.28571428571429,
+     "correct": 33,
+     "n": 35
+    },
+    "chart_compare": {
+     "acc": 88.33333333333333,
+     "correct": 53,
+     "n": 60
+    },
+    "chart_extremum": {
+     "acc": 78.57142857142857,
+     "correct": 33,
+     "n": 42
+    },
+    "chart_readoff": {
+     "acc": 96.96969696969697,
+     "correct": 32,
+     "n": 33
+    },
+    "chart_score": {
+     "acc": 64.17910447761194,
+     "correct": 43,
+     "n": 67
+    },
+    "chart_threshold": {
+     "acc": 93.61702127659575,
+     "correct": 44,
+     "n": 47
+    },
+    "chart_trend": {
+     "acc": 87.5,
+     "correct": 14,
+     "n": 16
+    }
+   }
+  },
+  "docimg": {
+   "acc": 76.0,
+   "correct": 228,
+   "n": 300,
+   "by_family": {
+    "docimg_arithmetic": {
+     "acc": 57.6271186440678,
+     "correct": 34,
+     "n": 59
+    },
+    "docimg_category": {
+     "acc": 100.0,
+     "correct": 2,
+     "n": 2
+    },
+    "docimg_date": {
+     "acc": 61.76470588235294,
+     "correct": 21,
+     "n": 34
+    },
+    "docimg_extract": {
+     "acc": 84.31372549019608,
+     "correct": 86,
+     "n": 102
+    },
+    "docimg_form": {
+     "acc": 89.36170212765957,
+     "correct": 42,
+     "n": 47
+    },
+    "docimg_policy": {
+     "acc": 76.3157894736842,
+     "correct": 29,
+     "n": 38
+    },
+    "docimg_timetable": {
+     "acc": 77.77777777777777,
+     "correct": 14,
+     "n": 18
+    }
+   }
+  },
+  "inventory": {
+   "acc": 54.8,
+   "correct": 137,
+   "n": 250,
+   "by_family": {
+    "inventory_audit": {
+     "acc": 45.0,
+     "correct": 9,
+     "n": 20
+    },
+    "inventory_colour_count": {
+     "acc": 28.571428571428573,
+     "correct": 2,
+     "n": 7
+    },
+    "inventory_compare": {
+     "acc": 75.0,
+     "correct": 9,
+     "n": 12
+    },
+    "inventory_count": {
+     "acc": 65.21739130434783,
+     "correct": 45,
+     "n": 69
+    },
+    "inventory_locate": {
+     "acc": 71.42857142857143,
+     "correct": 10,
+     "n": 14
+    },
+    "inventory_misplaced": {
+     "acc": 29.166666666666668,
+     "correct": 7,
+     "n": 24
+    },
+    "inventory_not_visible": {
+     "acc": 100.0,
+     "correct": 3,
+     "n": 3
+    },
+    "inventory_out_of_stock": {
+     "acc": 55.55555555555556,
+     "correct": 25,
+     "n": 45
+    },
+    "inventory_price_tag": {
+     "acc": 45.45454545454545,
+     "correct": 5,
+     "n": 11
+    },
+    "inventory_reorder": {
+     "acc": 45.16129032258065,
+     "correct": 14,
+     "n": 31
+    },
+    "inventory_total": {
+     "acc": 57.142857142857146,
+     "correct": 8,
+     "n": 14
+    }
+   }
+  },
+  "safety": {
+   "acc": 72.0,
+   "correct": 180,
+   "n": 250,
+   "by_family": {
+    "safety_blocked_exit": {
+     "acc": 47.82608695652174,
+     "correct": 11,
+     "n": 23
+    },
+    "safety_checklist": {
+     "acc": 100.0,
+     "correct": 15,
+     "n": 15
+    },
+    "safety_count": {
+     "acc": 100.0,
+     "correct": 7,
+     "n": 7
+    },
+    "safety_extinguisher": {
+     "acc": 92.3076923076923,
+     "correct": 12,
+     "n": 13
+    },
+    "safety_forklift_lane": {
+     "acc": 16.666666666666668,
+     "correct": 1,
+     "n": 6
+    },
+    "safety_guardrail": {
+     "acc": 52.63157894736842,
+     "correct": 10,
+     "n": 19
+    },
+    "safety_headcount": {
+     "acc": 100.0,
+     "correct": 6,
+     "n": 6
+    },
+    "safety_not_visible": {
+     "acc": 100.0,
+     "correct": 4,
+     "n": 4
+    },
+    "safety_position": {
+     "acc": 100.0,
+     "correct": 1,
+     "n": 1
+    },
+    "safety_ppe": {
+     "acc": 65.0,
+     "correct": 26,
+     "n": 40
+    },
+    "safety_ppe_rule": {
+     "acc": 66.66666666666667,
+     "correct": 8,
+     "n": 12
+    },
+    "safety_presence": {
+     "acc": 95.91836734693878,
+     "correct": 47,
+     "n": 49
+    },
+    "safety_sign_check": {
+     "acc": 86.95652173913044,
+     "correct": 20,
+     "n": 23
+    },
+    "safety_spill": {
+     "acc": 53.333333333333336,
+     "correct": 8,
+     "n": 15
+    },
+    "safety_zone_score": {
+     "acc": 23.529411764705884,
+     "correct": 4,
+     "n": 17
+    }
+   }
+  },
+  "geometry": {
+   "acc": 66.4,
+   "correct": 166,
+   "n": 250,
+   "by_family": {
+    "geometry_angle": {
+     "acc": 67.27272727272727,
+     "correct": 37,
+     "n": 55
+    },
+    "geometry_area": {
+     "acc": 63.265306122448976,
+     "correct": 31,
+     "n": 49
+    },
+    "geometry_circle": {
+     "acc": 82.3529411764706,
+     "correct": 28,
+     "n": 34
+    },
+    "geometry_classify": {
+     "acc": 63.63636363636363,
+     "correct": 14,
+     "n": 22
+    },
+    "geometry_coord": {
+     "acc": 70.83333333333333,
+     "correct": 17,
+     "n": 24
+    },
+    "geometry_length": {
+     "acc": 71.7948717948718,
+     "correct": 28,
+     "n": 39
+    },
+    "geometry_polygon": {
+     "acc": 50.0,
+     "correct": 4,
+     "n": 8
+    },
+    "geometry_relation": {
+     "acc": 36.8421052631579,
+     "correct": 7,
+     "n": 19
+    }
+   }
+  },
+  "screens": {
+   "acc": 72.8,
+   "correct": 182,
+   "n": 250,
+   "by_family": {
+    "mobile_locate": {
+     "acc": 72.41379310344827,
+     "correct": 42,
+     "n": 58
+    },
+    "mobile_next": {
+     "acc": 91.30434782608695,
+     "correct": 21,
+     "n": 23
+    },
+    "mobile_permission": {
+     "acc": 100.0,
+     "correct": 8,
+     "n": 8
+    },
+    "mobile_possible": {
+     "acc": 73.33333333333333,
+     "correct": 11,
+     "n": 15
+    },
+    "mobile_tap": {
+     "acc": 95.45454545454545,
+     "correct": 21,
+     "n": 22
+    },
+    "pro_ground": {
+     "acc": 48.0,
+     "correct": 12,
+     "n": 25
+    },
+    "pro_locate": {
+     "acc": 48.57142857142857,
+     "correct": 17,
+     "n": 35
+    },
+    "pro_menu": {
+     "acc": 100.0,
+     "correct": 9,
+     "n": 9
+    },
+    "screen_locate": {
+     "acc": 74.54545454545455,
+     "correct": 41,
+     "n": 55
+    }
+   }
+  }
+ }
+}

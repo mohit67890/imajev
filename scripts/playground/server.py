@@ -34,8 +34,9 @@ from starlette.concurrency import run_in_threadpool  # noqa: E402
 from starlette.requests import Request as HttpRequest  # noqa: E402
 
 from vision_decision.images import MAX_BYTES, load_image_bytes  # noqa: E402
-from vision_decision.jev_api import to_request, to_response  # noqa: E402
-from vision_decision.scoring import combine_rotations, compile_question, cyclic_offsets, result_from_logits, rotate  # noqa: E402
+from vision_decision.jev_api import MAX_OPTIONS, to_request_with_plan, to_response  # noqa: E402
+from vision_decision.scoring import (check_prompt_layout, check_readout_codes, combine_rotations, compile_question,  # noqa: E402
+                                    cyclic_offsets, result_from_logits, rotate)
 
 try:  # package import (PYTHONPATH=scripts) or plain script run
     from .examples import load_examples
@@ -76,10 +77,13 @@ class MLXBackend:
 
     name = "mlx"
 
-    def __init__(self, bundle=BUNDLE, adapter=None, rotations=1, max_input_tokens=4096):
+    def __init__(self, bundle=BUNDLE, adapter=None, rotations=1, max_input_tokens=4096, readout_codes=None, prompt_layout=None):
         from vision_decision.backend import MLXDirect
         self.engine = MLXDirect(str(bundle), adapter=None if adapter is None else str(adapter),
-                                max_input_tokens=max_input_tokens)
+                                max_input_tokens=max_input_tokens, readout_codes=readout_codes, prompt_layout=prompt_layout)
+        self.readout_codes, self.prompt_layout = self.engine.codes, self.engine.prompt_layout
+        self.max_options = self.engine.max_options
+        _warn_layout(self.engine.trained_prompt_layout, self.prompt_layout)
         self.adapter = None if adapter is None else str(adapter)
         self.model = MODEL_NAME if adapter else BASE_MODEL_NAME
         self.load_seconds = self.engine.load_seconds
@@ -102,7 +106,8 @@ class TorchBackend:
 
     name = "torch"
 
-    def __init__(self, bundle=BUNDLE, adapter=None, device=None, rotations=1, max_input_tokens=4096):
+    def __init__(self, bundle=BUNDLE, adapter=None, device=None, rotations=1, max_input_tokens=4096, readout_codes=None,
+                 prompt_layout=None):
         import torch
         from torch_decision import TorchDecision
         self.torch = torch
@@ -118,7 +123,13 @@ class TorchBackend:
         if adapter is not None:
             from peft import PeftModel
             self.engine.model = PeftModel.from_pretrained(self.engine.model, str(adapter)).eval()
-            self.engine.enable_readout(adapter, trainable=False)
+            self.engine.enable_readout(adapter, trainable=False, codes=readout_codes)
+        if self.engine.readout is None and readout_codes is not None:  # base model / legacy adapter: LM-head rows
+            self.engine.codes = check_readout_codes(readout_codes)
+        trained = self.engine.prompt_layout  # the adapter's recorded layout (standard when absent)
+        self.prompt_layout = trained if prompt_layout is None else check_prompt_layout(prompt_layout)
+        _warn_layout(trained, self.prompt_layout)
+        self.readout_codes, self.max_options = self.engine.codes, self.engine.max_options
         self.adapter = None if adapter is None else str(adapter)
         self.model = MODEL_NAME if adapter else BASE_MODEL_NAME
         self.load_seconds = perf_counter() - start
@@ -129,7 +140,7 @@ class TorchBackend:
         vocabulary tie break; with rotations == 1 the single pass keeps it."""
         results, seconds, tokens = [], 0.0, 0
         for field in request.fields:
-            header, choices, texts = compile_question(field, request.state)
+            header, choices, texts = compile_question(field, request.state, getattr(self, "prompt_layout", "standard"))
             labels = self.engine.labels(len(choices), len(images))
             start = perf_counter()
             passes = []
@@ -150,8 +161,16 @@ class TorchBackend:
                          "rotations": self.rotations}
 
 
-def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations=1, max_input_tokens=4096):
-    """`auto` prefers MLX with the converted adapter and falls back to torch + the PEFT adapter."""
+def _warn_layout(trained, served):
+    if trained != served:
+        log.warning("serving prompt layout %r but the adapter was trained with %r", served, trained)
+
+
+def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations=1, max_input_tokens=4096,
+                  readout_codes=None, prompt_layout=None):
+    """`auto` prefers MLX with the converted adapter and falls back to torch + the PEFT adapter.
+
+    readout_codes None / prompt_layout None follow the adapter (its readout rows; its decision_readout.json layout)."""
     if kind == "auto":
         kind = "mlx" if MLX_ADAPTER.is_dir() else "torch"
     default = MLX_ADAPTER if kind == "mlx" else TORCH_ADAPTER
@@ -166,9 +185,11 @@ def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations
     if chosen is not None and not Path(chosen).is_dir():
         raise ValueError(f"Adapter directory {chosen} does not exist")
     if kind == "mlx":
-        return MLXBackend(bundle, chosen, rotations=rotations, max_input_tokens=max_input_tokens)
+        return MLXBackend(bundle, chosen, rotations=rotations, max_input_tokens=max_input_tokens,
+                          readout_codes=readout_codes, prompt_layout=prompt_layout)
     if kind == "torch":
-        return TorchBackend(bundle, chosen, rotations=rotations, max_input_tokens=max_input_tokens)
+        return TorchBackend(bundle, chosen, rotations=rotations, max_input_tokens=max_input_tokens,
+                            readout_codes=readout_codes, prompt_layout=prompt_layout)
     raise ValueError(f"Unknown backend {kind!r}")
 
 
@@ -250,9 +271,10 @@ def decode_images(blobs):
     return loaded
 
 
-def compile_payload(payload):
+def compile_payload(payload, max_options=MAX_OPTIONS):
+    """-> (internal Request, multi plan). max_options is the loaded readout's limit (254, or 255 with 256 codes)."""
     try:
-        return to_request(payload, request_id="playground")
+        return to_request_with_plan(payload, request_id="playground", max_options=max_options)
     except ValidationError as exc:
         raise PlaygroundError(422, "invalid_request", "; ".join(
             f"{'.'.join(str(p) for p in e['loc'])}: {e['msg']}" for e in exc.errors()) or str(exc))
@@ -283,8 +305,12 @@ def create_app(backend, examples=None, static=STATIC, calibration=None):
 
     @app.get("/v1/models")
     def models():
-        return {"model": backend.model, "adapter": backend.adapter, "backend": backend.name,
+        body = {"model": backend.model, "adapter": backend.adapter, "backend": backend.name,
                 "loaded": True, "load_seconds": round(backend.load_seconds, 3)}
+        for extra in ("readout_codes", "prompt_layout", "max_options"):
+            if hasattr(backend, extra):
+                body[extra] = getattr(backend, extra)
+        return body
 
     @app.get("/examples")
     def examples_index():
@@ -306,7 +332,7 @@ def create_app(backend, examples=None, static=STATIC, calibration=None):
         started = perf_counter()
         payload, blobs = await read_payload(http_request)
         loaded = decode_images(blobs)
-        request = compile_payload(payload)
+        request, plan = compile_payload(payload, getattr(backend, "max_options", MAX_OPTIONS))
         images = [image for image, _ in loaded]   # [] is a text-only request; the model handles it
 
         def run():
@@ -323,7 +349,7 @@ def create_app(backend, examples=None, static=STATIC, calibration=None):
         if calibration is not None:
             results = [calibration.calibrate_result(result, field.type, len(result.scores) - 1, image=bool(images))
                        for field, result in zip(request.fields, results)]
-        body = to_response(request, results, model=backend.model)
+        body = to_response(request, results, model=backend.model, plan=plan)
         total_ms = round((perf_counter() - started) * 1000, 1)
         body["usage"] = {**usage, "total_ms": total_ms,
                          "images": [{k: meta[k] for k in ("sha256", "width", "height")} for _, meta in loaded]}
@@ -355,16 +381,22 @@ def main(argv=None):
     parser.add_argument("--max-input-tokens", type=int, default=4096,
                         help="refuse requests longer than this many processed tokens (training used <= 4096)")
     parser.add_argument("--model-name", help="public model name reported by the API and the UI (e.g. imajev-2b)")
+    parser.add_argument("--readout-codes", type=int, choices=(255, 256),
+                        help="decision readout size; default = the adapter's. 256 extends a 255-code adapter by one "
+                             "LM-head-initialised code so choice questions may have 255 options")
+    parser.add_argument("--prompt-layout", choices=("auto", "standard", "compact"), default="auto",
+                        help="prompt layout; auto = the layout recorded in the adapter (standard when absent)")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
     backend = build_backend(args.backend, args.adapter, args.no_adapter, Path(args.model_bundle), args.rotations,
-                            args.max_input_tokens)
+                            args.max_input_tokens, readout_codes=args.readout_codes,
+                            prompt_layout=None if args.prompt_layout == "auto" else args.prompt_layout)
     if args.model_name:
         backend.model = args.model_name
-    log.info("backend=%s model=%s adapter=%s load_seconds=%.1f",
-             backend.name, backend.model, backend.adapter, backend.load_seconds)
+    log.info("backend=%s model=%s adapter=%s load_seconds=%.1f readout_codes=%s prompt_layout=%s",
+             backend.name, backend.model, backend.adapter, backend.load_seconds, backend.readout_codes, backend.prompt_layout)
     calibration = None
     if args.calibration:
         from vision_decision.calibration import TemperatureCalibrator

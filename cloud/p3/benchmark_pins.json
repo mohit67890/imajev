@@ -1,0 +1,72 @@
+{
+ "note": "sha256 pins of benchmark files (hashes only, no benchmark text). Used by scripts/p3/transfer.py (a bundle file with one of these hashes fails the build) and by cloud/p3/bootstrap_train.sh (verifies the public benchmarks fetched on the pod). Generated from data/p3/decontam-sources/sources.json on 2026-09-25.",
+ "benchmarks": {
+  "jevbench-public": {
+   "origin": ".cache/external/jevbench/datasets/public (git clone of the JevBench repo)",
+   "revision": "2fa63fa3226cb369795525ed011800f57dcbd894",
+   "files": {
+    "easy.jsonl": "231df3c2c8e88a1a8c137ebe85de96ba70fabd330849098ac7b3c52c70b7172b",
+    "hard.jsonl": "89e9e6becb33ed88c1de7d42dcc87531b2fb64cfaef4e1986faf7c37b3f80ebb",
+    "original.jsonl": "5c2414edb3006b8bfcb70fda433f0f9ca015759433849f8d3104328a1f7c4180"
+   }
+  },
+  "jevstyle-dev-ours": {
+   "origin": "data/manifests/decision-p2b-jevstyle-dev.jsonl (scripts/p2/author_jevstyle_dev.py)",
+   "revision": "local",
+   "files": {
+    "decision-p2b-jevstyle-dev.jsonl": "3c206b2156204b60e1872eb59dff341494f11799d2c7988767a55a593b5c853b"
+   }
+  },
+  "decisionbench-1.0": {
+   "origin": "hf://datasets/Hanno-Labs/decision-bench split eval",
+   "revision": "b7c8107e01ecb1aee7c7eaf5caee4a3ba9f59443",
+   "files": {
+    "eval-00000-of-00001.parquet": "6c97d3f3b5f79ca8566d2ecdf2b0e0f78c20102898810cdd8b7439ac776893ca"
+   }
+  },
+  "fast-decisions-dev": {
+   "origin": "hf://datasets/fastino/fast-decisions dev split (17 domain files), copied from a scratch download",
+   "revision": "unrecorded (downloaded 2026-09-24/25; file sha256 below pin the content)",
+   "files": {
+    "agent_handoff.jsonl": "7c086a3a6a0014fc53d76df3912b93e1b5e4c293d92ab36f1620e5346c3269f8",
+    "banking_intent.jsonl": "43af4aafdf6aeca74400505acbe528d1605aacb1097e1e1c0a169e9dfb6b5a77",
+    "benefits_request.jsonl": "a37c96197152006fbb46e8ea0099dc6ab89feafbca424d21bd57b3f7ae3b235b",
+    "clinic_request.jsonl": "84392b5b6de98c6cf7b474b45b6cffd19ab581770b89fab5d3eb5c77e9397652",
+    "document_type.jsonl": "87798b1b7c57a553fa82b1c15495b4bcefcf9552e80185673f00e733d59552d7",
+    "email_triage.jsonl": "779fdef3ad22d1f8fc0b8b81a15b7a591546ff2f5df3d4a850884e08033b11e0",
+    "news_topic.jsonl": "c31f7710592c2f31f3634930da4840b535ceccd14a3092521547bc9c0f0a6b17",
+    "paper_field.jsonl": "bb4513faf7616d2ee21694ee62fdc222b4e0e86a2ac0601298b23c538d23e5d0",
+    "product_feedback.jsonl": "0b44b04d361cf29fc95728a5c1cae4506f42545fe1cb39af53b835287cba001f",
+    "restaurant_review.jsonl": "64bf7cd3e498045f337956bfec1e002a456cb9aac02c23cac2911fd902914a67",
+    "review_sentiment.jsonl": "413e8f6f81ce048d3e17f39ecd11cd28c1443253712a0930cfe8063bd1d82616",
+    "screen_tags.jsonl": "5433a6cb7d67e88de2c9b9443bf3291d91ce89be4a7ea631b93d71d8b56e227b",
+    "sports_recap.jsonl": "b2e1e6e174650d8b6a114f16dbacbd8b62f93ee77c3967c23d322e9848dac1b3",
+    "support_intent.jsonl": "a293e95915be740dab18e0bba4d9ca1e31ce9ce2f86f127080ad172cdf89ce72",
+    "support_topic.jsonl": "e7f41083889f229bf7eae58c48b42e0587d397dbfc959966bbfc379197102ed6",
+    "ticket_route.jsonl": "8660f5b7bfc6f2475d5aaf2d3202a62d2c647ed49a950dc2dd04d76d14cffe08",
+    "travel_request.jsonl": "6e596454de299d765d1d104e90d93543218f06e42b8b55bfc614cd2c8981ebfb"
+   }
+  },
+  "imajevbench-public": {
+   "origin": "data/imajev-bench/v2-lite-v1/records-audited.jsonl (dev+calibration+test) and ../imajev-release/bench/records/records-public.jsonl",
+   "revision": "local",
+   "files": {
+    "v2-lite-v1-records-audited.jsonl": "066cca0f29f04cfc87b4f05ea983f86acaf869c5a6dc6859b216c8e22ea01cf7",
+    "release-records-public.jsonl": "8551501a51853e91689d5970a2a7f7218b1de48729b9743ba620d2ca32af6ba8"
+   }
+  },
+  "imajevbench-private-1": {
+   "origin": "data/imajev-bench/private-1/records-audited.jsonl (read in place, NOT copied; hashes only in the index)",
+   "revision": "local",
+   "files": {
+    "records-audited.jsonl": "b5b3fa93da5ecb7289b73ef7e24b1ef6059140869b65bf1c62d6458817d115cf"
+   }
+  }
+ },
+ "shipped_adapter": {
+  "repo": "mohit67890/imajev-4b",
+  "revision": "712891d1192c6491441a19bdea254d8a6e1048d0",
+  "adapter_model.safetensors": "d8d328f85dcda4459a2331c47aba2a89ec808210e712248afdb69e38b9e0c25d",
+  "decision_readout.safetensors": "d88c7c56bb15bd12d3370e9afa30dd80a61d7405249221e8ddde6de93e9dcfe3"
+ }
+}

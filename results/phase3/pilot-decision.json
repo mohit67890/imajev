@@ -1,0 +1,90 @@
+{
+ "ordinal_weight": 0.0,
+ "readout_codes": 256,
+ "expand_lora_rank": 64,
+ "lora_rank": 64,
+ "lanes": {
+  "baseline": {
+   "dev_loss": 0.8786123293638229,
+   "dev_accuracy": 0.60375,
+   "dev2_accuracy": 0.59625,
+   "dev_slices": {
+    "image": 0.7619047619047619,
+    "text": 0.547457627118644
+   },
+   "steps": [
+    75,
+    100
+   ],
+   "last_step": 100,
+   "ordinal_loss_last": null
+  },
+  "ordinal": {
+   "dev_loss": 0.8736985620856286,
+   "dev_accuracy": 0.60875,
+   "dev2_accuracy": 0.5900000000000001,
+   "dev_slices": {
+    "image": 0.7523809523809524,
+    "text": 0.5576271186440678
+   },
+   "steps": [
+    75,
+    100
+   ],
+   "last_step": 100,
+   "ordinal_loss_last": 0.1243219828336603
+  },
+  "codes256": {
+   "dev_loss": 0.8811341820657252,
+   "dev_accuracy": 0.6087499999999999,
+   "dev2_accuracy": 0.5825,
+   "dev_slices": {
+    "image": 0.780952380952381,
+    "text": 0.547457627118644
+   },
+   "steps": [
+    75,
+    100
+   ],
+   "last_step": 100,
+   "ordinal_loss_last": null
+  },
+  "rank64": {
+   "dev_loss": 0.7682950590550899,
+   "dev_accuracy": 0.6675,
+   "dev2_accuracy": 0.63,
+   "dev_slices": {
+    "image": 0.8095238095238095,
+    "text": 0.6169491525423729
+   },
+   "steps": [
+    75,
+    100
+   ],
+   "last_step": 100,
+   "ordinal_loss_last": null
+  }
+ },
+ "parity_ok": true,
+ "has_255_rows": true,
+ "rules": {
+  "dev_acc_tol": 0.01,
+  "dev_loss_rel": 0.02,
+  "tail": 2,
+  "rank_acc_gain": 0.015,
+  "rank_loss_gain": 0.03,
+  "slice_tol": 0.02
+ },
+ "winners": [
+  "codes256",
+  "rank64"
+ ],
+ "lane": null,
+ "combined": true,
+ "reasons": [
+  "ordinal: lose (no_harm True, score dev 0.5900000000000001 vs baseline 0.59625)",
+  "codes256: WIN (no_harm True)",
+  "rank64: WIN (dev acc +0.064, dev loss -12.6% vs baseline; slices image 0.810 vs 0.762, text 0.617 vs 0.547)",
+  "combined winners ['codes256', 'rank64']: no single lane trained them together; the full run restarts from the shipped adapter with the combined flags (no lane resume)"
+ ]
+}

@@ -4,7 +4,12 @@ import json
 from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, model_validator
 
+# Serialized state limit (compact UTF-8 JSON). Raised from 32 KB to 128 KB in phase 3 (~32k tokens) so long documents can be
+# trained and served; the processed-token limit (--max-input-tokens) remains the real guard.
+MAX_STATE_BYTES = 131072
+
 UNKNOWN = "__unknown__"
+MAX_INTERNAL_FIELDS = 64
 Text = Annotated[StrictStr, Field(min_length=1, max_length=2000)]
 
 class StrictModel(BaseModel):
@@ -30,7 +35,9 @@ class CommonField(StrictModel):
 
 class ChoiceField(CommonField):
     type: Literal["choice"]
-    options: Annotated[list[Option], Field(min_length=2, max_length=254)]  # +unknown = 255 verified single-token codes
+    # +unknown: 254 options fill the shipped 255-code readout; 255 need the extended 256-code readout.
+    # The serving limit for the loaded adapter (254 or 255) is enforced by jev_api.to_request(max_options=...).
+    options: Annotated[list[Option], Field(min_length=2, max_length=255)]
 
     @model_validator(mode="after")
     def unique(self):
@@ -65,7 +72,9 @@ class Request(StrictModel):
     schema_version: Literal["1.0"] = "1.0"
     request_id: Annotated[StrictStr, Field(min_length=1, max_length=128)]
     state: dict | StrictStr = Field(default_factory=dict)
-    fields: Annotated[list[DecisionField], Field(min_length=1, max_length=8)]
+    # A public request has at most 8 questions (jev_api.to_request); a `multi` question fans out to one
+    # boolean field per label, so the internal request may carry more fields.
+    fields: Annotated[list[DecisionField], Field(min_length=1, max_length=MAX_INTERNAL_FIELDS)]
     execution: Execution = Field(default_factory=Execution)
 
     @model_validator(mode="after")
@@ -84,8 +93,8 @@ class Request(StrictModel):
             elif value is not None and type(value) not in (str, int, float, bool):
                 raise ValueError("State must contain JSON values")
         check(self.state)
-        if len(json.dumps(self.state, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode("utf-8")) > 32768:
-            raise ValueError("State exceeds 32768 bytes")
+        if len(json.dumps(self.state, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode("utf-8")) > MAX_STATE_BYTES:
+            raise ValueError(f"State exceeds {MAX_STATE_BYTES} bytes")
         return self
 
 class Result(StrictModel):

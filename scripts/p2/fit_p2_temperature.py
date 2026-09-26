@@ -17,9 +17,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
-from vision_decision.calibration import BUCKETS, TemperatureCalibrator, _nll, fit_temperature  # noqa: E402
+from vision_decision.calibration import BUCKET_LABELS, TemperatureCalibrator, _nll, fit_temperature  # noqa: E402
 
-BUCKET_KEYS = [f"{t}:{str(lo) if lo == hi else f'{lo}-{hi}'}" for t in ("boolean", "choice", "ordinal") for lo, hi in BUCKETS]
+BUCKET_KEYS = [f"{t}:{label}" for t in ("boolean", "choice", "ordinal") for label in BUCKET_LABELS]
 
 
 def select_rows(predictions, manifest=None, holdout_domains=()):

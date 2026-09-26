@@ -1,0 +1,138 @@
+{
+ "shipped": {
+  "n": 212,
+  "acc": 98.58490566037736,
+  "abstain_rate": 0.0,
+  "mean_conf": 98.44469132850755,
+  "ece": 0.006238489499631898,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 96.66666666666667
+  },
+  "by_type": {
+   "choice": 98.5,
+   "boolean": 100.0
+  }
+ },
+ "r1-s000660": {
+  "n": 212,
+  "acc": 99.05660377358491,
+  "abstain_rate": 0.0,
+  "mean_conf": 97.08035821622272,
+  "ece": 0.019762455573621815,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 98.33333333333333
+  },
+  "by_type": {
+   "choice": 99.0,
+   "boolean": 100.0
+  }
+ },
+ "r1-s001320": {
+  "n": 212,
+  "acc": 99.05660377358491,
+  "abstain_rate": 0.0,
+  "mean_conf": 97.2273347231577,
+  "ece": 0.02368559842964385,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 98.33333333333333
+  },
+  "by_type": {
+   "choice": 99.0,
+   "boolean": 100.0
+  }
+ },
+ "r1-s001980": {
+  "n": 212,
+  "acc": 99.52830188679245,
+  "abstain_rate": 0.0,
+  "mean_conf": 98.55346637514403,
+  "ece": 0.009748355116484291,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 100.0
+  },
+  "by_type": {
+   "choice": 99.5,
+   "boolean": 100.0
+  }
+ },
+ "r1-s002640": {
+  "n": 212,
+  "acc": 99.05660377358491,
+  "abstain_rate": 0.0,
+  "mean_conf": 98.42475225340645,
+  "ece": 0.0113597905860757,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 98.33333333333333
+  },
+  "by_type": {
+   "choice": 99.0,
+   "boolean": 100.0
+  }
+ },
+ "r2-s000099": {
+  "n": 212,
+  "acc": 99.05660377358491,
+  "abstain_rate": 0.0,
+  "mean_conf": 97.7035790119531,
+  "ece": 0.019588793786066903,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 98.33333333333333
+  },
+  "by_type": {
+   "choice": 99.0,
+   "boolean": 100.0
+  }
+ },
+ "r2-s000198": {
+  "n": 212,
+  "acc": 99.05660377358491,
+  "abstain_rate": 0.0,
+  "mean_conf": 97.60353686112278,
+  "ece": 0.019913965519869112,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 98.33333333333333
+  },
+  "by_type": {
+   "choice": 99.0,
+   "boolean": 100.0
+  }
+ },
+ "r2-s000291": {
+  "n": 212,
+  "acc": 99.05660377358491,
+  "abstain_rate": 0.0,
+  "mean_conf": 97.66409709206167,
+  "ece": 0.01892246418404123,
+  "by_category": {
+   "analysis_question": 100.0,
+   "instruction_following": 96.15384615384616,
+   "knowledge_question": 100.0,
+   "reasoning_question": 98.33333333333333
+  },
+  "by_type": {
+   "choice": 99.0,
+   "boolean": 100.0
+  }
+ }
+}

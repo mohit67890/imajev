@@ -1,0 +1,50 @@
+{
+ "schema_version": "1.0",
+ "calibration_version": "p3-r2-s000291-authored",
+ "temperatures": {
+  "boolean:2": 1.3051569717552742,
+  "boolean:3-5": 1.3051569717552742,
+  "boolean:6-10": 1.3051569717552742,
+  "boolean:11-25": 1.3051569717552742,
+  "boolean:26-254": 1.3051569717552742,
+  "choice:2": 1.3051569717552742,
+  "choice:3-5": 1.3051569717552742,
+  "choice:6-10": 1.3051569717552742,
+  "choice:11-25": 1.3051569717552742,
+  "choice:26-254": 1.3051569717552742,
+  "ordinal:2": 1.3051569717552742,
+  "ordinal:3-5": 1.3051569717552742,
+  "ordinal:6-10": 1.3051569717552742,
+  "ordinal:11-25": 1.3051569717552742,
+  "ordinal:26-254": 1.3051569717552742
+ },
+ "counts": {
+  "boolean:2": 150,
+  "boolean:3-5": 150,
+  "boolean:6-10": 150,
+  "boolean:11-25": 150,
+  "boolean:26-254": 150,
+  "choice:2": 150,
+  "choice:3-5": 150,
+  "choice:6-10": 150,
+  "choice:11-25": 150,
+  "choice:26-254": 150,
+  "ordinal:2": 150,
+  "ordinal:3-5": 150,
+  "ordinal:6-10": 150,
+  "ordinal:11-25": 150,
+  "ordinal:26-254": 150
+ },
+ "fit": {
+  "rule": "single temperature by held-out NLL on pooled rows",
+  "rows": 150,
+  "temperature": 1.3051569717552742,
+  "nll_raw": 0.631011137718808,
+  "nll_calibrated": 0.6120125593107982,
+  "decision_types": [
+   "boolean",
+   "choice",
+   "ordinal"
+  ]
+ }
+}

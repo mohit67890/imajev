@@ -1,0 +1,28 @@
+{
+ "lang": "en",
+ "source_rows": 220,
+ "kept": 212,
+ "flagged": 8,
+ "kinds": {
+  "choice": 200,
+  "boolean": 12
+ },
+ "by_category": {
+  "reasoning_question": 60,
+  "knowledge_question": 51,
+  "instruction_following": 26,
+  "analysis_question": 75
+ },
+ "flag_reasons": [
+  "only 2 distractors",
+  "only 2 distractors",
+  "verifier picked None, gold '3'; compliant ['A', 'B']",
+  "only 2 distractors",
+  "only 0 distractors",
+  "only 2 distractors",
+  "verifier picked None, gold 'It is a good day'; compliant ['A', 'B']",
+  "verifier picked None, gold 'I am happy today'; compliant ['B', 'C']"
+ ],
+ "manifest": "data/manifests/s1bench-typed-en.jsonl",
+ "protocol": "typed conversion (choice: gold + 3 Kimi-written distractors, blind-verified; yes/no -> boolean); NOT comparable to S1-Bench paper scores"
+}

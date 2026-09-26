@@ -14,7 +14,7 @@ import torch.distributed as dist
 import faulthandler,sys
 None  # periodic stack dumps disabled: they coincided with the SIGSEGVs (the dump thread walks frames without the GIL)  # a stack every 4 minutes of silence: a stalled run explains itself
 from decision_data import load_records,load_image,render,pixel_budget,batch_plan,with_noise_state,approx_tokens,permute_options,resolve_probs_target
-from decision_recipe import decision_loss,gold,rationale_ids,collate_with_rationale
+from decision_recipe import decision_loss,gold,rationale_ids,collate_with_rationale,OrdinalTarget,ordinal_loss
 from torch_decision import TorchDecision,TARGETS
 
 parser=argparse.ArgumentParser();parser.add_argument('--output',required=True);parser.add_argument('--model',required=True);parser.add_argument('--revision')
@@ -29,9 +29,30 @@ parser.add_argument('--soft-targets',action='store_true',help='train toward a re
 parser.add_argument('--soft-weight',type=float,default=1.0,help='with --soft-targets: loss = w * soft CE + (1 - w) * hard CE on the gold option')
 parser.add_argument('--permute-options',action='store_true',help='permute choice options per example per epoch, keyed on seed+epoch+record id (ordinal and boolean fields keep their order)')
 parser.add_argument('--rationale-weight',type=float,default=0.0,help='add W x LM cross-entropy over " Because: <rationale>" appended after the decision position (training only)')
-parser.add_argument('--rationale-max-tokens',type=int,default=64,help='cap on appended rationale tokens (prefix included)');args=parser.parse_args()
+parser.add_argument('--rationale-max-tokens',type=int,default=64,help='cap on appended rationale tokens (prefix included)')
+parser.add_argument('--ordinal-weight',type=float,default=0.0,help='phase 3: for score (ordinal) fields add W x normalised squared earth-mover distance between the predicted and target distributions over the ordered levels (unknown excluded, both renormalised): sum_k (CDF_pred(k) - CDF_target(k))^2 / (n-1), in [0, 1]. Target: one-hot gold level, target_distribution, or with --soft-targets the soft_weight mix of target_probs and gold. Skipped for unknown gold and for choice/boolean fields. Training only: dev loss stays the plain CE so runs with different W compare. 0 = off (default); see reports/phase3/ordinal-loss.md')
+parser.add_argument('--readout-codes',type=int,choices=(255,256),default=255,help='phase 3 (gated): decision readout size. 256 appends one code (initialised from its LM-head row, as the other rows were; also when --init-adapter carries a 255-row readout) so choice questions may have 255 options; <= 254-option questions keep their codes. Default 255 = the shipped readout')
+parser.add_argument('--prompt-layout',choices=('standard','compact'),default='standard',help='phase 3 (gated): prompt layout rendered for every example (vision_decision.scoring.compile_question). Recorded in the saved decision_readout.json (compact only) so the server serves the layout the adapter was trained with')
+# phase 3 pod (cloud/p3/pod_run_train.sh): continue the winning pilot lane into the full run. Default off; without it nothing below changes.
+parser.add_argument('--resume-from',default='',help='start from ANOTHER run\'s saved checkpoint directory (e.g. a pilot lane\'s <output>/last): adapter, readout, optimizer, scheduler and data position. Used only when this --output has no own last/ checkpoint (the own resume always wins). The source run\'s config.json must equal this one except world_size / accumulate / dev and selection settings; with the same micro-batches per step (world x accumulate) the resume is exact (the same optimizer steps over the same micro-batches). Writes <output>/resumed_from.json')
+parser.add_argument('--resume-inexact',action='store_true',help='with --resume-from: allow a different micro-batches per step. Starts at floor(source micro-batches / this per-step), so no micro-batch is skipped and fewer than one step\'s worth (< world x accumulate micro-batches) are trained twice; the learning-rate schedule is re-derived for this run\'s step count')
+# phase 3 pilot lane "rank64" (scripts/lora_expand.py): grow the --init-adapter's LoRA rank with an identical function at step 0
+parser.add_argument('--expand-lora-rank',type=int,default=0,help='with --init-adapter of rank r: train at rank R (> r). Every LoRA pair keeps its r trained rows of A / columns of B; the R-r new A rows get the standard LoRA init and the new B columns are zero; alpha becomes alpha*R/r so alpha/rank is unchanged. The model output is identical at step 0; the readout is untouched. 0 = off')
+parser.add_argument('--dev-slices',action='store_true',help='also log dev loss/accuracy per slice (image rows / text rows) in the dev entries (dev_slices); the overall numbers are the same pass')
+args=parser.parse_args()
+INIT_LORA=None
+if args.init_adapter:  # the LoRA structure follows the init adapter (its rank and alpha), grown only by --expand-lora-rank
+ sys.path.insert(0,str(Path(__file__).resolve().parent));from lora_expand import read_init_config,expanded_alpha
+ INIT_LORA=read_init_config(args.init_adapter)
+ if args.expand_lora_rank:
+  if args.expand_lora_rank<INIT_LORA['r']:parser.error(f"--expand-lora-rank {args.expand_lora_rank} < the init adapter's rank {INIT_LORA['r']}")
+  args.rank=args.expand_lora_rank;args.alpha=expanded_alpha(INIT_LORA['r'],INIT_LORA['alpha'],args.rank)
+ else:args.rank,args.alpha=INIT_LORA['r'],float(INIT_LORA['alpha'])
+elif args.expand_lora_rank:parser.error('--expand-lora-rank needs --init-adapter')
+if args.resume_inexact and not args.resume_from:parser.error('--resume-inexact needs --resume-from')
 if not 0<=args.soft_weight<=1:parser.error('--soft-weight must be in [0, 1]')
 if args.rationale_weight<0:parser.error('--rationale-weight must be >= 0')
+if not (math.isfinite(args.ordinal_weight) and args.ordinal_weight>=0):parser.error('--ordinal-weight must be >= 0')
 RATIONALE_CAP=args.rationale_max_tokens if args.rationale_weight>0 else 0  # 0 = no rationale tokens planned or appended
 world=int(os.environ.get('WORLD_SIZE',1));rank=int(os.environ.get('RANK',0));main=rank==0
 if world>1:
@@ -50,13 +71,14 @@ path=args.model
 if not Path(path).is_dir():
  from huggingface_hub import snapshot_download
  path=snapshot_download(args.model,revision=args.revision)
-RECIPE_DEFAULTS=dict(soft_targets=False,soft_weight=1.0,permute_options=False,rationale_weight=0.0,rationale_max_tokens=64)  # recorded only when changed, so existing outputs resume
-config=dict({k:v for k,v in vars(args).items() if k not in ('output','device','max_hours','workers','max_steps') and not (k in RECIPE_DEFAULTS and v==RECIPE_DEFAULTS[k])},world_size=world,manifest_sha256=hashlib.sha256(Path(f'data/manifests/{VERSION}.jsonl').read_bytes()).hexdigest(),train_cases=len(train),dev_cases=len(dev),targets=TARGETS,
+RECIPE_DEFAULTS=dict(soft_targets=False,soft_weight=1.0,permute_options=False,rationale_weight=0.0,rationale_max_tokens=64,ordinal_weight=0.0,readout_codes=255,prompt_layout='standard',expand_lora_rank=0,dev_slices=False)  # recorded only when changed, so existing outputs resume
+config=dict({k:v for k,v in vars(args).items() if k not in ('output','device','max_hours','workers','max_steps','resume_from','resume_inexact') and not (k in RECIPE_DEFAULTS and v==RECIPE_DEFAULTS[k])},world_size=world,manifest_sha256=hashlib.sha256(Path(f'data/manifests/{VERSION}.jsonl').read_bytes()).hexdigest(),train_cases=len(train),dev_cases=len(dev),targets=TARGETS,
  loss='cross-entropy over float32 candidate-label logits at the served decision position; no label smoothing'
  +(f'; target_probs rows: {args.soft_weight} x soft cross-entropy + {1-args.soft_weight:g} x hard cross-entropy' if args.soft_targets else '')
- +(f'; plus {args.rationale_weight} x LM cross-entropy over up to {args.rationale_max_tokens} appended rationale tokens (training only)' if args.rationale_weight>0 else ''))
+ +(f'; plus {args.rationale_weight} x LM cross-entropy over up to {args.rationale_max_tokens} appended rationale tokens (training only)' if args.rationale_weight>0 else '')
+ +(f'; plus {args.ordinal_weight} x normalised squared earth-mover distance over score-field levels, unknown excluded (training only)' if args.ordinal_weight>0 else ''))
 p=out/'config.json'
-VOLATILE={'dev_every','dev_cases','save_every'}  # checkpoint cadence may change on resume; everything that affects the data order or the optimisation may not
+VOLATILE={'dev_every','dev_cases','save_every','dev_slices'}  # checkpoint cadence may change on resume; everything that affects the data order or the optimisation may not
 strip=lambda c:{k:v for k,v in c.items() if k not in VOLATILE}
 if p.exists():assert strip(json.loads(p.read_text()))==strip(config),'Output exists with a different config'
 elif main:p.write_text(json.dumps(config,indent=2)+'\n')
@@ -65,8 +87,14 @@ init=None
 if args.init_adapter:
  from peft import set_peft_model_state_dict
  from safetensors.torch import load_file
- init=Path(args.init_adapter);set_peft_model_state_dict(model,load_file(str(init/'adapter_model.safetensors')))
-engine.enable_readout(args.init_adapter if init is not None and (init/'decision_readout.safetensors').exists() else None,trainable=True);model.train();engine.readout.train()
+ init=Path(args.init_adapter);init_sd=load_file(str(init/'adapter_model.safetensors'))
+ if args.expand_lora_rank and args.expand_lora_rank>INIT_LORA['r']:
+  from peft import get_peft_model_state_dict;from lora_expand import expand_state_dict
+  init_sd,xs=expand_state_dict(init_sd,{k:v.detach().cpu() for k,v in get_peft_model_state_dict(model).items()})
+  say(f"expanded the init adapter's LoRA rank {INIT_LORA['r']} -> {args.rank} (alpha {INIT_LORA['alpha']:g} -> {args.alpha:g}; {xs['expanded_pairs']} pairs; output identical at step 0)")
+ set_peft_model_state_dict(model,init_sd)
+engine.enable_readout(args.init_adapter if init is not None and (init/'decision_readout.safetensors').exists() else None,trainable=True,codes=args.readout_codes);model.train();engine.readout.train()
+engine.prompt_layout=args.prompt_layout  # this run's layout, saved with the readout (an --init-adapter's recorded layout does not carry over)
 if args.device.startswith('cuda') and not args.no_checkpointing:model.gradient_checkpointing_enable(gradient_checkpointing_kwargs=dict(use_reentrant=False));model.enable_input_require_grads()
 params=[q for q in model.parameters() if q.requires_grad]+list(engine.readout.parameters());# One deterministic plan of length-bucketed micro-batches per epoch, identical on every rank; rank r takes every world-th batch.
 budget=args.token_budget or 10**9
@@ -104,7 +132,9 @@ def make(record,rng,epoch=None):
  # --permute-options: the permutation is its own step keyed on the record id, so render must not shuffle again.
  permute=rng is not None and args.permute_options
  if permute:record=permute_options(record,args.seed,epoch)
- header,choices,texts,target=render(record,rng,shuffle=not permute,soft_targets=args.soft_targets);labels=engine.labels(len(choices),len(record['images']))
+ header,choices,texts,target=render(record,rng,shuffle=not permute,soft_targets=args.soft_targets,layout=args.prompt_layout);labels=engine.labels(len(choices),len(record['images']))
+ # --ordinal-weight: training rows of a score field carry the level count; render keeps levels ordered, unknown last
+ if rng is not None and args.ordinal_weight>0 and record['request']['fields'][0]['type']=='ordinal':target=OrdinalTarget(target,len(choices)-1)
  images=[load_image(x['image'],pixel_budget(record,args.pixels)) for x in record['images']]
  example=(*engine.render_example(images,header+'\n'.join(f'{l}: {t}' for l,t in zip(labels,texts)),labels),target)
  if rng is not None and RATIONALE_CAP:example+=(rationale_ids(engine.processor.tokenizer,record,RATIONALE_CAP),)
@@ -134,6 +164,7 @@ def loader(dataset,collated):
  extra=dict(batch_size=None) if collated else dict(batch_size=min(args.batch_size,8),collate_fn=engine.collate)
  return torch.utils.data.DataLoader(dataset,shuffle=False,num_workers=args.workers,prefetch_factor=4 if args.workers else None,**extra)
 rationale_total=[0.0]  # summed rationale LM loss since the last log entry (--rationale-weight)
+ordinal_total=[0.0,0]  # summed unweighted ordinal term and the number of examples it applied to, since the last log entry (--ordinal-weight)
 def batch_loss(batch):
  """(summed loss, readout hits, examples). Hits compare the readout argmax with gold() only: rationale tokens never
  enter the readout (dev rows carry none, and training rows read the decision position, not the rationale)."""
@@ -144,6 +175,10 @@ def batch_loss(batch):
   inputs,token_ids,targets=batch;logits=engine.candidate_logits_batch(inputs,token_ids);rationale=None
  loss=torch.stack([decision_loss(x,t,args.soft_weight) for x,t in zip(logits,targets)]).sum()  # hard label, a target_distribution list, or a --soft-targets SoftTarget
  if rationale is not None:loss=loss+args.rationale_weight*rationale
+ if args.ordinal_weight>0:  # OrdinalTarget only appears on training rows with the flag on; otherwise nothing is added
+  terms=[o for o in (ordinal_loss(x,t,args.soft_weight) for x,t in zip(logits,targets)) if o is not None]
+  if terms:
+   ordinal=torch.stack(terms).sum();ordinal_total[0]+=float(ordinal.detach());ordinal_total[1]+=len(terms);loss=loss+args.ordinal_weight*ordinal
  return loss,sum(int(x.argmax())==gold(t) for x,t in zip(logits,targets)),len(targets)
 def dev_loss(rows=None):
  model.eval();total=0;hits=0;n=0
@@ -153,9 +188,17 @@ def dev_loss(rows=None):
    except torch.OutOfMemoryError:
     torch.cuda.empty_cache();raise RuntimeError('Development batch exceeded memory; lower --token-budget or --batch-size (evaluation may not skip records)')
  model.train();total,hits,n=across(total,hits,n);return total/n,hits/n
+def dev_loss_sliced():
+ """--dev-slices: the same dev pass, split into image rows and text rows; overall = the example-weighted combination."""
+ parts={'image':[r for r in dev if r.get('images')],'text':[r for r in dev if not r.get('images')]};sl={};tot=hit=n=0.0
+ for k,rows in parts.items():
+  if not rows:continue
+  l,a=dev_loss(rows);sl[k]={'loss':l,'accuracy':a,'n':len(rows)};tot+=l*len(rows);hit+=a*len(rows);n+=len(rows)
+ return tot/n,hit/n,sl
 def evaluate_dev(entry):
  """Fill dev metrics into the log entry and return the selection score (lower is better)."""
- entry['dev_loss'],entry['dev_accuracy']=dev_loss()
+ if args.dev_slices:entry['dev_loss'],entry['dev_accuracy'],entry['dev_slices']=dev_loss_sliced()
+ else:entry['dev_loss'],entry['dev_accuracy']=dev_loss()
  if dev2:entry['dev2_loss'],entry['dev2_accuracy']=dev_loss(dev2)
  if args.select=='dev2_accuracy':return -entry.get('dev2_accuracy',entry['dev_accuracy'])
  if args.select=='mean_accuracy':return -(entry['dev_accuracy']+entry.get('dev2_accuracy',entry['dev_accuracy']))/2
@@ -173,6 +216,33 @@ if (out/'last'/'trainer.pt').exists():
  set_peft_model_state_dict(model,load_file(str(out/'last'/'adapter_model.safetensors')));state=torch.load(out/'last'/'trainer.pt',map_location=args.device)
  engine.readout.weight.data.copy_(load_file(str(out/'last'/'decision_readout.safetensors'),device=str(args.device))['weight'])
  optimizer.load_state_dict(state['optimizer']);scheduler.load_state_dict(state['scheduler']);step0,best=state['step'],state['best'];say('Resumed at step',step0)
+elif args.resume_from:  # phase 3: continue another run (a pilot lane) from its saved state; see --resume-from / --resume-inexact
+ RESUME_FREE=VOLATILE|{'world_size','accumulate','select','dev2_version','dev2_cases'}  # change neither the data order nor the optimisation
+ src=Path(args.resume_from);src_config=json.loads((src.parent/'config.json').read_text());mine=json.loads(json.dumps(config))
+ differ=sorted(k for k in set(src_config)|set(mine) if k not in RESUME_FREE and src_config.get(k)!=mine.get(k))
+ if differ:raise SystemExit(f'--resume-from {src}: the source config differs in {differ}')
+ from peft import set_peft_model_state_dict;from safetensors.torch import load_file
+ state=torch.load(src/'trainer.pt',map_location=args.device);src_per_step=int(src_config['world_size'])*int(src_config['accumulate'])
+ # The deterministic plan (flat, before balancing) does not depend on world or accumulate; balancing only reorders micro-batches
+ # inside one optimizer step. So after S source steps exactly the micro-batches flat[:S x source per-step] were trained.
+ consumed=int(state['step'])*src_per_step;exact=src_per_step==per_step;step0=consumed//per_step;repeated=consumed-step0*per_step
+ if not exact and not args.resume_inexact:raise SystemExit(f'--resume-from {src}: {src_per_step} micro-batches per step there, {per_step} here (--resume-inexact allows it)')
+ if not 0<step0<steps:raise SystemExit(f'--resume-from {src}: source step {state["step"]} maps to step {step0}, outside 1..{steps-1}')
+ set_peft_model_state_dict(model,load_file(str(src/'adapter_model.safetensors')))
+ engine.readout.weight.data.copy_(load_file(str(src/'decision_readout.safetensors'),device=str(args.device))['weight'])
+ optimizer.load_state_dict(state['optimizer'])
+ if exact:scheduler.load_state_dict(state['scheduler'])  # same step count, so the same schedule at the same step
+ else:
+  import warnings
+  with warnings.catch_warnings():warnings.simplefilter('ignore');scheduler.last_epoch=step0-1;scheduler.step()  # this run's schedule, at step0
+ best=float('inf')  # the source's best used its own dev set and rule; the first dev pass here sets it
+ resumed=dict(step=step0,resumed_from=str(src),mode='exact' if exact else 'inexact',source_step=int(state['step']),source_microbatches_per_step=src_per_step,
+  microbatches_per_step=per_step,source_microbatches=consumed,first_microbatch=step0*per_step,repeated_microbatches=repeated,skipped_microbatches=0,of=steps)
+ save('last',step0,best)  # a crash from here on resumes from this run's own last/
+ if main:
+  (out/'resumed_from.json').write_text(json.dumps(resumed,indent=1)+'\n')
+  with log.open('a') as f:f.write(json.dumps(resumed)+'\n')
+ say('Resumed from',src,json.dumps(resumed))
 else:
  entry=dict(step=0);best=evaluate_dev(entry);say(json.dumps(entry))
  save('best',0,best)
@@ -214,6 +284,8 @@ for step in range(step0,steps):
  norm=float(torch.nn.utils.clip_grad_norm_(params,args.clip));optimizer.step();scheduler.step()
  loss_sum,seen_all,skipped_all=across(sum(losses),seen,skipped);count=examples;entry=dict(examples_in_step=int(examples),skipped_oom_batches=int(skipped_all),step=step+1,of=steps,loss=loss_sum/count,grad_norm=norm,seconds=time.monotonic()-start,examples_per_second=seen_all/(time.monotonic()-window),gpus=world);assert math.isfinite(entry['loss']) and math.isfinite(norm)
  if RATIONALE_CAP:entry['rationale_loss']=across(rationale_total[0])[0]/count;rationale_total[0]=0.0  # unweighted, per example; already included (x weight) in loss
+ if args.ordinal_weight>0:  # unweighted mean over the score examples in this step; already included (x weight) in loss
+  total,applied=across(*ordinal_total);entry['ordinal_loss']=total/applied if applied else None;entry['ordinal_examples']=int(applied);ordinal_total[:]=[0.0,0]
  out_of_time=bool(across(float(bool(args.max_hours and (time.monotonic()-started)/3600>args.max_hours)) if main else 0.0)[0]);last=step+1==steps or out_of_time or (args.max_steps and step+1-step0>=args.max_steps)
  if (step+1)%args.dev_every==0 or last:
   score=evaluate_dev(entry)

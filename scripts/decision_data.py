@@ -89,14 +89,15 @@ def permute_options(record,seed,epoch):
  copy=json.loads(json.dumps(record));random.Random(f"{seed}:{epoch}:{record['id']}:options").shuffle(copy['request']['fields'][0]['options'])
  return copy
 
-def render(record,rng=None,shuffle=True,soft_targets=False):
+def render(record,rng=None,shuffle=True,soft_targets=False,layout='standard'):
  """(header, choices, texts, target). With rng (and shuffle), choice options are reshuffled; unknown stays last as served.
+ layout: the prompt layout (vision_decision.scoring.PROMPT_LAYOUTS); trainer --prompt-layout.
 
  target is the gold index, or a list (normalized `target_distribution`), or with soft_targets and a
  `target_probs` dict a SoftTarget(gold index, probs)."""
  request=json.loads(json.dumps(record['request']));field=request['fields'][0]
  if rng is not None and shuffle and field['type']=='choice':rng.shuffle(field['options'])
- parsed=Request.model_validate(request);header,choices,texts=compile_question(parsed.fields[0],parsed.state)
+ parsed=Request.model_validate(request);header,choices,texts=compile_question(parsed.fields[0],parsed.state,layout)
  if soft_targets:record=resolve_probs_target(record)
  wanted=UNKNOWN if record['target'] is None else record['target']
  index=[i for i,(value,_) in enumerate(choices) if value==wanted and type(value)==type(wanted)]

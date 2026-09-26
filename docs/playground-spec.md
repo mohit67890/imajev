@@ -14,7 +14,7 @@ confidence, latency) — plus image upload, since our state includes 1–2 image
   field at a time with `candidate_logits` (NEVER left-padded batches on MPS: they produce NaN).
 - Request → fields: `vision_decision.jev_api.to_request(payload)`; answers → `vision_decision.jev_api.to_response(request, results)`.
   With MLX use `backend.score_request(images, request.fields, request.state, rotations=1)` (one image prefill for all questions).
-- Limits come from `contracts.py`: 1–8 questions, choice ≤ 254 options, score 2–10 levels, string or JSON object state ≤ 32 KB, images JPEG/PNG/WebP ≤ 20 MB, 0–2 images.
+- Limits come from `contracts.py`: 1–8 questions, choice ≤ 254 options, score 2–10 levels, string or JSON object state ≤ 128 KB (raised from 32 KB in phase 3), images JPEG/PNG/WebP ≤ 20 MB, 0–2 images.
 - **Text-only (added after the first version of this spec):** a request may carry no image. The chat template is rendered with
   `num_images=0`, the vision tower is skipped and the shared state + header prefill is kept, so the same `POST /v1/systemone`
   serves both modes with the same shapes. Three or more images is still a 422.

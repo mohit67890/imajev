@@ -20,7 +20,7 @@ def request_data():
     lambda d: d["execution"].update(mode="gated"),
     lambda d: d["execution"].update(allow_external_fallback=True),
     lambda d: d.update(state={"bad": float("nan")}),
-    lambda d: d.update(state={"huge": "x" * 32769}),
+    lambda d: d.update(state={"huge": "x" * 131073}),
 ])
 def test_reject_invalid_requests(mutation):
     d = request_data(); mutation(d)

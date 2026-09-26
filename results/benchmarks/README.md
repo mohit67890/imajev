@@ -23,6 +23,7 @@ reasoning-on generation are separate rows.
 | **imajev-2b phase 2c soup50** (raw / cal T 1.65 authored-dev / rot4 / rot4+cal) — ship candidate, all gates pass, ImajevBench 71.7 | typesafe server | 58.6 / 0.176; cal 58.6 / 0.075; rot4 60.4 / 0.207; **rot4+cal 60.4 / 0.123** | 91.7 (rot4 93.1) | 100 | 2026-09-24 | `reports/decision-p2c/pod/2b-delta/jevbench-soup50-{raw,cal,rot4,rot4cal}/`; adapter `reports/decision-p2c/pod/adapters/2b-soup50/` |
 | imajev-9b phase 2c best / last (raw; pod-fold cal T 1.02 / …) — best passes all gates (ImajevBench 82.4) but hard below phase-2b | typesafe server | 66.7 / 0.161 (cal 0.123); last 68.5 / 0.168 (cal 0.114) | 100 | 100 | 2026-09-24 | `reports/decision-p2c/pod/9b-delta/jevbench-{best,last}-{raw,cal}/` |
 | **imajev-9b phase 2c soup50** (raw / cal T 1.75 authored-dev / rot4 / rot4+cal) — ship candidate, all gates pass, ImajevBench 82.1, private-1 84.7 | typesafe server | 69.4 / 0.187; cal 69.4 / 0.090; rot4 69.4 / 0.174; **rot4+cal 69.4 / 0.092** | 100 | 100 | 2026-09-24 | `reports/decision-p2c/pod/9b-delta/jevbench-soup50-{raw,cal,rot4,rot4cal}/`; adapter `reports/decision-p2c/pod/adapters/9b-soup50/` |
+| **imajev-4b phase 3 pick `r2-s000291`** (rank-64 LoRA, 256-code readout, round 2; owner override of the 14-item unknown gate) — pod the phase-3 pod, torch evaluator, raw / cal (authored-dev single T) / rot4 / rot4+cal | typesafe server | **71.2 / 0.113; cal 71.2 / 0.082; rot4 72.1 / 0.079; rot4+cal 72.1 / 0.082** (pooled public ECE cal 0.046) | 98.6 | 100 | 2026-09-26 | `reports/phase3/train-results/p3/run/eval/r2-s000291/jevbench/{single-raw,single-cal,rot4-raw,rot4-cal}/`; all 8 checkpoints: `reports/phase3/train-results/benchmarks.md` |
 | Qwen3.6-35B-A3B frozen, thinking off | vLLM + openai_compat, JSON schema | 61.3 / 0.329 | 88.9 | 100 | 2026-09-24 | `jevbench/qwen3.6-35b-a3b-frozen/nothink/` |
 | Qwen3.6-35B-A3B frozen, thinking on (16k budget) | vLLM + openai_compat, reasoning parser | **97.3** / 0.045 | 100 | 100 | 2026-09-24 | `jevbench/qwen3.6-35b-a3b-frozen/think/` |
 | mojev 0.85B (MoLeMo-Lab) | its own TypeSafe-compatible server, typesafe adapter | 33.3 / 0.268 | 63.9 | 91.7 | 2026-09-24 | `jevbench/mojev-0.85b/` |
@@ -38,6 +39,7 @@ Direct option scoring: imajev-9b 81.0 (v1.1) → 81.4 (phase 2); Qwen3.5-9B base
 Structured generation: Gemini 3.1 Pro 99.6, GPT-5.6 Luna 99.3, GPT-5.4 98.9, Gemini 3.8 Flash 98.2, Grok 4.3 91.4, Qwen3.5-9B 74.6, Qwen3.5-4B 67.4, Gemma 4 E4B-it 60.2, Qwen3.5-2B 59.9, Gemma 4 E2B-it 58.8.
 Phase 2b (pod, torch direct scoring, full rotations): imajev-2b 70.3, imajev-4b 82.4, imajev-9b 82.8 — `reports/decision-p2b/pod/train-out-p2b/<size>/imajevbench-best/`.
 Phase 2c (2026-09-24, same backend): imajev-4b 2c-best 79.6 (joint 92/122, text 24/37, visual 106/120; FAILS gate), 2c-last 79.9, soup50 **82.4** (97/26/107, all gates pass), soup75 80.6; imajev-2b 2c-best 71.0 (80/19/99; joint gate miss by 1), soup50 **71.7** (82/19/99, all gates pass); imajev-9b 2c-best 82.4 (96/29/105, all gates pass), soup50 **82.1** (96/29/104, all gates pass) — `reports/decision-p2c/pod/<size>-delta/imajevbench-<tag>/`, gates `reports/decision-p2c/pod/<run>/gates.json`.
+Phase 3 (2026-09-26, pod the phase-3 pod, torch direct scoring, full rotations, all 8 checkpoints in `reports/phase3/train-results/benchmarks.md`): shipped 1.0 re-measured 82.4 (joint 97/122, text 26/37, visual 107/120); **imajev-4b phase-3 pick r2-s000291 83.9 (joint 100/122, text 25/37, visual 109/120)**, r2-s000198 84.2 (100/25/110), r1 snapshots 81.7–82.4 (joint 95–97) — `reports/phase3/train-results/p3/run/eval/<ckpt>/imajevbench/`. private-1 hidden: pending (Mac MLX run).
 Hidden split private-1 (202 items, aggregates only, GPU 7 runner, same backend): phase-2b 2B 70.8 / 4B 84.7 / 9B 84.2; phase-2c 4B 2c-best 83.2, 4B soup50 84.2, 2B 2c-best 74.8, 2B soup50 74.3, 9B 2c-best 85.1, 9B soup50 84.7 — `reports/decision-p2c/pod/private1/<run>/score`.
 Controls: imajev-2b no-image (abstains 258/279), no-state 51.6, family-majority 35.8, image-blind best on contrast sets 66.7%.
 Run files: `imajev-release/bench/records/`, per-run predictions and manifests under `imajev-release/bench/` and `reports/imajev-bench/` (H100 bench pod pull); phase-2 rows under `reports/decision-p2/pod/train-out/<size>/imajevbench-best/`.
@@ -47,12 +49,15 @@ Pending rows: Gemma 4 E2B/E4B and SmolVLM2-2.2B **direct option scoring** (MLX-o
 | System | Setup | Domain avg | Pooled heads | Date | Files |
 |---|---|---|---|---|---|
 | imajev-4b 1.0 (phase 2c soup50) | MLX playground server, rot4, raw; one generic prompt (`Which {task} label fits this text?`, choice over full label list); multi-label heads = one noul per label, set = noul > 0.5 (top label if empty); exact set match | 59.3 | 58.8 ±1.8 (1704/2900) | 2026-09-25 | `results/benchmarks/fast-decisions/imajev-4b/` (public repo) |
+| imajev-4b phase 3 pick r2-s000291 | pod torch evaluator, single pass raw, same prompt / set rule | **60.4** | 59.4 (1723/2900) | 2026-09-26 | `reports/phase3/train-results/p3/run/eval/r2-s000291/fastdec/result.json` |
+
 Not comparable to their board (test split: GLiNER2.5-Decide 60.2, JevK5 57.6, SemIf 4B 56.4). Weak spots: multi-label heads (product_area 12, genres 26, aspects 42), ticket urgency 29, support_topic 38, paper_field 41.
 
 ## DecisionBench 1.0 (Hanno-Labs/decision-bench, 23,900 rows, official harness `run-system-one-http`)
 | System | Setup | Primary acc | Scored-row acc | Coverage | ECE | Date | Files |
 |---|---|---|---|---|---|---|---|
 | imajev-4b 1.0 (HF rev 712891d1) | torch server @ public 4e623a8, rot4 + shipped calibration, `--max-input-tokens 32768`, `--max-candidates 254`; 1×H100 | **77.5** | 79.3 | 97.75% (537 × 255-candidate rows unsupported, 0 errors) | **0.024** | 2026-09-25 | `decisionbench/` (+ raw run in `decisionbench-run/`, not exported) |
+| imajev-4b phase 3 pick r2-s000291 (NOT an official run: our 3k stratified subset, single pass raw, tracking only) | pod torch server | subset 72.9 (shipped on the same subset 72.2); full-suite equivalent 78.5 vs 78.2; ordinal 61.3 vs 49.1; reasoning 80.4 vs 67.1 | – | – | – | 2026-09-26 | `reports/phase3/train-results/p3/tracking-only/r2-s000291/decisionbench.json` |
 Rank on 2026-09-25: 3rd of 55 (after Bosun v3.1 1.7B 84.9 / 0.6B 81.2; above Winnow-12B 76.7, Jev 1.13 72.0); lowest ECE of all records. Upstream-dataset overlap disclosed in `decisionbench/contamination-check.md` (banking77 → RouteFinancial scored 87.1%, below RouteGeneralAssistant 96.7%).
 
 ## Reading notes for the launch report
@@ -109,3 +114,9 @@ GLM-5.3-Flash for PT/policy items; 8-gram decontamination vs JevBench. Dataset `
 1.22k val / 1.19k held-out core + 1.58k long-context + 1.62k PT/EN views; 28 families; fields incl. `target_probs`, `teacher_probs`,
 `rationale`). Caveat for OUR use of that dataset: GLM-5.3-Flash rows are API-labelled (our no-paid-API-outputs rule) → usable only after
 filtering to Qwen3.8-27B-labelled and programmatic rows, with the CC-BY attribution. Run both sizes same-protocol on the next pod.
+
+## Typed S1-Bench (our conversion; NOT an S1-Bench score)
+S1-Bench (WYRipple/S1-Bench, MIT, arXiv 2504.10368) is free-text + GPT-4o-judged; `scripts/s1bench/build_typed.py` turns the 220 English items
+into typed decisions (choice = gold + 3 Kimi-K2.5-written distractors, blind-verified and, for instruction following, per-option compliance
+checked; yes/no -> boolean); 212 kept. Saturated: shipped 1.0 98.6 (ECE 0.006), phase-3 pick 99.1, all snapshots 99.1–99.5, abstention 0%.
+Files: `data/manifests/s1bench-typed-en.jsonl`, `data/s1bench/{results/,summary.json,report-en.json,flagged-en.jsonl}`.

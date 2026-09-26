@@ -26,7 +26,7 @@ engine=TorchDecision(path,args.device)
 if args.adapter:
  from peft import PeftModel
  engine.model=PeftModel.from_pretrained(engine.model,args.adapter).eval()
- engine.enable_readout(args.adapter,trainable=False)  # False return preserves legacy adapter scoring
+ engine.enable_readout(args.adapter,trainable=False)  # False return preserves legacy adapter scoring; adopts the adapter's readout size and prompt layout
 name=lambda v:'unknown' if v==UNKNOWN or v is None else str(v).lower() if isinstance(v,bool) else v
 def reversed_copy(r):
  copy=json.loads(json.dumps(r));copy['request']['fields'][0]['options'].reverse();return copy
@@ -43,7 +43,7 @@ class Work(torch.utils.data.Dataset):
  def __getitem__(self,b):
   examples=[];meta=[]
   for i,rev in batches[b]:
-   r=reversed_copy(rows[i]) if rev else rows[i];header,choices,texts,target=render(r);target=max(range(len(target)),key=target.__getitem__) if isinstance(target,list) else target
+   r=reversed_copy(rows[i]) if rev else rows[i];header,choices,texts,target=render(r,layout=engine.prompt_layout);target=max(range(len(target)),key=target.__getitem__) if isinstance(target,list) else target
    labels=engine.labels(len(choices),len(r['images']));images=[load_image(x['image'],pixel_budget(r,args.pixels)) for x in r['images']]
    examples.append((*engine.render_example(images,header+'\n'.join(f'{l}: {t}' for l,t in zip(labels,texts)),labels),target));meta.append((i,rev,[name(c[0]) for c in choices],[c[0] for c in choices],target))
   return engine.collate(examples),meta

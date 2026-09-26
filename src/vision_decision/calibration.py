@@ -14,23 +14,32 @@ from typing import Any, Iterable, Mapping, Sequence
 
 from .contracts import UNKNOWN, Result
 
-BUCKETS = ((2, 2), (3, 5), (6, 10), (11, 25), (26, 254))
+# The top bucket covers 26..255 options: 255 is reachable only with the extended 256-code readout. Its key keeps
+# the name "26-254" so the calibration.json files already shipped keep matching (the name is a label, not a bound).
+BUCKETS = ((2, 2), (3, 5), (6, 10), (11, 25), (26, 255))
+BUCKET_LABELS = ("2", "3-5", "6-10", "11-25", "26-254")
+SHIPPED_MAX_OPTIONS = 254    # 255-code readout: options + unknown
+EXTENDED_MAX_OPTIONS = 255   # 256-code readout (phase-3 switch)
 
 
-def option_count_bucket(option_count: int) -> str:
+def option_count_bucket(option_count: int, max_options: int = SHIPPED_MAX_OPTIONS) -> str:
+    """Bucket label for an option count. max_options is the readout's limit (254 shipped, 255 extended)."""
     if isinstance(option_count, bool) or not isinstance(option_count, int) or option_count < 2:
         raise ValueError("option_count must be an integer >= 2")
-    for low, high in BUCKETS:
-        if option_count <= high:
-            return str(low) if low == high else f"{low}-{high}"
-    raise ValueError("option_count plus unknown exceeds the 255-option readout")
+    if max_options not in (SHIPPED_MAX_OPTIONS, EXTENDED_MAX_OPTIONS):
+        raise ValueError(f"max_options must be {SHIPPED_MAX_OPTIONS} or {EXTENDED_MAX_OPTIONS}")
+    if option_count <= max_options:
+        for (low, high), label in zip(BUCKETS, BUCKET_LABELS):
+            if option_count <= high:
+                return label
+    raise ValueError(f"option_count plus unknown exceeds the {max_options + 1}-code readout")
 
 
-def calibration_key(decision_type: str, option_count: int) -> str:
+def calibration_key(decision_type: str, option_count: int, max_options: int = SHIPPED_MAX_OPTIONS) -> str:
     if decision_type not in {"choice", "boolean", "ordinal", "noul", "score"}:
         raise ValueError(f"Unsupported decision type {decision_type!r}")
     canonical = {"noul": "boolean", "score": "ordinal"}.get(decision_type, decision_type)
-    return f"{canonical}:{option_count_bucket(option_count)}"
+    return f"{canonical}:{option_count_bucket(option_count, max_options)}"
 
 
 def softmax(logits: Sequence[float], temperature: float = 1.0) -> list[float]:
@@ -160,7 +169,7 @@ class TemperatureCalibrator:
                 raise ValueError("option_count must be an integer")
             if len(row["logits"]) != option_count + 1:
                 raise ValueError("option_count must equal len(logits) - 1 for unknown")
-            key = calibration_key(str(row["decision_type"]), option_count)
+            key = calibration_key(str(row["decision_type"]), option_count, EXTENDED_MAX_OPTIONS)
             grouped.setdefault(key, []).append((row["logits"], row["target_index"]))
         if not grouped:
             raise ValueError("No calibration rows supplied")
@@ -199,13 +208,13 @@ class TemperatureCalibrator:
         return payload
 
     def temperature(self, decision_type: str, option_count: int) -> float | None:
-        return self.temperatures.get(calibration_key(decision_type, option_count))
+        return self.temperatures.get(calibration_key(decision_type, option_count, EXTENDED_MAX_OPTIONS))
 
     def unknown_offset(self, decision_type: str, option_count: int, *, image: bool = False) -> float:
         """Offset on the unknown logit for text-only requests; zero for requests with images or unseen buckets."""
         if image or not self.unknown_offsets:
             return 0.0
-        return float(self.unknown_offsets.get(calibration_key(decision_type, option_count), 0.0))
+        return float(self.unknown_offsets.get(calibration_key(decision_type, option_count, EXTENDED_MAX_OPTIONS), 0.0))
 
     def calibrate_scores(self, raw_logits: Mapping[str, float], decision_type: str,
                          option_count: int, *, image: bool = False) -> tuple[dict[str, float], str | None]:

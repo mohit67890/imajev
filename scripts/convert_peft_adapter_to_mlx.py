@@ -34,6 +34,7 @@ PEFT_WRAPPER = "base_model.model."
 HF_LANGUAGE_PREFIX = "model.language_model."
 MLX_LANGUAGE_PREFIX = "language_model.model."
 SIDES = {"lora_A": "lora_a", "lora_B": "lora_b"}
+READOUT_ROWS = (255, 256)  # shipped readout, extended readout (options + unknown codes)
 # PEFT emits these for adapter kinds LoRALinear cannot represent; fail loudly instead of dropping them.
 UNSUPPORTED = ("lora_embedding_A", "lora_embedding_B", "lora_magnitude_vector", "modules_to_save")
 
@@ -147,10 +148,12 @@ def convert(src, dst):
         q_inputs = {tensor.shape[1] for key, tensor in weights.items()
                     if ".self_attn.q_proj.lora_A" in key and tensor.ndim == 2}
         expected_hidden = next(iter(q_inputs)) if len(q_inputs) == 1 else None
-        if (set(head) != {"weight"} or head["weight"].ndim != 2 or head["weight"].shape[0] != 255
+        # 255 rows: the shipped readout; 256 rows: the extended readout (phase-3 `--readout-codes 256`)
+        if (set(head) != {"weight"} or head["weight"].ndim != 2 or head["weight"].shape[0] not in READOUT_ROWS
                 or (expected_hidden is not None and head["weight"].shape[1] != expected_hidden)
                 or not bool(mx.all(mx.isfinite(head["weight"])).item())):
-            raise ValueError("decision_readout.safetensors must contain a finite weight with shape [255, hidden_size]")
+            raise ValueError("decision_readout.safetensors must contain a finite weight with shape [255 or 256, hidden_size]")
+        rows = head["weight"].shape[0]
         manifest = src / "decision_readout.json"
         if not manifest.exists():
             raise ValueError("Trained readout is missing decision_readout.json tokenizer binding")
@@ -158,8 +161,9 @@ def convert(src, dst):
         codes = payload.get("codes", [])
         valid_rows = all(isinstance(x, dict) and set(x) == {"code", "token_id"}
                          and isinstance(x["code"], str) and isinstance(x["token_id"], int) for x in codes)
-        if (payload.get("version") != 1 or len(codes) != 255 or not valid_rows
-                or len({x["code"] for x in codes}) != 255 or len({x["token_id"] for x in codes}) != 255):
+        if (payload.get("version") != 1 or len(codes) != rows or not valid_rows
+                or len({x["code"] for x in codes}) != rows or len({x["token_id"] for x in codes}) != rows
+                or payload.get("prompt_layout", "standard") not in ("standard", "compact")):
             raise ValueError("Invalid decision_readout.json")
     dst.mkdir(parents=True, exist_ok=True)
     digest = hashlib.sha256(source.read_bytes()).hexdigest()

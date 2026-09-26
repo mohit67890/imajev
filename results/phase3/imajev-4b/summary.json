@@ -1,0 +1,539 @@
+{
+ "name": "r2-s000291",
+ "selection": {
+  "name": "r2-s000291",
+  "ckpt": "p3/run/ckpts/r2-s000291",
+  "round": 2,
+  "step": 291,
+  "order": 3.0,
+  "fresh": {
+   "acc": 87.15382825226902,
+   "correct": 3745,
+   "n": 4297
+  },
+  "flagged": {
+   "acc": 79.02595094205475,
+   "correct": 2223,
+   "n": 2813
+  },
+  "human": {
+   "acc": 76.17834394904459,
+   "correct": 598,
+   "n": 785
+  }
+ },
+ "calibration": {
+  "single": {
+   "choice": "authored_dev",
+   "why": "per-type fit gives pooled public ECE 0.05885578135611021 > 0.03 -> authored-dev single T",
+   "guard_per_type": {
+    "pooled_ece": 0.05885578135611021,
+    "rows": 231,
+    "per_tier": {
+     "easy": 0.0019987989984900922,
+     "original": 0.053607558685559484,
+     "hard": 0.10121743736199829
+    },
+    "pass": false
+   },
+   "guard_authored": {
+    "pooled_ece": 0.04610139030769104,
+    "rows": 231,
+    "per_tier": {
+     "easy": 0.006103446852811167,
+     "original": 0.06855327508870701,
+     "hard": 0.0821624740162668
+    },
+    "pass": false
+   }
+  },
+  "rot4": {
+   "choice": "authored_dev",
+   "why": "per-type fit gives pooled public ECE 0.03949226252452005 > 0.03 -> authored-dev single T",
+   "guard_per_type": {
+    "pooled_ece": 0.03949226252452005,
+    "rows": 231,
+    "per_tier": {
+     "easy": 0.0016126524568990108,
+     "original": 0.0367983094647282,
+     "hard": 0.07872776940098972
+    },
+    "pass": false
+   }
+  }
+ },
+ "jevbench": {
+  "single_raw": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.0015248698503255165,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.050833447268106575,
+    "n": 72
+   },
+   "hard": {
+    "acc": 71.17117117117117,
+    "ece": 0.11319582851517256,
+    "n": 111
+   },
+   "pooled_ece": 0.06400431815806684
+  },
+  "single_cal": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.006218902929717607,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.06896204266962316,
+    "n": 72
+   },
+   "hard": {
+    "acc": 71.17117117117117,
+    "ece": 0.08222444590638898,
+    "n": 111
+   },
+   "pooled_ece": 0.046178132755124376
+  },
+  "rot4_raw": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.0014441205265534052,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.03589779794258398,
+    "n": 72
+   },
+   "hard": {
+    "acc": 72.07207207207207,
+    "ece": 0.07906740675649811,
+    "n": 111
+   },
+   "pooled_ece": 0.039599534538662814
+  },
+  "rot4_cal": {
+   "easy": {
+    "acc": 100.0,
+    "ece": 0.0060959200560181115,
+    "n": 48
+   },
+   "original": {
+    "acc": 98.61111111111111,
+    "ece": 0.06927919387653826,
+    "n": 72
+   },
+   "hard": {
+    "acc": 72.07207207207207,
+    "ece": 0.08218016541037856,
+    "n": 111
+   },
+   "pooled_ece": 0.04891416294540611
+  }
+ },
+ "fastdec": {
+  "rows": 1700,
+  "macro": 60.37745098039216,
+  "pooled_heads": 59.41379310344828,
+  "heads": 2900,
+  "by_domain": {
+   "agent_handoff": 75.0,
+   "banking_intent": 61.0,
+   "benefits_request": 71.5,
+   "clinic_request": 62.5,
+   "document_type": 81.0,
+   "email_triage": 52.75,
+   "news_topic": 64.0,
+   "paper_field": 41.0,
+   "product_feedback": 35.5,
+   "restaurant_review": 59.0,
+   "review_sentiment": 81.0,
+   "screen_tags": 58.5,
+   "sports_recap": 76.33333333333333,
+   "support_intent": 63.0,
+   "support_topic": 39.0,
+   "ticket_route": 49.333333333333336,
+   "travel_request": 56.0
+  },
+  "errors": 0
+ },
+ "gates": {
+  "shippable": false,
+  "image_gate": true,
+  "joint": {
+   "value": 100,
+   "target": 99,
+   "met": true
+  }
+ },
+ "imajevbench": {
+  "joint": [
+   100,
+   122
+  ],
+  "text": [
+   25,
+   37
+  ],
+  "visual": [
+   109,
+   120
+  ]
+ },
+ "panels": {
+  "p2b_test": {
+   "acc": 84.13793103448276,
+   "correct": 366,
+   "n": 435
+  },
+  "state_probe": {
+   "acc": 76.5,
+   "correct": 153,
+   "n": 200
+  },
+  "pairs_probe": {
+   "acc": 96.66666666666667,
+   "correct": 58,
+   "n": 60
+  },
+  "irrelevance": {
+   "acc": 80.02125398512221,
+   "correct": 2259,
+   "n": 2823
+  }
+ },
+ "direct_panels": {
+  "charts": {
+   "acc": 95.66666666666667,
+   "correct": 287,
+   "n": 300,
+   "by_family": {
+    "chart_claim": {
+     "acc": 97.14285714285714,
+     "correct": 34,
+     "n": 35
+    },
+    "chart_compare": {
+     "acc": 93.33333333333333,
+     "correct": 56,
+     "n": 60
+    },
+    "chart_extremum": {
+     "acc": 97.61904761904762,
+     "correct": 41,
+     "n": 42
+    },
+    "chart_readoff": {
+     "acc": 100.0,
+     "correct": 33,
+     "n": 33
+    },
+    "chart_score": {
+     "acc": 92.53731343283582,
+     "correct": 62,
+     "n": 67
+    },
+    "chart_threshold": {
+     "acc": 95.74468085106383,
+     "correct": 45,
+     "n": 47
+    },
+    "chart_trend": {
+     "acc": 100.0,
+     "correct": 16,
+     "n": 16
+    }
+   }
+  },
+  "docimg": {
+   "acc": 90.33333333333333,
+   "correct": 271,
+   "n": 300,
+   "by_family": {
+    "docimg_arithmetic": {
+     "acc": 66.10169491525424,
+     "correct": 39,
+     "n": 59
+    },
+    "docimg_category": {
+     "acc": 100.0,
+     "correct": 2,
+     "n": 2
+    },
+    "docimg_date": {
+     "acc": 97.05882352941177,
+     "correct": 33,
+     "n": 34
+    },
+    "docimg_extract": {
+     "acc": 98.03921568627452,
+     "correct": 100,
+     "n": 102
+    },
+    "docimg_form": {
+     "acc": 97.87234042553192,
+     "correct": 46,
+     "n": 47
+    },
+    "docimg_policy": {
+     "acc": 97.36842105263158,
+     "correct": 37,
+     "n": 38
+    },
+    "docimg_timetable": {
+     "acc": 77.77777777777777,
+     "correct": 14,
+     "n": 18
+    }
+   }
+  },
+  "inventory": {
+   "acc": 67.6,
+   "correct": 169,
+   "n": 250,
+   "by_family": {
+    "inventory_audit": {
+     "acc": 70.0,
+     "correct": 14,
+     "n": 20
+    },
+    "inventory_colour_count": {
+     "acc": 57.142857142857146,
+     "correct": 4,
+     "n": 7
+    },
+    "inventory_compare": {
+     "acc": 100.0,
+     "correct": 12,
+     "n": 12
+    },
+    "inventory_count": {
+     "acc": 71.01449275362319,
+     "correct": 49,
+     "n": 69
+    },
+    "inventory_locate": {
+     "acc": 92.85714285714286,
+     "correct": 13,
+     "n": 14
+    },
+    "inventory_misplaced": {
+     "acc": 41.666666666666664,
+     "correct": 10,
+     "n": 24
+    },
+    "inventory_not_visible": {
+     "acc": 66.66666666666667,
+     "correct": 2,
+     "n": 3
+    },
+    "inventory_out_of_stock": {
+     "acc": 73.33333333333333,
+     "correct": 33,
+     "n": 45
+    },
+    "inventory_price_tag": {
+     "acc": 54.54545454545455,
+     "correct": 6,
+     "n": 11
+    },
+    "inventory_reorder": {
+     "acc": 51.61290322580645,
+     "correct": 16,
+     "n": 31
+    },
+    "inventory_total": {
+     "acc": 71.42857142857143,
+     "correct": 10,
+     "n": 14
+    }
+   }
+  },
+  "safety": {
+   "acc": 92.4,
+   "correct": 231,
+   "n": 250,
+   "by_family": {
+    "safety_blocked_exit": {
+     "acc": 95.65217391304348,
+     "correct": 22,
+     "n": 23
+    },
+    "safety_checklist": {
+     "acc": 100.0,
+     "correct": 15,
+     "n": 15
+    },
+    "safety_count": {
+     "acc": 100.0,
+     "correct": 7,
+     "n": 7
+    },
+    "safety_extinguisher": {
+     "acc": 100.0,
+     "correct": 13,
+     "n": 13
+    },
+    "safety_forklift_lane": {
+     "acc": 100.0,
+     "correct": 6,
+     "n": 6
+    },
+    "safety_guardrail": {
+     "acc": 89.47368421052632,
+     "correct": 17,
+     "n": 19
+    },
+    "safety_headcount": {
+     "acc": 100.0,
+     "correct": 6,
+     "n": 6
+    },
+    "safety_not_visible": {
+     "acc": 100.0,
+     "correct": 4,
+     "n": 4
+    },
+    "safety_position": {
+     "acc": 100.0,
+     "correct": 1,
+     "n": 1
+    },
+    "safety_ppe": {
+     "acc": 90.0,
+     "correct": 36,
+     "n": 40
+    },
+    "safety_ppe_rule": {
+     "acc": 91.66666666666667,
+     "correct": 11,
+     "n": 12
+    },
+    "safety_presence": {
+     "acc": 97.95918367346938,
+     "correct": 48,
+     "n": 49
+    },
+    "safety_sign_check": {
+     "acc": 86.95652173913044,
+     "correct": 20,
+     "n": 23
+    },
+    "safety_spill": {
+     "acc": 100.0,
+     "correct": 15,
+     "n": 15
+    },
+    "safety_zone_score": {
+     "acc": 58.8235294117647,
+     "correct": 10,
+     "n": 17
+    }
+   }
+  },
+  "geometry": {
+   "acc": 88.4,
+   "correct": 221,
+   "n": 250,
+   "by_family": {
+    "geometry_angle": {
+     "acc": 96.36363636363636,
+     "correct": 53,
+     "n": 55
+    },
+    "geometry_area": {
+     "acc": 100.0,
+     "correct": 49,
+     "n": 49
+    },
+    "geometry_circle": {
+     "acc": 94.11764705882354,
+     "correct": 32,
+     "n": 34
+    },
+    "geometry_classify": {
+     "acc": 77.27272727272727,
+     "correct": 17,
+     "n": 22
+    },
+    "geometry_coord": {
+     "acc": 62.5,
+     "correct": 15,
+     "n": 24
+    },
+    "geometry_length": {
+     "acc": 92.3076923076923,
+     "correct": 36,
+     "n": 39
+    },
+    "geometry_polygon": {
+     "acc": 100.0,
+     "correct": 8,
+     "n": 8
+    },
+    "geometry_relation": {
+     "acc": 57.89473684210526,
+     "correct": 11,
+     "n": 19
+    }
+   }
+  },
+  "screens": {
+   "acc": 95.6,
+   "correct": 239,
+   "n": 250,
+   "by_family": {
+    "mobile_locate": {
+     "acc": 100.0,
+     "correct": 58,
+     "n": 58
+    },
+    "mobile_next": {
+     "acc": 100.0,
+     "correct": 23,
+     "n": 23
+    },
+    "mobile_permission": {
+     "acc": 100.0,
+     "correct": 8,
+     "n": 8
+    },
+    "mobile_possible": {
+     "acc": 80.0,
+     "correct": 12,
+     "n": 15
+    },
+    "mobile_tap": {
+     "acc": 100.0,
+     "correct": 22,
+     "n": 22
+    },
+    "pro_ground": {
+     "acc": 80.0,
+     "correct": 20,
+     "n": 25
+    },
+    "pro_locate": {
+     "acc": 97.14285714285714,
+     "correct": 34,
+     "n": 35
+    },
+    "pro_menu": {
+     "acc": 100.0,
+     "correct": 9,
+     "n": 9
+    },
+    "screen_locate": {
+     "acc": 96.36363636363636,
+     "correct": 53,
+     "n": 55
+    }
+   }
+  }
+ }
+}
