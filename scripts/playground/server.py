@@ -209,6 +209,33 @@ def decode_data_url(value, position):
         raise PlaygroundError(422, "bad_image", f"images[{position}] is not valid base64")
 
 
+IMAGE_DATA_URL = re.compile(r"data:image/[\w.+-]+;base64,[A-Za-z0-9+/=]+")
+
+
+def extract_state_images(payload):
+    """Image JevBench-style requests carry the photo as a data:image URI inside the state instead of the `images` field.
+    Pull every such URI out of the state (a string, a dict value, a list item or a messages[].content), in reading order,
+    replace it with "[image N]" and return the data URLs. The state keeps its structure; nothing else is touched."""
+    found = []
+
+    def take(value):
+        if not isinstance(value, str) or "data:image/" not in value:
+            return value
+        def repl(match):
+            found.append(match.group(0)); return f"[image {len(found)}]"
+        return IMAGE_DATA_URL.sub(repl, value)
+
+    def walk(node):
+        if isinstance(node, str): return take(node)
+        if isinstance(node, list): return [walk(x) for x in node]
+        if isinstance(node, dict): return {k: walk(v) for k, v in node.items()}
+        return node
+
+    if "state" in payload and payload["state"] is not None:
+        payload["state"] = walk(payload["state"])
+    return found
+
+
 async def read_payload(http_request):
     """-> (payload dict without images, [image bytes]) for multipart or JSON encodings."""
     content_type = (http_request.headers.get("content-type") or "").split(";")[0].strip().lower()
@@ -232,6 +259,8 @@ async def read_payload(http_request):
                 if isinstance(upload, str):
                     raise PlaygroundError(422, "bad_image", f"Form field {key!r} must be an uploaded file")
                 blobs.append(await upload.read())
+        if isinstance(payload, dict):
+            blobs += [decode_data_url(value, i) for i, value in enumerate(extract_state_images(payload))]
     elif content_type == "application/json":
         body = await http_request.body()
         try:
@@ -243,6 +272,7 @@ async def read_payload(http_request):
         images = payload.get("images", [])
         if not isinstance(images, list):
             raise PlaygroundError(422, "bad_image", "'images' must be a list of data URLs")
+        images = list(images) + extract_state_images(payload)   # data:image URIs embedded in the state count as images too
         blobs = [decode_data_url(value, i) for i, value in enumerate(images)]
     else:
         raise PlaygroundError(422, "bad_request",

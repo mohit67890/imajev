@@ -372,3 +372,27 @@ def test_calibration_is_applied_to_http_results():
     answer = response.json()['answers']['q']
     assert answer['calibration_version'] == 'http-test'
     assert .8 < answer['noul'] < .9
+
+
+def test_data_uri_image_inside_the_state_is_used_as_the_image(client, monkeypatch):
+    """Image JevBench sends the photo as a data:image URI in the request state; the server must treat it as images[0]
+    and leave a placeholder in the state so the prompt still reads naturally."""
+    seen = {}
+    original = server.decode_images
+
+    def spy(blobs):
+        seen["n"] = len(blobs); return original(blobs)
+    monkeypatch.setattr(server, "decode_images", spy)
+    uri = data_url(png_bytes())
+    for state in (uri, {"photo": uri, "note": "shelf 3"}, {"messages": [{"role": "user", "content": f"Look at this: {uri} and decide"}]}):
+        response = client.post("/v1/systemone", json={**REQUEST, "state": state})
+        assert response.status_code == 200, response.text
+        assert seen["n"] == 1
+    # the placeholder replaces the URI in the state that reaches the model
+    payload = {**REQUEST, "state": {"photo": uri}}
+    found = server.extract_state_images(payload)
+    assert len(found) == 1 and found[0].startswith("data:image/png;base64,") and payload["state"] == {"photo": "[image 1]"}
+    # an explicit images list and an embedded URI together are two images
+    payload = {**REQUEST, "state": f"reference: {uri}"}
+    response = client.post("/v1/systemone", json={**payload, "images": [data_url(jpeg_bytes(), "image/jpeg")]})
+    assert response.status_code == 200 and seen["n"] == 2

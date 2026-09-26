@@ -4,9 +4,10 @@
 # concurrency = total servers, so wall time scales ~1/GPUs (1×H100 ≈ 3.5 h, 4×H100 ≈ 1 h, 8×H100 ≈ 30 min; ~$15 either way).
 # Everything comes from pinned public sources unless ADAPTER_LOCAL points at a copied adapter dir (dry runs before the HF upload).
 #   required:  IMAJEV_COMMIT=<public repo commit with the phase-3 server code>   ADAPTER_REV=<HF revision of mohit67890/imajev-4b>
-#   optional:  ADAPTER_LOCAL=adapters/imajev-4b (skip the HF download)  SERVERS_PER_GPU=3  MAX_TOKENS=32768
-#              MAX_CANDIDATES=255 (256-code readout: 255 options + unknown; the previous release needed 254)  CAL_FILE=calibration-rot4.json
-#              DB_COMMIT=<decision-bench harness commit>  SMOKE=1
+#   optional:  ADAPTER_LOCAL=adapters/imajev-4b (skip the HF download)  SERVERS_PER_GPU=4 (80 GB: ~15-22 GB per server at 32k tokens)  MAX_TOKENS=32768
+#              MAX_CANDIDATES=255 (256-code readout: 255 options + unknown; the previous release needed 254); MAX_TOKENS=65536 (the 255-candidate
+#              canonical_entity rows render to > 32k tokens: at 32768, 251 of them error out and count as misses)  CAL_FILE=calibration-rot4.json
+#              DB_COMMIT=<decision-bench harness commit>  SMOKE=1  PRECHECK_FILE=precheck.jsonl (+ precheck_replay.py next to this script)
 # Launch:  IMAJEV_COMMIT=… ADAPTER_REV=… setsid nohup bash pod_decisionbench_p3.sh > launch.log 2>&1 < /dev/null &
 # Log db/run.log, markers SERVERS_READY / SMOKE_DONE / ALL_DONE (or FAILED). Result: decisionbench-imajev-4b-p3.tgz
 set -uo pipefail
@@ -14,7 +15,7 @@ set -uo pipefail
 ADAPTER_LOCAL=${ADAPTER_LOCAL:-}; [ -n "$ADAPTER_LOCAL" ] || : "${ADAPTER_REV:?set ADAPTER_REV (HF revision) or ADAPTER_LOCAL}"
 ADAPTER_REV=${ADAPTER_REV:-local-unpublished}
 DB_COMMIT=${DB_COMMIT:-47ea5a479e35fd5ac7fde5c72103143071d7d93f}
-MAX_TOKENS=${MAX_TOKENS:-32768}; SERVERS_PER_GPU=${SERVERS_PER_GPU:-3}; MAX_CANDIDATES=${MAX_CANDIDATES:-255}; CAL_FILE=${CAL_FILE:-calibration-rot4.json}; SMOKE=${SMOKE:-1}
+MAX_TOKENS=${MAX_TOKENS:-65536}; SERVERS_PER_GPU=${SERVERS_PER_GPU:-4}; MAX_CANDIDATES=${MAX_CANDIDATES:-255}; CAL_FILE=${CAL_FILE:-calibration-rot4.json}; SMOKE=${SMOKE:-1}
 mkdir -p db && exec > >(tee -a db/run.log) 2>&1
 trap 'echo FAILED line $LINENO; echo FAILED > db/FAILED' ERR
 set -e
@@ -26,7 +27,8 @@ NGPU=$(nvidia-smi -L | grep -c '^GPU'); SERVERS=$((NGPU*SERVERS_PER_GPU)); echo 
 # imajev server (public repo at the pinned commit)
 git clone -q https://github.com/mohit67890/imajev && (cd imajev && git checkout -q $IMAJEV_COMMIT)
 python -m venv venv --system-site-packages && . venv/bin/activate
-pip install -q -e "imajev[serve,torch]" "transformers==5.17.0" "peft==0.21.0" 2>&1 | tail -2
+pip install -q -e "imajev[serve,torch]" "transformers==5.17.0" "peft==0.21.0" flash-linear-attention tilelang 2>&1 | tail -2   # fla + tilelang: fast DeltaNet path (without them the servers are CPU-bound, ~5x slower)
+python -c "import fla, tilelang; print('fla', fla.__version__)"
 (cd imajev && python scripts/download_model.py --model 4b)
 if [ -n "$ADAPTER_LOCAL" ]; then AD=$ADAPTER_LOCAL; echo "adapter: local $AD (revision recorded as $ADAPTER_REV)"
 else hf download mohit67890/imajev-4b --revision $ADAPTER_REV --local-dir adapters/imajev-4b --exclude "mlx/*" --exclude "assets/*" > /dev/null; AD=adapters/imajev-4b; fi
@@ -50,6 +52,7 @@ apt-get install -y -qq nginx > /dev/null 2>&1 || (apt-get update -qq && apt-get 
 { echo "events { worker_connections 4096; } http { client_max_body_size 64m; proxy_read_timeout 900s; upstream s1 {"
   for i in $(seq 0 $((SERVERS-1))); do echo "server <host>:$((8765+i));"; done
   echo "} server { listen 8800; location / { proxy_pass http://s1; } } }"; } > /etc/nginx/nginx.conf
+sed -i "s/upstream s1 {/upstream s1 { least_conn;/" /etc/nginx/nginx.conf   # least-connections: round-robin queued cheap rows behind 20 s rows and left GPUs idle
 nginx -t && (nginx -s reload 2>/dev/null || nginx)
 
 # DecisionBench harness (unmodified, pinned)
@@ -57,6 +60,11 @@ venv/bin/pip install -q uv && export PATH=venv/bin:$PATH
 git clone -q https://github.com/Hanno-Labs/decision-bench && (cd decision-bench && git checkout -q $DB_COMMIT && uv sync -q)
 for i in $(seq 0 $((SERVERS-1))); do until curl -sf http://<host>:$((8765+i))/v1/models > /dev/null; do sleep 5; done; done
 T1=$(date +%s); echo SERVERS_READY "(setup $(( (T1-T0)/60 )) min)"; date -u
+# optional pre-check: replay saved requests (e.g. the rows that errored in an earlier run) through the full server pool; stop if any fail
+if [ -n "${PRECHECK_FILE:-}" ] && [ -s "$PRECHECK_FILE" ]; then
+  python3 precheck_replay.py "$PRECHECK_FILE" http://<host> $SERVERS || { echo "FAILED precheck: saved requests still error at MAX_TOKENS=$MAX_TOKENS"; echo FAILED > db/FAILED; exit 1; }
+  echo PRECHECK_DONE; date -u
+fi
 cd decision-bench
 ARGS=(task_specs/decisionbench-dev.toml --base-url http://<host> --model imajev-4b
   --model-repo mohit67890/imajev-4b --model-revision $ADAPTER_REV
@@ -67,7 +75,7 @@ if [ "$SMOKE" = 1 ]; then .venv/bin/decision-bench run-system-one-http "${ARGS[0
 .venv/bin/decision-bench run-system-one-http "${ARGS[0]}" db/full "${ARGS[@]:1}" > db/full-summary.json
 T2=$(date +%s); date -u
 python3 - <<PY
-import json; s=json.load(open("db/full-summary.json")) if open("db/full-summary.json").read().strip() else {}
+import json; _t=open("db/full-summary.json").read(); s=json.loads("\n".join(l for l in _t.splitlines() if not l.startswith("DECISION_BENCH_PROGRESS"))) if _t.strip() else {}   # the harness prepends progress lines
 meta={"gpus": $NGPU, "servers": $SERVERS, "servers_per_gpu": $SERVERS_PER_GPU, "concurrency": $SERVERS, "max_candidates": $MAX_CANDIDATES, "max_input_tokens": $MAX_TOKENS,
       "calibration_file": "$CAL_FILE", "adapter_sha256": "$ADAPTER_SHA", "adapter_revision": "$ADAPTER_REV", "imajev_commit": "$IMAJEV_COMMIT", "db_commit": "$DB_COMMIT",
       "setup_seconds": $((T1-T0)), "run_seconds": $((T2-T1))}

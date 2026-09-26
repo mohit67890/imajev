@@ -155,3 +155,18 @@ ssh <pod> 'grep -E "SERVERS_READY|SMOKE_DONE|ALL_DONE|FAILED" db/run.log'; scp <
 ```
 The official submission (a second PR to `Hanno-Labs/decision-bench-results`, or an update of #68) needs the public HF revision, so the upload
 comes first; the result record is built from `db/full/` exactly as for the 1.0 run.
+
+**FINAL run of 2026-09-26 19:04 IST (phase-3 adapter, staged, revision placeholder):** pod wu7f3mijoppety, 8×H100, 32 servers (4/GPU), least_conn, fla + tilelang,
+`--max-input-tokens 65536`; pre-check of the 251 rows that errored at 32k: 251/251 OK (median 62.8 s, max 122 s); smoke 35/35 OK; full suite 23,900/23,900 scored,
+**0 errors, 0 unsupported, coverage 100%**; ~46 min wall incl. the 9.5-min pre-check, ~$22. **Primary 79.69** (= supported), ECE 0.069, NLL 0.694, mean latency
+2.08 s; reasoning family 80.6, ordinal 46.2, canonical_entity 99.9 (2,222 rows incl. the 537 255-candidate rows at 95.7). Files:
+`../decisionbench-run/decisionbench-imajev-4b-p3-full/{db/full/,run-meta.json,run.log,result-record/}` (tarball sha256 ff162e49…). The record's `model_revision`
+is a placeholder until the adapter is on Hugging Face; re-stage with `decision-bench stage-result <that run dir> … --model-revision <hf rev>` and submit.
+
+**Earlier attempt the same day (superseded, kept for the record):** pod oac3r4s99mcfsc, 8×H100, 24 servers, ~1 h 05 min wall incl. a restart, ~$32.
+Result (`../decisionbench-run/p3/result-record/DecisionBench.json`, staged with the harness): **primary 78.64** (1.0: 77.55), supported 79.48, coverage 98.95%,
+0 unsupported, **251 errors** (all 255-candidate canonical_entity rows: `Processed request exceeds the 32768-token limit`; the runner now defaults to 65536),
+ECE 0.070 (1.0: 0.024), NLL 0.699, reasoning family 80.6 (68.0), ordinal 46.2 (40.3). Per task vs 1.0: finqa 68 → 92, musique multihop 83 → 97,
+evidence sufficiency 64 → 69, folio 61 → 64.5; browser-action 85 → 78, codebase ranking 62 → 55, game-goal 70 → 63 (100-row tasks).
+Lessons that are now defaults in `pod_decisionbench_p3.sh`: nginx `least_conn` (round-robin queued cheap rows behind 20 s rows and idled half the GPUs),
+`flash-linear-attention` + `tilelang` in the venv, 4 servers per GPU, `MAX_TOKENS=65536`. Cost/time quotes for pod runs must follow a measured probe.
