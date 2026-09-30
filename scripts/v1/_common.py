@@ -169,7 +169,12 @@ class RemoteZip:
             info = self.infos[n]
             p = dest / Path(n).name
             if p.exists() and p.stat().st_size == info["file_size"]:
-                continue
+                crc = 0
+                with p.open("rb") as cached:
+                    for block in iter(lambda: cached.read(1 << 20), b""):
+                        crc = zlib.crc32(block, crc)
+                if crc == info["crc"]:
+                    continue
             todo.append((n, info, p))
         todo.sort(key=lambda t: t[1]["offset"])
         runs, cur = [], []
