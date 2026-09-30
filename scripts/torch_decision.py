@@ -6,10 +6,33 @@ from vision_decision.scoring import MAX_READOUT_CODES, DEFAULT_PROMPT_LAYOUT, ch
 
 TARGETS=['q_proj','k_proj','v_proj','o_proj','gate_proj','up_proj','down_proj','in_proj_qkv','in_proj_z','out_proj']
 
+class _LazyMultimodalProcessor:
+ """Text requests need only the tokenizer; load optional vision/video processors on demand."""
+ def __init__(self,path):
+  from transformers import AutoTokenizer
+  self.path=path;self.tokenizer=AutoTokenizer.from_pretrained(path,local_files_only=True);self._multimodal=None
+ def _vision(self):
+  if self._multimodal is None:
+   from transformers import AutoProcessor
+   self._multimodal=AutoProcessor.from_pretrained(self.path,local_files_only=True)
+   self._multimodal.tokenizer=self.tokenizer  # preserve padding-side changes made by collate()
+  return self._multimodal
+ def apply_chat_template(self,messages,**kwargs):
+  if any(item.get('type') in ('image','video') for message in messages for item in message.get('content',[]) if isinstance(item,dict)):
+   return self._vision().apply_chat_template(messages,**kwargs)
+  return self.tokenizer.apply_chat_template(messages,**kwargs)
+ def __call__(self,text,images=None,**kwargs):
+  if images is not None:return self._vision()(text=text,images=images,**kwargs)
+  kwargs.setdefault('add_special_tokens',False)
+  return self.tokenizer(text,**kwargs)
+ def __getattr__(self,name):
+  if name.startswith('_'):raise AttributeError(name)
+  return getattr(self._vision(),name)
+
 class TorchDecision:
  def __init__(self,path,device,dtype=torch.bfloat16,max_length=4096,pad_multiple=0):
-  from transformers import AutoProcessor,Qwen3_5ForConditionalGeneration
-  self.processor=AutoProcessor.from_pretrained(path,local_files_only=True);self.device=device;self.max_length=max_length;self.pad_multiple=pad_multiple  # pad batches to a multiple (fewer distinct kernel shapes)
+  from transformers import Qwen3_5ForConditionalGeneration
+  self.processor=_LazyMultimodalProcessor(path);self.device=device;self.max_length=max_length;self.pad_multiple=pad_multiple  # pad batches to a multiple (fewer distinct kernel shapes)
   self.model=Qwen3_5ForConditionalGeneration.from_pretrained(path,local_files_only=True,dtype=dtype).to(device).eval()
   self.readout=None;self._codebook=None
   self.codes=MAX_READOUT_CODES  # readout size: 255 shipped; 256 with the extended readout (enable_readout(codes=256))

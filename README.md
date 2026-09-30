@@ -298,6 +298,19 @@ sizes, swap `4b` for `2b` or `9b` in the download commands, the bundle (`artifac
 default bundle) and the adapter paths. `--rotations 4` averages four option orders; every number in this README was measured with it and with `--calibration` (on JevBench hard it adds +1.8 / +0.9 / +0.0 points for the 2B / 4B / 9B at about 3×
 the latency). The 9B needs ~19 GB resident; do not keep it and another model loaded on the same Mac.
 
+For text-only PyTorch serving without torchvision, install the `torch-text` extra and use the same downloaded checkpoint
+and PEFT adapter:
+
+```sh
+pip install -e ".[serve,torch-text]"
+python scripts/playground/server.py --backend torch --model-bundle artifacts/model-qwen4b.json \
+  --adapter adapters/imajev-4b --calibration adapters/imajev-4b/calibration.json --model-name imajev-4b --port 8765
+```
+
+Send JSON requests with `state` and `questions`, as above, and omit images. Text requests load only the tokenizer; the
+multimodal processor loads when an image is requested. Image serving requires the existing `.[serve,torch]` extra,
+including torchvision. This uses the same Qwen model and decision head; CPU serving still loads the full checkpoint.
+
 On a CUDA GPU, `--fast` makes the torch backend quicker without changing what it computes: one tokenization per question,
 image normalisation on the GPU (pixels bit-identical to the processor's), and CUDA graphs of the language model recorded at
 load (about a minute; needs a C compiler for the Triton kernels, e.g. `build-essential`). `--merge-lora` also folds the adapter
