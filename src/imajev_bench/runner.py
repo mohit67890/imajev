@@ -29,15 +29,28 @@ def file_digest(path):
 
 
 def scoring_digest(records):
-    """Hash of everything scoring depends on: ids, splits, model inputs and gold. Review bookkeeping in provenance
-    can change without invalidating a run; a corrected gold label does invalidate it."""
-    return digest([{"id": r["id"], "split": r["split"], "payload": model_payload(r), "gold": r["gold"]} for r in records])
+    """Bind labels, scoring strata and evidence links as well as model inputs.
+
+    Review bookkeeping in provenance can change without invalidating a run; metadata
+    that changes family/track scores, group accuracy or cluster statistics cannot.
+    """
+    return digest([{"id": r["id"], "split": r["split"], "payload": model_payload(r), "gold": r["gold"],
+                    "track": r["track"], "family": r["family"], "group_id": r["group_id"],
+                    "evidence": {key: (r.get("provenance") or {}).get(key)
+                                 for key in ("source_cluster", "source_clusters", "contrast")}}
+                   for r in records])
 
 
 def inputs_digest(records):
-    """Hash of the model inputs only (ids, splits, payloads; no gold). A run made on a public release whose test gold
-    is withheld binds to this, so the label holders can verify and score it against the full records."""
-    return digest([{"id": r["id"], "split": r["split"], "payload": model_payload(r)} for r in records])
+    """Bind model inputs and public scoring strata without gold or hidden provenance.
+
+    A run made on a gold-withheld public release binds to this, so label holders
+    can verify it against full records. Track, family and group remain public and
+    must match; hidden evidence links are supplied by the label holders.
+    """
+    return digest([{"id": r["id"], "split": r["split"], "payload": model_payload(r),
+                    "track": r["track"], "family": r["family"], "group_id": r["group_id"]}
+                   for r in records])
 
 
 def run_hashes(records):
