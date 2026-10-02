@@ -1,54 +1,114 @@
 """Resumable parallel range downloader.
 
-Shared bandwidth makes a single S3 stream crawl; several ranged connections get a
-fairer share. Usage: parallel_fetch.py <url> <dest> [workers]
+Usage: parallel_fetch.py <url> <dest> [workers]. Incomplete bytes live in
+<dest>.part with a progress journal; only a completed download replaces <dest>.
 """
-import os, sys, threading, time
+import json
+import shutil
+import sys
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+
 import requests
 
-url, dest = sys.argv[1], sys.argv[2]
-workers = int(sys.argv[3]) if len(sys.argv) > 3 else 12
-total = int(requests.head(url, timeout=60).headers["Content-Length"])
-have = os.path.getsize(dest) if os.path.exists(dest) else 0
-if have >= total:
-    print(f"complete {have}"); sys.exit(0)
-with open(dest, "r+b" if have else "wb") as fh:
-    fh.truncate(total)
-
 CHUNK = 32 * 1024 * 1024
-jobs = [(s, min(s + CHUNK, total) - 1) for s in range(have - have % CHUNK if have else 0, total, CHUNK)]
-if jobs and have:  # first job restarts at the already-fetched boundary
-    jobs[0] = (have, jobs[0][1])
-    if jobs[0][0] > jobs[0][1]:
-        jobs.pop(0)
-lock = threading.Lock(); done = [0]; start = time.time()
 
 
-def run(i):
-    fh = open(dest, "r+b")
-    while True:
-        with lock:
-            if not jobs: break
-            a, b = jobs.pop(0)
-        for attempt in range(6):
+def download(url, dest, workers=12, chunk=CHUNK, attempts=6):
+    if workers < 1 or chunk < 1 or attempts < 1:
+        raise ValueError("workers, chunk and attempts must be positive")
+    dest = Path(dest)
+    response = requests.head(url, allow_redirects=True, timeout=60)
+    response.raise_for_status()
+    total = int(response.headers["Content-Length"])
+    if total < 0:
+        raise ValueError("negative Content-Length")
+    if dest.exists() and dest.stat().st_size == total:
+        print(f"complete {total}")
+        return
+    part = dest.with_name(dest.name + ".part")
+    journal = dest.with_name(dest.name + ".part.json")
+    etag = response.headers.get("ETag")
+    modified = response.headers.get("Last-Modified")
+    identity = {"url": url, "total": total, "chunk": chunk,
+                "etag": etag, "last_modified": modified}
+    starts = list(range(0, total, chunk))
+    done = set()
+    if part.exists() and part.stat().st_size == total and journal.exists():
+        state = json.loads(journal.read_text())
+        if all(state.get(k) == v for k, v in identity.items()):
+            done = set(state.get("done", []))
+            if not done.issubset(starts):
+                raise ValueError("invalid download progress")
+        else:
+            part.unlink()
+    if not part.exists() or not journal.exists():
+        # Preserve the old downloader's contiguous-prefix resume convention.
+        have = dest.stat().st_size if dest.exists() else 0
+        if 0 < have < total:
+            shutil.copyfile(dest, part)
+            done = {s for s in starts if s + chunk <= have}
+        else:
+            part.write_bytes(b"")
+    with part.open("r+b") as output:
+        output.truncate(total)
+    lock = threading.Lock()
+
+    def save_progress():
+        temp = journal.with_name(journal.name + ".tmp")
+        temp.write_text(json.dumps({**identity, "done": sorted(done)}) + "\n")
+        temp.replace(journal)
+
+    save_progress()
+
+    def fetch(start):
+        end = min(start + chunk, total) - 1
+        headers = {"Range": f"bytes={start}-{end}"}
+        if etag:
+            headers["If-Match"] = etag
+        elif modified:
+            headers["If-Unmodified-Since"] = modified
+        for attempt in range(attempts):
             try:
-                r = requests.get(url, headers={"Range": f"bytes={a}-{b}"}, timeout=180, stream=True)
-                r.raise_for_status()
-                buf = r.content
-                if len(buf) != b - a + 1: raise IOError("short read")
-                fh.seek(a); fh.write(buf)
+                with requests.get(url, headers=headers, timeout=180, stream=True) as response:
+                    response.raise_for_status()
+                    if response.status_code != 206:
+                        raise IOError("server ignored byte range")
+                    if response.headers.get("Content-Range") != f"bytes {start}-{end}/{total}":
+                        raise IOError("server returned a different byte range")
+                    data = response.content
+                    if len(data) != end - start + 1:
+                        raise IOError("short read")
                 break
-            except Exception as e:
-                if attempt == 5: raise
+            except Exception:
+                if attempt == attempts - 1:
+                    raise
                 time.sleep(2 * (attempt + 1))
         with lock:
-            done[0] += b - a + 1
-            el = time.time() - start
-            print(f"{(have + done[0]) / total:6.1%} {(have + done[0]) / 1e6:9.0f}MB {done[0] / el / 1e6:5.1f}MB/s", flush=True)
-    fh.close()
+            with part.open("r+b") as output:
+                output.seek(start)
+                output.write(data)
+                output.flush()
+            done.add(start)
+            save_progress()
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = [pool.submit(fetch, start) for start in starts if start not in done]
+        for future in futures:
+            future.result()  # worker errors must make the command fail
+    part.replace(dest)
+    journal.unlink()
+    print("complete", total)
 
 
-threads = [threading.Thread(target=run, args=(i,), daemon=True) for i in range(workers)]
-for t in threads: t.start()
-for t in threads: t.join()
-print("complete", os.path.getsize(dest))
+def main(argv=None):
+    args = sys.argv[1:] if argv is None else argv
+    if len(args) not in (2, 3):
+        raise SystemExit("Usage: parallel_fetch.py <url> <dest> [workers]")
+    download(args[0], args[1], int(args[2]) if len(args) == 3 else 12)
+
+
+if __name__ == "__main__":
+    main()
