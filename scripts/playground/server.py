@@ -312,11 +312,12 @@ async def read_payload(http_request):
         except json.JSONDecodeError as exc:
             raise PlaygroundError(422, "bad_json", f"The 'request' field is not valid JSON: {exc}")
         blobs = []
-        for key in ("image", "images", "image[]"):
-            for upload in form.getlist(key):
-                if isinstance(upload, str):
-                    raise PlaygroundError(422, "bad_image", f"Form field {key!r} must be an uploaded file")
-                blobs.append(await upload.read())
+        for key, upload in form.multi_items():
+            if key not in ("image", "images", "image[]"):
+                continue
+            if isinstance(upload, str):
+                raise PlaygroundError(422, "bad_image", f"Form field {key!r} must be an uploaded file")
+            blobs.append(await upload.read())
         if isinstance(payload, dict):
             blobs += [decode_data_url(value, i) for i, value in enumerate(extract_state_images(payload))]
     elif content_type == "application/json":
