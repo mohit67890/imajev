@@ -396,3 +396,10 @@ def test_data_uri_image_inside_the_state_is_used_as_the_image(client, monkeypatc
     payload = {**REQUEST, "state": f"reference: {uri}"}
     response = client.post("/v1/systemone", json={**payload, "images": [data_url(jpeg_bytes(), "image/jpeg")]})
     assert response.status_code == 200 and seen["n"] == 2
+
+
+@pytest.mark.parametrize("body", [b'{"state":"\xff","questions":{}}', b'\xff\xfe{\x00'])
+def test_invalid_json_byte_encoding_is_a_client_error(client, body):
+    response = client.post("/v1/systemone", content=body, headers={"content-type": "application/json"})
+    assert response.status_code == 422, response.text
+    assert response.json()["error"] == "bad_json"

@@ -323,7 +323,7 @@ async def read_payload(http_request):
         body = await http_request.body()
         try:
             payload = json.loads(body)
-        except json.JSONDecodeError as exc:
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
             raise PlaygroundError(422, "bad_json", f"Request body is not valid JSON: {exc}")
         if not isinstance(payload, dict):
             raise PlaygroundError(422, "bad_request", "Request body must be a JSON object")
