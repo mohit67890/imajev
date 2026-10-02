@@ -21,12 +21,13 @@ def hardware():
         except importlib.metadata.PackageNotFoundError: pass
     return info
 
-def calibrate_results(results, fields, path):
+def calibrate_results(results, fields, path, *, image=False, photo_only=False):
     if path is None:
         return results
     from .calibration import TemperatureCalibrator
     calibrator = TemperatureCalibrator.load(path)
-    return [calibrator.calibrate_result(result, field.type, len(result.scores) - 1)
+    return [calibrator.calibrate_result(result, field.type, len(result.scores) - 1,
+                                        image=image, photo_only=photo_only)
             for field, result in zip(fields, results)]
 
 def main():
@@ -68,7 +69,8 @@ def main():
             backend = MLXDirect(args.model_bundle, adapter=args.adapter)
             images = [image for image, _ in loaded]
             scored, run = backend.score_request(images[0] if len(images) == 1 else images, request.fields, request.state, args.rotations)
-            scored = calibrate_results(scored, request.fields, args.calibration)
+            scored = calibrate_results(scored, request.fields, args.calibration, image=bool(images),
+                                       photo_only=bool(images) and request.state in ({}, ""))
             run.pop("questions")
             output = {**to_response(request, scored, model=backend.bundle["repo"] + ("+adapter" if args.adapter else "")),
                       "images": [meta for _, meta in loaded], "usage": run}
@@ -78,7 +80,8 @@ def main():
             from .backend import MLXDirect
             backend = MLXDirect(args.model_bundle)
             scored, run = backend.score_request(image, request.fields, request.state, args.rotations)
-            scored = calibrate_results(scored, request.fields, args.calibration)
+            scored = calibrate_results(scored, request.fields, args.calibration, image=image is not None,
+                                       photo_only=image is not None and request.state in ({}, ""))
             details = run.pop("questions")
             results = {field.id: result.model_dump() for field, result in zip(request.fields, scored)}
             timings = {field.id: detail for field, detail in zip(request.fields, details)}
