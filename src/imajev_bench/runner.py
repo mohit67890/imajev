@@ -116,7 +116,10 @@ def decode_jev(response, payload):
         wire_keys = [str(i) for i in range(len(choices))] if field["type"] == "ordinal" else [k for k, _ in choices]
         if set(raw) != set(wire_keys):
             raise ValueError("Response candidate keys mismatch")
-        probabilities = {key: _number(raw[wire]) * (1 - unknown) for (key, _), wire in zip(choices, wire_keys)}
+        conditional = {wire: _number(raw[wire]) for wire in wire_keys}
+        if any(p < 0 or p > 1 for p in conditional.values()) or abs(sum(conditional.values()) - 1) > 1e-6:
+            raise ValueError("Invalid conditional probability distribution")
+        probabilities = {key: conditional[wire] * (1 - unknown) for (key, _), wire in zip(choices, wire_keys)}
     probabilities["__unknown__"] = unknown
     if any(p < -1e-8 or p > 1 + 1e-8 for p in probabilities.values()) or abs(sum(probabilities.values()) - 1) > 1e-6:
         raise ValueError("Invalid probability distribution")
