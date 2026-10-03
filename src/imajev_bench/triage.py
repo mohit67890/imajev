@@ -105,8 +105,7 @@ def audit_report(records: list[dict], min_providers: int = MIN_CONSENSUS_PROVIDE
     audited = [r for r in records if r["provenance"].get("audit_sample") and
                (r["annotation_status"] == "reviewed" or (r["provenance"].get("model_audit") or {}).get("verdict") in
                 ("corrected", "excluded"))]
-    errors = []
-    methods = {"model" if r["provenance"].get("model_audit") else "human" for r in audited}
+    errors, excluded, included = [], [], []
     for record in audited:
         construction = record["provenance"].get("construction")
         if isinstance(construction, dict) and "truth" in construction:
@@ -114,11 +113,18 @@ def audit_report(records: list[dict], min_providers: int = MIN_CONSENSUS_PROVIDE
         else:
             agreed, value = consensus(record, min_providers)
         audit = record["provenance"].get("model_audit") or {}
-        if audit.get("verdict") in ("corrected", "excluded"):
+        known_error = audit.get("verdict") in ("corrected", "excluded")
+        if not agreed and not known_error:
+            # No current-input proposal exists to test: do not count this as a correct consensus.
+            excluded.append(record["id"])
+            continue
+        included.append(record)
+        if known_error:
             errors.append(record["id"])        # the constructed label was wrong or the item was defective
         elif agreed and (type(value) is not type(record["gold"]) or value != record["gold"]):
             errors.append(record["id"])
-    n = len(audited)
+    n = len(included)
+    methods = {"model" if r["provenance"].get("model_audit") else "human" for r in included}
     rate = len(errors) / n if n else None
     upper = None
     if n:
@@ -127,4 +133,5 @@ def audit_report(records: list[dict], min_providers: int = MIN_CONSENSUS_PROVIDE
         half = z * ((rate * (1 - rate) / n + z * z / (4 * n * n)) ** 0.5) / (1 + z * z / n)
         upper = centre + half
     return {"audited": n, "consensus_errors": len(errors), "error_rate": rate, "wilson_upper_95": upper,
-            "error_ids": errors[:50], "audit_method": "+".join(sorted(methods)) or None}
+            "error_ids": errors[:50], "excluded_from_error_rate": excluded,
+            "audit_method": "+".join(sorted(methods)) or None}
