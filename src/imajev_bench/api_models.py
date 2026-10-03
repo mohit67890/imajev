@@ -178,7 +178,8 @@ class GeminiProvider:
                 "properties": {"answer": {"type": "STRING", "enum": tokens + [UNKNOWN_TOKEN]}, "evidence": {"type": "STRING"}}}}
         response = self._send(body)
         candidate = (response.get("candidates") or [{}])[0]
-        text_out = "".join(p.get("text", "") for p in candidate.get("content", {}).get("parts", []))
+        text_out = "".join(p.get("text", "") for p in candidate.get("content", {}).get("parts", [])
+                           if not p.get("thought"))
         return text_out, response.get("modelVersion", self.model), response.get("usageMetadata")
 
     def _send(self, body: dict) -> dict:
