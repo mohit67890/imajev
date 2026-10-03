@@ -58,7 +58,17 @@ def assemble(spec: dict[str, Any], spec_dir: Path, output: Path) -> dict[str, An
         sources[source["id"]] = source
 
     output.mkdir(parents=True, exist_ok=False)
-    (output / "assets").mkdir()
+    try:
+        (output / "assets").mkdir()
+        return _assemble_created(spec, spec_dir, output, fractions, cap, salt, sources)
+    except Exception:
+        # mkdir above established ownership: never remove a pre-existing output.
+        shutil.rmtree(output, ignore_errors=True)
+        raise
+
+
+def _assemble_created(spec, spec_dir, output, fractions, cap, salt, sources):
+    """Populate a newly owned directory; the caller removes it on any failure."""
     copied = {}
     records = []
     for item in spec["items"]:
