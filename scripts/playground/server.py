@@ -55,6 +55,8 @@ BUNDLE = ROOT / "artifacts/model.json"
 STATIC = Path(__file__).resolve().parent / "static"
 DATA_URL = re.compile(r"^data:(?P<mime>[\w.+-]+/[\w.+-]+)?(?P<b64>;base64)?,(?P<payload>.*)$", re.DOTALL)
 
+MAX_REQUEST_BYTES = 128 * 1024 * 1024  # covers two encoded images plus maximum typed request text
+
 log = logging.getLogger("playground")
 
 
@@ -261,6 +263,8 @@ def decode_data_url(value, position):
         raise PlaygroundError(422, "bad_image", f"images[{position}] is not a data: URL")
     if not match.group("b64"):
         raise PlaygroundError(422, "bad_image", f"images[{position}] must be base64-encoded (data:...;base64,...)")
+    if len(match.group("payload")) > 4 * ((MAX_BYTES + 2) // 3):
+        raise PlaygroundError(413, "image_too_large", f"Image {position} exceeds 20 MiB")
     try:
         return base64.b64decode(match.group("payload"), validate=True)
     except (binascii.Error, ValueError):
@@ -294,6 +298,16 @@ def extract_state_images(payload):
     return found
 
 
+async def _bounded_json_body(http_request):
+    chunks, size = [], 0
+    async for chunk in http_request.stream():
+        size += len(chunk)
+        if size > MAX_REQUEST_BYTES:
+            raise PlaygroundError(413, "request_too_large", "JSON request body exceeds 128 MiB")
+        chunks.append(chunk)
+    return b"".join(chunks)
+
+
 async def read_payload(http_request):
     """-> (payload dict without images, [image bytes]) for multipart or JSON encodings."""
     content_type = (http_request.headers.get("content-type") or "").split(";")[0].strip().lower()
@@ -306,21 +320,29 @@ async def read_payload(http_request):
         if raw is None:
             raise PlaygroundError(422, "bad_request", "Missing the 'request' form field")
         if not isinstance(raw, str):
-            raw = (await raw.read()).decode("utf-8", "replace")
+            raw_bytes = await raw.read(MAX_REQUEST_BYTES + 1)
+            if len(raw_bytes) > MAX_REQUEST_BYTES:
+                raise PlaygroundError(413, "request_too_large", "The request form field exceeds 128 MiB")
+            raw = raw_bytes.decode("utf-8", "replace")
         try:
             payload = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise PlaygroundError(422, "bad_json", f"The 'request' field is not valid JSON: {exc}")
+        embedded = extract_state_images(payload) if isinstance(payload, dict) else []
+        uploads = [(key, upload) for key in ("image", "images", "image[]") for upload in form.getlist(key)]
+        if len(uploads) + len(embedded) > 2:
+            raise PlaygroundError(422, "bad_image", f"Provide at most two images; got {len(uploads) + len(embedded)}")
         blobs = []
-        for key in ("image", "images", "image[]"):
-            for upload in form.getlist(key):
-                if isinstance(upload, str):
-                    raise PlaygroundError(422, "bad_image", f"Form field {key!r} must be an uploaded file")
-                blobs.append(await upload.read())
-        if isinstance(payload, dict):
-            blobs += [decode_data_url(value, i) for i, value in enumerate(extract_state_images(payload))]
+        for position, (key, upload) in enumerate(uploads):
+            if isinstance(upload, str):
+                raise PlaygroundError(422, "bad_image", f"Form field {key!r} must be an uploaded file")
+            blob = await upload.read(MAX_BYTES + 1)
+            if len(blob) > MAX_BYTES:
+                raise PlaygroundError(413, "image_too_large", f"Image {position} exceeds 20 MiB")
+            blobs.append(blob)
+        blobs += [decode_data_url(value, i) for i, value in enumerate(embedded)]
     elif content_type == "application/json":
-        body = await http_request.body()
+        body = await _bounded_json_body(http_request)
         try:
             payload = json.loads(body)
         except json.JSONDecodeError as exc:
@@ -331,6 +353,8 @@ async def read_payload(http_request):
         if not isinstance(images, list):
             raise PlaygroundError(422, "bad_image", "'images' must be a list of data URLs")
         images = list(images) + extract_state_images(payload)   # data:image URIs embedded in the state count as images too
+        if len(images) > 2:
+            raise PlaygroundError(422, "bad_image", f"Provide at most two images; got {len(images)}")
         blobs = [decode_data_url(value, i) for i, value in enumerate(images)]
     else:
         raise PlaygroundError(422, "bad_request",
