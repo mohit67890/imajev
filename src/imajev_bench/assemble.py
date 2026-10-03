@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -36,7 +37,10 @@ def _split_for(anchor: str, salt: str, fractions: dict[str, float]) -> str:
 def assemble(spec: dict[str, Any], spec_dir: Path, output: Path) -> dict[str, Any]:
     spec_dir, output = Path(spec_dir), Path(output)
     fractions = spec.get("split_fractions", {"dev": 0.2, "calibration": 0.1, "test": 0.7})
-    if set(fractions) - set(SPLITS) or abs(sum(fractions.values()) - 1) > 1e-9:
+    if (not isinstance(fractions, dict) or not fractions or set(fractions) - set(SPLITS)
+            or any(type(value) not in (int, float) or not math.isfinite(value) or value < 0
+                   for value in fractions.values())
+            or abs(sum(fractions.values()) - 1) > 1e-9):
         raise ValueError("split_fractions must use dev/calibration/test and sum to 1")
     cap = int(spec.get("max_records_per_image", 3))
     salt = spec.get("split_salt")
