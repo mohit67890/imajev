@@ -229,14 +229,24 @@ def test_load_and_apply_gold_fixes(tmp_path):
 
 def test_make_extra_queue_applies_gold_fixes_to_direct_leftovers(tmp_path):
     import make_extra_queue as X
-    from test_p3_labeltrain import azure_fixture, read_jsonl, xargs
-    azure_fixture(tmp_path)
+    import assembly_common as ac
+    from test_p3_assembly import cand
+    # The regression needs only three waiting constructed rows, not a live Azure run.
+    rows = [cand(f"it-{i}", ftype="choice", gold="b") for i in (6, 9, 12)]
+    ac.write_jsonl(tmp_path / "mine-pulled/waiting.flagged.jsonl",
+                   [{"id": r["id"], "item": r, "priority": 1.0} for r in rows])
+    args = ["extra", "--out-dir", str(tmp_path / "labeltrain"),
+            "--mine-pulled", str(tmp_path / "mine-pulled"), "--pool-dir", str(tmp_path / "pool"),
+            "--azure-queue", str(tmp_path / "queue.jsonl"),
+            "--azure-variants-queue", str(tmp_path / "variants.jsonl"),
+            "--azure-results", str(tmp_path / "results.jsonl"),
+            "--coordinator-status", str(tmp_path / "status.json"), "--no-gen-context"]
     fx = _fixes(tmp_path / "fixes.jsonl", [
         {"id": "it-6", "old_gold": "b", "new_gold": "c", "new_unknown_reason": None, "where": "q", "action": "drop"},
         {"id": "it-9", "old_gold": "b", "new_gold": None, "new_unknown_reason": "insufficient_evidence", "where": "q",
          "action": "relabel"}])
-    assert X.main(xargs(tmp_path, "extra", "--gold-fixes", str(fx))) == 0
-    direct = {r["id"]: r for r in read_jsonl(tmp_path / "labeltrain/direct-constructed-leftovers.jsonl")}
+    assert X.main(args + ["--gold-fixes", str(fx)]) == 0
+    direct = {r["id"]: r for r in ac.read_jsonl(tmp_path / "labeltrain/direct-constructed-leftovers.jsonl")}
     assert "it-6" not in direct and "it-12" in direct and direct["it-12"]["gold"] == "b"
     assert direct["it-9"]["gold"] is None and direct["it-9"]["label"]["target"] is None
     assert direct["it-9"]["unknown_reason"] == "insufficient_evidence"
@@ -250,7 +260,6 @@ def test_build_manifest_applies_gold_fixes(tmp_path):
     import azure_teacher as T
     import build_manifest as bm
     from test_p3_assembly import _fixture_pool
-    from test_p3_labeltrain import teacher_dir, write_jsonl
     _fixture_pool(tmp_path)
     rows = [r for r in ac.read_jsonl(tmp_path / "shards" / "pool-00.jsonl") if not r["pool"]["heldout_flagged_bucket"]]
     text = [r for r in rows if not r.get("images")][:260]
@@ -263,7 +272,8 @@ def test_build_manifest_applies_gold_fixes(tmp_path):
         return {"id": r["id"], "keep": True, "rule": "A", "origin": "mine", "item": r,
                 "label": T.label_for(r, {"keep": True, "target": "teacher_dist", "target_probs": probs}, ["Rationale."])}
     kept = text[:200] + imgs
-    teacher_dir(tmp_path / "teacher", [{"id": r["id"], "keep": True} for r in kept], [kept_row(r) for r in kept])
+    ac.write_jsonl(tmp_path / "teacher/results.jsonl", [{"id": r["id"], "keep": True} for r in kept])
+    ac.write_jsonl(tmp_path / "teacher/kept.jsonl", [kept_row(r) for r in kept])
     # direct leftover rows (constructed) taken from the remaining text rows
     left = []
     for r in text[200:230]:
@@ -271,7 +281,7 @@ def test_build_manifest_applies_gold_fixes(tmp_path):
         c["gold_kind"] = "constructed"
         c["label"] = {"target": c["gold"], "probs": None, "rationale": None, "target_kind": "constructed", "review": None}
         left.append(c)
-    write_jsonl(tmp_path / "leftovers.jsonl", left)
+    ac.write_jsonl(tmp_path / "leftovers.jsonl", left)
     drop_id = text[0]["id"]                                         # a teacher-kept row whose kept label contradicts
     contra = text[1]                                                # relabel contradicting the kept teacher label -> dropped too
     agree = text[2]                                                 # relabel that agrees with the teacher label -> kept
