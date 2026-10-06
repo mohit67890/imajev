@@ -252,3 +252,54 @@ def test_runs_survive_review_bookkeeping_but_not_gold_changes(tmp_path):
     corrected[0]["gold"] = False
     with pytest.raises(ValueError, match="dataset hash"):
         verify_run(corrected, path)
+
+
+@pytest.mark.parametrize("status", [429, 503])
+@pytest.mark.parametrize("header", ["45", "Wed, 01 Jan 2042 00:00:45 GMT", "invalid", "9" * 400])
+def test_provider_honors_retry_after_from_actual_http_response(status, header, monkeypatch):
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    import threading
+
+    from datetime import datetime, timezone
+    from imajev_bench import api_models
+
+    class FixedClock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return cls(2042, 1, 1, tzinfo=timezone.utc)
+
+    monkeypatch.setattr(api_models, "datetime", FixedClock)
+    requests = []
+    waits = []
+
+    class Endpoint(BaseHTTPRequestHandler):
+        def do_POST(self):
+            requests.append(json.loads(self.rfile.read(int(self.headers["Content-Length"]))))
+            if len(requests) == 1:
+                self.send_response(status)
+                self.send_header("Retry-After", header)
+                body = b"Retry later"
+            else:
+                self.send_response(200)
+                body = json.dumps({"model": "fixture", "choices": [{"message": {"content": '{"answer":"yes","evidence":"local"}'}}]}).encode()
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *args):
+            pass
+
+    endpoint = ThreadingHTTPServer(("127.0.0.1", 0), Endpoint)
+    worker = threading.Thread(target=endpoint.serve_forever, daemon=True)
+    worker.start()
+    try:
+        provider = OpenAIProvider("fixture", "fixture-key", base_url=f"http://127.0.0.1:{endpoint.server_port}", sleep=waits.append)
+        text, model, _ = provider.complete("Evidence", [], ["yes", "no"], True)
+        assert json.loads(text)["answer"] == "yes" and model == "fixture"
+        assert len(requests) == 2 and requests[0] == requests[1]
+        expected = 45.0 if header in {"45", "Wed, 01 Jan 2042 00:00:45 GMT"} else (15.0 if status == 429 else 1.0)
+        assert waits == [expected]
+    finally:
+        endpoint.shutdown()
+        worker.join(timeout=5)
+        endpoint.server_close()

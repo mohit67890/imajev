@@ -12,6 +12,7 @@ import base64
 import hashlib
 import json
 import mimetypes
+import math
 import os
 import random
 import re
@@ -19,6 +20,7 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any, Callable
 
@@ -109,6 +111,25 @@ def _schema(tokens: list[str]) -> dict:
                            "evidence": {"type": "string"}}}
 
 
+def _retry_after_seconds(value: str | None) -> float | None:
+    if value is None:
+        return None
+    value = value.strip()
+    if value.isascii() and value.isdigit():
+        try:
+            delay = float(value)
+            return delay if math.isfinite(delay) else None
+        except (ValueError, OverflowError):
+            return None
+    try:
+        deadline = parsedate_to_datetime(value)
+        if deadline.tzinfo is None:
+            deadline = deadline.replace(tzinfo=timezone.utc)
+        return max(0.0, (deadline - datetime.now(timezone.utc)).total_seconds())
+    except (ValueError, TypeError, OverflowError):
+        return None
+
+
 def _post(url: str, body: dict, headers: dict, opener: Callable, timeout: float, sleep: Callable, retries: int = 5):
     data = json.dumps(body).encode()
     for attempt in range(retries + 1):
@@ -120,6 +141,10 @@ def _post(url: str, body: dict, headers: dict, opener: Callable, timeout: float,
             if exc.code not in RETRY_CODES or attempt == retries:
                 detail = exc.read().decode(errors="replace")[:500] if hasattr(exc, "read") else ""
                 raise RuntimeError(f"HTTP {exc.code}: {detail}") from None
+            retry_after = _retry_after_seconds(exc.headers.get("Retry-After") if exc.headers else None)
+            if retry_after is not None:
+                sleep(retry_after)
+                continue
             if exc.code == 429:
                 # Per-minute quotas need minute-scale waits, not seconds.
                 sleep(min(120.0, 15.0 * 2 ** attempt))
