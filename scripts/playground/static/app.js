@@ -944,6 +944,8 @@ function syncRawToggle() {
 /* ───────────────────────────── copy as curl / vd decide ───────────────────────────── */
 
 const shellQuote = s => `'${String(s).replace(/'/g, `'\\''`)}'`;
+// curl's -F grammar parses filenames after shell quoting; protect its separators too.
+const formFile = name => `image=@"${String(name).replace(/[\\"]/g, '\\$&')}"`;
 
 function currentRequestJSON() {
   const { state, questions } = refreshValidation();
@@ -962,8 +964,8 @@ function curlCommand() {
   }
   const lines = [
     `curl -sS ${curlBase()}/v1/systemone \\`,
-    `  -F request=${shellQuote(JSON.stringify(request))} \\`,
-    ...names.map((name, i) => `  -F image=@${shellQuote(name)}${i === names.length - 1 ? '' : ' \\'}`),
+    `  --form-string request=${shellQuote(JSON.stringify(request))} \\`,
+    ...names.map((name, i) => `  -F ${shellQuote(formFile(name))}${i === names.length - 1 ? '' : ' \\'}`),
   ];
   return lines.join('\n');
 }
