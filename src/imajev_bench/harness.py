@@ -206,14 +206,14 @@ def environment_receipt(output: Path, sources: list[Path]) -> dict:
 
 
 def _load_images(root: Path, refs: list[dict]):
-    from PIL import Image
+    from PIL import Image, ImageOps
     images = []
     for ref in refs:
         path = (root / ref["path"]).resolve()
         if not path.is_relative_to(root.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest() != ref["sha256"]:
             raise ValueError(f"Image changed or escapes root: {ref['path']}")
         with Image.open(path) as image:
-            images.append(image.convert("RGB"))
+            images.append(ImageOps.exif_transpose(image).convert("RGB"))
     return images
 
 
