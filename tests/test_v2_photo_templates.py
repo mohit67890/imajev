@@ -247,3 +247,52 @@ def test_no_source_group_spans_test_and_fit(tmp_path, monkeypatch):
     for r in rows:
         side = "test" if r["partition"] == "test" else "fit"
         assert seen.setdefault(r["source_group"], side) == side
+
+
+@pytest.mark.parametrize("cache_state", ["intact", "same_size_corruption", "truncated"])
+def test_photo_download_manifest_matches_cached_image_bytes(tmp_path, monkeypatch, cache_state):
+    import hashlib
+    import io
+    import os
+    from types import SimpleNamespace
+    from PIL import Image
+    from v1._common import encode_image
+    from v2 import fetch_openimages as fetch
+
+    raw_buffer = io.BytesIO()
+    Image.new("RGB", (32, 24), "red").save(raw_buffer, format="PNG")
+    raw = raw_buffer.getvalue()
+    encoded, _, _ = encode_image(raw)
+    digest = hashlib.sha256(encoded).hexdigest()
+    raw_dir, out = tmp_path / "raw", tmp_path / "out"
+    images = out / fetch.SOURCE / "images"
+    raw_dir.mkdir()
+    images.mkdir(parents=True)
+    destination = images / f"{digest}.jpg"
+    cached = bytearray(encoded)
+    if cache_state == "same_size_corruption":
+        cached[-1] ^= 1
+    elif cache_state == "truncated":
+        cached = cached[:-1]
+    destination.write_bytes(cached)
+    os.utime(destination, ns=(1_000_000_000, 1_000_000_000))
+    original_mtime = destination.stat().st_mtime_ns
+    row = {"image_id": "photo", "url": "https://example.invalid/photo.png", "spdx": "CC-BY-2.0",
+           "author": "Fixture", "author_profile": "https://example.invalid/author", "title": "Red photo",
+           "license_url": "https://creativecommons.org/licenses/by/2.0/",
+           "flickr_landing_url": "https://example.invalid/photo"}
+    (raw_dir / "selection.jsonl").write_text(json.dumps(row) + "\n")
+    monkeypatch.setattr(fetch, "RAW_DIR", raw_dir)
+    monkeypatch.setattr(fetch, "OUT", out)
+    monkeypatch.setattr(fetch, "IMG_DIR", images)
+    monkeypatch.setattr(fetch, "session", lambda **kwargs: SimpleNamespace())
+    monkeypatch.setattr(fetch, "get_with_backoff", lambda *args, **kwargs: SimpleNamespace(content=raw))
+
+    fetch.run_download(workers=1, limit=None)
+
+    manifest = json.loads((raw_dir / "manifest.jsonl").read_text())
+    attribution = json.loads((out / fetch.SOURCE / "attribution.jsonl").read_text())
+    assert manifest["sha256"] == attribution["sha256"] == hashlib.sha256(destination.read_bytes()).hexdigest()
+    assert destination.read_bytes() == encoded
+    if cache_state == "intact":
+        assert destination.stat().st_mtime_ns == original_mtime
