@@ -252,3 +252,27 @@ def test_runs_survive_review_bookkeeping_but_not_gold_changes(tmp_path):
     corrected[0]["gold"] = False
     with pytest.raises(ValueError, match="dataset hash"):
         verify_run(corrected, path)
+
+
+@pytest.mark.parametrize("token", ['quoted"label', "line\nbreak", "back\\slash", "café"])
+def test_api_prompt_option_literals_round_trip_through_native_provider(token, tmp_path):
+    row = record(101)
+    row["request"]["fields"] = [{"id": "decision", "type": "choice", "question": "Which label?",
+                                  "options": [{"value": token}, {"value": "other"}]}]
+    row["gold"] = token
+    records = validate_records([row], tmp_path)
+    seen = []
+
+    def opener(request, timeout):
+        body = json.loads(request.data)
+        prompt = body["messages"][0]["content"][-1]["text"]
+        options = prompt.split("Options:\n", 1)[1].split("\nReply with JSON", 1)[0].splitlines()
+        seen.extend(json.loads(line[2:]) for line in options[:-1])
+        assert seen == [token, "other"]
+        return Reply({"model": "local-fixture", "choices": [{"message": {"content": json.dumps(
+            {"answer": seen[0], "evidence": "supplied state"})}}]})
+
+    provider = OpenAIProvider("local-fixture", "fixture-only", opener=opener)
+    output = run_api(records, tmp_path, tmp_path / "run", provider, order_seed=None)
+    verify_run(records, output)
+    assert json.loads(output.read_text())["value"] == token
