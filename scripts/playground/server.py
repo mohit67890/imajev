@@ -283,10 +283,12 @@ def extract_state_images(payload):
             found.append(match.group(0)); return f"[image {len(found)}]"
         return IMAGE_DATA_URL.sub(repl, value)
 
-    def walk(node):
+    def walk(node, depth=0):
+        if depth > 8:  # Match Request.bounds before recursive image extraction.
+            raise PlaygroundError(422, "invalid_request", "State nesting exceeds 8")
         if isinstance(node, str): return take(node)
-        if isinstance(node, list): return [walk(x) for x in node]
-        if isinstance(node, dict): return {k: walk(v) for k, v in node.items()}
+        if isinstance(node, list): return [walk(x, depth + 1) for x in node]
+        if isinstance(node, dict): return {k: walk(v, depth + 1) for k, v in node.items()}
         return node
 
     if "state" in payload and payload["state"] is not None:
@@ -309,7 +311,7 @@ async def read_payload(http_request):
             raw = (await raw.read()).decode("utf-8", "replace")
         try:
             payload = json.loads(raw)
-        except json.JSONDecodeError as exc:
+        except (json.JSONDecodeError, RecursionError) as exc:
             raise PlaygroundError(422, "bad_json", f"The 'request' field is not valid JSON: {exc}")
         blobs = []
         for key in ("image", "images", "image[]"):
@@ -323,7 +325,7 @@ async def read_payload(http_request):
         body = await http_request.body()
         try:
             payload = json.loads(body)
-        except json.JSONDecodeError as exc:
+        except (json.JSONDecodeError, RecursionError) as exc:
             raise PlaygroundError(422, "bad_json", f"Request body is not valid JSON: {exc}")
         if not isinstance(payload, dict):
             raise PlaygroundError(422, "bad_request", "Request body must be a JSON object")
