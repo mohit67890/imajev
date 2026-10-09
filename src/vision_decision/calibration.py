@@ -45,11 +45,19 @@ def calibration_key(decision_type: str, option_count: int, max_options: int = SH
 def softmax(logits: Sequence[float], temperature: float = 1.0) -> list[float]:
     if not logits or not math.isfinite(temperature) or temperature <= 0:
         raise ValueError("Expected logits and a finite positive temperature")
-    scaled = [float(value) / temperature for value in logits]
-    if not all(math.isfinite(value) for value in scaled):
+    values = [float(value) for value in logits]
+    if not all(math.isfinite(value) for value in values):
         raise ValueError("Logits must be finite")
-    top = max(scaled)
-    weights = [math.exp(value - top) for value in scaled]
+    top = max(values)
+    weights = []
+    for value in values:
+        difference = value - top
+        # Center before scaling to avoid overflow from a common finite offset.
+        # If opposite extreme logits overflow their gap, scale them first so a
+        # large temperature can still retain their relative probabilities.
+        scaled = (difference / temperature if math.isfinite(difference)
+                  else value / temperature - top / temperature)
+        weights.append(math.exp(scaled))
     total = sum(weights)
     return [value / total for value in weights]
 
