@@ -190,10 +190,15 @@ def environment_receipt(output: Path, sources: list[Path]) -> dict:
     """Copy every source file that can change a prediction, plus the installed package set."""
     target = output / "source"
     target.mkdir()
-    files = {}
+    files, copied = {}, {}
     for path in sources:
         path = Path(path).resolve()
         name = "__".join(path.parts[-3:])
+        if name in copied:
+            if copied[name] == path:
+                continue
+            raise ValueError(f"Source snapshot name collision: {copied[name]} and {path}")
+        copied[name] = path
         shutil.copyfile(path, target / name)
         files[name] = file_digest(path)
     try:
