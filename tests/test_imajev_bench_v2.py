@@ -6,7 +6,7 @@ from PIL import Image
 
 from imajev_bench.assemble import assemble
 from imajev_bench.cli import main, read_jsonl
-from imajev_bench.harness import NEUTRAL_UNKNOWN, build_question, run_local
+from imajev_bench.harness import NEUTRAL_UNKNOWN, build_question, environment_receipt, run_local
 from imajev_bench.lint import lint
 from imajev_bench.release import annotator_agreement, release_check
 from imajev_bench.runner import verify_run
@@ -294,3 +294,26 @@ def test_process_monitor_ignores_desktop_processes(monkeypatch):
     snapshot = harness.process_monitor()
     assert [b["pid"] for b in snapshot["busy"]] == [9001]
     assert [b["pid"] for b in snapshot["ignored"]] == [417]
+
+
+def test_source_snapshot_rejects_colliding_names_instead_of_overwriting(tmp_path):
+    sources = []
+    for project, contents in [("first", "first source"), ("second", "second source")]:
+        path = tmp_path / project / "src" / "pkg" / "engine.py"
+        path.parent.mkdir(parents=True)
+        path.write_text(contents)
+        sources.append(path)
+    output = tmp_path / "receipt"
+    output.mkdir()
+    with pytest.raises(ValueError, match="snapshot name collision"):
+        environment_receipt(output, sources)
+    assert (output / "source" / "src__pkg__engine.py").read_text() == "first source"
+
+
+def test_source_snapshot_allows_repeated_same_file(tmp_path):
+    source = tmp_path / "engine.py"
+    source.write_text("source")
+    output = tmp_path / "receipt"
+    output.mkdir()
+    receipt = environment_receipt(output, [source, source])
+    assert len(receipt["source_sha256"]) == 1
