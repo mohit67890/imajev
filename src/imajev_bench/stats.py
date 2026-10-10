@@ -243,6 +243,8 @@ def required_clusters(delta: float, discordant_rate: float, items_per_cluster: f
     """
     if not 0 < delta < 1 or not 0 < discordant_rate <= 1 or items_per_cluster < 1 or not 0 <= icc < 1:
         raise ValueError("Invalid power-analysis inputs")
+    if delta > discordant_rate:
+        raise ValueError("Accuracy difference cannot exceed the discordant pair rate")
     z = {0.05: 1.959964, 0.01: 2.575829}.get(alpha)
     zb = {0.8: 0.841621, 0.9: 1.281552}.get(power)
     if z is None or zb is None:

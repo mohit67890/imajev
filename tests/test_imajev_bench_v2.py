@@ -294,3 +294,10 @@ def test_process_monitor_ignores_desktop_processes(monkeypatch):
     snapshot = harness.process_monitor()
     assert [b["pid"] for b in snapshot["busy"]] == [9001]
     assert [b["pid"] for b in snapshot["ignored"]] == [417]
+
+def test_power_analysis_rejects_impossible_difference_vs_discordance():
+    # Difference=p(A-only)-p(B-only), discordance=p(A-only)+p(B-only).
+    # No paired outcome distribution can have difference greater than discordance.
+    with pytest.raises(ValueError, match='discordant'):
+        required_clusters(0.8, 0.1, 1, 0.0)
+    assert required_clusters(0.25, 0.25, 1, 0.0)['clusters'] > 1
