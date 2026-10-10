@@ -168,3 +168,14 @@ def test_text_only_request_compiles_without_an_image():
     answers = to_response(request, results)["answers"]
     assert answers["department"]["choice"] == "billing" and answers["urgent"]["noul"] > 0.5
     assert answers["frustration"]["legend"] == {"0": "calm", "1": "impatient", "2": "angry"}
+
+def test_rotation_average_accepts_extreme_finite_position_bias():
+    choices = [("red", ""), ("blue", ""), (UNKNOWN, "")]
+    combined = combine_rotations(choices, [(i, [1e308, -1e308, 0.0]) for i in range(3)])
+    assert all(math.isclose(score, 1 / 3) for score in combined.scores.values())
+
+
+def test_rotation_average_does_not_overflow_repeated_finite_logits():
+    choices = [("red", ""), ("blue", ""), (UNKNOWN, "")]
+    combined = combine_rotations(choices, [(0, [1e308, 0.0, 0.0]), (1, [0.0, 0.0, 1e308]), (2, [0.0, 1e308, 0.0])])
+    assert combined.scores == {"red": 1.0, "blue": 0.0, UNKNOWN: 0.0}
