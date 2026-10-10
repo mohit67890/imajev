@@ -3,7 +3,7 @@ import math
 from pathlib import Path
 import pytest
 from pydantic import ValidationError
-from vision_decision.contracts import Request, BooleanField, UNKNOWN
+from vision_decision.contracts import Request, BooleanField, Result, UNKNOWN
 from vision_decision.scoring import compile_question, candidates, result_from_logits, verified_label_ids, cyclic_offsets, rotate, combine_rotations
 from vision_decision.images import load_image
 from PIL import Image
@@ -168,3 +168,17 @@ def test_text_only_request_compiles_without_an_image():
     answers = to_response(request, results)["answers"]
     assert answers["department"]["choice"] == "billing" and answers["urgent"]["noul"] > 0.5
     assert answers["frustration"]["legend"] == {"0": "calm", "1": "impatient", "2": "angry"}
+
+
+@pytest.mark.parametrize("value", ["absent", UNKNOWN, 7, True])
+def test_answered_result_rejects_values_outside_scored_candidates(value):
+    with pytest.raises(ValidationError, match="scored candidate"):
+        Result(status="answered", value=value, scores={"red": 0.5, UNKNOWN: 0.5},
+               raw_logits={"red": 0.0, UNKNOWN: 0.0})
+
+
+@pytest.mark.parametrize("value,key", [("red", "red"), (7, "7"), (True, "true"), (False, "false")])
+def test_answered_result_accepts_each_candidate_value_type(value, key):
+    result = Result(status="answered", value=value, scores={key: 0.5, UNKNOWN: 0.5},
+                    raw_logits={key: 0.0, UNKNOWN: 0.0})
+    assert result.value == value

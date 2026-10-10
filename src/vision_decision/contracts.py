@@ -122,6 +122,10 @@ class Result(StrictModel):
         if self.status == "abstained":
             if self.value is not None or self.reason is None:
                 raise ValueError("Abstention requires null value and reason")
-        elif self.value is None or self.reason is not None:
-            raise ValueError("Answered result requires value and no reason")
+        else:
+            if self.value is None or self.reason is not None:
+                raise ValueError("Answered result requires value and no reason")
+            key = str(self.value).lower() if isinstance(self.value, bool) else str(self.value)
+            if key == UNKNOWN or key not in self.scores:
+                raise ValueError("Answered value must identify a scored candidate")
         return self
