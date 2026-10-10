@@ -159,7 +159,11 @@ def rotate(items, offset):
     return list(items[offset:]) + list(items[:offset])
 
 def combine_rotations(choices, per_rotation):
-    """Average per-candidate log-probabilities over presentation orders.
+    """Average per-candidate logits over presentation orders.
+
+    Per-order log-normalizers are common to all candidates and cancel in the
+    final softmax. Average before normalizing to avoid overflowing finite
+    logit differences or repeatedly accumulating very large values.
 
     per_rotation holds (offset, logits) where logits follow rotate(choices, offset).
     Position and label-token preferences cancel only to the extent the rotations cover positions.
@@ -167,12 +171,10 @@ def combine_rotations(choices, per_rotation):
     if not per_rotation or len({offset for offset, _ in per_rotation}) != len(per_rotation):
         raise ValueError("Expected distinct rotations")
     n = len(choices)
-    totals = [0.0] * n
+    contributions = [[] for _ in range(n)]
     for offset, logits in per_rotation:
         if len(logits) != n or not all(math.isfinite(x) for x in logits) or not 0 <= offset < n:
             raise ValueError("Invalid rotated logits")
-        top = max(logits)
-        norm = top + math.log(sum(math.exp(x - top) for x in logits))
         for position, value in enumerate(logits):
-            totals[(position + offset) % n] += value - norm
-    return result_from_logits(choices, [t / len(per_rotation) for t in totals])
+            contributions[(position + offset) % n].append(value / len(per_rotation))
+    return result_from_logits(choices, [math.fsum(values) for values in contributions])
