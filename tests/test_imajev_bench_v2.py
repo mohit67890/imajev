@@ -8,7 +8,7 @@ from imajev_bench.assemble import assemble
 from imajev_bench.cli import main, read_jsonl
 from imajev_bench.harness import NEUTRAL_UNKNOWN, build_question, run_local
 from imajev_bench.lint import lint
-from imajev_bench.release import annotator_agreement, release_check
+from imajev_bench.release import annotator_agreement, blind_baseline, release_check
 from imajev_bench.runner import verify_run
 from imajev_bench.schema import validate_records
 from imajev_bench.scoring import score
@@ -294,3 +294,23 @@ def test_process_monitor_ignores_desktop_processes(monkeypatch):
     snapshot = harness.process_monitor()
     assert [b["pid"] for b in snapshot["busy"]] == [9001]
     assert [b["pid"] for b in snapshot["ignored"]] == [417]
+
+
+@pytest.mark.parametrize("changed", ["predictions.jsonl", "raw.jsonl", "manifest.json", "completion.json", "dataset"])
+def test_blind_baseline_requires_matching_completed_run(tmp_path, changed):
+    record = text_record("v1")
+    record["track"] = "visual"
+    img = image(tmp_path / "p.png", "blue")
+    record["images"] = [{"path": "p.png", "sha256": __import__("hashlib").sha256(img.read_bytes()).hexdigest()}]
+    out = run_local([record], tmp_path, tmp_path / "blind", FakeBackend(),
+                    condition="no_image", warmup=0, repeats=1, monitor=lambda: {"busy": []})
+    assert blind_baseline([record], out)["blind_accuracy"] == 1.0
+    if changed == "dataset":
+        record["request"]["state"]["count"] = 9
+    elif changed == "completion.json":
+        (out.parent / changed).unlink()
+    else:
+        path = out.parent / changed
+        path.write_text(path.read_text() + "\n")
+    with pytest.raises(ValueError, match="integrity|hash|completed"):
+        blind_baseline([record], out)

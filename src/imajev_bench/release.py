@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from .lint import lint
+from .runner import verify_run
 from .schema import validate_records
 from .stats import evidence_clusters, required_clusters
 from .triage import audit_report
@@ -47,6 +48,7 @@ def annotator_agreement(records):
 
 def blind_baseline(records, predictions_path):
     """Score a completed no_image run: answerable visual/joint accuracy against the full-evidence label."""
+    verify_run(records, predictions_path)
     rows = {json.loads(line)["id"]: json.loads(line) for line in Path(predictions_path).read_text().splitlines()}
     manifest = json.loads((Path(predictions_path).parent / "manifest.json").read_text())
     if manifest.get("condition") != "no_image":
