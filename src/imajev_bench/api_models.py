@@ -25,7 +25,7 @@ from typing import Any, Callable
 from .runner import canonical_bytes, digest, file_digest, run_hashes
 from .schema import model_payload
 
-PROMPT_VERSION = "api-v2"  # v2: text-only wording no longer says "No image is supplied"
+PROMPT_VERSION = "api-v3"  # v3: option literals use JSON string escaping
 UNKNOWN_TOKEN = "unknown"
 RETRY_CODES = {408, 409, 429, 500, 502, 503, 504}
 KEY_NAMES = {"openai": "OPENAI_API_KEY", "gemini": "GEMINI_API_KEY", "azure-openai": "AZURE_OPENAI_API_KEY"}
@@ -70,7 +70,7 @@ def build_prompt(payload: dict, order_seed: int | None) -> tuple[str, list[tuple
     if order_seed is not None:
         rng = random.Random(f"{order_seed}\0{request['request_id']}")
         options = rng.sample(options, len(options))
-    lines = [f'- "{token}"' + (f": {desc}" if desc and desc != token else "") for token, _, desc in options]
+    lines = ['- ' + json.dumps(token, ensure_ascii=False) + (f": {desc}" if desc and desc != token else "") for token, _, desc in options]
     lines.append(f'- "{UNKNOWN_TOKEN}": the supplied images and state do not determine the answer')
     n = len(payload["images"])
     image_note = "This decision uses only the state below; there is no image to inspect." if n == 0 else (
