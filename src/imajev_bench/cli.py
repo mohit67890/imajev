@@ -177,7 +177,7 @@ def main(argv=None):
         runs = []
         for path in (args.predictions_a, args.predictions_b):
             verify_run(records, path)
-            rows = {row["id"]: row for row in read_jsonl(path)}
+            rows = _read_predictions(path, records)
             runs.append({r["id"]: _correct(r, rows.get(r["id"])) for r in records})
         report = paired_cluster_test(runs[0], runs[1], evidence_clusters(records))
         report.update(a=str(args.predictions_a), b=str(args.predictions_b), split=args.split)
@@ -185,14 +185,7 @@ def main(argv=None):
         print(json.dumps({k: report[k] for k in ("difference", "low", "high", "p_value", "clusters")}))
         return
     attribution = verify_run(records, args.predictions)
-    prediction_rows = read_jsonl(args.predictions)
-    predictions = {}
-    for row in prediction_rows:
-        if not isinstance(row.get("id"), str) or row["id"] in predictions:
-            raise ValueError("Prediction IDs must be present and unique")
-        predictions[row["id"]] = row
-    if set(predictions) - {r["id"] for r in records}:
-        raise ValueError("Predictions include IDs outside the selected dataset split")
+    predictions = _read_predictions(args.predictions, records)
     dataset_audit = audit(records)
     content_reuse = dataset_audit["exact_content_connected_clusters"] < dataset_audit["declared_groups"]
     result = score(records, predictions, bootstrap_samples=0 if content_reuse else args.bootstrap_samples)
@@ -211,6 +204,18 @@ def main(argv=None):
         json.dump(result, handle, indent=2, allow_nan=False)
         handle.write("\n")
     print(args.output)
+
+
+def _read_predictions(path, records):
+    """Use the same prediction identity contract for score and paired comparison."""
+    predictions = {}
+    for row in read_jsonl(path):
+        if not isinstance(row.get("id"), str) or row["id"] in predictions:
+            raise ValueError("Prediction IDs must be present and unique")
+        predictions[row["id"]] = row
+    if set(predictions) - {record["id"] for record in records}:
+        raise ValueError("Predictions include IDs outside the selected dataset split")
+    return predictions
 
 
 def _write_json(path, value):
