@@ -396,3 +396,31 @@ def test_data_uri_image_inside_the_state_is_used_as_the_image(client, monkeypatc
     payload = {**REQUEST, "state": f"reference: {uri}"}
     response = client.post("/v1/systemone", json={**payload, "images": [data_url(jpeg_bytes(), "image/jpeg")]})
     assert response.status_code == 200 and seen["n"] == 2
+
+
+@pytest.mark.parametrize("encoding", ["json", "multipart"])
+def test_excessive_json_depth_is_rejected_before_scoring(encoding):
+    client, backend = make_client()
+    depth = sys.getrecursionlimit() + 100
+    nested = '[' * depth + '"evidence"' + ']' * depth
+    raw = '{"state":' + nested + ',"questions":{"answer":{"type":"noul","instructions":"Is it present?"}}}'
+    if encoding == "json":
+        response = client.post("/v1/systemone", content=raw, headers={"Content-Type": "application/json"})
+    else:
+        response = client.post("/v1/systemone", files={"request": (None, raw)})
+    assert response.status_code == 422, response.text
+    assert response.json()["error"] in {"bad_json", "invalid_request"}
+    assert any(word in response.json()["detail"].lower() for word in ("recursion", "nesting"))
+    assert backend.calls == []
+
+
+@pytest.mark.parametrize("embedded_image", [False, True])
+def test_image_extraction_preserves_state_at_allowed_depth(embedded_image):
+    client, backend = make_client()
+    state = data_url(png_bytes()) if embedded_image else "evidence"
+    for _ in range(8):
+        state = {"value": state}
+    payload = {"state": state, "questions": {"answer": {"type": "noul", "instructions": "Is it present?"}}}
+    response = client.post("/v1/systemone", json=payload)
+    assert response.status_code == 200, response.text
+    assert backend.calls == [(int(embedded_image), ["answer"])]
