@@ -216,9 +216,19 @@ def _construction_error(record: BenchmarkRecord, reviews: object) -> str | None:
             return _target_error(record, record.gold)
         if not isinstance(reviews, list) or not reviews:
             return "audit-sample construction records require a human review or a confirmed model audit"
+        reviewer_ids = set()
         for review in reviews:
             if not isinstance(review, dict) or review.get("input_sha256") != expected or "value" not in review:
                 return "construction audit reviews must bind to the model input and carry a value"
+            reviewer = review.get("reviewer_id")
+            if not isinstance(reviewer, str) or not reviewer.strip() or reviewer != reviewer.strip():
+                return "construction audit reviewer_id must be a trimmed non-empty string"
+            if reviewer in reviewer_ids:
+                return "construction audit reviewer_id values must be distinct"
+            reviewer_ids.add(reviewer)
+            evidence = review.get("evidence")
+            if not isinstance(evidence, str) or not evidence.strip():
+                return "construction audit reviews require non-empty string evidence"
             if type(review["value"]) is not type(record.gold) or review["value"] != record.gold:
                 return "construction audit reviews must agree with gold"
     return _target_error(record, record.gold)
