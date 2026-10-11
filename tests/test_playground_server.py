@@ -396,3 +396,26 @@ def test_data_uri_image_inside_the_state_is_used_as_the_image(client, monkeypatc
     payload = {**REQUEST, "state": f"reference: {uri}"}
     response = client.post("/v1/systemone", json={**payload, "images": [data_url(jpeg_bytes(), "image/jpeg")]})
     assert response.status_code == 200 and seen["n"] == 2
+
+
+@pytest.mark.parametrize("encoding", ["json", "multipart"])
+def test_embedded_image_reference_follows_explicit_images(encoding):
+    class CapturingBackend(FakeBackend):
+        def score(self, images, request):
+            self.state = request.state
+            self.pixels = [image.getpixel((0, 0)) for image in images]
+            return super().score(images, request)
+
+    backend = CapturingBackend()
+    client = TestClient(server.create_app(backend, examples=[]))
+    explicit = png_bytes(color=(255, 0, 0))
+    embedded = png_bytes(color=(0, 0, 255))
+    payload = {**REQUEST, "state": {"photo": data_url(embedded)}}
+    if encoding == "json":
+        response = client.post("/v1/systemone", json={**payload, "images": [data_url(explicit)]})
+    else:
+        response = client.post("/v1/systemone", data={"request": json.dumps(payload)},
+                               files={"image": ("explicit.png", explicit, "image/png")})
+    assert response.status_code == 200, response.text
+    assert backend.pixels == [(255, 0, 0), (0, 0, 255)]
+    assert backend.state["photo"] == "[image 2]"
