@@ -148,7 +148,9 @@ function renderImages() {
 }
 
 /** After a run, mark each tile with what the server actually decoded and scored. */
-function annotateImages(usageImages) {
+function annotateImages(usageImages, images = S.images) {
+  // A response belongs to the submitted files, even if the editor changed while it ran.
+  if (images.length !== S.images.length || images.some((img, i) => img.file !== S.images[i].file)) return;
   const tiles = $('thumbs').querySelectorAll('.shot');
   (usageImages || []).forEach((meta, i) => {
     const tile = tiles[i];
@@ -679,22 +681,23 @@ async function run() {
   if (!state.ok || !questions.ok) { showError('Fix the JSON errors above before running.'); return; }
   // Images are optional: with none the model answers from the state and the questions alone.
   const request = { state: state.value, questions: questions.value };
+  const images = S.images.map(({ file, name }) => ({ file, name }));
   hideError();
   setRunning(true);
   const started = performance.now();
   startElapsedClock(started);
   try {
-    const response = MOCK ? await runMock() : await postSystemOne(request);
+    const response = MOCK ? await runMock() : await postSystemOne(request, images);
     S.request = request;
     S.response = response;
     renderResponse(request, response);
-    annotateImages(response.usage?.images);
+    annotateImages(response.usage?.images, images);
     stopElapsedClock({ serverMs: response.usage?.total_ms, roundTripMs: performance.now() - started });
-    recordRun({ request, response, elapsed: performance.now() - started });
+    recordRun({ request, images, response, elapsed: performance.now() - started });
   } catch (err) {
     showError(String(err.message || err));
     stopElapsedClock({ roundTripMs: performance.now() - started, failed: true });
-    recordRun({ request, error: String(err.message || err), elapsed: performance.now() - started });
+    recordRun({ request, images, error: String(err.message || err), elapsed: performance.now() - started });
   } finally {
     setRunning(false);
   }
@@ -706,10 +709,10 @@ async function runMock() {
   return structuredClone(mock.response);
 }
 
-async function postSystemOne(request) {
+async function postSystemOne(request, images) {
   const body = new FormData();
   body.append('request', JSON.stringify(request));
-  for (const img of S.images) body.append('image', img.file, img.name);
+  for (const img of images) body.append('image', img.file, img.name);
 
   let res;
   try {
@@ -987,15 +990,15 @@ function vdCommand() {
 
 /* ───────────────────────────── history ───────────────────────────── */
 
-function recordRun({ request, response, error, elapsed }) {
+function recordRun({ request, images, response, error, elapsed }) {
   const answers = response?.answers || {};
   const entry = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     at: new Date().toISOString(),
     model: response?.model || null,
     questionCount: Object.keys(request.questions || {}).length,
-    imageCount: S.images.length,
-    imageNames: S.images.map(i => i.name),
+    imageCount: images.length,
+    imageNames: images.map(i => i.name),
     totalMs: Math.round(response?.usage?.total_ms ?? elapsed),
     abstained: Object.values(answers).filter(a => a.abstained).length,
     error: error || null,
@@ -1003,7 +1006,7 @@ function recordRun({ request, response, error, elapsed }) {
     questions: request.questions,
     response: response || null,
   };
-  S.imagesByRun.set(entry.id, S.images.map(i => ({ file: i.file, name: i.name })));
+  S.imagesByRun.set(entry.id, images);
   S.history.unshift(entry);
   S.history = S.history.slice(0, HISTORY_LIMIT);
   writeJSON(LS.history, S.history);
