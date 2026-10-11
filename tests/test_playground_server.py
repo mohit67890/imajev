@@ -396,3 +396,14 @@ def test_data_uri_image_inside_the_state_is_used_as_the_image(client, monkeypatc
     payload = {**REQUEST, "state": f"reference: {uri}"}
     response = client.post("/v1/systemone", json={**payload, "images": [data_url(jpeg_bytes(), "image/jpeg")]})
     assert response.status_code == 200 and seen["n"] == 2
+
+
+@pytest.mark.parametrize("keys", [("images", "image"), ("image[]", "images"), ("image[]", "image")])
+def test_multipart_aliases_preserve_reference_target_order(client, keys):
+    reference = png_bytes(size=(17, 11))
+    target = jpeg_bytes(size=(23, 19))
+    response = client.post("/v1/systemone", data={"request": json.dumps(REQUEST)},
+                           files=[(keys[0], ("reference.png", reference, "image/png")),
+                                  (keys[1], ("target.jpg", target, "image/jpeg"))])
+    assert response.status_code == 200, response.text
+    assert [(image["width"], image["height"]) for image in response.json()["usage"]["images"]] == [(17, 11), (23, 19)]
