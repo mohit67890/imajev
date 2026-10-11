@@ -11,17 +11,20 @@ def load_image_bytes(data):
     if len(data) > MAX_BYTES:
         raise ValueError("Image exceeds 20 MiB")
     from io import BytesIO
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", Image.DecompressionBombWarning)
-        with Image.open(BytesIO(data)) as source:
-            if source.format not in {"JPEG", "PNG", "WEBP"}:
-                raise ValueError("Only JPEG, PNG, and WebP are supported")
-            if getattr(source, "n_frames", 1) != 1:
-                raise ValueError("Multi-frame images are unsupported")
-            if source.width * source.height > MAX_PIXELS:
-                raise ValueError("Image exceeds 20 million decoded pixels")
-            source.load()
-            image = ImageOps.exif_transpose(source).convert("RGB")
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", Image.DecompressionBombWarning)
+            with Image.open(BytesIO(data)) as source:
+                if source.format not in {"JPEG", "PNG", "WEBP"}:
+                    raise ValueError("Only JPEG, PNG, and WebP are supported")
+                if getattr(source, "n_frames", 1) != 1:
+                    raise ValueError("Multi-frame images are unsupported")
+                if source.width * source.height > MAX_PIXELS:
+                    raise ValueError("Image exceeds 20 million decoded pixels")
+                source.load()
+                image = ImageOps.exif_transpose(source).convert("RGB")
+    except (Image.DecompressionBombWarning, Image.DecompressionBombError) as exc:
+        raise ValueError("Image exceeds 20 million decoded pixels") from exc
     return image, {"sha256": hashlib.sha256(data).hexdigest(), "width": image.width, "height": image.height, "bytes": len(data)}
 
 def load_image(path):
