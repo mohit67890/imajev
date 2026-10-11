@@ -60,12 +60,15 @@ def main():
             output = {"valid": True, "fields": len(request.fields), "mode": request.execution.mode}
         elif args.command == "decide":
             from .jev_api import to_request, to_response
-            request = to_request(json.loads(Path(args.request).read_text()))
+            # Parse the full contract first; the loaded adapter determines the serving limit.
+            request = to_request(json.loads(Path(args.request).read_text()), max_options=255)
             if len(args.image) > 2:
                 raise ValueError("Provide at most two images")
             loaded = [load_image(path) for path in args.image]
             from .backend import MLXDirect
             backend = MLXDirect(args.model_bundle, adapter=args.adapter)
+            if any(field.type == "choice" and len(field.options) > backend.max_options for field in request.fields):
+                raise ValueError(f"Choice options exceed the loaded adapter's {backend.max_options}-option limit")
             images = [image for image, _ in loaded]
             scored, run = backend.score_request(images[0] if len(images) == 1 else images, request.fields, request.state, args.rotations)
             scored = calibrate_results(scored, request.fields, args.calibration)
