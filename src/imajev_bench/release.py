@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from .lint import lint
+from .runner import verify_run
 from .schema import validate_records
 from .stats import evidence_clusters, required_clusters
 from .triage import audit_report
@@ -47,11 +48,36 @@ def annotator_agreement(records):
 
 def blind_baseline(records, predictions_path):
     """Score a completed no_image run: answerable visual/joint accuracy against the full-evidence label."""
+    # The harness runs one split at a time. The protocol also permits no_image
+    # runs to omit the text track, so verify complete selections against the
+    # all-split release records rather than treating unrequested rows as errors.
+    selections = [records]
+    selections += [[r for r in records if r["split"] == split]
+                   for split in ("dev", "calibration", "test")]
+    candidates = []
+    seen = set()
+    for selection in selections:
+        for selected in (selection, [r for r in selection if r["track"] in ("visual", "joint")]):
+            ids = tuple(r["id"] for r in selected)
+            if ids and ids not in seen:
+                candidates.append(selected)
+                seen.add(ids)
+    first_error = None
+    for selected in candidates:
+        try:
+            manifest = verify_run(selected, predictions_path)["manifest"]
+            break
+        except ValueError as exc:
+            if first_error is None:
+                first_error = exc
+    else:
+        raise first_error or ValueError("Blind baseline requires nonempty records")
     rows = {json.loads(line)["id"]: json.loads(line) for line in Path(predictions_path).read_text().splitlines()}
-    manifest = json.loads((Path(predictions_path).parent / "manifest.json").read_text())
     if manifest.get("condition") != "no_image":
         raise ValueError("Blind baseline requires a harness run with condition=no_image")
-    items = [r for r in records if r["track"] in ("visual", "joint") and r["gold"] is not None]
+    items = [r for r in selected if r["track"] in ("visual", "joint") and r["gold"] is not None]
+    if not items:
+        raise ValueError("Blind baseline requires answerable visual or joint records")
     correct = sum(rows.get(r["id"], {}).get("status") == "answered"
                   and _key(rows[r["id"]].get("value")) == _key(r["gold"]) for r in items)
     families = defaultdict(Counter)
