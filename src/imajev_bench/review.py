@@ -44,7 +44,10 @@ def build_review(records, root, output, reviewer_id=None, seed=0):
             if not path.is_relative_to(root.resolve()):
                 raise ValueError("Image escapes dataset root")
             mime = mimetypes.guess_type(path.name)[0] or "image/png"
-            images.append("data:" + mime + ";base64," + base64.b64encode(path.read_bytes()).decode())
+            blob = path.read_bytes()
+            if hashlib.sha256(blob).hexdigest() != asset["sha256"]:
+                raise ValueError(f"Image changed since validation: {asset['path']}")
+            images.append("data:" + mime + ";base64," + base64.b64encode(blob).decode())
         input_sha256 = digest(model_payload(record))
         hashes.append((record["id"], input_sha256))
         rows.append({k: record[k] for k in ("id", "track", "group_id", "request")} | {"images": images, "input_sha256": input_sha256})
