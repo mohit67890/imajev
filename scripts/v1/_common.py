@@ -128,7 +128,8 @@ class RemoteZip:
         cache = self.cache_dir / "central-directory.json"
         if cache.exists():
             meta = json.loads(cache.read_text())
-            if meta.get("etag") == self.etag and meta.get("size") == self.size:
+            if (meta.get("url") == self.url and meta.get("etag") == self.etag
+                    and meta.get("size") == self.size):
                 return meta["members"]
         tail = _Tail(self.url, self.session, self.size, self.etag)
         with zipfile.ZipFile(tail) as z:
