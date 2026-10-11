@@ -109,7 +109,10 @@ class TorchBackend:
     supports_thinking = True
 
     def __init__(self, bundle=BUNDLE, adapter=None, device=None, rotations=1, max_input_tokens=4096, readout_codes=None,
-                 prompt_layout=None, fast=False, graph_lengths=None, merge_lora=False, float32=False):
+                 prompt_layout=None, fast=False, graph_lengths=None, merge_lora=False, float32=False,
+                 question_microbatch=8, result_cache_size=4096, result_cache_path=None, shared_prefix=True):
+        from torch_caches import ResultCache, artifact_namespace
+        from torch_prefix_cache import PrefixScorer
         import torch
         from torch_decision import GRAPH_LENGTHS, TorchDecision
         self.torch = torch
@@ -153,6 +156,14 @@ class TorchBackend:
         self.readout_codes, self.max_options = self.engine.codes, self.engine.max_options
         self.adapter = None if adapter is None else str(adapter)
         self.model = MODEL_NAME if adapter else BASE_MODEL_NAME
+        self.merge_lora = bool(merge_lora) and adapter is not None
+        self.question_microbatch = max(1, int(question_microbatch))
+        self.shared_prefix_requested = bool(shared_prefix)
+        self._prefix_scorer = PrefixScorer(self.engine, fast=self.fast, microbatch=self.question_microbatch)
+        self._prefix_scorer.enabled = self.shared_prefix_requested
+        self.result_cache_namespace = artifact_namespace(bundle, Path(adapter) if adapter is not None else None)
+        from vision_decision.contracts import Result
+        self.result_cache = ResultCache(int(result_cache_size), path=result_cache_path, result_type=Result)
         self.load_seconds = perf_counter() - start
 
     def score(self, images, request, thinking=None):
@@ -164,41 +175,180 @@ class TorchBackend:
         thought of at most max_tokens, and its decision is read again right after the thought (docs/think-if-unsure-plan.md)."""
         if thinking is not None and thinking.active and self.rotations != 1:
             raise PlaygroundError(422, "invalid_request", "thinking needs a server running --rotations 1")
-        results, seconds, tokens, thoughts = [], 0.0, 0, []
+        if thinking is not None and thinking.active:
+            # Thinking writes follow-up tokens per question: never serve stored answers.
+            return self._score_uncached(images, request, thinking=thinking)
+        from torch_caches import cache_context_digest, field_cache_key
+        cache = getattr(self, "result_cache", None)
+        if cache is None or cache.capacity <= 0:
+            return self._score_uncached(images, request, thinking=thinking)
+        context = cache_context_digest(namespace=getattr(self, "result_cache_namespace", None), model=self.model,
+                                       adapter=self.adapter, rotations=self.rotations, fast=self.fast,
+                                       merge_lora=getattr(self, "merge_lora", False),
+                                       shared_prefix=getattr(self, "shared_prefix_requested", False),
+                                       microbatch=getattr(self, "question_microbatch", 8),
+                                       prompt_layout=getattr(self, "prompt_layout", None),
+                                       readout_codes=getattr(self, "readout_codes", None),
+                                       state=request.state, images=images)
+        keys = [field_cache_key(context, field) for field in request.fields]
+        results, miss_idx, miss_fields = [None] * len(request.fields), [], []
+        for i, (key, field) in enumerate(zip(keys, request.fields)):
+            hit = cache.get(key)
+            if hit is None:
+                miss_idx.append(i); miss_fields.append(field)
+            else:
+                results[i] = hit
+        if miss_fields:
+            fresh, usage = self._score_uncached(images, request.model_copy(update={"fields": miss_fields}),
+                                              thinking=thinking)
+            for i, result in zip(miss_idx, fresh):
+                results[i] = result
+                cache.put(keys[i], result)
+        else:
+            usage = {"prefill_ms": 0.0, "questions_ms": 0.0, "input_tokens": 0, "rotations": self.rotations}
+        usage = dict(usage)
+        if miss_fields and getattr(self, "_prefix_cache_metadata", None):
+            usage["prefix_cache"] = dict(self._prefix_cache_metadata)
+        usage.update(cache_hits=len(request.fields) - len(miss_fields), cache_misses=len(miss_fields),
+                     cache_entries=len(cache), cache_capacity=cache.capacity, cache_persistent=cache.persistent)
+        self._prefix_cache_metadata = None
+        return results, usage
+
+    def _score_uncached(self, images, request, thinking=None):
+        """Model forward path (no result cache); thinking still applies per question."""
+        if thinking is not None and thinking.active and self.rotations != 1:
+            raise PlaygroundError(422, "invalid_request", "thinking needs a server running --rotations 1")
+        results, seconds, tokens, thoughts, compiled = [], 0.0, 0, [], []
         for field in request.fields:
             header, choices, texts = compile_question(field, request.state, getattr(self, "prompt_layout", "standard"))
             labels = self.engine.labels(len(choices), len(images))
-            start = perf_counter()
-            passes = []
-            for offset in cyclic_offsets(len(choices), self.rotations):
-                prompt = header + "\n".join(f"{label}: {text}" for label, text in zip(labels, rotate(texts, offset)))
-                if getattr(self, "fast", False):
-                    with self.torch.inference_mode():
-                        _, inputs, token_ids = self.engine.prepare_fast(images, prompt, labels)
-                        logits = [float(x) for x in self.engine.candidate_logits_fast(inputs, token_ids).cpu().tolist()]
-                else:
-                    with self.torch.no_grad():
-                        _, inputs, token_ids = self.engine.prepare(images, prompt, labels)
-                        logits = [float(x) for x in self.engine.candidate_logits(inputs, token_ids).cpu().tolist()]
-                tokens = max(tokens, int(inputs["input_ids"].shape[-1]))
-                passes.append((offset, logits, token_ids))
-            seconds += perf_counter() - start
-            if len(passes) == 1:
-                result = result_from_logits(choices, passes[0][1], token_ids=passes[0][2])
-            else:
-                result = combine_rotations(choices, [(offset, logits) for offset, logits, _ in passes])
-            if thinking is not None and thinking.should_think(result):
+            compiled.append((field, header, choices, texts, labels))
+        use_batch = (
+            (thinking is None or not thinking.active)
+            and len(compiled) > 1
+            and getattr(getattr(self.engine, "device", None), "type", getattr(self.engine, "device", "")) == "cuda"
+        )
+        if use_batch:
+            try:
+                results = self._score_batched(images, compiled)
+                tokens = max(tokens, self._last_batch_tokens)
+            except Exception:
+                log.exception("batched torch scoring failed; retrying per question")
+                use_batch = False
+                results = []
+                self._batch_seconds = 0.0
+        if not use_batch:
+            for field, header, choices, texts, labels in compiled:
                 start = perf_counter()
-                thought_result, note = self._think(images, prompt, choices, labels, thinking)
-                result = thought_result or result
-                note["think_ms"] = round((perf_counter() - start) * 1000, 1)
-                thoughts.append({"question": field.id, **note})
-            results.append(result)
+                passes = []
+                for offset in cyclic_offsets(len(choices), self.rotations):
+                    prompt = header + "\n".join(f"{label}: {text}" for label, text in zip(labels, rotate(texts, offset)))
+                    if getattr(self, "fast", False):
+                        with self.torch.inference_mode():
+                            _, inputs, token_ids = self.engine.prepare_fast(images, prompt, labels)
+                            logits = [float(x) for x in self.engine.candidate_logits_fast(inputs, token_ids).cpu().tolist()]
+                    else:
+                        with self.torch.no_grad():
+                            _, inputs, token_ids = self.engine.prepare(images, prompt, labels)
+                            logits = [float(x) for x in self.engine.candidate_logits(inputs, token_ids).cpu().tolist()]
+                    tokens = max(tokens, int(inputs["input_ids"].shape[-1]))
+                    passes.append((offset, logits, token_ids))
+                seconds += perf_counter() - start
+                if len(passes) == 1:
+                    result = result_from_logits(choices, passes[0][1], token_ids=passes[0][2])
+                else:
+                    result = combine_rotations(choices, [(offset, logits) for offset, logits, _ in passes])
+                if thinking is not None and thinking.should_think(result):
+                    start = perf_counter()
+                    thought_result, note = self._think(images, prompt, choices, labels, thinking)
+                    result = thought_result or result
+                    note["think_ms"] = round((perf_counter() - start) * 1000, 1)
+                    thoughts.append({"question": field.id, **note})
+                results.append(result)
         # No shared prefill on this path: the whole cost is reported per question.
-        usage = {"prefill_ms": 0.0, "questions_ms": round(seconds * 1000, 1), "input_tokens": tokens, "rotations": self.rotations}
+        usage = {"prefill_ms": 0.0, "questions_ms": round((seconds + getattr(self, "_batch_seconds", 0.0)) * 1000, 1), "input_tokens": tokens, "rotations": self.rotations}
         if thinking is not None and thinking.active:
             usage["thinking"] = {"mode": thinking.mode, "max_tokens": thinking.max_tokens, "thought": thoughts}
+        self._batch_seconds = 0.0
         return results, usage
+
+    def _score_batched(self, images, compiled):
+        """Physical batch dispatcher: chunked to <= microbatch, prefix-KV when validated.
+
+        Splits large logical panels into <= question_microbatch chunks (bounded
+        VRAM), then per chunk tries the shared-prefix KV path (parity-gated per
+        evidence mode, serial fallback) so the vision/evidence prefix runs once.
+        """
+        microbatch = max(1, int(getattr(self, "question_microbatch", 8) or 8))
+        if len(compiled) > microbatch:
+            combined, total_seconds, max_tokens = [], 0.0, 0
+            for start in range(0, len(compiled), microbatch):
+                combined.extend(self._score_chunk(images, compiled[start:start + microbatch]))
+                total_seconds += float(getattr(self, "_batch_seconds", 0.0) or 0.0)
+                max_tokens = max(max_tokens, int(getattr(self, "_last_batch_tokens", 0) or 0))
+            self._batch_seconds, self._last_batch_tokens = total_seconds, max_tokens
+            return combined
+        return self._score_chunk(images, compiled)
+
+    def _score_chunk(self, images, compiled):
+        """One <= microbatch chunk: prefix-KV when requested+enabled, else serial batch."""
+        scorer = getattr(self, "_prefix_scorer", None)
+        if scorer is not None and getattr(self, "shared_prefix_requested", False):
+            try:
+                out = scorer.maybe_validate_and_score(images, compiled, self.rotations, self._score_serial_batch)
+            except Exception:
+                log.exception("prefix-KV scoring failed; falling back to serial batch")
+                out = self._score_serial_batch(images, compiled)
+            self._prefix_cache_metadata = dict(getattr(scorer, "metadata", None) or {})
+            return out
+        return self._score_serial_batch(images, compiled)
+
+    def _score_serial_batch(self, images, compiled):
+        """One forward per rotation offset across all questions (CUDA only).
+
+        Groups questions by rotation offset, renders each (prompt, labels) pair,
+        collates into a single left-padded batch via the engine, and reads
+        per-question logits from one candidate_logits_batch call. Falls back to
+        serial on any alignment error (collate asserts the decision suffix).
+        """
+        from time import perf_counter as _pc
+        start = _pc()
+        max_rots = max(len(cyclic_offsets(len(choices), self.rotations)) for _, _, choices, _, _ in compiled)
+        per_q = [[] for _ in compiled]
+        max_tokens = 0
+        fast = getattr(self, "fast", False)
+        for r in range(max_rots):
+            examples, owners = [], []
+            for qi, (field, header, choices, texts, labels) in enumerate(compiled):
+                offsets = cyclic_offsets(len(choices), self.rotations)
+                if r >= len(offsets):
+                    continue
+                offset = offsets[r]
+                prompt = header + "\n".join(f"{label}: {text}" for label, text in zip(labels, rotate(texts, offset)))
+                rendered, imgs, tids = self.engine.render_example(images, prompt, labels)
+                examples.append((rendered, imgs, tids, None))
+                owners.append((qi, offset, tids))
+            if fast:
+                with self.torch.inference_mode():
+                    inputs, tids_list, _ = self.engine.collate_fast(examples)
+                    batch_logits = self.engine.candidate_logits_batch_fast(inputs, tids_list)
+            else:
+                with self.torch.no_grad():
+                    inputs, tids_list, _ = self.engine.collate(examples)
+                    batch_logits = self.engine.candidate_logits_batch(inputs, tids_list)
+            max_tokens = max(max_tokens, int(inputs["input_ids"].shape[-1]))
+            for (qi, offset, _), logits_t in zip(owners, batch_logits):
+                per_q[qi].append((offset, [float(x) for x in logits_t.cpu().tolist()]))
+        self._last_batch_tokens = max_tokens
+        self._batch_seconds = _pc() - start
+        out = []
+        for qi, (field, header, choices, texts, labels) in enumerate(compiled):
+            passes = per_q[qi]
+            if len(passes) == 1:
+                out.append(result_from_logits(choices, passes[0][1]))
+            else:
+                out.append(combine_rotations(choices, [(offset, logits) for offset, logits in passes]))
+        return out
 
     def _think(self, images, prompt, choices, labels, thinking):
         """-> (the Result read after a greedy thought, a usage note). `prompt` is the rotations == 1 single-pass prompt."""
@@ -224,7 +374,8 @@ def _warn_layout(trained, served):
 
 
 def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations=1, max_input_tokens=4096,
-                  readout_codes=None, prompt_layout=None, fast=False, merge_lora=False, float32=False):
+                  readout_codes=None, prompt_layout=None, fast=False, merge_lora=False, float32=False,
+                  question_microbatch=8, result_cache_size=4096, result_cache_path=None, shared_prefix=True):
     """`auto` prefers MLX with the converted adapter and falls back to torch + the PEFT adapter.
 
     readout_codes None / prompt_layout None follow the adapter (its readout rows; its decision_readout.json layout)."""
@@ -247,7 +398,9 @@ def build_backend(kind, adapter=None, no_adapter=False, bundle=BUNDLE, rotations
     if kind == "torch":
         return TorchBackend(bundle, chosen, rotations=rotations, max_input_tokens=max_input_tokens,
                             readout_codes=readout_codes, prompt_layout=prompt_layout, fast=fast, merge_lora=merge_lora,
-                            float32=float32)
+                            float32=float32, question_microbatch=question_microbatch,
+                            result_cache_size=result_cache_size, result_cache_path=result_cache_path,
+                            shared_prefix=shared_prefix)
     raise ValueError(f"Unknown backend {kind!r}")
 
 
@@ -403,6 +556,35 @@ def create_app(backend, examples=None, static=STATIC, calibration=None, thinking
                 body[extra] = getattr(backend, extra)
         return body
 
+    @app.get("/v1/aimino-capabilities")
+    def aimino_capabilities():
+        scorer = getattr(backend, "_prefix_scorer", None)
+        cache = getattr(backend, "result_cache", None)
+        requested = bool(getattr(backend, "shared_prefix_requested", False))
+        enabled = bool(scorer.enabled) if scorer is not None else False
+        return {
+            "logical_max_questions": int(getattr(backend, "logical_max_questions",
+                                                getattr(__import__("vision_decision.jev_api", fromlist=["MAX_QUESTIONS"]),
+                                                         "MAX_QUESTIONS"))),
+            "question_microbatch": int(getattr(backend, "question_microbatch", 8)),
+            "result_cache_size": int(getattr(cache, "capacity", 0)) if cache is not None else 0,
+            "result_cache_persistent": bool(cache is not None and cache.persistent),
+            "shared_prefix_requested": requested,
+            "shared_prefix": enabled,
+            "shared_prefix_enabled": enabled,
+            "shared_prefix_validated": bool(getattr(scorer, "validated", False)) if scorer is not None else False,
+            "shared_prefix_validated_text": bool(getattr(scorer, "validated_text", False)) if scorer is not None else False,
+            "shared_prefix_validated_visual": bool(getattr(scorer, "validated_visual", False)) if scorer is not None else False,
+            "shared_prefix_error": getattr(scorer, "error", None),
+            # Compatibility aliases for the first overlay revision.
+            "shared_vision_requested": requested,
+            "shared_vision": enabled,
+            "shared_vision_validated": bool(getattr(scorer, "validated", False)) if scorer is not None else False,
+            "fast": bool(getattr(backend, "fast", False)),
+            "rotations": int(getattr(backend, "rotations", 1)),
+        }
+
+
     @app.get("/examples")
     def examples_index():
         return app.state.examples
@@ -505,14 +687,37 @@ def main(argv=None):
     parser.add_argument("--think-model", default="imajev-4b", help="--think-engine vllm: its served model name")
     parser.add_argument("--float32", action="store_true",
                         help="torch only: serve in float32 on CUDA too (a slow reference for checking bf16 serving paths)")
+    parser.add_argument("--logical-max-questions", type=int, default=32,
+                        help="torch only: Jev question ceiling for this server (at most 64)")
+    parser.add_argument("--question-microbatch", type=int, default=8,
+                        help="torch only: physical questions per batch chunk (bounded VRAM)")
+    parser.add_argument("--result-cache-size", type=int, default=4096,
+                        help="torch only: exact per-question result cache entries (0 = off)")
+    parser.add_argument("--result-cache-path", default=None,
+                        help="torch only: optional SQLite path for result reuse across restarts")
+    parser.add_argument("--shared-prefix", dest="shared_prefix", action="store_true", default=True,
+                        help="torch only: reuse the multimodal transformer prefix/KV across unique questions")
+    parser.add_argument("--no-shared-prefix", dest="shared_prefix", action="store_false",
+                        help="torch only: disable the shared-prefix KV path")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args(argv)
+    if args.logical_max_questions < 1 or args.logical_max_questions > 64:
+        parser.error("--logical-max-questions must be in 1..64")
+    if args.question_microbatch < 1 or args.question_microbatch > args.logical_max_questions:
+        parser.error("--question-microbatch must be in 1..logical-max-questions")
+    if args.result_cache_size < 0 or args.result_cache_size > 100_000:
+        parser.error("--result-cache-size must be in 0..100000")
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
+    from vision_decision import jev_api
+    jev_api.MAX_QUESTIONS = args.logical_max_questions
     backend = build_backend(args.backend, args.adapter, args.no_adapter, Path(args.model_bundle), args.rotations,
                             args.max_input_tokens, readout_codes=args.readout_codes,
                             prompt_layout=None if args.prompt_layout == "auto" else args.prompt_layout, fast=args.fast,
-                            merge_lora=args.merge_lora, float32=args.float32)
+                            merge_lora=args.merge_lora, float32=args.float32,
+                            question_microbatch=args.question_microbatch, result_cache_size=args.result_cache_size,
+                            result_cache_path=args.result_cache_path, shared_prefix=args.shared_prefix)
+    backend.logical_max_questions = args.logical_max_questions
     if args.model_name:
         backend.model = args.model_name
     log.info("backend=%s model=%s adapter=%s load_seconds=%.1f readout_codes=%s prompt_layout=%s",

@@ -132,6 +132,32 @@ class TorchDecision:
   suffix=self.processor.tokenizer.encode('</think>\n\n',add_special_tokens=False)
   if not all(row[-len(suffix):].tolist()==suffix for row in inputs['input_ids']):raise ValueError('Left padding did not align the decision positions')
   return inputs,[e[2] for e in examples],[e[3] for e in examples]
+ def collate_fast(self,examples):
+  """collate() with fast-path pixel handling: uint8 passthrough (no CPU
+  rescale/normalize); normalize_patches finishes on GPU in candidate_logits_fast."""
+  self.processor.tokenizer.padding_side='left'
+  image_groups=[e[1] for e in examples]
+  images=None if all(not group for group in image_groups) else image_groups
+  inputs=dict(self.processor(text=[e[0] for e in examples],images=images,return_tensors='pt',do_rescale=False,do_normalize=False,padding=True,**({'pad_to_multiple_of':self.pad_multiple} if self.pad_multiple else {})))
+  if inputs['input_ids'].shape[-1]>self.max_length:raise ValueError(f'Processed request exceeds the {self.max_length}-token limit')
+  suffix=self.__dict__.get('_suffix_ids') or self.__dict__.setdefault('_suffix_ids',self.processor.tokenizer.encode(self.DECISION_TAIL,add_special_tokens=False))
+  if not all(row[-len(suffix):].tolist()==suffix for row in inputs['input_ids']):raise ValueError('Left padding did not align the decision positions')
+  return inputs,[e[2] for e in examples],[e[3] for e in examples]
+ def candidate_logits_batch_fast(self,inputs,token_ids):
+  """candidate_logits_batch() through the fast forward. Graphs are captured at
+  batch 1, so replay is gated on B==1; real batches run the eager LM (keeps the
+  uint8 + single-tokenize fast-path wins either way)."""
+  inputs={k:v.to(self.device) for k,v in inputs.items()}
+  if inputs.get('pixel_values') is not None and inputs['pixel_values'].dtype==torch.uint8:inputs['pixel_values']=self.normalize_patches(inputs['pixel_values'])
+  embeds,positions=self._embeds_positions(inputs);graphs=self.__dict__.get('graphs')
+  # Graphs are captured at batch 1; replay with B>1 would silently score row 0.
+  if graphs is not None and embeds.shape[0] == 1 and graphs.fits(embeds.shape[1]):
+   hidden=graphs.run(embeds,positions).float().unsqueeze(0)
+   base=self._base();head=base.lm_head.weight
+   return [self.readout(hidden[i])[self._readout_indices(ids)] if self.readout is not None and self._readout_indices(ids) is not None else hidden[i]@head[torch.tensor(ids,device=self.device)].float().T for i,ids in enumerate(token_ids)]
+  base=self._base()
+  hidden=base.model.language_model(inputs_embeds=embeds,position_ids=positions,use_cache=False).last_hidden_state[:,-1].float();head=base.lm_head.weight
+  return [self.readout(hidden[i])[self._readout_indices(ids)] if self.readout is not None and self._readout_indices(ids) is not None else hidden[i]@head[torch.tensor(ids,device=self.device)].float().T for i,ids in enumerate(token_ids)]
  def candidate_logits_batch(self,inputs,token_ids):
   inputs={k:v.to(self.device) for k,v in inputs.items()};base=self.model.get_base_model() if hasattr(self.model,'get_base_model') else self.model
   hidden=base.model(**inputs).last_hidden_state[:,-1].float();head=base.lm_head.weight
