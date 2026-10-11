@@ -50,7 +50,9 @@ def flatten_description(description):
         return description or None
     if isinstance(description, dict):
         return "; ".join(f"{k}: {_text(v)}" for k, v in description.items()) or None
-    return "; ".join(_text(v) for v in description) or None
+    if isinstance(description, list):
+        return "; ".join(_text(v) for v in description) or None
+    raise ValueError("Criteria description must be null, a string, an object or an array")
 
 def concentration(probabilities):
     """Jev's confidence for choice and score: (n * p_max - 1) / (n - 1); 1.0 on one option, 0.0 when uniform."""
@@ -109,7 +111,10 @@ def to_request_with_plan(payload, request_id="jev-request", max_options=MAX_OPTI
                 entries.append((label, field_id))
             plan[name] = {"type": "multi", "labels": entries, "threshold": float(threshold)}
         elif kind == "noul":
-            criteria = criteria or {}
+            if criteria is None:
+                criteria = {}
+            if not isinstance(criteria, dict):
+                raise ValueError(f"Noul question {name!r} needs a criteria object of true/false -> description")
             fields.append({"id": name, "type": "boolean", "question": q["instructions"],
                            "yes_description": flatten_description(criteria.get("true")), "no_description": flatten_description(criteria.get("false"))})
         elif kind == "choice":
