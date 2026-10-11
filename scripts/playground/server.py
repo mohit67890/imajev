@@ -203,19 +203,20 @@ class TorchBackend:
     def _think(self, images, prompt, choices, labels, thinking):
         """-> (the Result read after a greedy thought, a usage note). `prompt` is the rotations == 1 single-pass prompt."""
         engine = getattr(self, "thoughts", None)  # a VLLMThoughts client (--think-engine vllm), else transformers generate
+        tokens, closed = [], False
         try:
             tokens, closed = engine.think(images, prompt, thinking.max_tokens)[:2] if engine else self.engine.generate_thought(images, prompt, thinking.max_tokens)
-        except Exception as exc:  # no thought (e.g. a prompt longer than the thought engine's context): keep the single pass
+            inputs, token_ids = self.engine.inputs_after_thought(images, prompt, labels, tokens, closed)
+            with self.torch.inference_mode():
+                scored = self.engine.candidate_logits_fast(inputs, token_ids) if getattr(self, "fast", False) else self.engine.candidate_logits(inputs, token_ids)
+                logits = [float(x) for x in scored.cpu().tolist()]
+            note = {"thought_tokens": len(tokens), "closed": closed}
+            if thinking.return_thought:
+                note["text"] = self.engine.processor.tokenizer.decode(tokens)
+            return result_from_logits(choices, logits, token_ids=token_ids), note
+        except Exception as exc:  # optional thought generation or scoring failed: keep the single pass
             log.warning("thought failed, keeping the single-pass answer: %s", exc)
-            return None, {"thought_tokens": 0, "closed": False, "error": f"{type(exc).__name__}: {str(exc)[:200]}"}
-        inputs, token_ids = self.engine.inputs_after_thought(images, prompt, labels, tokens, closed)
-        with self.torch.inference_mode():
-            scored = self.engine.candidate_logits_fast(inputs, token_ids) if getattr(self, "fast", False) else self.engine.candidate_logits(inputs, token_ids)
-            logits = [float(x) for x in scored.cpu().tolist()]
-        note = {"thought_tokens": len(tokens), "closed": closed}
-        if thinking.return_thought:
-            note["text"] = self.engine.processor.tokenizer.decode(tokens)
-        return result_from_logits(choices, logits, token_ids=token_ids), note
+            return None, {"thought_tokens": len(tokens), "closed": closed, "error": f"{type(exc).__name__}: {str(exc)[:200]}"}
 
 
 def _warn_layout(trained, served):

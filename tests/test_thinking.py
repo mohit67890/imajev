@@ -200,3 +200,24 @@ def test_a_failed_thought_keeps_the_single_pass_answer():
     assert results[0].value == "blue"  # the single-pass answer, not an error
     note = usage["thinking"]["thought"][0]
     assert note["thought_tokens"] == 0 and "RuntimeError" in note["error"]
+
+
+@pytest.mark.parametrize("stage", ["prepare", "score"])
+def test_failed_post_thought_decision_keeps_the_single_pass(stage):
+    class BrokenAfterThought(StubEngine):
+        def inputs_after_thought(self, *args):
+            if stage == "prepare":
+                raise ValueError("Processed thought exceeds the token limit")
+            return super().inputs_after_thought(*args)
+
+        def candidate_logits(self, inputs, token_ids):
+            if stage == "score" and inputs.get("after"):
+                raise RuntimeError("post-thought scoring failed")
+            return super().candidate_logits(inputs, token_ids)
+
+    backend = torch_backend(BrokenAfterThought(single=[0.0, 0.05, -9.0], after=[3.0, 0.0, -9.0]))
+    results, usage = backend.score([], to_request(REQUEST), thinking=ThinkingPolicy(mode="always"))
+    assert results[0].value == "blue"
+    note = usage["thinking"]["thought"][0]
+    assert note["thought_tokens"] == 3 and note["closed"] is True
+    assert "error" in note
