@@ -59,8 +59,8 @@ def main():
             request = Request.model_validate_json(Path(args.input).read_text())
             output = {"valid": True, "fields": len(request.fields), "mode": request.execution.mode}
         elif args.command == "decide":
-            from .jev_api import to_request, to_response
-            request = to_request(json.loads(Path(args.request).read_text()))
+            from .jev_api import to_request_with_plan, to_response
+            request, plan = to_request_with_plan(json.loads(Path(args.request).read_text()))
             if len(args.image) > 2:
                 raise ValueError("Provide at most two images")
             loaded = [load_image(path) for path in args.image]
@@ -70,7 +70,7 @@ def main():
             scored, run = backend.score_request(images[0] if len(images) == 1 else images, request.fields, request.state, args.rotations)
             scored = calibrate_results(scored, request.fields, args.calibration)
             run.pop("questions")
-            output = {**to_response(request, scored, model=backend.bundle["repo"] + ("+adapter" if args.adapter else "")),
+            output = {**to_response(request, scored, model=backend.bundle["repo"] + ("+adapter" if args.adapter else ""), plan=plan),
                       "images": [meta for _, meta in loaded], "usage": run}
         else:
             request = Request.model_validate_json(Path(args.request).read_text())
