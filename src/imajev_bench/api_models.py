@@ -324,10 +324,11 @@ def run_api(records: list[dict], root: Path, output: Path, provider, *, constrai
 
     def one(record):
         payload = model_payload(record)
-        text, options = build_prompt(payload, order_seed)
         start = time.perf_counter()
+        text, options = "", []
         reply, model, usage = "", None, None
         try:
+            text, options = build_prompt(payload, order_seed)
             reply, model, usage = provider.complete(text, encode_images(root, payload["images"]),
                                                     [t for t, _, _ in options], constrained)
             result = parse_reply(reply, options)
