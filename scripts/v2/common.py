@@ -14,7 +14,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import time
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 import requests
@@ -94,7 +96,17 @@ def get_with_backoff(sess: requests.Session, url: str, *, params=None, tries: in
         try:
             r = sess.get(url, params=params, timeout=timeout, stream=stream)
             if r.status_code in (429, 503):
-                wait = float(r.headers.get("Retry-After", delay))
+                retry_after = r.headers.get("Retry-After")
+                try:
+                    wait = float(retry_after) if retry_after is not None else delay
+                except (TypeError, ValueError):
+                    try:
+                        wait = parsedate_to_datetime(retry_after).timestamp() - time.time()
+                        wait = max(0.0, wait)
+                    except (TypeError, ValueError, OverflowError):
+                        wait = delay
+                if not math.isfinite(wait) or wait < 0:
+                    wait = delay
                 time.sleep(min(wait, 30.0))
                 delay = min(delay * 2, 30.0)
                 last = RuntimeError(f"{r.status_code} from {url}")
