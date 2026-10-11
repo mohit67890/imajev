@@ -48,7 +48,7 @@ def store_image(raw: bytes, out_dir: Path) -> dict:
     digest = hashlib.sha256(data).hexdigest()
     out_dir.mkdir(parents=True, exist_ok=True)
     dest = out_dir / f"{digest}.jpg"
-    if not dest.exists() or dest.stat().st_size != len(data):
+    if not dest.exists() or dest.stat().st_size != len(data) or dest.read_bytes() != data:
         dest.write_bytes(data)
     return {"image": dest.as_posix(), "sha256": digest, "width": w, "height": h}
 
