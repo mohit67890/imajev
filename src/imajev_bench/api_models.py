@@ -368,9 +368,21 @@ def prelabel_export(run_dir: Path, records: list[dict]) -> dict:
         if completion.get(key) != file_digest(run_dir / name):
             raise ValueError(f"Pre-label run artifact integrity mismatch: {name}")
     rows = [json.loads(line) for line in (run_dir / "predictions.jsonl").read_text().splitlines()]
+    raw_rows = [json.loads(line) for line in (run_dir / "raw.jsonl").read_text().splitlines()]
+    count = manifest.get("record_count")
+    if (type(count) is not int or count < 1 or completion.get("completed_count") != count
+            or len(rows) != count or len(raw_rows) != count):
+        raise ValueError("Pre-label run row count does not match its completed manifest")
+    prediction_ids = [row.get("id") for row in rows]
+    raw_ids = [row.get("id") for row in raw_rows]
+    for ids in (prediction_ids, raw_ids):
+        if any(not isinstance(item, str) for item in ids) or len(set(ids)) != len(ids):
+            raise ValueError("Pre-label run IDs must be present and unique")
+    if set(prediction_ids) != set(raw_ids):
+        raise ValueError("Pre-label prediction/raw row coverage differs")
     # Bind to model inputs, not whole records: provenance and draft labels change during annotation.
     by_id = {r["id"]: r for r in records}
-    for raw in (json.loads(line) for line in (run_dir / "raw.jsonl").read_text().splitlines()):
+    for raw in raw_rows:
         record = by_id.get(raw["id"])
         if record is None or raw["payload_sha256"] != digest(model_payload(record)):
             raise ValueError(f"Pre-label run input does not match current record {raw['id']!r}")
