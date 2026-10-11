@@ -294,3 +294,34 @@ def test_process_monitor_ignores_desktop_processes(monkeypatch):
     snapshot = harness.process_monitor()
     assert [b["pid"] for b in snapshot["busy"]] == [9001]
     assert [b["pid"] for b in snapshot["ignored"]] == [417]
+
+
+@pytest.mark.parametrize("orientation", [1, 6])
+def test_local_harness_preserves_image_display_orientation(tmp_path, orientation):
+    import hashlib
+    from vision_decision.images import load_image_bytes
+
+    photo = Image.new("RGB", (32, 24), "red")
+    for x in range(16, 32):
+        for y in range(24):
+            photo.putpixel((x, y), (0, 0, 255))
+    exif = photo.getexif()
+    exif[274] = orientation
+    path = tmp_path / "photo.jpg"
+    photo.save(path, exif=exif)
+    blob = path.read_bytes()
+    displayed, _ = load_image_bytes(blob)
+    record = text_record("oriented")
+    record.update(track="visual", images=[{"path": path.name, "sha256": hashlib.sha256(blob).hexdigest()}])
+    records = validate_records([record], tmp_path)
+
+    class CapturingBackend(FakeBackend):
+        def score(self, images, prompt, labels, choices):
+            assert len(images) == 1
+            assert images[0].size == displayed.size
+            assert images[0].tobytes() == displayed.tobytes()
+            return super().score(images, prompt, labels, choices)
+
+    output = run_local(records, tmp_path, tmp_path / "oriented-run", CapturingBackend(),
+                       warmup=0, repeats=1, monitor=lambda: {"busy": []})
+    verify_run(records, output)
