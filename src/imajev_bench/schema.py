@@ -311,8 +311,19 @@ def validate_records(
         validated.append(record)
 
     # gold_withheld is emitted only when set, so full-label datasets hash exactly as before.
-    return [record.model_dump(mode="json", exclude=None if record.gold_withheld else {"gold_withheld"})
-            for record in validated]
+    result = [record.model_dump(mode="json", exclude=None if record.gold_withheld else {"gold_withheld"})
+              for record in validated]
+    # Source and contrast links can connect different groups and different image files.
+    # Enforce the same complete evidence units used by the statistical scorer.
+    from .stats import evidence_clusters
+    cluster_splits: dict[str, str] = {}
+    clusters = evidence_clusters(result)
+    for record in result:
+        cluster = clusters[record["id"]]
+        previous = cluster_splits.setdefault(cluster, record["split"])
+        if previous != record["split"]:
+            raise ValueError(f"evidence cluster {cluster!r} leaks across splits")
+    return result
 
 
 def gold_withheld(records: list[dict[str, Any]]) -> list[str]:
