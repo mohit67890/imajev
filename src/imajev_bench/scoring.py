@@ -314,6 +314,8 @@ def _bootstrap(rows: list[dict[str, Any]], samples: int, seed: int) -> dict[str,
 def score(records: list[dict[str, Any]], predictions: Mapping[str, dict[str, Any]],
           bootstrap_samples: int = 1000, seed: int = 0) -> dict[str, Any]:
     """Score records and predictions and return a JSON-serializable report."""
+    if any(record.get("gold_withheld") for record in records):
+        raise ValueError("Records with gold withheld cannot be scored")
     if bootstrap_samples < 0:
         raise ValueError("bootstrap_samples must be non-negative")
     if not isinstance(predictions, Mapping):
