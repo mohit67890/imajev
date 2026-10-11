@@ -1005,6 +1005,8 @@ function recordRun({ request, response, error, elapsed }) {
   };
   S.imagesByRun.set(entry.id, S.images.map(i => ({ file: i.file, name: i.name })));
   S.history.unshift(entry);
+  // Release uploaded File objects when their history rows can no longer be restored.
+  S.history.slice(HISTORY_LIMIT).forEach(old => S.imagesByRun.delete(old.id));
   S.history = S.history.slice(0, HISTORY_LIMIT);
   writeJSON(LS.history, S.history);
   renderHistory();
