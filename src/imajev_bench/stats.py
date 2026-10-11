@@ -158,14 +158,21 @@ def contrast_metrics(records: list[Mapping[str, Any]], predictions: Mapping[str,
         if contrast:
             sets[contrast["set_id"]][contrast["role"]].append((record, contrast))
 
+    missing = object()
+
     def value(record):
-        raw = predictions.get(record["id"])
+        raw = predictions.get(record["id"], missing)
         if isinstance(raw, Mapping):
-            return None if raw.get("status") != "answered" else raw.get("value")
+            if raw.get("status") == "abstained" and "value" in raw and raw["value"] is None:
+                return None
+            if raw.get("status") == "answered" and "value" in raw and raw["value"] is not None:
+                return raw["value"]
+            return missing
         return raw
 
     def correct(record):
-        return _typed_equal(value(record), record["gold"])
+        answer = value(record)
+        return answer is not missing and _typed_equal(answer, record["gold"])
 
     totals = dict(sets=0, all_correct=0, change_pairs=0, change_pairs_correct=0, change_detected=0,
                   same_pairs=0, same_pairs_correct=0, same_unchanged=0, constant_sets=0)
@@ -180,11 +187,13 @@ def contrast_metrics(records: list[Mapping[str, Any]], predictions: Mapping[str,
         all_ok = all(correct(r) for r in rows)
         totals["all_correct"] += all_ok
         values = [value(r) for r in rows]
-        constant = all(_typed_equal(v, values[0]) for v in values)
+        constant = all(v is not missing and _typed_equal(v, values[0]) for v in values)
         totals["constant_sets"] += constant
         for record, contrast in members["variant"]:
             both = correct(original) and correct(record)
-            moved = not _typed_equal(value(original), value(record))
+            original_value, variant_value = value(original), value(record)
+            valid_pair = original_value is not missing and variant_value is not missing
+            moved = valid_pair and not _typed_equal(original_value, variant_value)
             if contrast["relation"] == "change":
                 totals["change_pairs"] += 1
                 totals["change_pairs_correct"] += both
@@ -192,7 +201,7 @@ def contrast_metrics(records: list[Mapping[str, Any]], predictions: Mapping[str,
             else:
                 totals["same_pairs"] += 1
                 totals["same_pairs_correct"] += both
-                totals["same_unchanged"] += not moved
+                totals["same_unchanged"] += valid_pair and not moved
         per_set.append({"set_id": set_id, "all_correct": all_ok, "constant": constant,
                         "pattern": "".join("1" if correct(r) else "0" for r in rows)})
     return {**totals, "per_set": per_set,
