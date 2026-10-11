@@ -125,8 +125,12 @@ def decode_jev(response, payload):
     value = None if answer["abstained"] else max(choices, key=lambda x: probabilities[x[0]])[1]
     if field["type"] == "choice":
         declared = answer.get("choice")
-        if declared not in dict(choices) or (not answer["abstained"] and declared != value):
+        if declared not in dict(choices):
             raise ValueError("Declared choice conflicts with candidate probabilities")
+        if not answer["abstained"]:
+            if probabilities[declared] < max(probabilities[key] for key, _ in choices):
+                raise ValueError("Declared choice conflicts with candidate probabilities")
+            value = dict(choices)[declared]
     if field["type"] == "ordinal":
         expected_legend = {str(i): item["description"] for i, item in enumerate(field["levels"])}
         if answer.get("legend") != expected_legend:

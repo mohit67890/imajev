@@ -153,7 +153,9 @@ def to_response(request, results, model="imajev", plan=None):
         if field.type == "boolean":
             answers[field.id] = {"type": "noul", "noul": result.scores["true"] + 0.5 * unknown, **common}
         elif field.type == "choice":
-            answers[field.id] = {"type": "choice", "choice": max(known, key=known.get), "probabilities": known,
+            # Direct scoring resolves ties by vocabulary token ID; keep that selected answer.
+            selected = result.value if result.status == "answered" else max(known, key=known.get)
+            answers[field.id] = {"type": "choice", "choice": selected, "probabilities": known,
                                  "confidence": concentration(known) * (1 - unknown), **common}
         else:
             answers[field.id] = {"type": "score", "score": sum(float(k) * v for k, v in known.items()),
