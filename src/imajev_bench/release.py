@@ -70,15 +70,19 @@ def release_check(records: list[dict], root: Path, targets: dict | None = None,
     def gate(name, ok, detail, **extra):
         gates.append({"gate": name, "passed": bool(ok), "detail": detail, **extra})
 
+    all_records = records
     quarantined = [r for r in records if r["provenance"].get("quarantined")]
+    records = [r for r in records if not r["provenance"].get("quarantined")]
     try:
-        validate_records([r for r in records if not r["provenance"].get("quarantined")], Path(root), require_reviewed=True)
+        validate_records(records, Path(root), require_reviewed=True)
         gate("human_review", True, "Every scored record has a validated label route (see limitations for the audit method); "
              f"{len(quarantined)} quarantined record(s) are excluded from scoring.")
     except ValueError as exc:
         gate("human_review", False, str(exc))
 
-    lint_report = lint(records, Path(root))
+    lint_report = lint(records, Path(root)) if records else {
+        "status": "fail", "counts": {"fail": 1}, "checks": [
+            {"check": "nonempty_scored_dataset", "status": "fail", "detail": "No unquarantined records remain."}]}
     gate("construction_lint", lint_report["status"] != "fail",
          f"Lint status {lint_report['status']}: {lint_report['counts']}",
          failing=[c["check"] for c in lint_report["checks"] if c["status"] == "fail"])
@@ -140,7 +144,7 @@ def release_check(records: list[dict], root: Path, targets: dict | None = None,
          f"{targets['detectable_difference']:.0%} paired difference (assumes 25% discordance, ICC 0.3).", **power)
 
     return {"release_ready": all(g["passed"] for g in gates), "targets": targets, "gates": gates, "lint": lint_report,
-            "limitations": limitations(records, gates)}
+            "limitations": limitations(all_records, gates)}
 
 
 def limitations(records: list[dict], gates: list[dict]) -> list[str]:
