@@ -29,7 +29,8 @@ confidence, latency) — plus image upload, since our state includes 1–2 image
   `score`+`legend`+`probabilities`+`confidence`; always `unknown_probability`, `abstained`) plus
   `"usage": {"prefill_ms": n, "questions_ms": n, "total_ms": n, "input_tokens": n, "images": [{"sha256","width","height"}]}`.
   Errors: 422 `{"error": "...", "detail": "..."}` for validation problems (bad JSON, unsupported type, too many options, more than two images),
-  413 for oversized images, 500 with message for runtime failures. Never return a fake answer on error.
+  413 for oversized images or a JSON request body over 128 MiB, 500 with message for runtime failures. Never return a fake answer on error.
+  JSON bodies are collected from the stream with that cap. Image count and encoded-image size are checked before base64 decoding; multipart image copies read at most the 20 MiB limit plus one sentinel byte. Multipart parsing and transport-level buffering are still managed by Starlette and the server.
 - The model loads once at startup and stays resident; requests are served sequentially (a lock) — one GPU.
 - `GET /` serves the playground; `GET /examples` returns a list of example requests (JSON) for the "Load example" menu.
 - Log one line per request to stdout: time, n images, n questions, total_ms, abstained count.
