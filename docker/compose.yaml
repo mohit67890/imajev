@@ -1,0 +1,25 @@
+name: imajev
+
+services:
+  imajev:
+    image: imajev:cpu
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        TORCH_INDEX_URL: https://download.pytorch.org/whl/cpu
+    init: true
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-8765}:8765"
+    command: ${SERVER_FLAGS:-}
+    environment:
+      MODEL_SIZE: ${MODEL_SIZE:-2b}
+      ROTATIONS: ${ROTATIONS:-4}
+      MAX_INPUT_TOKENS: ${MAX_INPUT_TOKENS:-4096}
+    volumes:
+      - model-data:/data
+    stop_grace_period: 30s
+
+volumes:
+  model-data:

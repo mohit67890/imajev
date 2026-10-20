@@ -9,5 +9,6 @@ artifacts/models/
 data/
 out/
 .env*
+!.env.example
 .DS_Store
 *.log
