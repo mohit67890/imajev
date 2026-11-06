@@ -24,6 +24,9 @@ confidence, latency) — plus image upload, since our state includes 1–2 image
 - `POST /v1/systemone` — two accepted encodings:
   - `multipart/form-data`: field `request` = JSON string `{"state": ..., "questions": {...}}` (Jev shape; `model` optional and ignored),
     files `image` (1–2; first = reference, second = target);
+    the TypeSafe SDK multipart form is also accepted: `request.assets` maps each text reference to `{"type":"image","part":"asset-N"}`,
+    and each named `asset-N` file part supplies that image. References in request text are passed to the model as `[image 1]`, `[image 2]`,
+    in upload order. Missing or unexpected uploaded file parts return 422 instead of silently dropping an image;
   - `application/json`: same object plus `"images": ["data:image/jpeg;base64,...", ...]` (1–2).
   Response = `jev_api.to_response(...)` (fields per answer: `type`, and `noul` | `choice`+`probabilities`+`confidence` |
   `score`+`legend`+`probabilities`+`confidence`; always `unknown_probability`, `abstained`) plus

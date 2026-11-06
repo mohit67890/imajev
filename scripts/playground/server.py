@@ -294,6 +294,19 @@ def extract_state_images(payload):
     return found
 
 
+def replace_asset_references(value, references):
+    """Replace TypeSafe asset references in request text with positional image markers."""
+    if isinstance(value, str):
+        for reference, marker in sorted(references.items(), key=lambda item: len(item[0]), reverse=True):
+            value = value.replace(reference, marker)
+        return value
+    if isinstance(value, list):
+        return [replace_asset_references(item, references) for item in value]
+    if isinstance(value, dict):
+        return {key: replace_asset_references(item, references) for key, item in value.items()}
+    return value
+
+
 async def read_payload(http_request):
     """-> (payload dict without images, [image bytes]) for multipart or JSON encodings."""
     content_type = (http_request.headers.get("content-type") or "").split(";")[0].strip().lower()
@@ -311,14 +324,36 @@ async def read_payload(http_request):
             payload = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise PlaygroundError(422, "bad_json", f"The 'request' field is not valid JSON: {exc}")
+        if not isinstance(payload, dict):
+            raise PlaygroundError(422, "bad_request", "Request body must be a JSON object")
         blobs = []
+        accepted_file_fields = {"request", "image", "images", "image[]"}
         for key in ("image", "images", "image[]"):
             for upload in form.getlist(key):
                 if isinstance(upload, str):
                     raise PlaygroundError(422, "bad_image", f"Form field {key!r} must be an uploaded file")
                 blobs.append(await upload.read())
-        if isinstance(payload, dict):
-            blobs += [decode_data_url(value, i) for i, value in enumerate(extract_state_images(payload))]
+        assets = payload.pop("assets", {})
+        if not isinstance(assets, dict):
+            raise PlaygroundError(422, "bad_image", "The 'assets' field must map image references to uploaded parts")
+        references = {}
+        for reference, asset in assets.items():
+            if not isinstance(reference, str) or not isinstance(asset, dict) or asset.get("type") != "image":
+                raise PlaygroundError(422, "bad_image", "Each 'assets' entry must name an image reference and image part")
+            part = asset.get("part")
+            if not isinstance(part, str) or not part:
+                raise PlaygroundError(422, "bad_image", f"Asset {reference!r} has no multipart file part")
+            uploads = form.getlist(part)
+            if len(uploads) != 1 or isinstance(uploads[0], str):
+                raise PlaygroundError(422, "bad_image", f"Asset {reference!r} must reference exactly one uploaded part {part!r}")
+            accepted_file_fields.add(part)
+            blobs.append(await uploads[0].read())
+            references[reference] = f"[image {len(blobs)}]"
+        for key, value in form.multi_items():
+            if not isinstance(value, str) and hasattr(value, "read") and key not in accepted_file_fields:
+                raise PlaygroundError(422, "bad_image", f"Unexpected uploaded file part {key!r}")
+        payload = replace_asset_references(payload, references)
+        blobs += [decode_data_url(value, i) for i, value in enumerate(extract_state_images(payload))]
     elif content_type == "application/json":
         body = await http_request.body()
         try:
@@ -327,6 +362,8 @@ async def read_payload(http_request):
             raise PlaygroundError(422, "bad_json", f"Request body is not valid JSON: {exc}")
         if not isinstance(payload, dict):
             raise PlaygroundError(422, "bad_request", "Request body must be a JSON object")
+        if "assets" in payload:
+            raise PlaygroundError(422, "bad_image", "The 'assets' field requires multipart/form-data file parts")
         images = payload.get("images", [])
         if not isinstance(images, list):
             raise PlaygroundError(422, "bad_image", "'images' must be a list of data URLs")
@@ -337,7 +374,7 @@ async def read_payload(http_request):
                               "Use multipart/form-data (field 'request' + files 'image') or application/json")
     if not isinstance(payload, dict):
         raise PlaygroundError(422, "bad_request", "The request must be a JSON object")
-    payload = {k: v for k, v in payload.items() if k not in ("images", "model")}
+    payload = {k: v for k, v in payload.items() if k not in ("images", "model", "assets")}
     return payload, blobs
 
 
