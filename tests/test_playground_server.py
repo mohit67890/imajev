@@ -146,6 +146,53 @@ def test_multipart_accepts_a_reference_target_pair(client):
     assert len(response.json()["usage"]["images"]) == 2
 
 
+def test_multipart_accepts_typesafe_assets_and_replaces_references(monkeypatch):
+    client, backend = make_client()
+    seen = {}
+    compile_payload = server.compile_payload
+
+    def capture_payload(payload, max_options=server.MAX_OPTIONS):
+        seen["payload"] = payload
+        return compile_payload(payload, max_options)
+
+    monkeypatch.setattr(server, "compile_payload", capture_payload)
+    payload = {
+        "state": "A customer returned <delivered>; compare it with <catalog>.",
+        "questions": {"same": {"type": "noul", "instructions": "Do <delivered> and <catalog> show the same product?"}},
+        "assets": {
+            "<delivered>": {"type": "image", "part": "asset-0"},
+            "<catalog>": {"type": "image", "part": "asset-1"},
+        },
+    }
+    response = client.post("/v1/systemone", data={"request": json.dumps(payload)}, files=[
+        ("asset-0", ("asset-0", png_bytes(), "image/png")),
+        ("asset-1", ("asset-1", jpeg_bytes(), "image/jpeg")),
+    ])
+
+    assert response.status_code == 200, response.text
+    assert len(response.json()["usage"]["images"]) == 2
+    assert [item["width"] for item in response.json()["usage"]["images"]] == [32, 40]
+    assert backend.calls == [(2, ["same"])]
+    assert seen["payload"]["state"] == "A customer returned [image 1]; compare it with [image 2]."
+    assert seen["payload"]["questions"]["same"]["instructions"] == "Do [image 1] and [image 2] show the same product?"
+    assert "assets" not in seen["payload"]
+
+
+def test_multipart_missing_typesafe_asset_part_is_422(client):
+    payload = {**REQUEST, "assets": {"<photo>": {"type": "image", "part": "asset-0"}}}
+    response = client.post("/v1/systemone", data={"request": json.dumps(payload)},
+                           files=[("other-file", ("other-file", png_bytes(), "image/png"))])
+    assert response.status_code == 422
+    assert response.json()["error"] == "bad_image"
+
+
+def test_multipart_unknown_file_part_is_422(client):
+    response = client.post("/v1/systemone", data={"request": json.dumps(REQUEST)},
+                           files=[("asset-0", ("asset-0", png_bytes(), "image/png"))])
+    assert response.status_code == 422
+    assert response.json()["error"] == "bad_image"
+
+
 def test_multipart_ignores_the_optional_model_field(client):
     payload = {**REQUEST, "model": "jev-1"}
     response = client.post("/v1/systemone", data={"request": json.dumps(payload)},
