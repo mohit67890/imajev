@@ -234,7 +234,6 @@ Full policy: `docs/imajev-bench-hidden-test.md`.
   - a few self-cancelling rules;
   - small people at image edges in 3 scenes;
   - weekday timetables that don't state the day.
-- The hidden set is not built yet (§8); when it is, the first version will be Flare-only.
 - Gemma 4 and SmolVLM2 have generation rows only (Gemma) or no row yet (SmolVLM2): their
   direct-scoring backends are MLX-only.
 
